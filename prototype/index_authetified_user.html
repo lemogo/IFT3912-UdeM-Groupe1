@@ -19,6 +19,12 @@
 <!-- Custom styles for this template -->
 <link href="theme.css" rel="stylesheet">
 
+<!-- Custom styles for this template -->
+<link href="carousel.css" rel="stylesheet">
+
+<!-- Custom styles for this template -->
+<link href="signin.css" rel="stylesheet">
+
 <!-- Just for debugging purposes. Don't actually copy this line! -->
 <!--[if lt IE 9]><script src="../../docs-assets/js/ie8-responsive-file-warning.js"></script><![endif]-->
 
@@ -41,14 +47,14 @@
 						class="icon-bar"></span> <span class="icon-bar"></span> <span
 						class="icon-bar"></span>
 				</button>
-				<a class="navbar-brand" href="index.html">UdeM Active</a>
+				<a class="navbar-brand" href="index_authetified_user.html">UdeM Active</a>
 			</div>
 			<div class="navbar-collapse collapse">
 				<ul class="nav navbar-nav">
 					<li class="active"><a href="my_trainings.html">My trainings</a></li>
 					<li><a href="add_training.html">Add training</a></li>
-					<li><a href="#contact">Find trainings</a></li>
-					<li class="dropdown"><a href="#" class="dropdown-toggle"
+					<li><a href="#">Find trainings</a></li>
+					<li class="dropdown"><a href="my_trainings.html" class="dropdown-toggle"
 						data-toggle="dropdown">Dropdown <b class="caret"></b></a>
 						<ul class="dropdown-menu">
 							<li><a href="#">Training type</a></li>
@@ -59,39 +65,76 @@
 							<li><a href="#">Separated link</a></li>
 							<li><a href="#">One more separated link</a></li>
 						</ul></li>
+					<li>			
+					<button class="btn btn btn-danger btn-block" type="button"
+				onclick="window.location='index.html'">Sign out</button>
+</li>
 				</ul>
 			</div>
 			<!--/.nav-collapse -->
 		</div>
 	</div>
 
+	<div class="container theme-showcase">
+		<div class="page-header">
+			<h1>Upoming events</h1>
+					<li class="dropdown"><a href="my_trainings.html" class="dropdown-toggle"
+						data-toggle="dropdown">Dropdown <b class="caret"></b></a>
+						<ul class="dropdown-menu">
+							<li><a href="#">Training type</a></li>
+							<li><a href="#">Event title</a></li>
+							<li><a href="#">People</a></li>
+							<li class="divider"></li>
+							<li class="dropdown-header">Nav header</li>
+							<li><a href="#">Separated link</a></li>
+							<li><a href="#">One more separated link</a></li>
+						</ul></li>
+		</div>
+		<div class="panel panel-default">
+			<div class="panel-heading">
+				<h3 class="panel-title">
+					Event title
+					<button type="button" class="btn btn btn-primary">Join!</button>
+				</h3>
+			</div>
+			<div class="panel-body">
+				<h5 class="panel-title-item-heading">Date</h5>
+				<h5 class="panel-title-item-heading">Location</h5>
+			</div>
+		</div>
+		<div class="panel panel-default">
+			<div class="panel-heading">
+				<h3 class="panel-title">
+					Event title
+					<button type="button" class="btn btn btn-primary">Join!</button>
+				</h3>
+			</div>
+			<div class="panel-body">
+				<h5 class="panel-title-item-heading">Date</h5>
+				<h5 class="panel-title-item-heading">Location</h5>
+			</div>
+		</div>
 
-	<!-- Main jumbotron for a primary marketing message or call to action -->
-	<div class="jumbotron"></div>
+		<div class="row">
+			<!--  div class="col-sm-4"-->
+			<div class="list-group">
 
-	<div class="container">
-
-		<form class="form-signin" role="form">
-			Username:<input type="text" class="form-control"
-				placeholder="Username" required autofocus><br> 
-			Email:<input
-				type="text" class="form-control" placeholder="Email address"
-				required><br> 
-			Password:<input type="password"
-				class="form-control" placeholder="Password" required><br>
-			Re-type Password:<input type="password" class="form-control"
-				placeholder="Password" required><br>
-			First Name:<input
-				type="text" class="form-control" placeholder="First Name"><br> 
-			Last Name:<input
-				type="text" class="form-control" placeholder="Last Name"><br> 
-			Address:<input type="text" class="form-control" placeholder="Address"
-				required><br> 
-			<button class="btn btn-lg btn-danger btn-block" type="button"
-				onclick="window.location='index.html';return false">Cancel</button>
-			<button class="btn btn-lg btn-primary btn-block" type="submit">Sign
-				up</button>
-		</form>
+				<a href="#" class="list-group-item active"> </a> <a href="#"
+					class="list-group-item">
+					<h4 class="list-group-item-heading">List group item heading</h4>
+					<p class="list-group-item-text">Donec id elit non mi porta
+						gravida at eget metus. Maecenas sed diam eget risus varius
+						blandit.</p>
+				</a> <a href="#" class="list-group-item">
+					<h4 class="list-group-item-heading">List group item heading</h4>
+					<p class="list-group-item-text">Donec id elit non mi porta
+						gravida at eget metus. Maecenas sed diam eget risus varius
+						blandit.</p>
+				</a>
+			</div>
+			<!--  /div-->
+			<!-- /.col-sm-4 -->
+		</div>
 
 	</div>
 	<!-- /container -->
