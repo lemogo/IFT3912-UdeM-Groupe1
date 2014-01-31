@@ -45,20 +45,8 @@
 			</div>
 			<div class="navbar-collapse collapse">
 				<ul class="nav navbar-nav">
-					<li class="active"><a href="my_trainings.html">My trainings</a></li>
-					<li><a href="add_training.html">Add training</a></li>
-					<li><a href="#contact">Find trainings</a></li>
-					<li class="dropdown"><a href="#" class="dropdown-toggle"
-						data-toggle="dropdown">Dropdown <b class="caret"></b></a>
-						<ul class="dropdown-menu">
-							<li><a href="#">Training type</a></li>
-							<li><a href="#">Event title</a></li>
-							<li><a href="#">People</a></li>
-							<li class="divider"></li>
-							<li class="dropdown-header">Nav header</li>
-							<li><a href="#">Separated link</a></li>
-							<li><a href="#">One more separated link</a></li>
-						</ul></li>
+					<li><a href="index.html#upcomming">Upcomming trainings</a></li>
+					<li><a href="index.html#search">Find trainings</a></li>
 				</ul>
 			</div>
 			<!--/.nav-collapse -->
@@ -69,30 +57,88 @@
 	<!-- Main jumbotron for a primary marketing message or call to action -->
 	<div class="jumbotron"></div>
 
-	<div class="container">
+	<div class="page-header">
+		<h2 class="form-signin-heading">Please Sign Up!</h2>
 
-		<form class="form-signin" role="form">
-			Username:<input type="text" class="form-control"
-				placeholder="Username" required autofocus><br> 
-			Email:<input
-				type="text" class="form-control" placeholder="Email address"
-				required><br> 
-			Password:<input type="password"
-				class="form-control" placeholder="Password" required><br>
-			Re-type Password:<input type="password" class="form-control"
-				placeholder="Password" required><br>
-			First Name:<input
-				type="text" class="form-control" placeholder="First Name"><br> 
-			Last Name:<input
-				type="text" class="form-control" placeholder="Last Name"><br> 
-			Address:<input type="text" class="form-control" placeholder="Address"
-				required><br> 
-			<button class="btn btn-lg btn-danger btn-block" type="button"
-				onclick="window.location='index.html';return false">Cancel</button>
-			<button class="btn btn-lg btn-primary btn-block" type="submit">Sign
-				up</button>
-		</form>
+		<div class="container theme-showcase">
+			<div class="panel panel-default">
 
+				<form class="form-signin" role="form">
+
+					<div class="form-group">
+						<label class="col-sm-2 control-label">Username:</label>
+						<div class="col-sm-10">
+							<input type="text" class="form-control" placeholder="Username"
+								required autofocus>
+						</div>
+					</div>
+
+
+					<div class="form-group">
+						<label for="inputEmail3" class="col-sm-2 control-label">Email</label>
+						<div class="col-sm-10">
+							<input type="text" class="form-control"
+								placeholder="Email address" required>
+						</div>
+					</div>
+
+					<div class="form-group">
+						<label class="col-sm-2 control-label">Password:</label>
+						<div class="col-sm-10">
+							<input type="password" class="form-control"
+								placeholder="Password" required>
+						</div>
+					</div>
+
+
+
+					<div class="form-group">
+						<label class="col-sm-2 control-label">Re-type Password:</label>
+						<div class="col-sm-10">
+							<input type="password" class="form-control"
+								placeholder="Password" required>
+						</div>
+					</div>
+
+					<div class="form-group">
+						<label class="col-sm-2 control-label">First Name:</label>
+						<div class="col-sm-10">
+							<input type="text" class="form-control" placeholder="First Name">
+						</div>
+					</div>
+
+
+					<div class="form-group">
+						<label class="col-sm-2 control-label">Last Name:</label>
+						<div class="col-sm-10">
+							<input type="text" class="form-control" placeholder="Last Name">
+						</div>
+					</div>
+
+
+					<div class="form-group">
+						<label class="col-sm-2 control-label">Address:</label>
+						<div class="col-sm-10">
+							<input type="text" class="form-control" placeholder="Address"
+								required>
+						</div>
+					</div>
+
+
+					<label></label>
+					<div class="form-group">
+						<div class="col-sm-2">
+							<button class="btn btn-lg btn-danger btn-block" type="button"
+								onclick="window.location='index.html';return false">Cancel</button>
+						</div>
+						<div class="col-sm-2 pull-right">
+							<button class="btn btn-lg btn-primary btn-block " type="submit">Sign
+								up</button>
+						</div>
+					</div>
+				</form>
+			</div>
+		</div>
 	</div>
 	<!-- /container -->
 

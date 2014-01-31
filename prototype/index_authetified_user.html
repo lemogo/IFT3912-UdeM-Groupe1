@@ -47,94 +47,135 @@
 						class="icon-bar"></span> <span class="icon-bar"></span> <span
 						class="icon-bar"></span>
 				</button>
-				<a class="navbar-brand" href="index_authetified_user.html">UdeM Active</a>
+				<a class="navbar-brand" href="index_authetified_user.html">UdeM
+					Active</a>
 			</div>
 			<div class="navbar-collapse collapse">
 				<ul class="nav navbar-nav">
-					<li class="active"><a href="my_trainings.html">My trainings</a></li>
+					<li class="active"><a href="my_trainings.html">My
+							trainings</a></li>
 					<li><a href="add_training.html">Add training</a></li>
 					<li><a href="#">Find trainings</a></li>
-					<li class="dropdown"><a href="my_trainings.html" class="dropdown-toggle"
-						data-toggle="dropdown">Dropdown <b class="caret"></b></a>
-						<ul class="dropdown-menu">
-							<li><a href="#">Training type</a></li>
-							<li><a href="#">Event title</a></li>
-							<li><a href="#">People</a></li>
-							<li class="divider"></li>
-							<li class="dropdown-header">Nav header</li>
-							<li><a href="#">Separated link</a></li>
-							<li><a href="#">One more separated link</a></li>
-						</ul></li>
-					<li>			
-					<button class="btn btn btn-danger btn-block" type="button"
-				onclick="window.location='index.html'">Sign out</button>
-</li>
+					<li>
+						<button class="btn btn btn-danger btn-block" type="button"
+							onclick="window.location='index.html'">Sign out</button>
+					</li>
 				</ul>
 			</div>
 			<!--/.nav-collapse -->
 		</div>
 	</div>
 
-	<div class="container theme-showcase">
-		<div class="page-header">
-			<h1>Upoming events</h1>
-					<li class="dropdown"><a href="my_trainings.html" class="dropdown-toggle"
-						data-toggle="dropdown">Dropdown <b class="caret"></b></a>
-						<ul class="dropdown-menu">
-							<li><a href="#">Training type</a></li>
-							<li><a href="#">Event title</a></li>
-							<li><a href="#">People</a></li>
-							<li class="divider"></li>
-							<li class="dropdown-header">Nav header</li>
-							<li><a href="#">Separated link</a></li>
-							<li><a href="#">One more separated link</a></li>
-						</ul></li>
-		</div>
-		<div class="panel panel-default">
-			<div class="panel-heading">
-				<h3 class="panel-title">
-					Event title
-					<button type="button" class="btn btn btn-primary">Join!</button>
-				</h3>
-			</div>
-			<div class="panel-body">
-				<h5 class="panel-title-item-heading">Date</h5>
-				<h5 class="panel-title-item-heading">Location</h5>
-			</div>
-		</div>
-		<div class="panel panel-default">
-			<div class="panel-heading">
-				<h3 class="panel-title">
-					Event title
-					<button type="button" class="btn btn btn-primary">Join!</button>
-				</h3>
-			</div>
-			<div class="panel-body">
-				<h5 class="panel-title-item-heading">Date</h5>
-				<h5 class="panel-title-item-heading">Location</h5>
-			</div>
-		</div>
+	<div class="page-header" id="upcomming">
+		<h1>Upoming events</h1>
 
-		<div class="row">
-			<!--  div class="col-sm-4"-->
-			<div class="list-group">
+		<div class="container theme-showcase">
+			<div class="panel panel-default">
+				<div class="panel-heading">
+					<div class="input-group" id="search">
+						<input type="text" class="form-control" placeholder="search">
+						<div class="input-group-btn">
+							<button type="button" class="btn btn-default dropdown-toggle"
+								data-toggle="dropdown">
+								type <span class="caret"></span>
+							</button>
+							<button type="button" class="btn btn-default dropdown-toggle"
+								data-toggle="dropdown">Go!</button>
+							<ul class="dropdown-menu">
+								<li><a>All</a></li>
+								<li><a>Training type</a></li>
+								<li><a>Training description</a></li>
+								<li><a>Training title</a></li>
+								<li><a>People</a></li>
+							</ul>
+						</div>
+						<!-- /btn-group -->
+						<label><input type="checkbox"> Cancelled events
+							only</label>
+					</div>
+				</div>
 
-				<a href="#" class="list-group-item active"> </a> <a href="#"
-					class="list-group-item">
-					<h4 class="list-group-item-heading">List group item heading</h4>
-					<p class="list-group-item-text">Donec id elit non mi porta
-						gravida at eget metus. Maecenas sed diam eget risus varius
-						blandit.</p>
-				</a> <a href="#" class="list-group-item">
-					<h4 class="list-group-item-heading">List group item heading</h4>
-					<p class="list-group-item-text">Donec id elit non mi porta
-						gravida at eget metus. Maecenas sed diam eget risus varius
-						blandit.</p>
-				</a>
+				<div class="panel-body">
+					<div class="panel-group" id="accordion">
+						<div class="panel panel-default">
+							<div class="panel-heading">
+								<h4 class="panel-title">
+									<a data-toggle="collapse" data-parent="#accordion"
+										href="#collapseOne"> Event title </a>
+									<button type="button" class="btn btn btn-primary">Join!</button>
+									<span class="badge" data-toggle="tooltip" data-placement="left"
+										title="Number of people who joined">20</span>
+									<a class="btn btn btn-warning pull-right" href="owner_training.html"
+								role="button">Full details</a>
+								</h4>
+							</div>
+
+							<div id="collapseOne" class="panel-collapse collapse in">
+								<div class="panel panel-default">
+									<div class="panel-body">
+										<h5 class="panel-title-item-heading">Date</h5>
+										<h5 class="panel-title-item-heading">Location</h5>
+										<h5 class="panel-title-item-heading">
+											<a>Author</a>
+										</h5>
+									</div>
+								</div>
+							</div>
+						</div>
+						<div class="panel panel-default">
+							<div class="panel-heading">
+								<h4 class="panel-title">
+									<a data-toggle="collapse" data-parent="#accordion"
+										href="#collapseTwo"> Event title </a>
+									<button type="button" class="btn btn btn-primary">Join!</button>
+									<span class="badge" data-toggle="tooltip" data-placement="left"
+										title="Number of people who joined">14</span>
+									<a class="btn btn btn-warning pull-right" href="owner_training.html"
+								role="button">Full details</a>
+								</h4>
+							</div>
+
+							<div id="collapseTwo" class="panel-collapse collapse">
+								<div class="panel panel-body">
+									<div class="panel-body">
+										<h5 class="panel-title-item-heading">Date</h5>
+										<h5 class="panel-title-item-heading">Location</h5>
+										<h5 class="panel-title-item-heading">
+											<a>Author</a>
+										</h5>
+									</div>
+								</div>
+							</div>
+						</div>
+						<div class="panel panel-default">
+							<div class="panel-heading">
+								<h4 class="panel-title">
+									<a data-toggle="collapse" data-parent="#accordion"
+										href="#collapseThree"> Event title </a>
+									<button type="button" class="btn btn btn-primary">Join!</button>
+									<span class="badge" data-toggle="tooltip" data-placement="left"
+										title="Number of people who joined">14</span>
+									<a class="btn btn btn-warning pull-right" href="owner_training.html"
+								role="button">Full details</a>
+								</h4>
+							</div>
+							<div id="collapseThree" class="panel-collapse collapse">
+								<div class="panel panel-default">
+									<div class="panel-body">
+										<h5 class="panel-title-item-heading">Date</h5>
+										<h5 class="panel-title-item-heading">Location</h5>
+										<h5 class="panel-title-item-heading">
+											<a>Author</a>
+										</h5>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+				</div>
+
 			</div>
-			<!--  /div-->
-			<!-- /.col-sm-4 -->
-		</div>
 
 	</div>
 	<!-- /container -->

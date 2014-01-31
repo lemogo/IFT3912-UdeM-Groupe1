@@ -63,7 +63,7 @@
       </div>
     </div>
 
-	<!-- Main jumbotron for a primary marketing message or call to action -->
+	<!-- Main jumbotron - present as dirty layout fix-->
 	<div class="jumbotron"></div>
 
     <div class="container">
@@ -75,10 +75,17 @@
         <label class="checkbox">
           <input type="checkbox" value="remember-me"> Remember me
         </label>
-			<button class="btn btn-lg btn-danger btn-block" type="button"
-				onclick="window.location='index.html';return false">Cancel</button>
-        <button class="btn btn-lg btn-primary btn-block" type="submit"
-        onclick="window.location='index_authetified_user.html';return true">Log in</button>
+
+					<div class="form-group">
+						<div class="col-sm-2">
+							<button class="btn btn-lg btn-danger btn-block" type="button"
+								onclick="window.location='index.html';return false">Cancel</button>
+						</div>
+						<div class="col-sm-2 pull-right">
+							<button class="btn btn-lg btn-primary btn-block "
+								type="submit" onclick="window.location='index_authetified_user.html';return true">Log in</button>
+						</div>
+					</div>
       </form>
 
     </div> <!-- /container -->
