@@ -215,10 +215,11 @@
 }
 
 .navbar-inverse {
-  background-image: -webkit-linear-gradient(top, #3c3c3c 0%, #222222 100%);
-  background-image: linear-gradient(to bottom, #3c3c3c 0%, #222222 100%);
+  background-image: -webkit-linear-gradient(top, #2f78b7 0%, #145388 100%);
+  background-image: linear-gradient(to bottom, #2f78b7 0%, #145388 100%);
   background-repeat: repeat-x;
-  filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#ff3c3c3c', endColorstr='#ff222222', GradientType=0);
+  border-color: #276195;
+  filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#276195', endColorstr='#145388', GradientType=0);
   filter: progid:DXImageTransform.Microsoft.gradient(enabled=false);
 }
 
