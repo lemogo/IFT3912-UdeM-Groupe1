@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="">
+<meta name="author" content="">
+<link rel="shortcut icon" href="images/favicon.ico">
+
+<title>UdeM Actif - Notifications</title>
+
+<!-- Bootstrap core and theme CSS -->
+<link href="css/bootstrap.css" rel="stylesheet">
+<link href="css/bootstrap-theme.css" rel="stylesheet">
+<link href="css/connexion.css" rel="stylesheet">
+
+<!-- Custom styles for this template -->
+<link href="css/general.css" rel="stylesheet">
+<link href="css/navbar.css" rel="stylesheet">
+<link href="css/events.css" rel="stylesheet">
+<link href="css/notifications.css" rel="stylesheet">
+
+<!--[if lt IE 9]>
+      <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+      <script src="https://oss.maxcdn.com/libs/respond.js/1.3.0/respond.min.js"></script>
+    <![endif]-->
+</head>
+
+<body>
+
+	<!-- Fixed navbar -->
+	<div class="navbar navbar-inverse navbar-fixed-top" role="navigation">
+		<div class="container">
+			<div class="navbar-header">
+				<a class="navbar-brand navlink" href="index.html">UdeM Actif</a>
+			</div>
+			<div class="navbar-collapse collapse">
+				<ul class="nav navbar-nav">
+					<li><a href="liste-des-evenements.html" class="navlink">Liste des événements</a></li>
+					<li><a href="ajouter-un-evenement.html"  class="navlink">Créer votre événement</a></li>
+				</ul>
+				<ul class="navbar-nav pull-right navbar-right-links">
+					<li><a href="voir-membre-owner.html" class="navlink">Mon compte</a></li>
+					<li><a href="notifications.html"  class="navlink">Notifications <span class="badge badgeYellow" data-toggle="tooltip" data-placement="left" title="Vous avez 3 nouvelles notifications">3</span></a></li>
+				</ul>
+			</div>
+		</div>
+	</div>
+	<div id="contentWrapper">
+		<div class="container theme-showcase">
+			<h1 class="pageTitle">Notifications</h1>
+			<p class="descpage">Gérez vos notifications et Bacon ipsum dolor sit amet meatball beef ribs jowl bresaola sirloin pork loin tail shank pork chop short ribs pork. Rump brisket tongue, shankle tri-tip pork chop capicola doner corned beef swine leberkas bresaola andouille bacon.</p>
+			<div class="panel panel-primary">
+				<div class="panel-heading">
+					<h2 class="panel-title">Liste de vos notifications</h2>
+				</div>
+				<div class="panel-collapse collapse in">
+					<div class="alert alert-danger">
+				    	L'événement <i>Spartan Race</i> créé par <a href="voir-membre.html">barfuhok</a> a été annulé.
+				    	<a type="button" class="btn btn-xs btn-danger deleteNotification">X</a>
+				    </div>
+					<div class="alert alert-info">
+				    	Le membre <a href="voir-membre.html">barfuhok</a> s'est inscrit à votre activité <a href="event.html">Volleyball</a>.
+				    	<a type="button" class="btn btn-xs btn-danger deleteNotification">X</a>
+				    </div>
+				    <div class="alert alert-info">
+				    	Le membre <a href="voir-membre.html">barfuhok</a> s'est inscrit à votre activité <a href="event.html">Badminton</a>.
+				    	<a type="button" class="btn btn-xs btn-danger deleteNotification">X</a>
+				    </div>
+				</div>
+			</div>
+		</div>
+	</div>
+
+
+	<!-- Bootstrap core JavaScript
+    ================================================== -->
+	<!-- Placed at the end of the document so the pages load faster -->
+	<script src="https://code.jquery.com/jquery-1.10.2.min.js"></script>
+	<script src="js/bootstrap.js"></script>
+	<script src="js/notifications.js"></script>
+</body>
+</html>

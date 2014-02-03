@@ -5193,6 +5193,16 @@ textarea.input-group-sm > .input-group-btn > .btn {
   background-color: #999999;
   border-radius: 10px;
 }
+.badgeGreen {
+	background-color:#2fa80e;
+}
+.badgeYellow {
+	background-color:#ea812c;
+}
+.badgeBlue {
+	background-color:#879eb4;
+}
+
 
 .badge:empty {
   display: none;

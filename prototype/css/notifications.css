@@ -1,0 +1,9 @@
+.alert {
+	position:relative;
+}
+.deleteNotification {
+	right:10px;
+	position:absolute;
+	opacity:0.4;
+	filter:alpha(opacity=40);
+}

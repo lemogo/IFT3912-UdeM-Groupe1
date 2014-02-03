@@ -1,0 +1,41 @@
+#search {
+	width:100%;
+	position:relative;
+}
+#search .filterSearch {
+	width:173px;
+	position:absolute;
+	right:0px;
+}
+#search .filterSearch .btn, #search .filterSearch .dropdown-menu {
+	float:right;
+}
+#search .filterSearch .dropdown-menu li {
+	cursor:pointer;
+}
+#search .searchInput {
+	width:400px;
+}
+.panel-body .panel .panel-heading {
+	position:relative;
+	height:53px;
+}
+.panel-body .panel .detailsButtons {
+	position:absolute;
+	right:0px;
+	padding-right:10px;
+}
+.panel-body .panel .panel-title {
+	font-size:18px;
+	padding-top:6px;
+	color:#145388;
+}
+.panel-body .panel .panel-title .place-left {
+	font-size:12px;
+	margin-left:10px;
+	color:#606060;
+}
+.panel-body .panel .panel-title-item-heading {
+	font-weight:bold;
+	color:#145388;
+}

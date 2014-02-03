@@ -1,34 +1,25 @@
 
 <!DOCTYPE html>
-<html lang="en">
+<html lang="fr">
 <head>
 <meta charset="utf-8">
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="description" content="">
 <meta name="author" content="">
-<link rel="shortcut icon" href="../../docs-assets/ico/favicon.png">
+<link rel="shortcut icon" href="images/favicon.ico">
 
-<title>Theme Template for Bootstrap</title>
+<title>UdeM Actif - Participer à des activitées sportives</title>
 
-<!-- Bootstrap core CSS -->
+<!-- Bootstrap core and theme CSS -->
 <link href="css/bootstrap.css" rel="stylesheet">
-<!-- Bootstrap theme -->
-<link href="css/bootstrap-theme.min.css" rel="stylesheet">
+<link href="css/bootstrap-theme.css" rel="stylesheet">
 
 <!-- Custom styles for this template -->
-<link href="theme.css" rel="stylesheet">
+<link href="css/general.css" rel="stylesheet">
+<link href="css/navbar.css" rel="stylesheet">
+<link href="css/carousel.css" rel="stylesheet">
 
-<!-- Custom styles for this template -->
-<link href="carousel.css" rel="stylesheet">
-
-<!-- Custom styles for this template -->
-<link href="signin.css" rel="stylesheet">
-
-<!-- Just for debugging purposes. Don't actually copy this line! -->
-<!--[if lt IE 9]><script src="../../docs-assets/js/ie8-responsive-file-warning.js"></script><![endif]-->
-
-<!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
 <!--[if lt IE 9]>
       <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
       <script src="https://oss.maxcdn.com/libs/respond.js/1.3.0/respond.min.js"></script>
@@ -41,170 +32,84 @@
 	<div class="navbar navbar-inverse navbar-fixed-top" role="navigation">
 		<div class="container">
 			<div class="navbar-header">
-				<button type="button" class="navbar-toggle" data-toggle="collapse"
-					data-target=".navbar-collapse">
-					<span class="sr-only">Toggle navigation</span> <span
-						class="icon-bar"></span> <span class="icon-bar"></span> <span
-						class="icon-bar"></span>
-				</button>
-				<a class="navbar-brand" href="index.html">UdeM Active</a>
+				<a class="navbar-brand navlink" href="index.html">UdeM Actif</a>
 			</div>
 			<div class="navbar-collapse collapse">
 				<ul class="nav navbar-nav">
-					<li><a href="#">Find trainings</a></li>
-					<li class="dropdown"><a href="my_trainings.html" class="dropdown-toggle"
-						data-toggle="dropdown">Dropdown <b class="caret"></b></a>
-						<ul class="dropdown-menu">
-							<li><a href="#">Training type</a></li>
-							<li><a href="#">Event title</a></li>
-							<li><a href="#">People</a></li>
-							<li class="divider"></li>
-							<li class="dropdown-header">Nav header</li>
-							<li><a href="#">Separated link</a></li>
-							<li><a href="#">One more separated link</a></li>
-						</ul></li>
+					<li><a href="liste-des-evenements.html" class="navlink">Liste des événements</a></li>
+					<li><a href="ajouter-un-evenement.html"  class="navlink">Créer votre événement</a></li>
 				</ul>
-			</div>
-			<!--/.nav-collapse -->
-		</div>
-	</div>
-
-
-	<!-- Carousel
-    ================================================== -->
-	<div id="myCarousel" class="carousel slide" data-ride="carousel">
-		<!-- Indicators -->
-		<ol class="carousel-indicators">
-			<li data-target="#myCarousel" data-slide-to="0" class="active"></li>
-			<li data-target="#myCarousel" data-slide-to="1"></li>
-			<li data-target="#myCarousel" data-slide-to="2"></li>
-		</ol>
-		<div class="carousel-inner">
-			<div class="item active">
-				<img data-src="holder.js/900x500/auto/#777:#7a7a7a/text:First slide"
-					src="images/Universite_de_Montreal_faded.jpg" alt="First slide">
-				<div class="container">
-					<div class="carousel-caption">
-						<h1>UdeM Active.</h1>
-						<p>"UdeM active" was conceived to allow sport enthusiasms to
-							share their passion by creating events such as jogging, biking,
-							dance, crossfit and the likes.</p>
-						<p>
-							<a class="btn btn-lg btn-primary" href="sign_up.html"
-								role="button">Sign up today</a>
-							<a class="btn btn-lg btn-default" href="log_in.html"
-								role="button">Log in</a>
-						</p>
-					</div>
-				</div>
-			</div>
-			<div class="item">
-				<img
-					data-src="holder.js/900x500/auto/#666:#6a6a6a/text:Second slide"
-					alt="Second slide">
-				<div class="container">
-					<div class="carousel-caption">
-						<h1>Running</h1>
-						<p>Mark founds a horde of people who love to run like him.</p>
-						<p>
-							<a class="btn btn-lg btn-primary" href="#" role="button">Learn
-								more</a>
-						</p>
-					</div>
-				</div>
-			</div>
-			<div class="item">
-				<img data-src="holder.js/900x500/auto/#555:#5a5a5a/text:Third slide"
-					alt="Third slide" src="images/yoga_park.jpg">
-				<div class="container">
-					<div class="carousel-caption">
-						<h1>Yoga</h1>
-						<p>Kesha found a new passion in yoga in the park.</p>
-						<p>
-							<a class="btn btn-lg btn-primary" href="#" role="button">Browse
-								gallery</a>
-						</p>
-					</div>
+				<div class="pull-right connect">
+					<a class="btn btn-primary" href="enregistrement.html" role="button">Enregistrez-vous</a>
+					<a class="btn btn-default" href="connexion.html" role="button">Connexion à votre compte</a>
 				</div>
 			</div>
 		</div>
-		<a class="left carousel-control" href="#myCarousel" data-slide="prev"><span
-			class="glyphicon glyphicon-chevron-left"></span></a> <a
-			class="right carousel-control" href="#myCarousel" data-slide="next"><span
-			class="glyphicon glyphicon-chevron-right"></span></a>
 	</div>
-	<!-- /.carousel -->
 
-	<div class="container theme-showcase">
-		<div class="page-header">
-			<h1>Upoming events</h1>
-					<li class="dropdown"><a href="my_trainings.html" class="dropdown-toggle"
-						data-toggle="dropdown">Dropdown <b class="caret"></b></a>
-						<ul class="dropdown-menu">
-							<li><a href="#">Training type</a></li>
-							<li><a href="#">Event title</a></li>
-							<li><a href="#">People</a></li>
-							<li class="divider"></li>
-							<li class="dropdown-header">Nav header</li>
-							<li><a href="#">Separated link</a></li>
-							<li><a href="#">One more separated link</a></li>
-						</ul></li>
-		</div>
-		<div class="panel panel-default">
-			<div class="panel-heading">
-				<h3 class="panel-title">
-					Event title
-					<button type="button" class="btn btn btn-primary">Join!</button>
-				</h3>
-			</div>
-			<div class="panel-body">
-				<h5 class="panel-title-item-heading">Date</h5>
-				<h5 class="panel-title-item-heading">Location</h5>
-			</div>
-		</div>
-		<div class="panel panel-default">
-			<div class="panel-heading">
-				<h3 class="panel-title">
-					Event title
-					<button type="button" class="btn btn btn-primary">Join!</button>
-				</h3>
-			</div>
-			<div class="panel-body">
-				<h5 class="panel-title-item-heading">Date</h5>
-				<h5 class="panel-title-item-heading">Location</h5>
-			</div>
-		</div>
+	<div id="contentWrapper">
+		<!-- Carousel -->
+		<div id="myCarousel" class="carousel slide" data-ride="carousel">
+			<!-- Indicators -->
+			<ol class="carousel-indicators">
+				<li data-target="#myCarousel" data-slide-to="0" class="active"></li>
+				<li data-target="#myCarousel" data-slide-to="1"></li>
+			</ol>
+			<div class="carousel-inner">
+				<div class="item active" style="background-image: url('images/caroussel_1.jpg');">
 
-		<div class="row">
-			<!--  div class="col-sm-4"-->
-			<div class="list-group">
-
-				<a href="#" class="list-group-item active"> </a> <a href="#"
-					class="list-group-item">
-					<h4 class="list-group-item-heading">List group item heading</h4>
-					<p class="list-group-item-text">Donec id elit non mi porta
-						gravida at eget metus. Maecenas sed diam eget risus varius
-						blandit.</p>
-				</a> <a href="#" class="list-group-item">
-					<h4 class="list-group-item-heading">List group item heading</h4>
-					<p class="list-group-item-text">Donec id elit non mi porta
-						gravida at eget metus. Maecenas sed diam eget risus varius
-						blandit.</p>
-				</a>
+					<div class="container" style="background-image: url('static/images/bg/login.jpg');">
+						<div class="carousel-caption">
+							<h1>UdeM Actif</h1>
+							<p>UdeM actif est une plateforme réservée au membres de l'Université de Montréal invitant les étudiants à participer ou à créer leurs événements sportifs</p>
+							<p><a class="btn btn-lg btn-primary" href="enregistrement.html" role="button">S'enregistrer gratuitement</a></p>
+						</div>
+					</div>
+				</div>
+				<div class="item" style="background-image: url('images/caroussel_2.jpg');">
+					<div class="container">
+						<div class="carousel-caption">
+							<h1>Des activités en tout genre</h1>
+							<p>Participez à des activités en tout genre parmi celles proposées par les autres membres, ou bien créez vous-même votre événements sportif si vous êtes à la recherche de partneraire(s).</p>
+							<p>
+								<a class="btn btn-lg btn-primary" href="liste-des-evenements.html" role="button">Voir la liste des événements</a>
+							</p>
+						</div>
+					</div>
+				</div>
 			</div>
-			<!--  /div-->
-			<!-- /.col-sm-4 -->
+			<a class="left carousel-control" href="#myCarousel" data-slide="prev"><span
+				class="glyphicon glyphicon-chevron-left"></span></a> <a
+				class="right carousel-control" href="#myCarousel" data-slide="next"><span
+				class="glyphicon glyphicon-chevron-right"></span></a>
 		</div>
-
+		
+		<div class="container theme-showcase">
+			<div class="row">
+		        <div class="col-md-4">
+		          <h2>Trouvez des événements</h2>
+		          <p>Trouvez des activitées sportives. Bacon ipsum dolor sit amet meatball beef ribs jowl bresaola sirloin pork loin tail shank pork chop short ribs pork. Rump brisket tongue, shankle tri-tip pork chop capicola doner corned beef swine leberkas bresaola andouille bacon. Ham hock tenderloin andouille strip steak. Jerky kevin pork loin drumstick bresaola porchetta boudin turkey pork chop salami.</p>
+		          <p><a class="btn btn-primary" href="liste-des-evenements.html" role="button">Liste des activitées &raquo;</a></p>
+		        </div>
+		        <div class="col-md-4">
+		          <h2>Créez des événements</h2>
+		          <p>Créez votre propre activitée sportive. Cras eleifend, neque condimentum molestie tincidunt, tortor erat pellentesque risus, ac pharetra mi magna non nibh. Donec malesuada nisi ipsum, commodo posuere libero adipiscing id. Sed accumsan, neque eu rhoncus sagittis, turpis mauris dictum sapien, nec porttitor odio augue convallis tortor. </p>
+		          <p><a class="btn btn-primary" href="ajouter-un-evenement.html" role="button">Créez votre événement &raquo;</a></p>
+		       </div>
+		        <div class="col-md-4">
+		          <h2>C'est gratuit!</h2>
+		          <p>Enregistrez-vous gratuitement afin de pouvoir participer et de créez vos événements Vivamus sed ultrices nulla. Aliquam erat volutpat. Nunc tincidunt justo eleifend condimentum posuere. Proin mattis placerat neque non accumsan. Praesent cursus blandit vestibulum. Curabitur convallis volutpat dolor, non fringilla ligula adipiscing eget. Quisque auctor rhoncus lobortis. </p>
+		          <p><a class="btn btn-primary" href="enregistrement.html" role="button">S'enregistrer &raquo;</a></p>
+		        </div>
+	      </div>
+	
+		</div>
 	</div>
-	<!-- /container -->
 
-
-	<!-- Bootstrap core JavaScript
-    ================================================== -->
+	<!-- Bootstrap core JavaScript -->
 	<!-- Placed at the end of the document so the pages load faster -->
 	<script src="https://code.jquery.com/jquery-1.10.2.min.js"></script>
-	<script src="js/bootstrap.min.js"></script>
+	<script src="js/bootstrap.js"></script>
 	<script src="../../docs-assets/js/holder.js"></script>
 </body>
 </html>

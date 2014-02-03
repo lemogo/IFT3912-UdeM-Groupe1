@@ -1,0 +1,17 @@
+#formAddEvent .form-group  {
+	display:block;
+	margin-bottom:5px;
+	min-height:40px;
+}
+#formAddEvent .form-group .col-sm-9 {
+	width:650px;	
+}
+#formAddEvent .description {
+	min-height:80px;
+}
+#formAddEvent .addButton {
+	float:right;
+}
+#formAddEvent label {
+	color:#145388;
+}
