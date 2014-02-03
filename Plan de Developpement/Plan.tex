@@ -1,0 +1,87 @@
+\documentclass[10pt,a4paper]{report}
+\usepackage[utf8]{inputenc}
+\usepackage[francais]{babel}
+\usepackage[T1]{fontenc}
+\usepackage{amsmath}
+\usepackage{amsfonts}
+\usepackage{amssymb}
+\usepackage{qtree}
+\usepackage[left=1cm,right=1cm,top=1cm,bottom=1cm]{geometry}
+		\author{Nicolas Lavoie Drapeau \and Alexandre Mathon-Roy \and Luc-Antoine Girardin \and William Tchoudi \and Lionnel Lemogo}
+		\title{IFT3912 - Développement et maintenance,\\Plan de développement\\Équipe 1}
+		\begin{document}
+		\maketitle
+		\begin{flushleft}
+				\section*{Résumé}
+					Permettre à des utilisateurs de créer ou de s'inscrire en ligne à 
+					des événements reliés à l'entraînement et au maintient d'un rythme de vie sain.\\
+				\section*{Work Breakdown Structure}
+					\begin{enumerate}
+						\item[1.] Analyse des besoins.\\
+						\begin{enumerate}
+							\item[1.1] Analyser les fonctions requises\\
+							\item[1.2] Définir les besoins des interfaces web\\
+							\item[1.3] Développer l'architecture du système web\\
+							\item[1.4] D�crire les cas d'utilisation\\
+						\end{enumerate}
+				\item[2.] Analyse des risques.\\
+					\begin{enumerate}
+						\item[2.1] Identifier et analyser les risques.\\
+						\item[2.2] Composer le plan d'aversion des risques.\\
+					\end{enumerate}
+				\item[3.] Qualité et métriques.\\
+					\begin{enumerate}
+						\item[3.1] Définir les métriques du projet.\\
+						\item[3.2] Définir l'évaluation de qualité du logiciel.\\
+					\end{enumerate}
+				\item[4.] Conception.\\
+					\begin{enumerate}
+						\item[4.1] Conception des interfaces web.\\
+						\item[4.2] Conception du pont entre web et le système d'origine (Conception d�tailler du pont Java-Web, UML )\\
+						\item[4.3] Conception de l'architecture du projet.\\
+						\item[4.4] Conception de la fonctionnalité de recherche.\\
+						\item[4.5] Conception de la base donnée.\\
+					\end{enumerate}
+				\item[5.] Implémentation et tests unitaires.\\
+					\begin{enumerate}
+						\item[5.1] Coder la base de données.\\
+						\item[5.2] Coder les interfaces statiques Web et faire des tests unitaires.\\
+						\item[5.3] Coder la gestion dynamique des pages Web et faire les tests unitaires.\\
+						\item[5.4] Coder le pont et faire des tests unitaires.\\
+				\end{enumerate}
+				\item[6.] Installation et déploiement.\\
+					\begin{enumerate}
+						\item[6.1] Installer le serveur web.\\
+						\item[6.2] Installer la base de données.\\
+						\item[6.3] Assurer la communication entre le pont, la base de données et le serveur.\\
+						\item[6.4] Tester le serveur.\\
+						\item[6.5] Tester le fonctionnement du pont.\\
+					\end{enumerate}
+				\end{enumerate}
+				\section*{Échéancier et assignation des ressources}
+						Taille de l'équipe: 5 membres.\\
+						Expert Web: 2\\
+						Expert DB: 1\\
+						Expert java: 2\\
+						Modèle de l'équipe: % contr�le décentralisé
+				\\
+				\section*{Analyse des risques}
+						\begin{enumerate}
+						\item[$\bullet$] Risque relié projet
+						\begin{enumerate}
+						\item[1.] Risque de dépasser la date limite. (Chance: 80\%, Impact: $\frac{3}{4}$)\\
+						\item[2.] Problèmes de disponibilité du personnel. (Chance 60\%, Impact: $\frac{2}{4}$)\\
+						\item[3.] Problèmes de compétence du personnel. (Chance 50\%, Impact: $\frac{1}{4}$)\\
+						\item[4.] Risque de bris matériel. (Chance: 20\%, Impact: $\frac{2}{4}$)\\
+				\end{enumerate}
+				\item[$\bullet$] Risque techniques
+					\begin{enumerate}
+					
+						\item[1.] Risque de documentation de mauvaise qualité. (Chance: 85\%, Impact: $\frac{1}{4}$)\\
+						\item[2.] Risque sur qualit� du logiciel d�velopp�  (Chance: 65\%, Impact: $\frac{2}{4}$)\\
+						\item[3.] Risque sur la taille du projet  (Chance: 75\%, Impact: $\frac{2}{4}$)\\
+						\item[3.] Risque sur la  technonologie utilis�e (Chance: 65\%, Impact: $\frac{2}{4}$)\\
+					\end{enumerate}
+					\end{enumerate}
+		\end{flushleft}
+\end{document}
