@@ -1,0 +1,30 @@
+- Numéro de l'équipe : 1
+
+
+- Noms des membres de l'équipe qui ont contribué au prototype :
+Alexandre Mathon-Roy MATA24038802
+Lionnel Lemogo LEML12018203
+
+On a préféré ne pas tous travailler sur le prototype pour ne pas se marcher sur les pieds. Les autres membres travailleront sur la deuxième remise tandis que nous non.
+
+
+
+- Explication des fonctionnalités :
+
+index.html : Page d'accueil. Présente le projet à l'aide d'un carousel informatif et 3 sections descriptives dans le bas. Le projet à été fait aux couleurs de l'UdeM afin que les étudiants s'y rattache.
+ajouter-un-evenement.html : On a besoin d'un nom de l'événement, une date, un lieu, un nombre de participants et d'un description. Un "datepicker" à été ajouté pour la date. Une validation HTML5 est faite.
+ajouter-un-evenement-succes.html : La page sur laquelle on est redirigé lorsqu'on crée un événement. Un message d'alerte succès est affiché.
+connexion.html : La page qui sert de connexion à l'utilisateur.
+enregistrement.html : La page qui sert pour créer un nouveau compte. On a besoin d'un nom, une adresse courriel, un nom d'utilisateur, un mot de passe, l'age de la personne et une description. Une validation HTML5 est faite.
+evenement.html : La page qui sert à voir un événement déjà créé. On montre les informations de bases de l'événement, et aussi le nom de la personnes qui a créé l'événement, le nombre d'inscrits et les places restantes. On peut s'inscrire directement sur cette page. On peut aussi laisser des commentaires.
+evenement-modification.html : Idem, mais pour lorsqu'on veut modifier notre événement déjà créé. 
+evenement-owner.html: La vue qu'on a sur une page d'événement lorsque nous somme le créateur de l'événement. Les boutons de mofification et pour supprimer l'événement sont présents.
+evenement-desinscription-succes.html : Le message d'alerte qui apparait lorsqu'on se désincrit d'un événement.
+evenement-inscription-succes.html : Le message d'alerte qui apparait lorsqu'on s'incrit à un événement.
+evenement-supprimer.html : Le message d'alerte qui apparait lorsqu'on a supprimer un événement.
+header-connected.html : Cette paqe est jsute pour démontrer le header qui n'est plus le même lorsqu'on est connecté sur le site. On a maintenant un bouton pour accéder à "mon compte", une pour accéder à nos notifications et un bouton de déconnexion.
+liste-des-evenements.html : Permet de voir la liste des événements, par défaut ceux à venir. Il y a un filtre qui nous permet de classé les événements à venir, ceux passés et ceux annulés. Il y a aussi un système de recherche. La liste montre les événements avec leur description, titre, date, lieu et places restantes. Un bouton nous permet d'aller directement sur la page de l'inscription afin de s'inscrire et de voir plus d'informations.
+modifier-mes-informations.html : Permet à l'utilisateur de modifier ses informations personnelles.
+notifications.html : Un système de notifications qui nous permet de voir un événement qui à été supprimé, mais aussi si quelqu'un à joint notre événement.
+voir-membre.html : Les informations sur un membre. On voit son nom d'utilisateur, nom complet, age, membre depuis et sa description. On voit aussi la liste des événements créés par ce membre.
+voir-membre-owner.html : La vue qu'on a lorsqu'on est sur notre propre profil. On a un bouton de modification des informations en plus. On peut aussi voir la liste des événements auxquels on participe.
