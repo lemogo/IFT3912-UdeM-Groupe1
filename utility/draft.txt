@@ -1,3 +1,0 @@
- -qualité du logiciel (respectant les 7 princcipes "modularité , abstraction, anticipation du changement  ...") et aussi s'il est vraiment convivial , fiable etc
-  -taille du projet (est ce que ça peux être trop grand ou pas)
-  - technonologie utilisée ( y a t'il un risque que cela nous fasse perdre du temps ou bien nous fait opter pour des solutions plutot difficile ...)

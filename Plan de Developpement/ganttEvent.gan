@@ -1,9 +1,9 @@
-<?xml version="1.0" encoding="UTF-8"?><project name="EventCalender" company="" webLink="http://" view-date="2014-02-05" view-index="0" gantt-divider-location="444" resource-divider-location="300" version="2.0" locale="fr">
+<?xml version="1.0" encoding="UTF-8"?><project name="EventCalender" company="" webLink="http://" view-date="2013-12-16" view-index="0" gantt-divider-location="686" resource-divider-location="300" version="2.0" locale="fr">
     <description/>
-    <view zooming-state="default:2" id="gantt-chart">
-        <field id="tpd3" name="Nom" width="38" order="0"/>
-        <field id="tpd4" name="Date de début" width="30" order="1"/>
-        <field id="tpd5" name="Date de fin" width="30" order="2"/>
+    <view zooming-state="default:7" id="gantt-chart">
+        <field id="tpd3" name="Nom" width="56" order="0"/>
+        <field id="tpd4" name="Date de début" width="12" order="1"/>
+        <field id="tpd5" name="Date de fin" width="31" order="2"/>
         <option id="taskLabelUp" value="name"/>
         <option id="taskLabelDown" value="advancement"/>
         <option id="taskLabelLeft" value="resources"/>
@@ -44,8 +44,8 @@
         <task id="3" name="D: Décrire les cas d'utilisation" color="#8cb6ce" meeting="false" start="2014-02-12" duration="6" complete="0" expand="true"/>
         <task id="5" name="E: Identifier et analyser les risques." color="#8cb6ce" meeting="false" start="2014-02-03" duration="10" complete="0" expand="true"/>
         <task id="7" name="F: Composer le plan d’aversion des risques." color="#8cb6ce" meeting="false" start="2014-02-03" duration="10" complete="0" expand="true"/>
-        <task id="8" name="G: Définir les métriques du projet." color="#8cb6ce" meeting="false" start="2014-02-12" duration="7" complete="0" expand="true"/>
-        <task id="9" name="H: Définir l’évaluation de qualité du logiciel." color="#8cb6ce" meeting="false" start="2014-02-12" duration="7" complete="0" expand="true"/>
+        <task id="8" name="G: Définir les métriques du projet." color="#8cb6ce" meeting="false" start="2014-03-17" duration="4" complete="0" expand="true"/>
+        <task id="9" name="H: Définir l’évaluation de qualité du logiciel." color="#8cb6ce" meeting="false" start="2014-03-17" duration="4" complete="0" expand="true"/>
         <task id="10" name="I: Conception des interfaces web" color="#8cb6ce" meeting="false" start="2014-01-22" duration="4" complete="0" expand="true">
             <depend id="16" type="2" difference="0" hardness="Strong"/>
         </task>
@@ -68,10 +68,12 @@
         <task id="16" name="O: Coder les interfaces statiques Web et faire des tests unitaires" color="#8cb6ce" meeting="false" start="2014-01-26" duration="9" complete="0" expand="true">
             <depend id="42" type="2" difference="8" hardness="Strong"/>
         </task>
-        <task id="42" name="V: Coder la gestion dynamique de la page Web et faire les tests unitaires." color="#8cb6ce" meeting="false" start="2014-02-12" duration="14" complete="0" expand="true">
+        <task id="42" name="V: Coder la gestion dynamique de la page Web et faire les tests unitaires." color="#8cb6ce" meeting="false" start="2014-02-12" duration="18" complete="0" expand="true">
             <depend id="20" type="2" difference="0" hardness="Strong"/>
         </task>
         <task id="17" name="P: Coder le pont et faire des tests unitaires" color="#8cb6ce" meeting="false" start="2014-02-26" duration="19" complete="0" expand="true">
+            <depend id="8" type="2" difference="0" hardness="Strong"/>
+            <depend id="9" type="2" difference="0" hardness="Strong"/>
             <depend id="20" type="2" difference="1" hardness="Strong"/>
             <depend id="22" type="2" difference="0" hardness="Strong"/>
         </task>
@@ -81,14 +83,11 @@
         <task id="19" name="R: Installer la base de données" color="#8cb6ce" meeting="false" start="2014-02-26" duration="2" complete="0" expand="true">
             <depend id="18" type="2" difference="0" hardness="Strong"/>
         </task>
-        <task id="20" name="S: Assurer la communication entre le pont, la base de données et le serveur" color="#8cb6ce" meeting="false" start="2014-03-18" duration="4" complete="0" expand="true">
-            <depend id="80" type="2" difference="0" hardness="Strong"/>
-        </task>
+        <task id="20" name="S: Assurer la communication entre le pont, la base de données et le serveur" color="#8cb6ce" meeting="false" start="2014-03-18" duration="4" complete="0" expand="true"/>
         <task id="21" name="T: Tester le serveur" color="#8cb6ce" meeting="false" start="2014-03-02" duration="2" complete="0" expand="true">
             <depend id="20" type="2" difference="0" hardness="Strong"/>
         </task>
         <task id="22" name="U: Tester le fonctionnement du pont" color="#8cb6ce" meeting="false" start="2014-03-17" duration="3" complete="0" expand="true"/>
-        <task id="80" name="W: produire la docummentation et rapport du projet" color="#8cb6ce" meeting="false" start="2014-03-22" duration="5" complete="0" expand="true"/>
     </tasks>
     <resources>
         <resource id="0" name="Alexandre" function="SoftwareDevelopment:2" contacts="" phone=""/>
@@ -107,7 +106,6 @@
         <allocation task-id="42" resource-id="0" function="SoftwareDevelopment:2" responsible="true" load="100.0"/>
         <allocation task-id="16" resource-id="0" function="SoftwareDevelopment:2" responsible="true" load="100.0"/>
         <allocation task-id="21" resource-id="0" function="SoftwareDevelopment:2" responsible="true" load="100.0"/>
-        <allocation task-id="80" resource-id="0" function="SoftwareDevelopment:2" responsible="false" load="100.0"/>
         <allocation task-id="20" resource-id="0" function="SoftwareDevelopment:2" responsible="true" load="100.0"/>
         <allocation task-id="2" resource-id="1" function="SoftwareDevelopment:2" responsible="false" load="100.0"/>
         <allocation task-id="8" resource-id="1" function="SoftwareDevelopment:2" responsible="false" load="100.0"/>
@@ -117,8 +115,8 @@
         <allocation task-id="12" resource-id="1" function="SoftwareDevelopment:2" responsible="false" load="100.0"/>
         <allocation task-id="42" resource-id="1" function="SoftwareDevelopment:2" responsible="false" load="100.0"/>
         <allocation task-id="16" resource-id="1" function="SoftwareDevelopment:2" responsible="false" load="100.0"/>
-        <allocation task-id="80" resource-id="1" function="SoftwareDevelopment:2" responsible="true" load="100.0"/>
         <allocation task-id="20" resource-id="1" function="SoftwareDevelopment:2" responsible="false" load="100.0"/>
+        <allocation task-id="21" resource-id="1" function="SoftwareDevelopment:2" responsible="false" load="100.0"/>
         <allocation task-id="2" resource-id="2" function="SoftwareDevelopment:2" responsible="false" load="100.0"/>
         <allocation task-id="5" resource-id="2" function="SoftwareDevelopment:2" responsible="false" load="100.0"/>
         <allocation task-id="7" resource-id="2" function="SoftwareDevelopment:2" responsible="false" load="100.0"/>
@@ -129,7 +127,6 @@
         <allocation task-id="17" resource-id="2" function="SoftwareDevelopment:2" responsible="true" load="100.0"/>
         <allocation task-id="18" resource-id="2" function="SoftwareDevelopment:2" responsible="false" load="100.0"/>
         <allocation task-id="22" resource-id="2" function="SoftwareDevelopment:2" responsible="true" load="100.0"/>
-        <allocation task-id="80" resource-id="2" function="SoftwareDevelopment:2" responsible="false" load="100.0"/>
         <allocation task-id="20" resource-id="2" function="SoftwareDevelopment:2" responsible="false" load="100.0"/>
         <allocation task-id="0" resource-id="3" function="SoftwareDevelopment:2" responsible="true" load="100.0"/>
         <allocation task-id="1" resource-id="3" function="SoftwareDevelopment:2" responsible="true" load="100.0"/>
@@ -143,8 +140,8 @@
         <allocation task-id="17" resource-id="3" function="SoftwareDevelopment:2" responsible="false" load="100.0"/>
         <allocation task-id="18" resource-id="3" function="SoftwareDevelopment:2" responsible="false" load="100.0"/>
         <allocation task-id="22" resource-id="3" function="SoftwareDevelopment:2" responsible="false" load="100.0"/>
-        <allocation task-id="80" resource-id="3" function="SoftwareDevelopment:2" responsible="false" load="100.0"/>
         <allocation task-id="20" resource-id="3" function="SoftwareDevelopment:2" responsible="false" load="100.0"/>
+        <allocation task-id="3" resource-id="3" function="SoftwareDevelopment:2" responsible="false" load="100.0"/>
         <allocation task-id="2" resource-id="4" function="SoftwareDevelopment:2" responsible="false" load="100.0"/>
         <allocation task-id="3" resource-id="4" function="SoftwareDevelopment:2" responsible="true" load="100.0"/>
         <allocation task-id="5" resource-id="4" function="SoftwareDevelopment:2" responsible="true" load="100.0"/>
@@ -159,7 +156,6 @@
         <allocation task-id="18" resource-id="4" function="SoftwareDevelopment:2" responsible="true" load="100.0"/>
         <allocation task-id="19" resource-id="4" function="SoftwareDevelopment:2" responsible="true" load="100.0"/>
         <allocation task-id="22" resource-id="4" function="SoftwareDevelopment:2" responsible="false" load="100.0"/>
-        <allocation task-id="80" resource-id="4" function="SoftwareDevelopment:2" responsible="false" load="100.0"/>
         <allocation task-id="20" resource-id="4" function="SoftwareDevelopment:2" responsible="false" load="100.0"/>
     </allocations>
     <vacations/>
@@ -173,9 +169,9 @@
         <displaycolumn property-id="tpd9" order="-1" width="75" visible="false"/>
         <displaycolumn property-id="tpd8" order="-1" width="75" visible="false"/>
         <displaycolumn property-id="tpd0" order="-1" width="75" visible="false"/>
-        <displaycolumn property-id="tpd3" order="0" width="164" visible="true"/>
-        <displaycolumn property-id="tpd4" order="1" width="131" visible="true"/>
-        <displaycolumn property-id="tpd5" order="2" width="130" visible="true"/>
+        <displaycolumn property-id="tpd3" order="0" width="374" visible="true"/>
+        <displaycolumn property-id="tpd4" order="1" width="83" visible="true"/>
+        <displaycolumn property-id="tpd5" order="2" width="210" visible="true"/>
     </taskdisplaycolumns>
     <previous/>
     <roles roleset-name="Default"/>
