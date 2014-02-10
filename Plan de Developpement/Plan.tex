@@ -11,10 +11,14 @@
 		\title{IFT3912 - Développement et maintenance,\\Plan de développement\\Équipe 1}
 		\begin{document}
 		\maketitle
-		\begin{flushleft}
 				\section*{Résumé}
-					Permettre à des utilisateurs de créer ou de s'inscrire en ligne à 
-					des événements reliés à l'entraînement et au maintient d'un rythme de vie sain.\\
+					\setlength{\parindent}{1cm}
+					\indent{Le projet consiste à créer une application web, constitué majoritairement d’un serveur http 								spécialisé, qui gère des évènements. Chaque évènement et utilisateurs auront leur page propre afin de 								consulter leurs informations respectives.}\\[2ex]
+					\indent{Lorsque la page web est téléchargée, l’application sera en mode de navigation pour utilisateurs 							anonymes. Un utilisateur anonyme aura la possibilité de consulter une liste d’évènements à venir, 									d’évènements passés et d’évènement annulés ou chercher des évènements à l’aide d’une barre de recherche pour 					ultimement avoir la possibilité de s’y inscrire.}\\[2ex]
+					\indent{Si un utilisateur anonyme crée un compte ou ouvre sa session, l’application entre en mode de 								navigation pour utilisateur enregistré. Un tel utilisateur aura toutes les options d’un utilisateur anonyme, 					mais avec certaines options en bonus. Par exemple, un utilisateur enregistré pourra modifier son compte, 							consulter la liste des évènements où il est inscrit, créer et gérer ses évènements et commenter des 								évènements. Évidemment il pourra se déconnecter.}\\[2ex]
+					\indent{Le logiciel ainsi créer sera utilisable par tous pour tout genre d’évènements, mais il sera conçu à 						la base	pour des évènements sportifs. Ainsi, n’importe qui pourra organiser par exemple une journée de 								soccer au parc du coin avec le voisinage. Par contre, en plus de gens individuels, des entreprises, des 							organismes ou encore des associations pourront se servir de l’application pour organiser par exemple leur 							levé de fonds avec une activité de Zumba, des évènements de sensibilisation à l’importance du sport, etc. 							L’application devra donc être bien présentée et professionnelle pour l’utilisation par des entreprises, mais 					également facile à utiliser, facile à comprendre, bref : simple, pour l’utilisation par des gens communs.}\\[2ex]
+					\indent{Le système devra donc avoir plusieurs interfaces pour gérer des utilisateurs, des évènements et des 						résultats de recherche. Il devra pouvoir stocker l'information, c'est-à-dire la liste d'utilisateurs, 								d'évènement, les commentaires, etc, dans un base de données. Le tout devra être gérer dans un site web 								convivial dans un affichage adéquat et rapide (de deux à trois secondes de chargement).}\\[2ex]	
+		\begin{flushleft}
 				\section*{Work Breakdown Structure}
 					\begin{enumerate}
 						\item[1.] Analyse des besoins.\\
@@ -22,7 +26,7 @@
 							\item[1.1] Analyser les fonctions requises\\
 							\item[1.2] Définir les besoins des interfaces web\\
 							\item[1.3] Développer l'architecture du système web\\
-							\item[1.4] D�crire les cas d'utilisation\\
+							\item[1.4] Décrire les cas d'utilisation\\
 						\end{enumerate}
 				\item[2.] Analyse des risques.\\
 					\begin{enumerate}
@@ -37,7 +41,7 @@
 				\item[4.] Conception.\\
 					\begin{enumerate}
 						\item[4.1] Conception des interfaces web.\\
-						\item[4.2] Conception du pont entre web et le système d'origine (Conception d�tailler du pont Java-Web, UML )\\
+						\item[4.2] Conception du pont entre web et le système d'origine (Conception détailler du pont Java-Web, UML )\\
 						\item[4.3] Conception de l'architecture du projet.\\
 						\item[4.4] Conception de la fonctionnalité de recherche.\\
 						\item[4.5] Conception de la base donnée.\\
@@ -63,7 +67,7 @@
 						Expert Web: 2\\
 						Expert DB: 1\\
 						Expert java: 2\\
-						Modèle de l'équipe: % contr�le décentralisé
+						Modèle de l'équipe: % contr�le décentralisé
 				\\
 				\section*{Analyse des risques}
 						\begin{enumerate}
@@ -76,11 +80,10 @@
 				\end{enumerate}
 				\item[$\bullet$] Risque techniques
 					\begin{enumerate}
-					
 						\item[1.] Risque de documentation de mauvaise qualité. (Chance: 85\%, Impact: $\frac{1}{4}$)\\
-						\item[2.] Risque sur qualit� du logiciel d�velopp�  (Chance: 65\%, Impact: $\frac{2}{4}$)\\
+						\item[2.] Risque sur qualité du logiciel développé  (Chance: 65\%, Impact: $\frac{2}{4}$)\\
 						\item[3.] Risque sur la taille du projet  (Chance: 75\%, Impact: $\frac{2}{4}$)\\
-						\item[3.] Risque sur la  technonologie utilis�e (Chance: 65\%, Impact: $\frac{2}{4}$)\\
+						\item[3.] Risque sur la  technonologie utilisée (Chance: 65\%, Impact: $\frac{2}{4}$)\\
 					\end{enumerate}
 					\end{enumerate}
 		\end{flushleft}
