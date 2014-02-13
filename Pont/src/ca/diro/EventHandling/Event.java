@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+import ca.diro.UserHandling.AnonymousUser;
 import ca.diro.UserHandling.User;
 
 /**
@@ -22,7 +23,7 @@ public class Event {
 	 * @author lavoiedn
 	 */
 	public enum Visibility {
-		GuestOnly, Public, Friends;
+		GuestOnly, Public;
 	}
 
 	/**
@@ -48,7 +49,7 @@ public class Event {
 	}
 
 	/**
-	 * Constructor for an <code>Event</code> objet using the <code>User</code>
+	 * Constructor for an <code>Event</code> object using the <code>User</code>
 	 * ID of the creator, the <code>Event</code>'s <code>visibility</code>, and
 	 * its <code>eventType</code>.
 	 * 
@@ -67,7 +68,7 @@ public class Event {
 	}
 
 	/**
-	 * Constructor for an <code>Event</code> objet using the <code>User</code>
+	 * Constructor for an <code>Event</code> object using the <code>User</code>
 	 * who created it, the <code>Event</code>'s visibility, and its type.
 	 * 
 	 * @param creator
@@ -100,15 +101,6 @@ public class Event {
 		case Public:
 			added = false;
 			break;
-		case Friends:
-			for (User u : guest.getFriendList()) {
-				if (u.getUserID() == guest.getUserID()) {
-					// TODO: Add new guest to database.
-					added = true;
-				}
-			}
-			added = false;
-			break;
 		case GuestOnly:
 			if (isGuest(guest)) {
 				added = false;
@@ -132,7 +124,7 @@ public class Event {
 	 * @return <code>true</code> if the <code>User</code> is successfully
 	 *         deleted from the guest list, else <code>false</code>.
 	 */
-	public boolean removeGuest(User guest) {
+	public boolean removeGuest(AnonymousUser guest) {
 		boolean deleted = true;
 		switch (visibility) {
 		case Public:
@@ -205,19 +197,15 @@ public class Event {
 	}
 
 	/**
-	 * Returns the {@link Array} of IDs of the <code>User</code>s invited to
+	 * Returns the array of IDs of the <code>User</code>s invited to
 	 * this <code>Event</code>.
 	 * 
-	 * @return The {@link Array} of IDs of the <code>User</code>s invited to
+	 * @return The array of IDs of the <code>User</code>s invited to
 	 *         this <code>Event</code>.
 	 */
 	public List<Long> getGuestList() {
 		List<Long> guests = new ArrayList<Long>();
 		switch (visibility) {
-		case Friends:
-			for (User u : (new User(creatorID)).getFriendList())
-				guests.add(u.getUserID());
-			break;
 		case Public:
 			// TODO: fetch all users from DB.
 			/*
@@ -235,14 +223,14 @@ public class Event {
 	 * Returns <code>True</code> if this <code>User</code> is a guest, else
 	 * <code>False</code>.
 	 * 
-	 * @param u
+	 * @param guest
 	 *            The <code>User</code> to verify.
 	 * @return <code>True</code> if this <code>User</code> is a guest, else
 	 *         <code>False</code>.
 	 */
-	public boolean isGuest(User u) {
+	public boolean isGuest(User guest) {
 		for (long l : getGuestList()) {
-			if (l == u.getUserID())
+			if (l == guest.getUserID())
 				return true;
 		}
 		return false;
