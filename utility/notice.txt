@@ -1,0 +1,3 @@
+le j'ai ajouté le plugin H2 au squelette projet webapp 
+la base donnée utilisée est H2 j'ai trouvée cela plus simple car derby a des 
+sérieux problèmes de mise à jour
