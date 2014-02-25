@@ -64,7 +64,6 @@
         <mkdir dir="${javadoc.dir}"/>
         <javadoc destdir="${javadoc.dir}">
             <fileset dir="src"/>
-            <classpath refid="classpath"/>
         </javadoc>
     </target>
 
