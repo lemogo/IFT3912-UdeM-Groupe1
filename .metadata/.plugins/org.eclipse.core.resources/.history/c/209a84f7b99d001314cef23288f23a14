@@ -1,0 +1,19 @@
+/**
+ * 
+ */
+package DataBase.Command;
+
+/**
+ * @author pc-user
+ *
+ */
+public class ListRegisterEvent {
+
+	/**
+	 * 
+	 */
+	public ListRegisterEvent() {
+		// TODO Auto-generated constructor stub
+	}
+
+}

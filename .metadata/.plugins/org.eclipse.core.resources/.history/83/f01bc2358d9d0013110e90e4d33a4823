@@ -1,0 +1,31 @@
+/**
+ * 
+ */
+package DataBase.Command;
+
+/**
+ *Command to create User Account 
+ * @author group1
+ *
+ */
+public class CreateUserAccount extends AbstractCommand{
+
+	public CreateUserAccount(String query) {
+		super(query);
+		// TODO Auto-generated constructor stub
+	}
+	
+	
+	/**
+	 * @return the query to to be execute
+	 */
+	public String buildQuery(String info){
+		return "" ;
+	}
+	
+	
+	/**
+	 * String to build querry
+	 */
+	String query ;
+}

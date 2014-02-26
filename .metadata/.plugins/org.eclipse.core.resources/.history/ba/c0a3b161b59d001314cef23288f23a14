@@ -1,0 +1,19 @@
+/**
+ * 
+ */
+package DataBase.Command;
+
+/**
+ * @author pc-user
+ *
+ */
+public class PageInfoUser {
+
+	/**
+	 * 
+	 */
+	public PageInfoUser() {
+		// TODO Auto-generated constructor stub
+	}
+
+}

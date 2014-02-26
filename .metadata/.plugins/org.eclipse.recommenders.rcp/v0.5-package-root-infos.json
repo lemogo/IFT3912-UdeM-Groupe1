@@ -1,0 +1,561 @@
+[
+  {
+    "symbolicName": "jre",
+    "version": {
+      "major": 1,
+      "minor": 0,
+      "micro": 0,
+      "qualifier": ""
+    },
+    "jarFileFingerprint": "1c705b0183d636dcbd72f427d632ae93308e92f8",
+    "jarFileModificationDate": "2013-10-29T23:58:53.267-04:00",
+    "location": "C:\\Program Files\\Java\\jdk1.7.0_45\\jre\\lib\\rt.jar",
+    "javaRuntime": true
+  },
+  {
+    "symbolicName": "jre",
+    "version": {
+      "major": 1,
+      "minor": 0,
+      "micro": 0,
+      "qualifier": ""
+    },
+    "jarFileFingerprint": "b01a2234d70b3f0783bdccf80141015bf89451f9",
+    "jarFileModificationDate": "2013-10-29T23:58:38.562-04:00",
+    "location": "C:\\Program Files\\Java\\jdk1.7.0_45\\jre\\lib\\resources.jar",
+    "javaRuntime": true
+  },
+  {
+    "symbolicName": "jre",
+    "version": {
+      "major": 1,
+      "minor": 0,
+      "micro": 0,
+      "qualifier": ""
+    },
+    "jarFileFingerprint": "a3d1a9689f1c8e36ab64fb669df92076771c42f2",
+    "jarFileModificationDate": "2013-10-29T23:58:38.465-04:00",
+    "location": "C:\\Program Files\\Java\\jdk1.7.0_45\\jre\\lib\\ext\\sunmscapi.jar",
+    "javaRuntime": true
+  },
+  {
+    "symbolicName": "org.eclipse.jetty.plus",
+    "version": {
+      "major": 9,
+      "minor": 0,
+      "micro": 0,
+      "qualifier": "M5"
+    },
+    "jarFileFingerprint": "ba954820e7cee8376cbcb13804c1780e70901210",
+    "jarFileModificationDate": "2013-01-30T16:02:52-05:00",
+    "location": "C:\\Users\\pc-user\\Documents\\GitHub\\Groupe1\\Webapp\\lib\\jetty-plus-9.0.0.M5.jar",
+    "javaRuntime": false
+  },
+  {
+    "symbolicName": "com.google.guava.guava",
+    "version": {
+      "major": 13,
+      "minor": 0,
+      "micro": 1,
+      "qualifier": ""
+    },
+    "jarFileFingerprint": "44c48ceccd996301a11d347c563e1092cbf67f1f",
+    "jarFileModificationDate": "2013-02-28T13:24:32-05:00",
+    "location": "C:\\Users\\pc-user\\Documents\\GitHub\\Groupe1\\Webapp\\lib\\mustache-0.8.10-all.jar",
+    "javaRuntime": false
+  },
+  {
+    "symbolicName": "jre",
+    "version": {
+      "major": 1,
+      "minor": 0,
+      "micro": 0,
+      "qualifier": ""
+    },
+    "jarFileFingerprint": "7a6f8aaa32d8c9dfe139695d71135fb37bb22761",
+    "jarFileModificationDate": "2013-10-29T23:58:49.609-04:00",
+    "location": "C:\\Program Files\\Java\\jdk1.7.0_45\\jre\\lib\\jsse.jar",
+    "javaRuntime": true
+  },
+  {
+    "symbolicName": "slf4j.api",
+    "version": {
+      "major": 1,
+      "minor": 7,
+      "micro": 2,
+      "qualifier": ""
+    },
+    "jarFileFingerprint": "2530e5caa094f7d78a09a6dba850c37c206cc763",
+    "jarFileModificationDate": "2013-01-28T18:38:34-05:00",
+    "location": "C:\\Users\\pc-user\\Documents\\GitHub\\Groupe1\\Webapp\\lib\\slf4j-api-1.7.2.jar",
+    "javaRuntime": false
+  },
+  {
+    "symbolicName": "org.eclipse.jetty.rewrite",
+    "version": {
+      "major": 9,
+      "minor": 0,
+      "micro": 0,
+      "qualifier": "M5"
+    },
+    "jarFileFingerprint": "f980355e660fcf7d5451c49813a517f06af11580",
+    "jarFileModificationDate": "2013-01-30T16:02:52-05:00",
+    "location": "C:\\Users\\pc-user\\Documents\\GitHub\\Groupe1\\Webapp\\lib\\jetty-rewrite-9.0.0.M5.jar",
+    "javaRuntime": false
+  },
+  {
+    "symbolicName": "jre",
+    "version": {
+      "major": 1,
+      "minor": 0,
+      "micro": 0,
+      "qualifier": ""
+    },
+    "jarFileFingerprint": "b17b8fec920e80d352b6165c32c667f02cc49dfd",
+    "jarFileModificationDate": "2013-10-29T23:58:55.133-04:00",
+    "location": "C:\\Program Files\\Java\\jdk1.7.0_45\\jre\\lib\\ext\\localedata.jar",
+    "javaRuntime": true
+  },
+  {
+    "symbolicName": "xuggle-xuggler-5.4",
+    "version": {
+      "major": -1,
+      "minor": -1,
+      "micro": -1,
+      "qualifier": ""
+    },
+    "jarFileFingerprint": "53a5b0f219d86c2fd570675fcbaa6a6c1a0626e8",
+    "jarFileModificationDate": "2012-04-06T22:25:48-04:00",
+    "location": "C:\\Users\\pc-user\\Documents\\GitHub\\Groupe1\\Webapp\\lib\\xuggle-xuggler-5.4.jar",
+    "javaRuntime": false
+  },
+  {
+    "symbolicName": "junit",
+    "version": {
+      "major": -1,
+      "minor": -1,
+      "micro": -1,
+      "qualifier": ""
+    },
+    "jarFileFingerprint": "365907cf1e488e967f1d3e923d0111b36d930ee6",
+    "jarFileModificationDate": "2012-05-26T07:46:30-04:00",
+    "location": "C:\\eclipse\\plugins\\org.junit_4.10.0.v4_10_0_v20120426-0900\\junit.jar",
+    "javaRuntime": false
+  },
+  {
+    "symbolicName": "org.eclipse.jetty.jaas",
+    "version": {
+      "major": 9,
+      "minor": 0,
+      "micro": 0,
+      "qualifier": "M5"
+    },
+    "jarFileFingerprint": "fcd188a12a7af56a92dac67ddda0a9b123fedc27",
+    "jarFileModificationDate": "2013-01-30T16:02:52-05:00",
+    "location": "C:\\Users\\pc-user\\Documents\\GitHub\\Groupe1\\Webapp\\lib\\jetty-jaas-9.0.0.M5.jar",
+    "javaRuntime": false
+  },
+  {
+    "symbolicName": "org.eclipse.jetty.jndi",
+    "version": {
+      "major": 9,
+      "minor": 0,
+      "micro": 0,
+      "qualifier": "M5"
+    },
+    "jarFileFingerprint": "e6d1f8fcc510f2b6bf565ef8bfacd82768b321c4",
+    "jarFileModificationDate": "2013-01-30T16:02:52-05:00",
+    "location": "C:\\Users\\pc-user\\Documents\\GitHub\\Groupe1\\Webapp\\lib\\jetty-jndi-9.0.0.M5.jar",
+    "javaRuntime": false
+  },
+  {
+    "symbolicName": "org.eclipse.jetty.webapp",
+    "version": {
+      "major": 9,
+      "minor": 0,
+      "micro": 0,
+      "qualifier": "M5"
+    },
+    "jarFileFingerprint": "10598c7cccb812faf46726a9ed344a4c6d134034",
+    "jarFileModificationDate": "2013-01-30T16:02:52-05:00",
+    "location": "C:\\Users\\pc-user\\Documents\\GitHub\\Groupe1\\Webapp\\lib\\jetty-webapp-9.0.0.M5.jar",
+    "javaRuntime": false
+  },
+  {
+    "symbolicName": "org.eclipse.jetty.annotations",
+    "version": {
+      "major": 9,
+      "minor": 0,
+      "micro": 0,
+      "qualifier": "M5"
+    },
+    "jarFileFingerprint": "d2ad4bee7d5668ab3b5f879753591997f6170ee3",
+    "jarFileModificationDate": "2013-01-30T16:02:52-05:00",
+    "location": "C:\\Users\\pc-user\\Documents\\GitHub\\Groupe1\\Webapp\\lib\\jetty-annotations-9.0.0.M5.jar",
+    "javaRuntime": false
+  },
+  {
+    "symbolicName": "slf4j.simple",
+    "version": {
+      "major": 1,
+      "minor": 7,
+      "micro": 2,
+      "qualifier": ""
+    },
+    "jarFileFingerprint": "2d6e13e4011dd1df6f9ec25e82f8f73876d729e0",
+    "jarFileModificationDate": "2013-02-17T20:21:44-05:00",
+    "location": "C:\\Users\\pc-user\\Documents\\GitHub\\Groupe1\\Webapp\\lib\\slf4j-simple-1.7.2.jar",
+    "javaRuntime": false
+  },
+  {
+    "symbolicName": "org.eclipse.jetty.xml",
+    "version": {
+      "major": 9,
+      "minor": 0,
+      "micro": 0,
+      "qualifier": "M5"
+    },
+    "jarFileFingerprint": "0e77cbeb5653c698e3e8b9dd623cbe5e3362367b",
+    "jarFileModificationDate": "2013-01-30T16:02:52-05:00",
+    "location": "C:\\Users\\pc-user\\Documents\\GitHub\\Groupe1\\Webapp\\lib\\jetty-xml-9.0.0.M5.jar",
+    "javaRuntime": false
+  },
+  {
+    "symbolicName": "jre",
+    "version": {
+      "major": 1,
+      "minor": 0,
+      "micro": 0,
+      "qualifier": ""
+    },
+    "jarFileFingerprint": "b4085004247b082b1d95f3bbf47cee40f03d3f09",
+    "jarFileModificationDate": "2013-10-29T23:58:38.467-04:00",
+    "location": "C:\\Program Files\\Java\\jdk1.7.0_45\\jre\\lib\\ext\\sunpkcs11.jar",
+    "javaRuntime": true
+  },
+  {
+    "symbolicName": "org.eclipse.jetty.util",
+    "version": {
+      "major": 9,
+      "minor": 0,
+      "micro": 0,
+      "qualifier": "M5"
+    },
+    "jarFileFingerprint": "3d38d57ec1f1dc4e736163141003b95132feada3",
+    "jarFileModificationDate": "2013-01-30T16:02:52-05:00",
+    "location": "C:\\Users\\pc-user\\Documents\\GitHub\\Groupe1\\Webapp\\lib\\jetty-util-9.0.0.M5.jar",
+    "javaRuntime": false
+  },
+  {
+    "symbolicName": "jre",
+    "version": {
+      "major": 1,
+      "minor": 0,
+      "micro": 0,
+      "qualifier": ""
+    },
+    "jarFileFingerprint": "50236013f9193b07a63079282dcde50ad08fefa0",
+    "jarFileModificationDate": "2013-10-29T23:58:38.441-04:00",
+    "location": "C:\\Program Files\\Java\\jdk1.7.0_45\\jre\\lib\\ext\\access-bridge.jar",
+    "javaRuntime": true
+  },
+  {
+    "symbolicName": "jre",
+    "version": {
+      "major": 1,
+      "minor": 0,
+      "micro": 0,
+      "qualifier": ""
+    },
+    "jarFileFingerprint": "16c2f22bbf5f8781b37b32ceae582ed3012131d2",
+    "jarFileModificationDate": "2013-10-29T23:58:38.505-04:00",
+    "location": "C:\\Program Files\\Java\\jdk1.7.0_45\\jre\\lib\\jfr.jar",
+    "javaRuntime": true
+  },
+  {
+    "symbolicName": "org.eclipse.jetty.servlet",
+    "version": {
+      "major": 9,
+      "minor": 0,
+      "micro": 0,
+      "qualifier": "M5"
+    },
+    "jarFileFingerprint": "5f85dbbeadccf69b82a286ac94003f0e78f19fce",
+    "jarFileModificationDate": "2013-01-30T16:02:52-05:00",
+    "location": "C:\\Users\\pc-user\\Documents\\GitHub\\Groupe1\\Webapp\\lib\\jetty-servlet-9.0.0.M5.jar",
+    "javaRuntime": false
+  },
+  {
+    "symbolicName": "javax.servlet-3.0-sources",
+    "version": {
+      "major": -1,
+      "minor": -1,
+      "micro": -1,
+      "qualifier": ""
+    },
+    "jarFileFingerprint": "5a37fd0efae0179e4c533d6450f4af9017037ded",
+    "jarFileModificationDate": "2013-01-30T17:50:48-05:00",
+    "location": "C:\\Users\\pc-user\\Documents\\GitHub\\Groupe1\\Webapp\\lib\\javax.servlet-3.0-sources.jar",
+    "javaRuntime": false
+  },
+  {
+    "symbolicName": "jre",
+    "version": {
+      "major": 1,
+      "minor": 0,
+      "micro": 0,
+      "qualifier": ""
+    },
+    "jarFileFingerprint": "3445e1bd8fd1de2bf4784708818f80b3c8f0c12c",
+    "jarFileModificationDate": "2013-10-29T23:58:38.443-04:00",
+    "location": "C:\\Program Files\\Java\\jdk1.7.0_45\\jre\\lib\\ext\\dnsns.jar",
+    "javaRuntime": true
+  },
+  {
+    "symbolicName": "org.eclipse.jetty.jmx",
+    "version": {
+      "major": 9,
+      "minor": 0,
+      "micro": 0,
+      "qualifier": "M5"
+    },
+    "jarFileFingerprint": "3b956f3e2b72d26c8e145617563e03ab17a77919",
+    "jarFileModificationDate": "2013-01-30T16:02:52-05:00",
+    "location": "C:\\Users\\pc-user\\Documents\\GitHub\\Groupe1\\Webapp\\lib\\jetty-jmx-9.0.0.M5.jar",
+    "javaRuntime": false
+  },
+  {
+    "symbolicName": "org.eclipse.jetty.client",
+    "version": {
+      "major": 9,
+      "minor": 0,
+      "micro": 0,
+      "qualifier": "M5"
+    },
+    "jarFileFingerprint": "27bfa67b7b461b0b7d765b4df1196fe7af190356",
+    "jarFileModificationDate": "2013-01-30T16:02:52-05:00",
+    "location": "C:\\Users\\pc-user\\Documents\\GitHub\\Groupe1\\Webapp\\lib\\jetty-client-9.0.0.M5.jar",
+    "javaRuntime": false
+  },
+  {
+    "symbolicName": "org.hamcrest.core",
+    "version": {
+      "major": 1,
+      "minor": 1,
+      "micro": 0,
+      "qualifier": "v20090501071000"
+    },
+    "jarFileFingerprint": "254c9660266e1177c94b1a9ba05f6f757e7fb85a",
+    "jarFileModificationDate": "2012-09-20T05:29:56-04:00",
+    "location": "C:\\eclipse\\plugins\\org.hamcrest.core_1.1.0.v20090501071000.jar",
+    "javaRuntime": false
+  },
+  {
+    "symbolicName": "org.eclipse.jetty.deploy",
+    "version": {
+      "major": 9,
+      "minor": 0,
+      "micro": 0,
+      "qualifier": "M5"
+    },
+    "jarFileFingerprint": "6f410ab9dc930b162acf59c994b1e2b9471f1848",
+    "jarFileModificationDate": "2013-01-30T16:02:52-05:00",
+    "location": "C:\\Users\\pc-user\\Documents\\GitHub\\Groupe1\\Webapp\\lib\\jetty-deploy-9.0.0.M5.jar",
+    "javaRuntime": false
+  },
+  {
+    "symbolicName": "javax.servlet",
+    "version": {
+      "major": 3,
+      "minor": 0,
+      "micro": 0,
+      "qualifier": "v201112011016"
+    },
+    "jarFileFingerprint": "0aaaa85845fb5c59da00193f06b8e5278d8bf3f8",
+    "jarFileModificationDate": "2013-01-30T16:03:52-05:00",
+    "location": "C:\\Users\\pc-user\\Documents\\GitHub\\Groupe1\\Webapp\\lib\\servlet-api-3.0.jar",
+    "javaRuntime": false
+  },
+  {
+    "symbolicName": "jre",
+    "version": {
+      "major": 1,
+      "minor": 0,
+      "micro": 0,
+      "qualifier": ""
+    },
+    "jarFileFingerprint": "8348ffceddde6f58ddebc0e54aa905e25d03abef",
+    "jarFileModificationDate": "2013-10-29T23:58:38.444-04:00",
+    "location": "C:\\Program Files\\Java\\jdk1.7.0_45\\jre\\lib\\ext\\jaccess.jar",
+    "javaRuntime": true
+  },
+  {
+    "symbolicName": "org.eclipse.jetty.http",
+    "version": {
+      "major": 9,
+      "minor": 0,
+      "micro": 0,
+      "qualifier": "M5"
+    },
+    "jarFileFingerprint": "a90f9e47aa69b52e9ef05c34c305ac3ef89a4c34",
+    "jarFileModificationDate": "2013-01-30T16:02:52-05:00",
+    "location": "C:\\Users\\pc-user\\Documents\\GitHub\\Groupe1\\Webapp\\lib\\jetty-http-9.0.0.M5.jar",
+    "javaRuntime": false
+  },
+  {
+    "symbolicName": "org.eclipse.jetty.io",
+    "version": {
+      "major": 9,
+      "minor": 0,
+      "micro": 0,
+      "qualifier": "M5"
+    },
+    "jarFileFingerprint": "7d94abdda8e36a7d4e0b57f13956e4ca94e1c44f",
+    "jarFileModificationDate": "2013-01-30T16:02:52-05:00",
+    "location": "C:\\Users\\pc-user\\Documents\\GitHub\\Groupe1\\Webapp\\lib\\jetty-io-9.0.0.M5.jar",
+    "javaRuntime": false
+  },
+  {
+    "symbolicName": "org.eclipse.jetty.servlets",
+    "version": {
+      "major": 9,
+      "minor": 0,
+      "micro": 0,
+      "qualifier": "M5"
+    },
+    "jarFileFingerprint": "1582458af89340654c80f0ab2bcb35e1ac23af69",
+    "jarFileModificationDate": "2013-01-30T16:02:52-05:00",
+    "location": "C:\\Users\\pc-user\\Documents\\GitHub\\Groupe1\\Webapp\\lib\\jetty-servlets-9.0.0.M5.jar",
+    "javaRuntime": false
+  },
+  {
+    "symbolicName": "jre",
+    "version": {
+      "major": 1,
+      "minor": 0,
+      "micro": 0,
+      "qualifier": ""
+    },
+    "jarFileFingerprint": "97e3bcb13f325218fcf9d2286aa7ce6e8c231b7a",
+    "jarFileModificationDate": "2013-10-29T23:58:38.464-04:00",
+    "location": "C:\\Program Files\\Java\\jdk1.7.0_45\\jre\\lib\\ext\\sunjce_provider.jar",
+    "javaRuntime": true
+  },
+  {
+    "symbolicName": "jre",
+    "version": {
+      "major": 1,
+      "minor": 0,
+      "micro": 0,
+      "qualifier": ""
+    },
+    "jarFileFingerprint": "95dc9053062d68cde4e8c38494cc63aefd7b0a42",
+    "jarFileModificationDate": "2013-10-29T23:58:38.463-04:00",
+    "location": "C:\\Program Files\\Java\\jdk1.7.0_45\\jre\\lib\\ext\\sunec.jar",
+    "javaRuntime": true
+  },
+  {
+    "symbolicName": "jre",
+    "version": {
+      "major": 1,
+      "minor": 0,
+      "micro": 0,
+      "qualifier": ""
+    },
+    "jarFileFingerprint": "85aed9e9c8dc262a23b29d88a306cf9f204729fd",
+    "jarFileModificationDate": "2013-10-29T23:58:48.250-04:00",
+    "location": "C:\\Program Files\\Java\\jdk1.7.0_45\\jre\\lib\\charsets.jar",
+    "javaRuntime": true
+  },
+  {
+    "symbolicName": "jre",
+    "version": {
+      "major": 1,
+      "minor": 0,
+      "micro": 0,
+      "qualifier": ""
+    },
+    "jarFileFingerprint": "0e9fc49aafbb82052439e1ac1e3a99833fdb92b1",
+    "jarFileModificationDate": "2013-10-29T23:58:38.468-04:00",
+    "location": "C:\\Program Files\\Java\\jdk1.7.0_45\\jre\\lib\\ext\\zipfs.jar",
+    "javaRuntime": true
+  },
+  {
+    "symbolicName": "org.h2",
+    "version": {
+      "major": 1,
+      "minor": 3,
+      "micro": 175,
+      "qualifier": ""
+    },
+    "jarFileFingerprint": "408ed316edddbce6db031c6bdceee73a09647d9e",
+    "jarFileModificationDate": "2014-01-31T13:17:02.843-05:00",
+    "location": "C:\\Users\\pc-user\\Documents\\GitHub\\Groupe1\\Webapp\\lib\\h2-1.3.175.jar",
+    "javaRuntime": false
+  },
+  {
+    "symbolicName": "org.eclipse.jetty.proxy",
+    "version": {
+      "major": 9,
+      "minor": 0,
+      "micro": 0,
+      "qualifier": "M5"
+    },
+    "jarFileFingerprint": "f153dae64315c220ae20b76eae215a80a8aecb80",
+    "jarFileModificationDate": "2013-01-30T16:02:52-05:00",
+    "location": "C:\\Users\\pc-user\\Documents\\GitHub\\Groupe1\\Webapp\\lib\\jetty-proxy-9.0.0.M5.jar",
+    "javaRuntime": false
+  },
+  {
+    "symbolicName": "org.eclipse.jetty.security",
+    "version": {
+      "major": 9,
+      "minor": 0,
+      "micro": 0,
+      "qualifier": "M5"
+    },
+    "jarFileFingerprint": "48f9324d0170669b3f8927a3796a24fcf628fd7c",
+    "jarFileModificationDate": "2013-01-30T16:02:52-05:00",
+    "location": "C:\\Users\\pc-user\\Documents\\GitHub\\Groupe1\\Webapp\\lib\\jetty-security-9.0.0.M5.jar",
+    "javaRuntime": false
+  },
+  {
+    "symbolicName": "org.eclipse.jetty.server",
+    "version": {
+      "major": 9,
+      "minor": 0,
+      "micro": 0,
+      "qualifier": "M5"
+    },
+    "jarFileFingerprint": "d98566a87ea9bdf7767ee806312784cc0b1ff53e",
+    "jarFileModificationDate": "2013-01-30T16:02:52-05:00",
+    "location": "C:\\Users\\pc-user\\Documents\\GitHub\\Groupe1\\Webapp\\lib\\jetty-server-9.0.0.M5.jar",
+    "javaRuntime": false
+  },
+  {
+    "symbolicName": "jre",
+    "version": {
+      "major": 1,
+      "minor": 0,
+      "micro": 0,
+      "qualifier": ""
+    },
+    "jarFileFingerprint": "f831655c50b92c41e366442d09511ea84270c45e",
+    "jarFileModificationDate": "2013-10-29T23:58:38.500-04:00",
+    "location": "C:\\Program Files\\Java\\jdk1.7.0_45\\jre\\lib\\jce.jar",
+    "javaRuntime": true
+  },
+  {
+    "symbolicName": "org.eclipse.jetty.continuation",
+    "version": {
+      "major": 9,
+      "minor": 0,
+      "micro": 0,
+      "qualifier": "M5"
+    },
+    "jarFileFingerprint": "0355a4ccffe64b43ddfc01b930b3a695cfe6eeaf",
+    "jarFileModificationDate": "2013-01-30T16:02:52-05:00",
+    "location": "C:\\Users\\pc-user\\Documents\\GitHub\\Groupe1\\Webapp\\lib\\jetty-continuation-9.0.0.M5.jar",
+    "javaRuntime": false
+  }
+]

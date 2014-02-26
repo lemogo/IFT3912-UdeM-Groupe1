@@ -1,0 +1,19 @@
+/**
+ * 
+ */
+package DataBase.Command;
+
+/**
+ * @author pc-user
+ *
+ */
+public class CancelEvent {
+
+	/**
+	 * 
+	 */
+	public CancelEvent() {
+		// TODO Auto-generated constructor stub
+	}
+
+}

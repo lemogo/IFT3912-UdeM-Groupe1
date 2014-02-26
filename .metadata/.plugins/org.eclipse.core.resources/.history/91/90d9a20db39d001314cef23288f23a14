@@ -1,0 +1,19 @@
+/**
+ * 
+ */
+package DataBase.Command;
+
+/**
+ * @author pc-user
+ *
+ */
+public class OpenSession {
+
+	/**
+	 * 
+	 */
+	public OpenSession() {
+		// TODO Auto-generated constructor stub
+	}
+
+}

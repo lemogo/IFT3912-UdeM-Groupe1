@@ -1,0 +1,19 @@
+/**
+ * 
+ */
+package DataBase.Command;
+
+/**
+ * @author pc-user
+ *
+ */
+public class ModifyAccount {
+
+	/**
+	 * 
+	 */
+	public ModifyAccount() {
+		// TODO Auto-generated constructor stub
+	}
+
+}

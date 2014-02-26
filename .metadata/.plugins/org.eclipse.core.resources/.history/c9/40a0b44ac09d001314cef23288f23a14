@@ -1,0 +1,31 @@
+/**
+ * 
+ */
+package DataBase.Command;
+
+import java.util.Map;
+
+/**
+ * @author pc-user
+ *
+ */
+public class ListEventByUser extends AbstractCommand{
+
+	/**
+	 * 
+	 */
+	public ListEventByUser(Map<String,String> info) {
+		query_ = buildQuery(info);
+		
+	}
+	
+	/**
+	 * @param userInfo Map to be parsed and build the right query
+	 * @return a string that is the query
+	 */
+	public String buildQuery(Map<String,String> info){
+		String str="" ;
+		return str ;
+	}
+
+}

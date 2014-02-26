@@ -1,0 +1,19 @@
+/**
+ * 
+ */
+package DataBase.Command;
+
+/**
+ * @author pc-user
+ *
+ */
+public class NotifyCancelledEvent {
+
+	/**
+	 * 
+	 */
+	public NotifyCancelledEvent() {
+		// TODO Auto-generated constructor stub
+	}
+
+}

@@ -1,0 +1,22 @@
+/**
+ * 
+ */
+package DataBase.Command;
+
+import ca.diro.UserHandling.User;
+
+
+/**
+ * @author pc-user
+ * 
+ */
+public class CommandHello extends AbstractCommand{
+	
+
+	/**
+	 * 
+	 */
+	public CommandHello() {
+		super("select * from test");
+	}
+}

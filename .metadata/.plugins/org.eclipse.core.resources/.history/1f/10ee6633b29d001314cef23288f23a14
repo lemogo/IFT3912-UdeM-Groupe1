@@ -1,0 +1,29 @@
+/**
+ * 
+ */
+package DataBase.Command;
+
+import java.util.Map;
+
+//import ca.diro.UserHandling.User;
+
+
+/**
+ * @author group1
+ * 
+ */
+public class CommandHello extends AbstractCommand{
+	
+
+	/**
+	 *
+	 */
+	public CommandHello() {
+		//super("select * from test");
+		this.query_ = "select * from test" ;
+	}
+	public String buildQuery(){
+		String str="" ;
+		return str ;
+	}
+}

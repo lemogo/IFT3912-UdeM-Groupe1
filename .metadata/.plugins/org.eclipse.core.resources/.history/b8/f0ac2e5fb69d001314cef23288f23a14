@@ -1,0 +1,19 @@
+/**
+ * 
+ */
+package DataBase.Command;
+
+/**
+ * @author pc-user
+ *
+ */
+public class ListPassedEvent {
+
+	/**
+	 * 
+	 */
+	public ListPassedEvent() {
+		// TODO Auto-generated constructor stub
+	}
+
+}

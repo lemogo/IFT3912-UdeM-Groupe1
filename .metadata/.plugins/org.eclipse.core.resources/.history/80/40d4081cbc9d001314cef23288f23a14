@@ -1,0 +1,18 @@
+/**
+ * 
+ */
+package DataBase.Command;
+
+/**
+ * this command allow signed user to add an event in his account 
+ * @author groupe1
+ *
+ */
+public class AddEvent {
+
+
+	public AddEvent() {
+		// TODO Auto-generated constructor stub
+	}
+
+}

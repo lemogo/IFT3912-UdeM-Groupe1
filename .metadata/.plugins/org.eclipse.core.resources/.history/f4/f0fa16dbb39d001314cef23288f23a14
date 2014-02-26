@@ -1,0 +1,19 @@
+/**
+ * 
+ */
+package DataBase.Command;
+
+/**
+ * @author pc-user
+ *
+ */
+public class ComingEvent {
+
+	/**
+	 * 
+	 */
+	public ComingEvent() {
+		// TODO Auto-generated constructor stub
+	}
+
+}

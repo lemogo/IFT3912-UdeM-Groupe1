@@ -1,0 +1,19 @@
+/**
+ * 
+ */
+package DataBase.Command;
+
+/**
+ * @author pc-user
+ *
+ */
+public class ResearchEvent {
+
+	/**
+	 * 
+	 */
+	public ResearchEvent() {
+		// TODO Auto-generated constructor stub
+	}
+
+}

@@ -1,0 +1,19 @@
+/**
+ * 
+ */
+package DataBase.Command;
+
+/**
+ * @author pc-user
+ *
+ */
+public class EditEvent {
+
+	/**
+	 * 
+	 */
+	public EditEvent() {
+		// TODO Auto-generated constructor stub
+	}
+
+}

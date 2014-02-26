@@ -1,0 +1,59 @@
+import static org.junit.Assert.assertTrue;
+
+import java.sql.ResultSet;
+import java.sql.SQLException;
+
+import org.junit.Test;
+
+import DataBase.DataBase;
+import DataBase.Command.*;
+
+/**
+ * 
+ */
+
+/**
+ * @author pc-user
+ *
+ */
+public class TestDataBase {
+
+	/**
+	 * Test method for {@link DataBase.DataBase#dbConnect()}.
+	 */
+	@Test
+	public void testDbConnect() {
+	}
+
+	/**
+	 * Test method for {@link DataBase.DataBase#dbExecute(DataBase.Command)}.
+	 * @throws SQLException 
+	 * @throws ClassNotFoundException 
+	 */
+	@Test
+	public void testDbExecute() throws ClassNotFoundException, SQLException {
+		DataBase MyDb = new DataBase();
+		//MyDb.dbDelete();
+		MyDb.dbConnect();
+		AbstractCommand cmd = new CommandHello();
+		assertTrue(MyDb.execute(cmd));
+		
+		ResultSet rs = cmd.getResultSet();
+		
+		//Statement stat = MyDb.statement();
+		//MyDb.createTable();
+		//MyDb.insertTable();
+
+		
+		//private ResultSet cr ;
+		//rs = MyDb.helloWord();
+		while (rs.next()) {
+			System.out.println(rs.getString("name"));
+		}
+
+		//stat.close();
+
+		MyDb.dbClose();
+	}
+
+}
