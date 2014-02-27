@@ -1,32 +1,32 @@
 /**
  * 
  */
-package DataBase.Command;
+package ca.diro.DataBase.Command;
 
 import java.util.Map;
 
 /**
- * This command run the query that allow anonymous user to subscribe in one  event 
+ * this command class give information on a user that can be use to generate user's own page
  * @author william
  *
  */
-public class SubscribeToEvent extends AbstractCommand{
-
+public class PageInfoUser extends AbstractCommand{
 	/**
-	 * Constructor 
-	 * @param info string to buils query
+	 * Constructor
+	 * @param info string to build query
 	 */
-	public SubscribeToEvent(String info) {
+	public PageInfoUser(String info) {
 		query_ = buildQuery(info);
 		
 	}
+	
 	/**
 	 * @param info String from JSON format to be parsed and build the right query
 	 * @return a string that is the query
 	 */
 	private String buildQuery(String info){
 		String str="" ;
-		//TODO parse query
 		return str ;
 	}
+
 }

@@ -1,27 +1,27 @@
 /**
  * 
  */
-package DataBase.Command;
+package ca.diro.DataBase.Command;
 
-import java.util.Map;
+import java.util.*;
 
 /**
- * This class run build query for searching event using events at title and description as criteria 
+ * Command to create User Account using data from user
+ * 
  * @author william
- *
+ * 
  */
-public class ResearchEvent extends AbstractCommand{
+public class CreateUserAccount extends AbstractCommand {
 
-	
 	/**
-	 * Constructor 
-	 * @param info string to build query
+	 * Constructor
+	 * @param info string 
 	 */
-	public ResearchEvent(String info) {
+	public CreateUserAccount(String info) {
 		query_ = buildQuery(info);
-		
+
 	}
-	
+
 	/**
 	 * @param info String from JSON format to be parsed and build the right query
 	 * @return a string that is the query
@@ -31,4 +31,5 @@ public class ResearchEvent extends AbstractCommand{
 		//TODO parse query
 		return str ;
 	}
+
 }

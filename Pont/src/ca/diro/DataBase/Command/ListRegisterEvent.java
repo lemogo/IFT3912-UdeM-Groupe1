@@ -1,27 +1,25 @@
 /**
  * 
  */
-package DataBase.Command;
+package ca.diro.DataBase.Command;
 
-import java.util.*;
+import java.util.Map;
 
 /**
- * Command to create User Account using data from user
- * 
+ * Command to see all event where a signed user is subscripted 
  * @author william
- * 
+ *
  */
-public class CreateUserAccount extends AbstractCommand {
+public class ListRegisterEvent extends AbstractCommand{
 
 	/**
-	 * Constructor
-	 * @param info string 
+	 * @param info string to build query
 	 */
-	public CreateUserAccount(String info) {
+	public ListRegisterEvent(String info) {
 		query_ = buildQuery(info);
-
+		
 	}
-
+	
 	/**
 	 * @param info String from JSON format to be parsed and build the right query
 	 * @return a string that is the query
@@ -31,5 +29,4 @@ public class CreateUserAccount extends AbstractCommand {
 		//TODO parse query
 		return str ;
 	}
-
 }

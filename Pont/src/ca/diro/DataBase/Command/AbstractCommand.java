@@ -1,7 +1,7 @@
 /**
  * 
  */
-package DataBase.Command;
+package ca.diro.DataBase.Command;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;

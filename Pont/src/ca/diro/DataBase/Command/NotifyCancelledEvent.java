@@ -1,23 +1,24 @@
 /**
  * 
  */
-package DataBase.Command;
+package ca.diro.DataBase.Command;
 
 import java.util.Map;
 
 /**
- * this command allow logged user to modified their account informations  parameter except the user's name   
+ * this class make command to notify users subscripted in an event when  cancelled 
  * @author william
  *
  */
-public class ModifyAccount extends AbstractCommand{
-
+public class NotifyCancelledEvent extends AbstractCommand{
+	
 	/**
-	 * Constructor
-	 * @param info to buif query with
+	 * Constructor 
+	 * @param info sting to build query with
 	 */
-	public ModifyAccount(String info) {
-		query_ = buildQuery(info);	
+	public NotifyCancelledEvent(String info) {
+		query_ = buildQuery(info);
+		
 	}
 	
 	/**

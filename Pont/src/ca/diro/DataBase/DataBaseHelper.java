@@ -1,7 +1,7 @@
 /**
  * 
  */
-package DataBase;
+package ca.diro.DataBase;
 
 /**
  * Class to help database command to parse string parameter and build the string query

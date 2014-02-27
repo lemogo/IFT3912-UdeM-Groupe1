@@ -1,21 +1,21 @@
 /**
  * 
  */
-package DataBase.Command;
+package ca.diro.DataBase.Command;
 
 import java.util.Map;
 
 /**
- * this command class give information on a user that can be use to generate user's own page
+ * this class close an user's session
  * @author william
  *
  */
-public class PageInfoUser extends AbstractCommand{
+public class CloseSession extends AbstractCommand{
 	/**
-	 * Constructor
-	 * @param info string to build query
+	 * Constructor 
+	 * @param a string info to parse 
 	 */
-	public PageInfoUser(String info) {
+	public CloseSession(String info) {
 		query_ = buildQuery(info);
 		
 	}
@@ -26,6 +26,7 @@ public class PageInfoUser extends AbstractCommand{
 	 */
 	private String buildQuery(String info){
 		String str="" ;
+		//TODO parse query
 		return str ;
 	}
 

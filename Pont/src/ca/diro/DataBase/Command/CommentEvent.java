@@ -1,23 +1,20 @@
 /**
  * 
  */
-package DataBase.Command;
+package ca.diro.DataBase.Command;
 
 import java.util.Map;
 
 /**
- * Command to see all event where a signed user is subscripted 
+* this class permit to set query in order to allow an signed user to comment event 
  * @author william
- *
  */
-public class ListRegisterEvent extends AbstractCommand{
-
+public class CommentEvent extends AbstractCommand{
 	/**
-	 * @param info string to build query
+	 * @param info string 
 	 */
-	public ListRegisterEvent(String info) {
-		query_ = buildQuery(info);
-		
+	public CommentEvent(String info) {
+		query_ = buildQuery(info);	
 	}
 	
 	/**
