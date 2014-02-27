@@ -1,0 +1,33 @@
+/**
+ * 
+ */
+package DataBase.Command;
+
+import java.util.Map;
+
+/**
+  * this class permit to set query in order to allow an signed user to delete event 
+ * @author william
+ */
+public class DeleteEvent extends AbstractCommand{
+
+
+	/**
+	 * Constructor
+	 * @param info string for query
+	 */
+	public DeleteEvent(String info) {
+		query_ = buildQuery(info);
+		
+	}
+	
+	/**
+	 * @param info String from JSON format to be parsed and build the right query
+	 * @return a string that is the query
+	 */
+	private String buildQuery(String info){
+		String str="" ;
+		return str ;
+	}
+
+}

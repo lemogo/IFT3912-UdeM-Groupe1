@@ -1,0 +1,33 @@
+/**
+ * 
+ */
+package DataBase.Command;
+
+import java.util.Map;
+
+/**
+ * this command allow logged user to modified their account informations  parameter except the user's name   
+ * @author william
+ *
+ */
+public class ModifyAccount extends AbstractCommand{
+
+	/**
+	 * Constructor
+	 * @param info to buif query with
+	 */
+	public ModifyAccount(String info) {
+		query_ = buildQuery(info);
+		
+	}
+	
+	/**
+	 * @param info String from JSON format to be parsed and build the right query
+	 * @return a string that is the query
+	 */
+	private String buildQuery(String info){
+		String str="" ;
+		return str ;
+	}
+
+}
