@@ -1,6 +1,6 @@
 package DataBase;
 
-import java.sql.Connection;
+import java.sql.*;
 import java.sql.DriverManager;
 import java.sql.SQLException;
 import java.sql.Statement;
@@ -22,7 +22,8 @@ public class DataBase {
 	 * @throws ClassNotFoundException
 	 * @throws SQLException
 	 */
-	public DataBase() throws ClassNotFoundException, SQLException {
+	
+	public DataBase() {
 		//TODO database constructor
 	}
 
@@ -45,7 +46,7 @@ public class DataBase {
 	 * 
 	 * @throws SQLException
 	 */
-	public void dbClose() throws SQLException {
+	public void dbClose()  {
 		//TODO Close DB
 	}
 
@@ -54,7 +55,7 @@ public class DataBase {
 	 * 
 	 * @throws SQLException
 	 */
-	public void dbDelete() throws SQLException {
+	public void dbDelete()  {
 		//TODO Delete DB
 		
 	}
@@ -63,7 +64,7 @@ public class DataBase {
 	 * @return un objet Statement
 	 * @throws SQLException
 	 */
-	private Statement statement() throws SQLException {
+	private Statement statement()  {
 		Statement stat = null;
 		//TODO statement connection to DB
 		return stat;
@@ -74,7 +75,7 @@ public class DataBase {
 	 * 
 	 * @throws SQLException
 	 */
-	public void createTable() throws SQLException {
+	public void createTable()  {
 		//TODO Creation table
 	}
 
@@ -83,7 +84,7 @@ public class DataBase {
 	 * 
 	 * @throws SQLException
 	 */
-	public void insertTable() throws SQLException {
+	public void insertTable()  {
 		//TODO inser data populate DB
 		
 	}
@@ -94,11 +95,12 @@ public class DataBase {
 	 * @return true if good connection or false when no connection.
 	 * @throws SQLException
 	 */
-	public boolean execute(AbstractCommand cmd) throws SQLException{
+	public boolean execute(AbstractCommand cmd) {
 		//TODO execute statement
 			return false;
 	}	
-
+	
+	
 	/**
 	 * connection to database
 	 */
