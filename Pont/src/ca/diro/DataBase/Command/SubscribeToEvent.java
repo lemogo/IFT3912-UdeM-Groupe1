@@ -1,25 +1,25 @@
 /**
  * 
  */
-package DataBase.Command;
+package ca.diro.DataBase.Command;
 
 import java.util.Map;
 
 /**
- * this command permit user to open a session
+ * This command run the query that allow anonymous user to subscribe in one  event 
  * @author william
  *
  */
-public class OpenSession  extends AbstractCommand{
+public class SubscribeToEvent extends AbstractCommand{
 
 	/**
-	 * @param sessionInfo string to buid query with
+	 * Constructor 
+	 * @param info string to buils query
 	 */
-	public OpenSession(String sessionInfo) {
-		query_ = buildQuery(sessionInfo);
+	public SubscribeToEvent(String info) {
+		query_ = buildQuery(info);
 		
 	}
-	
 	/**
 	 * @param info String from JSON format to be parsed and build the right query
 	 * @return a string that is the query

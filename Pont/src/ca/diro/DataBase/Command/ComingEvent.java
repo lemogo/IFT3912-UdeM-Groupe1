@@ -1,7 +1,7 @@
 /**
  * 
  */
-package DataBase.Command;
+package ca.diro.DataBase.Command;
 
 /**
  * this command permit user to coming event 

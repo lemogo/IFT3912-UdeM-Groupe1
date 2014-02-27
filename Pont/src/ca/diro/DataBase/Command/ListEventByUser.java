@@ -1,24 +1,22 @@
 /**
  * 
  */
-package DataBase.Command;
+package ca.diro.DataBase.Command;
 
 import java.util.Map;
 
 /**
-  * this class permit to set query in order to allow an signed user to delete event 
+ * this class make the command to view all event that one user has created
  * @author william
+ *
  */
-public class DeleteEvent extends AbstractCommand{
-
-
+public class ListEventByUser extends AbstractCommand{
 	/**
-	 * Constructor
-	 * @param info string for query
+	 * Constructor 
+	 * @param info string to build query 
 	 */
-	public DeleteEvent(String info) {
+	public ListEventByUser(String info) {
 		query_ = buildQuery(info);
-		
 	}
 	
 	/**
@@ -30,5 +28,4 @@ public class DeleteEvent extends AbstractCommand{
 		//TODO parse query
 		return str ;
 	}
-
 }

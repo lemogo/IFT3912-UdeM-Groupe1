@@ -1,22 +1,22 @@
 /**
  * 
  */
-package DataBase.Command;
+package ca.diro.DataBase.Command;
 
 import java.util.Map;
 
 /**
- * this class permit to set query in order to allow an signed user to edit  event 
+  * this class permit to set query in order to allow an signed user to delete event 
  * @author william
- *
  */
-public class EditEvent extends AbstractCommand{
+public class DeleteEvent extends AbstractCommand{
+
 
 	/**
-	 * Constructor 
-	 * @param info string to build query with
+	 * Constructor
+	 * @param info string for query
 	 */
-	public EditEvent(String info) {
+	public DeleteEvent(String info) {
 		query_ = buildQuery(info);
 		
 	}
@@ -30,4 +30,5 @@ public class EditEvent extends AbstractCommand{
 		//TODO parse query
 		return str ;
 	}
+
 }

@@ -1,4 +1,4 @@
-package DataBase;
+package ca.diro.DataBase;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
@@ -7,7 +7,8 @@ import java.sql.Statement;
 
 import org.h2.tools.DeleteDbFiles;
 
-import DataBase.Command.AbstractCommand;
+import ca.diro.DataBase.Command.AbstractCommand;
+
 
 /**
  * THis class handle all query connection to database by receiving command 

@@ -1,27 +1,25 @@
 /**
  * 
  */
-package DataBase.Command;
+package ca.diro.DataBase.Command;
 
 import java.util.Map;
 
 /**
- * this command allow signed user to add an event in his account 
+ * this class permit to set query in order to allow an signed user to cancel event 
  * @author william
- *
  */
-public class AddEvent extends AbstractCommand{
+public class CancelEvent extends AbstractCommand{
 
-
-	/**
-	 * Constructor 
-	 * @param a string info to parse 
+	
+	/** Constructor 
+	 * @param info string to build query
 	 */
-	public AddEvent(String info) {
-		query_ = buildQuery(info);
-		
+	public CancelEvent(String info) {
+		query_ = buildQuery(info);	
 	}
 	
+
 	/**
 	 * @param info String from JSON format to be parsed and build the right query
 	 * @return a string that is the query
@@ -31,6 +29,4 @@ public class AddEvent extends AbstractCommand{
 		//TODO parse query
 		return str ;
 	}
-
-
 }

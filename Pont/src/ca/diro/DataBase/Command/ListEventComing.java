@@ -1,19 +1,19 @@
 /**
  * 
  */
-package DataBase.Command;
+package ca.diro.DataBase.Command;
 
 /**
- * Command to see passed event with number people attended
+ * Command for getting comming event with available places
  * @author william
  *
  */
-public class ListPassedEvent extends  AbstractCommand{
+public class ListEventComing extends AbstractCommand{
 
 	/**
-	 * Constructor
+	 * Constructor 
 	 */
-	public ListPassedEvent() {
+	public ListEventComing() {
 		this.query_ = buildQuery() ;
 	}
 	
@@ -21,7 +21,7 @@ public class ListPassedEvent extends  AbstractCommand{
 	 * Method to define query
 	 * @return the query in string
 	 */
-	public String buildQuery(){
+	private String buildQuery(){
 		String str="" ;
 		//TODO parse query
 		return str ;

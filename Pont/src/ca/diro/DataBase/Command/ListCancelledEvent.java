@@ -1,19 +1,18 @@
 /**
  * 
  */
-package DataBase.Command;
+package ca.diro.DataBase.Command;
 
 /**
- * Command for getting comming event with available places
+ * Command to see the list of all cancelled event 
  * @author william
  *
  */
-public class ListEventComing extends AbstractCommand{
-
+public class ListCancelledEvent extends  AbstractCommand{	
 	/**
 	 * Constructor 
 	 */
-	public ListEventComing() {
+	public ListCancelledEvent() {
 		this.query_ = buildQuery() ;
 	}
 	

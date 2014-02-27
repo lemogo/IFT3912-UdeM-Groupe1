@@ -1,20 +1,25 @@
 /**
  * 
  */
-package DataBase.Command;
+package ca.diro.DataBase.Command;
 
 import java.util.Map;
 
 /**
-* this class permit to set query in order to allow an signed user to comment event 
+ * this command allow signed user to add an event in his account 
  * @author william
+ *
  */
-public class CommentEvent extends AbstractCommand{
+public class AddEvent extends AbstractCommand{
+
+
 	/**
-	 * @param info string 
+	 * Constructor 
+	 * @param a string info to parse 
 	 */
-	public CommentEvent(String info) {
-		query_ = buildQuery(info);	
+	public AddEvent(String info) {
+		query_ = buildQuery(info);
+		
 	}
 	
 	/**
@@ -26,4 +31,6 @@ public class CommentEvent extends AbstractCommand{
 		//TODO parse query
 		return str ;
 	}
+
+
 }

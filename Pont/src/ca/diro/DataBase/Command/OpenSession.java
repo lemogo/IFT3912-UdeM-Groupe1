@@ -1,22 +1,22 @@
 /**
  * 
  */
-package DataBase.Command;
+package ca.diro.DataBase.Command;
 
 import java.util.Map;
 
 /**
- * this class close an user's session
+ * this command permit user to open a session
  * @author william
  *
  */
-public class CloseSession extends AbstractCommand{
+public class OpenSession  extends AbstractCommand{
+
 	/**
-	 * Constructor 
-	 * @param a string info to parse 
+	 * @param sessionInfo string to buid query with
 	 */
-	public CloseSession(String info) {
-		query_ = buildQuery(info);
+	public OpenSession(String sessionInfo) {
+		query_ = buildQuery(sessionInfo);
 		
 	}
 	
@@ -29,5 +29,4 @@ public class CloseSession extends AbstractCommand{
 		//TODO parse query
 		return str ;
 	}
-
 }

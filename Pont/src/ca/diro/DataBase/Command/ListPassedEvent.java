@@ -1,18 +1,19 @@
 /**
  * 
  */
-package DataBase.Command;
+package ca.diro.DataBase.Command;
 
 /**
- * Command to see the list of all cancelled event 
+ * Command to see passed event with number people attended
  * @author william
  *
  */
-public class ListCancelledEvent extends  AbstractCommand{	
+public class ListPassedEvent extends  AbstractCommand{
+
 	/**
-	 * Constructor 
+	 * Constructor
 	 */
-	public ListCancelledEvent() {
+	public ListPassedEvent() {
 		this.query_ = buildQuery() ;
 	}
 	
@@ -20,7 +21,7 @@ public class ListCancelledEvent extends  AbstractCommand{
 	 * Method to define query
 	 * @return the query in string
 	 */
-	private String buildQuery(){
+	public String buildQuery(){
 		String str="" ;
 		//TODO parse query
 		return str ;

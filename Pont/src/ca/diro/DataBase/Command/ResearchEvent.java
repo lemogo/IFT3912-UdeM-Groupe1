@@ -1,22 +1,25 @@
 /**
  * 
  */
-package DataBase.Command;
+package ca.diro.DataBase.Command;
 
 import java.util.Map;
 
 /**
- * this class make the command to view all event that one user has created
+ * This class run build query for searching event using events at title and description as criteria 
  * @author william
  *
  */
-public class ListEventByUser extends AbstractCommand{
+public class ResearchEvent extends AbstractCommand{
+
+	
 	/**
 	 * Constructor 
-	 * @param info string to build query 
+	 * @param info string to build query
 	 */
-	public ListEventByUser(String info) {
+	public ResearchEvent(String info) {
 		query_ = buildQuery(info);
+		
 	}
 	
 	/**
