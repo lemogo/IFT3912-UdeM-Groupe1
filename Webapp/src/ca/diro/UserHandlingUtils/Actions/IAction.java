@@ -4,6 +4,8 @@ import java.sql.ResultSet;
 
 import javax.servlet.http.HttpServletRequest;
 
+import ca.diro.UserHandlingUtils.UserPermission;
+
 /**
  * The interface for user actions. Every action type that can be performed by a
  * user that requires a permission should implement this interface.

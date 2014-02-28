@@ -1,5 +1,4 @@
 import java.io.IOException;
-import java.sql.ResultSet;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
@@ -7,6 +6,14 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.eclipse.jetty.server.Request;
 import org.eclipse.jetty.server.handler.AbstractHandler;
+
+import org.json.JSONArray;
+import org.json.JSONObject;
+import org.json.JSONException;
+
+import java.sql.SQLException;
+import java.sql.ResultSet;
+import java.sql.ResultSetMetaData;
 
 /**
  * Handler for the Jetty server.
@@ -24,6 +31,10 @@ public class RequestHandler extends AbstractHandler {
 	 * The <code>ResultSet</code> of a database query.
 	 */
 	private ResultSet resultSet;
+	/**
+	 * The <code>resultSet</code> as a <code>JSONArray</code>.
+	 */
+	private JSONArray JSONResult;
 
 	/*
 	 * (non-Javadoc)
@@ -38,15 +49,8 @@ public class RequestHandler extends AbstractHandler {
 			throws IOException, ServletException {
 	}
 
-	/**
-	 * Identifies the expected command from the given <code>HttpServletRequest</code> and
-	 * returns the String that represents it.
-	 * 
-	 * @param request
-	 *            The <code>HttpServletRequest</code> sent by the server.
-	 * @return The String that represents the requested command.
-	 */
-	private String identifyCommand(HttpServletRequest request) {
-		return "";
+	private JSONArray resultSetToJSON() {
+		// TODO Convert ResulSet to workable JSONArray.
+		return JSONResult;
 	}
 }
