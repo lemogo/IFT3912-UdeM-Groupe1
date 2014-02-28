@@ -14,7 +14,7 @@ public class DataBaseHelper {
 	 * Constructor 
 	 */
 	public DataBaseHelper() {
-		// TODO Auto-generated constructor stub
+		// TODO something
 	}
 
 }

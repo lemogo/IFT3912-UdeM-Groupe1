@@ -1,17 +1,11 @@
 package ca.diro.DataBase;
 
 import java.sql.*;
-import java.sql.DriverManager;
-import java.sql.SQLException;
-import java.sql.Statement;
-
-import org.h2.tools.DeleteDbFiles;
 
 import ca.diro.DataBase.Command.AbstractCommand;
 
-
 /**
- * THis class handle all query connection to database by receiving command 
+ * THis class handle all queries in order to connect database by executing queries commands 
  * @author william
  * 
  */
@@ -32,7 +26,7 @@ public class DataBase {
 	 * méthode de connection à la base de donnée
 	 */
 	/**
-	 * @return a boolean that is true when good connection established
+	 * @return a boolean which is true when good connection established
 	 */
 	public boolean dbConnect() {
 
@@ -72,7 +66,7 @@ public class DataBase {
 	}
 
 	/**
-	 * Méthode pour créer des tables de la base de données
+	 * Method to create tables of the database
 	 * 
 	 * @throws SQLException
 	 */
@@ -81,7 +75,7 @@ public class DataBase {
 	}
 
 	/**
-	 * Méthod for insert data in database
+	 * Method to populate database
 	 * 
 	 * @throws SQLException
 	 */
@@ -91,7 +85,7 @@ public class DataBase {
 	}
 
 	/**
-	 * execute a command with query .
+	 * Method to execute a query  command on database  .
 	 * @param cmd la commande
 	 * @return true if good connection or false when no connection.
 	 * @throws SQLException
@@ -102,42 +96,44 @@ public class DataBase {
 	}	
 	
 	
+	
+
 	/**
 	 * connection to database
 	 */
-	private Connection con = null;
+	public Connection con = null;
 	/**
 	 * restore database
 	 */
-	private String restoreScript = null;
+	public String restoreScript = null;
 	/**
 	 * database name
 	 */
-	private String dbName = "dbgroup1";
+	public String dbName = "dbgroup1";
 	
 	/**
-	 * path database 
+	 * directory for the embedded database 
 	 */
-	private String dbpath = "jdbc:h2:data/database/dbgroup1";
+	public String dbpath = "jdbc:h2:data/database/dbgroup1";
 	/**
-	 * passeword de la base de données
+	 * database password
 	 */
-	private final String dbPassword = "";
+	public final String dbPassword = "";
 	/**
-	 * passeword de la base de données
+	 * data base user name
 	 */
-	private final String dbUserName = "group1";
+	public final String dbUserName = "group1";
 	/**
-	 * Contante d'état d'une transation réussite
+	 * state of successful transaction 
 	 */
 	public static final int SUCCESSFUL = 0;
 	/**
-	 * constante d'état d'une transaction échouée
+	 * state of failed transaction 
 	 */
 	public static final int FAILED = -1;
 	/**
-	 * constante de restauration de la base de donnée en cas de panne
+	 * constant for recovering database in case of shutdown 
 	 */
-	private static final String SCRIPT_RESTORE = "DbRestore.sql";
+	public static final String SCRIPT_RESTORE = "DbRestore.sql";
 
 }
