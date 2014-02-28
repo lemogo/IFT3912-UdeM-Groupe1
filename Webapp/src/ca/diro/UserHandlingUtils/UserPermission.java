@@ -1,4 +1,4 @@
-package ca.diro.UserHandlingUtils.Actions;
+package ca.diro.UserHandlingUtils;
 
 /**
  * Description of the required permission to perform a certain action.
