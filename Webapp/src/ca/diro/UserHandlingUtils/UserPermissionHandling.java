@@ -4,6 +4,9 @@ import java.sql.ResultSet;
 
 import javax.servlet.http.HttpServletRequest;
 
+import org.eclipse.jetty.security.authentication.*;
+import org.eclipse.jetty.server.session.*;
+
 import ca.diro.UserHandlingUtils.Actions.ActionPermissionsException;
 import ca.diro.UserHandlingUtils.Actions.UnauthorizedAction;
 import ca.diro.UserHandlingUtils.Actions.UserAction;
@@ -17,8 +20,7 @@ import ca.diro.UserHandlingUtils.Actions.UserAction;
 public class UserPermissionHandling {
 
 	/**
-	 * Performs the given <code>HttpServletRequest</code>, assuming that it has
-	 * the appropriate permissions.
+	 * Performs the given <code>HttpServletRequest</code>.
 	 * 
 	 * @param request
 	 *            The client's <code>HttpServletRequest</code>.
@@ -35,12 +37,12 @@ public class UserPermissionHandling {
 
 	/**
 	 * Verifies if the <code>HttpServletRequest</code> was made with appropriate
-	 * permissions for the command.
+	 * permissions for the command and returns the appropriate <code>UserAction</code>.
 	 * 
 	 * @param request
 	 *            The client's <code>HttpServletRequest</code>.
 	 * 
-	 * @return The <code>ResultSet</code> that results from this request.
+	 * @return The requested <code>UserAction</code>.
 	 */
 	private UserAction handleRequestPermissions(HttpServletRequest request) {
 		UserAction requestedAction = new UnauthorizedAction(0, 0);
