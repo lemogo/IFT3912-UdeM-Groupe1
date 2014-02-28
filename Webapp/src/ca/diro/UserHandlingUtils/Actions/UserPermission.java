@@ -8,34 +8,42 @@ package ca.diro.UserHandlingUtils.Actions;
  */
 public enum UserPermission {
 	/**
+	 * No one can use this. Alternative to "NONE", equivalent to "null".
+	 */
+	UNAUTHORIZED,
+	/**
 	 * Absolute permission. For testing and administration purposes.
 	 */
-	Admin,
+	ADMIN,
 	/**
 	 * The user must be the owner of an event to alter it.
 	 */
-	EventOwner,
+	EVENT_OWNER,
 	/**
 	 * The user must be the owner of a comment to alter it.
 	 */
-	CommentOwner,
+	COMMENT_OWNER,
 	/**
 	 * We like money so charging users for more permissions is good.
 	 */
-	Premium,
+	PREMIUM,
 	/**
 	 * The user must be logged in to perform this action.
 	 */
-	RegisteredUser,
+	LOGGED_USER,
+	/**
+	 * The user must have an existing account to perform this action.
+	 */
+	REGISTERED_USER,
 	/**
 	 * Any user can perform this action.
 	 */
-	None;
+	NONE;
 
 	/**
 	 * Returns <code>true</code> if this <code>UserPermission</code> is allowed
-	 *         to perform an action with the given target
-	 *         <code>UserPermission</code>, else <code>false</code>.
+	 * to perform an action with the given target <code>UserPermission</code>,
+	 * else <code>false</code>.
 	 * 
 	 * @param targetPermission
 	 *            The <code>UserPermission</code> required.
@@ -44,11 +52,13 @@ public enum UserPermission {
 	 *         <code>UserPermission</code>, else <code>false</code>.
 	 */
 	public boolean hasPermission(UserPermission targetPermission) {
-		if (this == Admin) {
-			return true;
-		} else if (targetPermission == EventOwner && this != EventOwner) {
+		if (this == UNAUTHORIZED) {
 			return false;
-		} else if (targetPermission == CommentOwner && this != CommentOwner) {
+		} else if (this == ADMIN) {
+			return true;
+		} else if (targetPermission == EVENT_OWNER && this != EVENT_OWNER) {
+			return false;
+		} else if (targetPermission == COMMENT_OWNER && this != COMMENT_OWNER) {
 			return false;
 		} else if (this.compareTo(targetPermission) < 0) {
 			return true;
