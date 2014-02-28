@@ -10,7 +10,7 @@ package ca.diro.UserHandlingUtils.Actions;
 public class CreateUserAccountAction extends UserAction {
 
 	/**
-	 * Constructor for a <code>AccountCreationAction</code>. Calls the
+	 * Constructor for a <code>CreateUserAccountAction</code>. Calls the
 	 * <code>UserAction</code> constructor.
 	 * 
 	 * 
@@ -19,8 +19,7 @@ public class CreateUserAccountAction extends UserAction {
 	 * @param targetID
 	 *            The ID of the target of this <code>UserAction</code>.
 	 * 
-	 * @see ca.diro.UserHandlingUtils.Actions.UserAction#UserAction(int, int,
-	 *      String)
+	 * @see ca.diro.UserHandlingUtils.Actions.UserAction#UserAction(int, int)
 	 */
 	public CreateUserAccountAction(int userID, int targetID) {
 		super(userID, targetID);

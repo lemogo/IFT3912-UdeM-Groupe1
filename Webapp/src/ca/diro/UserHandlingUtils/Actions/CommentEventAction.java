@@ -9,7 +9,7 @@ package ca.diro.UserHandlingUtils.Actions;
 public class CommentEventAction extends UserAction {
 
 	/**
-	 * Constructor for a <code>CommentCreationAction</code>. Calls the
+	 * Constructor for a <code>CommentEventAction</code>. Calls the
 	 * <code>UserAction</code> constructor.
 	 * 
 	 * 
@@ -18,8 +18,7 @@ public class CommentEventAction extends UserAction {
 	 * @param targetID
 	 *            The ID of the target of this <code>UserAction</code>.
 	 * 
-	 * @see ca.diro.UserHandlingUtils.Actions.UserAction#UserAction(int, int,
-	 *      String)
+	 * @see ca.diro.UserHandlingUtils.Actions.UserAction#UserAction(int, int)
 	 */
 	public CommentEventAction(int userID, int targetID) {
 		super(userID, targetID);

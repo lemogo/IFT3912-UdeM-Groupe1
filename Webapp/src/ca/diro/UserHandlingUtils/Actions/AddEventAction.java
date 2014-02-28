@@ -1,15 +1,15 @@
 package ca.diro.UserHandlingUtils.Actions;
 
 /**
- * The <code>UserAction</code> for account modification.
+ * The <code>UserAction</code> for event creation.
  * 
  * @author lavoiedn
  * 
  */
-public class ModifyAccountAction extends UserAction {
+public class AddEventAction extends UserAction {
 
 	/**
-	 * Constructor for a <code>ModifyAccountAction</code>. Calls the
+	 * Constructor for a <code>AddEventAction</code>. Calls the
 	 * <code>UserAction</code> constructor.
 	 * 
 	 * 
@@ -20,7 +20,7 @@ public class ModifyAccountAction extends UserAction {
 	 * 
 	 * @see ca.diro.UserHandlingUtils.Actions.UserAction#UserAction(int, int)
 	 */
-	public ModifyAccountAction(int userID, int targetID) {
+	public AddEventAction(int userID, int targetID) {
 		super(userID, targetID);
 		// TODO Set command to appropriate AbstractCommand.
 	}

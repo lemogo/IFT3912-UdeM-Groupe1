@@ -2,10 +2,12 @@ package ca.diro.UserHandlingUtils.Actions;
 
 import java.sql.ResultSet;
 
+import javax.servlet.http.HttpServletRequest;
+
 import org.eclipse.jetty.server.Request;
 
 /**
- * Class to represent when a <code>Request</code> did not meet the required
+ * Class to represent when a <code>HttpServletRequest</code> did not meet the required
  * permissions to be executed.
  * 
  * @author lavoiedn
@@ -14,12 +16,16 @@ import org.eclipse.jetty.server.Request;
 public class UnauthorizedAction extends UserAction {
 
 	/**
-	 * Constructor for a <code>UnauthorizedAction</code>.
+	 * Constructor for a <code>UnauthorizedAction</code>. Calls the
+	 * <code>UserAction</code> constructor.
+	 * 
 	 * 
 	 * @param userID
 	 *            The ID of the user who initiated this <code>UserAction</code>.
 	 * @param targetID
 	 *            The ID of the target of this <code>UserAction</code>.
+	 * 
+	 * @see ca.diro.UserHandlingUtils.Actions.UserAction#UserAction(int, int)
 	 */
 	public UnauthorizedAction(int userID, int targetID) {
 		super(userID, targetID);
@@ -44,7 +50,7 @@ public class UnauthorizedAction extends UserAction {
 	 * .jetty.server.Request)
 	 */
 	@Override
-	public ResultSet performAction(Request request) throws ActionPermissionsException{
+	public ResultSet performAction(HttpServletRequest request) throws ActionPermissionsException{
 		throw new ActionPermissionsException("Unauthorized to perform requested action.");
 	}
 

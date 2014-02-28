@@ -1,15 +1,15 @@
 package ca.diro.UserHandlingUtils.Actions;
 
 /**
- * The <code>UserAction</code> for account modification.
+ * The <code>UserAction</code> for event deletion.
  * 
  * @author lavoiedn
  * 
  */
-public class ModifyAccountAction extends UserAction {
+public class CancelEventAction extends UserAction {
 
 	/**
-	 * Constructor for a <code>ModifyAccountAction</code>. Calls the
+	 * Constructor for a <code>CancelEventAction</code>. Calls the
 	 * <code>UserAction</code> constructor.
 	 * 
 	 * 
@@ -20,9 +20,9 @@ public class ModifyAccountAction extends UserAction {
 	 * 
 	 * @see ca.diro.UserHandlingUtils.Actions.UserAction#UserAction(int, int)
 	 */
-	public ModifyAccountAction(int userID, int targetID) {
+	public CancelEventAction(int userID, int targetID) {
 		super(userID, targetID);
-		// TODO Set command to appropriate AbstractCommand.
+		// TODO Set command to the appropriate AbstractCommand.
 	}
 
 	/*
@@ -33,7 +33,7 @@ public class ModifyAccountAction extends UserAction {
 	 */
 	@Override
 	public UserPermission getRequiredUserPermission() {
-		return UserPermission.LOGGED_USER;
+		return UserPermission.EVENT_OWNER;
 	}
 
 }
