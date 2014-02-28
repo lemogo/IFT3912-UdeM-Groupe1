@@ -1,5 +1,7 @@
 package ca.diro.UserHandlingUtils.Actions;
 
+import ca.diro.UserHandlingUtils.UserPermission;
+
 /**
  * The <code>UserAction</code> used for user log in.
  * 

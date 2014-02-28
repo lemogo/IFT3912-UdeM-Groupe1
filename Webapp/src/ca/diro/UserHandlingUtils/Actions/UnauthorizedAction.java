@@ -6,6 +6,8 @@ import javax.servlet.http.HttpServletRequest;
 
 import org.eclipse.jetty.server.Request;
 
+import ca.diro.UserHandlingUtils.UserPermission;
+
 /**
  * Class to represent when a <code>HttpServletRequest</code> did not meet the required
  * permissions to be executed.
