@@ -1,0 +1,36 @@
+/**
+ * 
+ */
+package ca.diro.DataBase.Command;
+
+
+/**
+ * this command allow signed user to add an event in his account 
+ * @author william
+ *
+ */
+public class AddEvent extends AbstractCommand{
+
+
+	/**
+	 * Constructor 
+	 * @param a string info to parse 
+	 */
+	public AddEvent(String info) {
+		query_ = buildQuery(info);
+		
+	}
+	
+	/**
+	 * Method to parse JSON string to get parameter useful to build query
+	 * @param info String from JSON format to be parsed and build the right query
+	 * @return a string that is the query
+	 */
+	public String buildQuery(String info){
+		String str="" ;
+		//TODO parse query
+		return str ;
+	}
+
+
+}

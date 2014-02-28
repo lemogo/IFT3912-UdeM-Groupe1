@@ -1,0 +1,39 @@
+/**
+ * 
+ */
+package ca.diro.DataBase.Command;
+
+import java.util.*;
+
+/**
+ * Command to create User Account using data from user
+ * 
+ * @author william
+ * 
+ */
+public class CreateUserAccount extends AbstractCommand {
+
+	/**
+	 * Constructor
+	 * @param info string 
+	 */
+	public CreateUserAccount(String info) {
+		query_ = buildQuery(info);
+
+	}
+
+	/**
+	 * Method to parse JSON string to get parameter useful to build query
+	 * 
+	 * @param info
+	 *            String from JSON format to be parsed and build the right query
+	 * @return a string that is the query
+	 */
+	public String buildQuery(String info) {
+		String str = "";
+		// TODO parse query
+		return str;
+	}
+
+
+}
