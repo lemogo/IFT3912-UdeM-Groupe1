@@ -4,7 +4,7 @@
 package ca.diro.DataBase.Command;
 
 /**
- * Command to see passed event with number people attended
+ * THis class implement the Command to see passed events and the number of people attended
  * @author william
  *
  */

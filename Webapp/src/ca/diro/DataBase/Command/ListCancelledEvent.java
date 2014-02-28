@@ -4,7 +4,7 @@
 package ca.diro.DataBase.Command;
 
 /**
- * Command to see the list of all cancelled event 
+ * Command to see the list of all cancelled events 
  * @author william
  *
  */
