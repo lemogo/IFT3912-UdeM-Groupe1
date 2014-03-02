@@ -16,7 +16,7 @@ import org.eclipse.jetty.util.security.Constraint;
  * @author lavoiedn
  * 
  */
-public class RequestMain {
+public class Main {
 
 	public final static int DEFAULT_PORT = 8080;
 	private static Server server;
