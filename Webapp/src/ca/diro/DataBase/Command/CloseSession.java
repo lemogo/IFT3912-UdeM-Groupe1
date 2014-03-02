@@ -8,7 +8,7 @@ package ca.diro.DataBase.Command;
  * @author william
  *
  */
-public class CloseSession extends AbstractCommand{
+public class CloseSession extends Command{
 	/**
 	 * Constructor 
 	 * @param a string info to parse 
@@ -26,7 +26,7 @@ public class CloseSession extends AbstractCommand{
 	 *            string to build query
 	 * @return a string that is the query
 	 */
-	public String buildQuery(String info) {
+	private String buildQuery(String info) {
 		String str = "";
 		// TODO parse query
 		return str;

@@ -8,7 +8,7 @@ package ca.diro.DataBase.Command;
  * @author william
  *
  */
-public class ListRegisterEvent extends AbstractCommand{
+public class ListRegisterEvent extends Command{
 
 	/**
 	 * @param info string to build query

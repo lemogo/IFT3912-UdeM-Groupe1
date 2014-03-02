@@ -8,7 +8,7 @@ package ca.diro.DataBase.Command;
  * @author william
  *
  */
-public class OpenSession  extends AbstractCommand{
+public class OpenSession  extends Command{
 
 	/**
 	 * @param sessionInfo string to buid query with
@@ -26,7 +26,7 @@ public class OpenSession  extends AbstractCommand{
 	 *            string to build query
 	 * @return a string that is the query
 	 */
-	public String buildQuery(String info) {
+	private String buildQuery(String info) {
 		String str = "";
 		// TODO parse query
 		return str;

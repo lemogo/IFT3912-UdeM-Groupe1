@@ -2,7 +2,7 @@ package ca.diro.DataBase;
 
 import java.sql.*;
 
-import ca.diro.DataBase.Command.AbstractCommand;
+import ca.diro.DataBase.Command.Command;
 
 /**
  * THis class handle all queries in order to connect database by executing queries commands 
@@ -22,10 +22,9 @@ public class DataBase {
 		//TODO database constructor
 	}
 
+	
 	/**
-	 * méthode de connection à la base de donnée
-	 */
-	/**
+	 * Method to get get database connection
 	 * @return a boolean which is true when good connection established
 	 */
 	public boolean dbConnect() {
@@ -37,7 +36,7 @@ public class DataBase {
 	}
 
 	/**
-	 * fermeture de la base de données
+	 * Mrthod to clase database
 	 * 
 	 * @throws SQLException
 	 */
@@ -90,7 +89,7 @@ public class DataBase {
 	 * @return true if good connection or false when no connection.
 	 * @throws SQLException
 	 */
-	public boolean execute(AbstractCommand cmd) {
+	public boolean execute(Command cmd) {
 		//TODO execute statement
 			return false;
 	}	
@@ -101,28 +100,28 @@ public class DataBase {
 	/**
 	 * connection to database
 	 */
-	public Connection con = null;
+	private Connection con = null;
 	/**
 	 * restore database
 	 */
-	public String restoreScript = null;
+	private String restoreScript = null;
 	/**
 	 * database name
 	 */
-	public String dbName = "dbgroup1";
+	private String dbName = "dbgroup1";
 	
 	/**
 	 * directory for the embedded database 
 	 */
-	public String dbpath = "jdbc:h2:data/database/dbgroup1";
+	private String dbpath = "jdbc:h2:data/database/dbgroup1";
 	/**
 	 * database password
 	 */
-	public final String dbPassword = "";
+	private final String dbPassword = "";
 	/**
 	 * data base user name
 	 */
-	public final String dbUserName = "group1";
+	private  String dbUserName = "group1";
 	/**
 	 * state of successful transaction 
 	 */

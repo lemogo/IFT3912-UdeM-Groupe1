@@ -7,7 +7,7 @@ package ca.diro.DataBase.Command;
 * this class permit to set query in order to allow an signed user to comment event 
  * @author william
  */
-public class CommentEvent extends AbstractCommand{
+public class CommentEvent extends Command{
 	/**
 	 * @param info string 
 	 */
@@ -23,7 +23,7 @@ public class CommentEvent extends AbstractCommand{
 	 *            string to build query
 	 * @return a string that is the query
 	 */
-	public String buildQuery(String info) {
+	private String buildQuery(String info) {
 		String str = "";
 		// TODO parse query
 		return str;

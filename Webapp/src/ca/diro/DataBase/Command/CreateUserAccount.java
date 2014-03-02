@@ -9,7 +9,7 @@ package ca.diro.DataBase.Command;
  * @author william
  * 
  */
-public class CreateUserAccount extends AbstractCommand {
+public class CreateUserAccount extends Command {
 
 	/**
 	 * Constructor

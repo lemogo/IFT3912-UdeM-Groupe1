@@ -5,6 +5,7 @@ package ca.diro.DataBase.Command;
 
 import java.sql.ResultSet;
 import java.sql.Statement;
+import java.util.Map;
 
 /**
  * This Abstract class allowing to create and encapsulate  query that has to be executed 
@@ -12,12 +13,12 @@ import java.sql.Statement;
  * 
  * @author william
  */
-public abstract class AbstractCommand {
+public abstract class Command {
 
 	/**
 	 * Constructor
 	 */
-	public AbstractCommand() {
+	public Command() {
 	}
 	
 	/**
@@ -30,7 +31,14 @@ public abstract class AbstractCommand {
 		//TODO execute command
 		return returnValue;
 	}
-
+	/**
+	 * This method has to be more generic in order to parse Json string in Map type
+	 * @return a Map with string key and string value 
+	 */
+	protected Map<String, String> parseToMap(String info){
+		//TODO implement generic parsing
+		return null ;
+	}
 		
 	/**
 	 * getter
@@ -53,9 +61,9 @@ public abstract class AbstractCommand {
 	/**
 	 * query which has to be executed
 	 */
-	 public String query_;
+	 protected String query_;
 	/**
 	 * Result getting from database
 	 */
-	public ResultSet result_;
+	protected  ResultSet result_;
 }

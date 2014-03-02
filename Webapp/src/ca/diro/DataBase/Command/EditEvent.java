@@ -8,7 +8,7 @@ package ca.diro.DataBase.Command;
  * @author william
  *
  */
-public class EditEvent extends AbstractCommand{
+public class EditEvent extends Command{
 
 	/**
 	 * Constructor 
@@ -27,7 +27,7 @@ public class EditEvent extends AbstractCommand{
 	 *            string to build query
 	 * @return a string that is the query
 	 */
-	public String buildQuery(String info) {
+	private String buildQuery(String info) {
 		String str = "";
 		// TODO parse query
 		return str;

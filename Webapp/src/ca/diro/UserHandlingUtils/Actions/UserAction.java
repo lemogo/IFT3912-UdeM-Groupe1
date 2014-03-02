@@ -4,7 +4,7 @@ import java.sql.ResultSet;
 
 import javax.servlet.http.HttpServletRequest;
 
-import ca.diro.DataBase.Command.AbstractCommand;
+import ca.diro.DataBase.Command.Command;
 import ca.diro.UserHandlingUtils.ActionPermissionsException;
 
 /**
@@ -28,10 +28,10 @@ public abstract class UserAction implements IAction {
 	 */
 	private int targetID;
 	/**
-	 * The {@link ca.diro.DataBase.Command.AbstractCommand} associated with this
+	 * The {@link ca.diro.DataBase.Command.Command} associated with this
 	 * <code>UserAction</code>.
 	 */
-	protected AbstractCommand command;
+	protected Command command;
 
 	/**
 	 * Constructor for a <code>UserAction</code>.

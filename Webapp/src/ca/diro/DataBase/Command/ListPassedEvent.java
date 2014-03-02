@@ -8,7 +8,7 @@ package ca.diro.DataBase.Command;
  * @author william
  *
  */
-public class ListPassedEvent extends  AbstractCommand{
+public class ListPassedEvent extends  Command{
 
 	/**
 	 * Constructor

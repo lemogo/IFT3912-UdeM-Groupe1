@@ -8,7 +8,7 @@ package ca.diro.DataBase.Command;
  * @author william
  *
  */
-public class ListCancelledEvent extends  AbstractCommand{	
+public class ListCancelledEvent extends  Command{	
 	/**
 	 * Constructor 
 	 */
