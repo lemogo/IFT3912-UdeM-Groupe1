@@ -5,6 +5,7 @@ import java.sql.ResultSet;
 import javax.servlet.http.HttpServletRequest;
 
 import ca.diro.DataBase.Command.AbstractCommand;
+import ca.diro.UserHandlingUtils.ActionPermissionsException;
 
 /**
  * Represents the actions that can be performed by a user that affect the user

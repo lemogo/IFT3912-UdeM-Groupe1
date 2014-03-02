@@ -3,6 +3,11 @@ package ca.diro.UserHandlingUtils;
 /**
  * Description of the required permission to perform a certain action.
  * 
+ * Do not confuse those with the "roles" given to users. "Roles" only define the
+ * different kind of users, these <code>UserPermission</code> define different
+ * states the users can be in using an enum along with a quick way of comparing
+ * two values.
+ * 
  * @author lavoiedn
  * 
  */

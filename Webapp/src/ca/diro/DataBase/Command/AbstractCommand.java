@@ -7,8 +7,9 @@ import java.sql.ResultSet;
 import java.sql.Statement;
 
 /**
- * Class allowing to create and encapsulate  query that has to be executed on the database.
- * this class also get the query's result
+ * This Abstract class allowing to create and encapsulate  query that has to be executed 
+ * on the database using inheritance to implement specific query on subclass 
+ * 
  * @author william
  */
 public abstract class AbstractCommand {
@@ -20,6 +21,7 @@ public abstract class AbstractCommand {
 	}
 	
 	/**
+	 * Method to execute query 
 	 * @param stat statement for connection to database
 	 * @return false or true useful to check status 
 	 */
@@ -29,9 +31,9 @@ public abstract class AbstractCommand {
 		return returnValue;
 	}
 
-	
-	
+		
 	/**
+	 * getter
 	 * @return query to be executed
 	 */
 	public String getQuery()
@@ -39,17 +41,21 @@ public abstract class AbstractCommand {
 		return query_;
 	}
 	
+	/**
+	 * getter 
+	 * @return a resultset  
+	 */
 	public ResultSet getResultSet()
 	{
 		return result_;
 	}
 
 	/**
-	 * query that has to be executed
+	 * query which has to be executed
 	 */
-	 protected String query_;
+	 public String query_;
 	/**
 	 * Result getting from database
 	 */
-	private ResultSet result_;
+	public ResultSet result_;
 }

@@ -3,9 +3,8 @@
  */
 package ca.diro.DataBase.Command;
 
-
 /**
-  * this class permit to set query in order to allow an signed user to delete event 
+  * this class permit to set query in order to allow a signed user to delete event 
  * @author william
  */
 public class DeleteEvent extends AbstractCommand{
@@ -21,13 +20,17 @@ public class DeleteEvent extends AbstractCommand{
 	}
 	
 	/**
-	 * @param info String from JSON format to be parsed and build the right query
+	 * Method to parse String from JSON format in order to retrieve parameters
+	 * and build the right query
+	 * 
+	 * @param info
+	 *            string to build query
 	 * @return a string that is the query
 	 */
-	private String buildQuery(String info){
-		String str="" ;
-		//TODO parse query
-		return str ;
+	public String buildQuery(String info) {
+		String str = "";
+		// TODO parse query
+		return str;
 	}
 
 }

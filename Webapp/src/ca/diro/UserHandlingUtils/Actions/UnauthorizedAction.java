@@ -6,6 +6,7 @@ import javax.servlet.http.HttpServletRequest;
 
 import org.eclipse.jetty.server.Request;
 
+import ca.diro.UserHandlingUtils.ActionPermissionsException;
 import ca.diro.UserHandlingUtils.UserPermission;
 
 /**

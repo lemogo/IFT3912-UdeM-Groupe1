@@ -1,4 +1,4 @@
-package ca.diro.UserHandlingUtils.Actions;
+package ca.diro.UserHandlingUtils;
 
 /**
  * Exception thrown when an <code>IAction</code> did not meet the required

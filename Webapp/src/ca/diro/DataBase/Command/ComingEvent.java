@@ -20,7 +20,7 @@ public class ComingEvent  extends AbstractCommand{
 	 * Method to define query
 	 * @return the query in string
 	 */
-	private String buildQuery(){
+	public String buildQuery(){
 		String str="" ;
 		//TODO parse query
 		return str ;

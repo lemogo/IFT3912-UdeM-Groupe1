@@ -4,6 +4,7 @@ import java.sql.ResultSet;
 
 import javax.servlet.http.HttpServletRequest;
 
+import ca.diro.UserHandlingUtils.ActionPermissionsException;
 import ca.diro.UserHandlingUtils.UserPermission;
 
 /**
