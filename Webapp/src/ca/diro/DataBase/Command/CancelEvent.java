@@ -4,7 +4,7 @@
 package ca.diro.DataBase.Command;
 
 /**
- * This class permit to set query in order to allow a signed user to cancel
+ * this class permit to set query in order to allow a signed user to cancel
  * event
  * 
  * @author william
@@ -22,7 +22,7 @@ public class CancelEvent extends AbstractCommand {
 	}
 
 	/**
-	 * Parses String from JSON format in order to retrieve parameters
+	 * Method to parse String from JSON format in order to retrieve parameters
 	 * and build the right query
 	 * 
 	 * @param info

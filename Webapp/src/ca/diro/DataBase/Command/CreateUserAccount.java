@@ -9,19 +9,19 @@ package ca.diro.DataBase.Command;
  * @author william
  * 
  */
-public class CreateUserAccountEvent extends AbstractCommand {
+public class CreateUserAccount extends AbstractCommand {
 
 	/**
 	 * Constructor
 	 * @param info string 
 	 */
-	public CreateUserAccountEvent(String info) {
+	public CreateUserAccount(String info) {
 		query_ = buildQuery(info);
 
 	}
 
 	/**
-	 * Parse String from JSON format in order to retrieve parameters
+	 * Method to parse String from JSON format in order to retrieve parameters
 	 * and build the right query
 	 * 
 	 * @param info

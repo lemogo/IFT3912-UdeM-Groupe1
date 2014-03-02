@@ -23,7 +23,7 @@ public class DataBase {
 	}
 
 	/**
-	 * Connects to Database
+	 * méthode de connection à la base de donnée
 	 */
 	/**
 	 * @return a boolean which is true when good connection established
@@ -37,7 +37,7 @@ public class DataBase {
 	}
 
 	/**
-	 * Closes Database
+	 * fermeture de la base de données
 	 * 
 	 * @throws SQLException
 	 */
@@ -46,7 +46,7 @@ public class DataBase {
 	}
 
 	/**
-	 * Deletes data base
+	 * delete data base
 	 * 
 	 * @throws SQLException
 	 */
@@ -56,7 +56,6 @@ public class DataBase {
 	}
 
 	/**
-	 * Creates a Statement object
 	 * @return un objet Statement
 	 * @throws SQLException
 	 */
@@ -67,7 +66,7 @@ public class DataBase {
 	}
 
 	/**
-	 * Creates tables of the database
+	 * Method to create tables of the database
 	 * 
 	 * @throws SQLException
 	 */
@@ -76,7 +75,7 @@ public class DataBase {
 	}
 
 	/**
-	 * Populates database
+	 * Method to populate database
 	 * 
 	 * @throws SQLException
 	 */
@@ -86,7 +85,7 @@ public class DataBase {
 	}
 
 	/**
-	 * Executes a query  command on database  .
+	 * Method to execute a query  command on database  .
 	 * @param cmd la commande
 	 * @return true if good connection or false when no connection.
 	 * @throws SQLException
@@ -97,7 +96,7 @@ public class DataBase {
 	}	
 	
 	
-	//-----------------------------------------------------------------
+	
 
 	/**
 	 * connection to database

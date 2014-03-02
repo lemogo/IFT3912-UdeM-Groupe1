@@ -16,7 +16,7 @@ public class CommentEvent extends AbstractCommand{
 	}
 	
 	/**
-	 * Parse String from JSON format in order to retrieve parameters
+	 * Method to parse String from JSON format in order to retrieve parameters
 	 * and build the right query
 	 * 
 	 * @param info
