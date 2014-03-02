@@ -3,7 +3,6 @@
  */
 package ca.diro.DataBase.Command;
 
-import java.util.Map;
 
 /**
  * This class run build query for searching event using events at title and description as criteria 

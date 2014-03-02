@@ -3,7 +3,6 @@
  */
 package ca.diro.DataBase.Command;
 
-import java.util.Map;
 
 /**
  * this class make the command to view all event that one user has created

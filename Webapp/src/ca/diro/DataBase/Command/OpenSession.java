@@ -3,7 +3,6 @@
  */
 package ca.diro.DataBase.Command;
 
-import java.util.Map;
 
 /**
  * this command permit user to open a session

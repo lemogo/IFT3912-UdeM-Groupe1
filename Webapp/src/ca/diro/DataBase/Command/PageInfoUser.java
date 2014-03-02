@@ -3,7 +3,6 @@
  */
 package ca.diro.DataBase.Command;
 
-import java.util.Map;
 
 /**
  * this command class give information on a user that can be use to generate user's own page

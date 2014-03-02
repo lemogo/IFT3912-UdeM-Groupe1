@@ -3,7 +3,6 @@
  */
 package ca.diro.DataBase.Command;
 
-import java.util.Map;
 
 /**
  * Command to see all event where a signed user is subscripted 

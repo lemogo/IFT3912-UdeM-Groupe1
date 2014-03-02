@@ -3,7 +3,6 @@
  */
 package ca.diro.DataBase.Command;
 
-import java.util.Map;
 
 /**
  * this command allow logged user to modified their account informations  parameter except the user's name   

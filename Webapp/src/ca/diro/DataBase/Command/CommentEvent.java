@@ -3,7 +3,6 @@
  */
 package ca.diro.DataBase.Command;
 
-import java.util.Map;
 
 /**
 * this class permit to set query in order to allow an signed user to comment event 

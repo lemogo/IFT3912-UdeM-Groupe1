@@ -3,7 +3,6 @@
  */
 package ca.diro.DataBase.Command;
 
-import java.util.*;
 
 /**
  * Command to create User Account using data from user
