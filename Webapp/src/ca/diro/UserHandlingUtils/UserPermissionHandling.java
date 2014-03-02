@@ -1,41 +1,47 @@
 package ca.diro.UserHandlingUtils;
 
+import java.io.IOException;
 import java.sql.ResultSet;
 
+import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.eclipse.jetty.security.authentication.*;
+import org.eclipse.jetty.server.Request;
+import org.eclipse.jetty.server.handler.AbstractHandler;
 import org.eclipse.jetty.server.session.*;
+import org.json.JSONArray;
 
 import ca.diro.UserHandlingUtils.Actions.UnauthorizedAction;
 import ca.diro.UserHandlingUtils.Actions.UserAction;
 
 /**
  * Permission handling for database access and other operations.
+ * Will handle requests forwarded from {@link ca.diro.RequestHandler}.
  * 
  * @author girardil
  * @version 1.1
  */
-public class UserPermissionHandling {
-
+public class UserPermissionHandling extends AbstractHandler{
+	
 	/**
-	 * Performs the given <code>HttpServletRequest</code>.
-	 * 
-	 * @param request
-	 *            The client's <code>HttpServletRequest</code>.
-	 * @param response
-	 *            The bridge's response to the request.
-	 * 
-	 * @return The <code>ResultSet</code> that results from this request.
-	 * @throws ActionPermissionsException
+	 * The <code>ResultSet</code> of a database query.
 	 */
-	public ResultSet makeRequest(HttpServletRequest request,
-			HttpServletResponse response) throws ActionPermissionsException {
-		ResultSet results;
-		UserAction requestedAction = handleRequestPermissions(request, response);
-		results = requestedAction.performAction(request);
-		return results;
+	private ResultSet resultSet;
+	/**
+	 * The <code>resultSet</code> as a <code>JSONArray</code>.
+	 */
+	private JSONArray JSONResult;
+
+	/* (non-Javadoc)
+	 * @see org.eclipse.jetty.server.Handler#handle(java.lang.String, org.eclipse.jetty.server.Request, javax.servlet.http.HttpServletRequest, javax.servlet.http.HttpServletResponse)
+	 */
+	@Override
+	public void handle(String target, Request baseRequest,
+			HttpServletRequest request, HttpServletResponse response)
+			throws IOException, ServletException {
+		// TODO Handle requests that require particular permission handling.
 	}
 
 	/**
@@ -56,4 +62,6 @@ public class UserPermissionHandling {
 		// TODO Find requested action and return it.
 		return requestedAction;
 	}
+
+
 }
