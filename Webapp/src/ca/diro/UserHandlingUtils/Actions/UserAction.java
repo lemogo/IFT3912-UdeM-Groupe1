@@ -9,10 +9,7 @@ import ca.diro.UserHandlingUtils.ActionPermissionsException;
 
 /**
  * Represents the actions that can be performed by a user that affect the user
- * itself. This could also have been done using a multitude of
- * <code>AbstractHandler</code>s. However, I wanted a way to call every command
- * using a list of <code>UserAction</code>s if required. (For instance, if we
- * need to use a queue for requests.)
+ * itself.
  * 
  * @author lavoiedn
  * 
@@ -20,11 +17,11 @@ import ca.diro.UserHandlingUtils.ActionPermissionsException;
 public abstract class UserAction implements IAction {
 
 	/**
-	 * The ID of the user who initiated this <code>UserAction</code>.
+	 * The ID of the user who initiated this <code>IAction</code>.
 	 */
 	private int userID;
 	/**
-	 * The ID of the target of this <code>UserAction</code>.
+	 * The ID of the target of this <code>IAction</code>.
 	 */
 	private int targetID;
 	/**

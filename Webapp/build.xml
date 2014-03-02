@@ -31,7 +31,7 @@
     <path id="classpath">
         <!-- Par défaut, le classpath contiendra tous les fichiers .jar dans le
             dossier lib" -->
-        <fileset dir="${lib.dir}" erroronmissingdir="false"/>
+        <fileset dir="${lib.dir}" includes="**/*.jar" erroronmissingdir="false"/>
         <!-- Si vous devez ajouter un dossier ou un fichier jar au classpath, décommentez
              et modifiez une des lignes ci-dessous. -->
         <!-- <pathelement location="lib/myjar.jar"/> -->
@@ -64,11 +64,6 @@
         <mkdir dir="${javadoc.dir}"/>
         <javadoc destdir="${javadoc.dir}">
             <fileset dir="src"/>
-           	 <classpath refid="classpath"/>
-             <link href="http://download.oracle.com/javase/7/docs/api/"/>
-           	 <link href= "http://download.eclipse.org/jetty/stable-9/apidocs/"/>
-           	 <!-- Only way I could find to include links for the servlet javadoc. -->
-           	 <link href= "http://tomcat.apache.org/tomcat-5.5-doc/servletapi/"/>
         </javadoc>
     </target>
 

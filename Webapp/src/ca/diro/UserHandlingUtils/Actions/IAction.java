@@ -39,7 +39,8 @@ public interface IAction {
 
 	/**
 	 * Applies the <code>IAction</code>'s effects. Note that permission handling
-	 * must be done before the <code>IAction</code> is performed.
+	 * must be done by another class before the <code>IAction</code> is
+	 * performed.
 	 * 
 	 * @param request
 	 *            The <code>HttpServletRequest</code> containing the required
