@@ -4,18 +4,18 @@
 package ca.diro.DataBase.Command;
 
 /**
- * this this make command permitting user to open a session
+ * this class implement command to allow logged user to modified their account informations  parameter except the user's name   
  * @author william
  *
  */
-public class OpenSession  extends AbstractCommand{
+public class ModifyAccountEvent extends AbstractCommand{
 
 	/**
-	 * @param sessionInfo string to buid query with
+	 * Constructor
+	 * @param info to buif query with
 	 */
-	public OpenSession(String sessionInfo) {
-		query_ = buildQuery(sessionInfo);
-		
+	public ModifyAccountEvent(String info) {
+		query_ = buildQuery(info);	
 	}
 	
 	/**
@@ -31,4 +31,5 @@ public class OpenSession  extends AbstractCommand{
 		// TODO parse query
 		return str;
 	}
+
 }

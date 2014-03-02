@@ -21,7 +21,7 @@ public abstract class AbstractCommand {
 	}
 	
 	/**
-	 * Method to execute query 
+	 * Executes a query command 
 	 * @param stat statement for connection to database
 	 * @return false or true useful to check status 
 	 */
@@ -30,10 +30,9 @@ public abstract class AbstractCommand {
 		//TODO execute command
 		return returnValue;
 	}
-
 		
 	/**
-	 * getter
+	 * Gets executed query
 	 * @return query to be executed
 	 */
 	public String getQuery()
@@ -42,20 +41,22 @@ public abstract class AbstractCommand {
 	}
 	
 	/**
-	 * getter 
+	 * Gets result set 
 	 * @return a resultset  
 	 */
 	public ResultSet getResultSet()
 	{
 		return result_;
 	}
+	
+	//--------------------------------------------------------
 
 	/**
 	 * query which has to be executed
 	 */
-	 public String query_;
+	 protected String query_;
 	/**
 	 * Result getting from database
 	 */
-	public ResultSet result_;
+	protected ResultSet result_;
 }

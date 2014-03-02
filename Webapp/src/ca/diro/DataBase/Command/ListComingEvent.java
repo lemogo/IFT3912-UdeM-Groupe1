@@ -8,12 +8,12 @@ package ca.diro.DataBase.Command;
  * @author william
  *
  */
-public class ListEventComing extends AbstractCommand{
+public class ListComingEvent extends AbstractCommand{
 
 	/**
 	 * Constructor 
 	 */
-	public ListEventComing() {
+	public ListComingEvent() {
 		this.query_ = buildQuery() ;
 	}
 	

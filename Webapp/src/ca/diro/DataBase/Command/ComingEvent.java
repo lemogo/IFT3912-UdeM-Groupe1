@@ -3,6 +3,7 @@
  */
 package ca.diro.DataBase.Command;
 
+//FIXME: please change coming to something more descriptive
 /**
  * this command permit user to coming event 
  * @author william
@@ -17,7 +18,7 @@ public class ComingEvent  extends AbstractCommand{
 	}
 	
 	/**
-	 * Method to define query
+	 * Defines query
 	 * @return the query in string
 	 */
 	public String buildQuery(){
