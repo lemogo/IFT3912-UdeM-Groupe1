@@ -10,6 +10,12 @@ import org.eclipse.jetty.security.authentication.BasicAuthenticator;
 import org.eclipse.jetty.server.Server;
 import org.eclipse.jetty.util.security.Constraint;
 
+/**
+ * The main class. It serves to initialize the server and its security measures.
+ * 
+ * @author lavoiedn
+ * 
+ */
 public class RequestMain {
 
 	public final static int DEFAULT_PORT = 8080;
@@ -24,6 +30,13 @@ public class RequestMain {
 	 */
 	private static String realmProperties = "resources/realm.properties";
 
+	/**
+	 * This is the main. It makes things run.
+	 * 
+	 * @param args
+	 *            Whatever you type in the console as an array of Strings.
+	 * @throws Exception
+	 */
 	public static void main(String[] args) throws Exception {
 		initSecureServer();
 		server.start();
