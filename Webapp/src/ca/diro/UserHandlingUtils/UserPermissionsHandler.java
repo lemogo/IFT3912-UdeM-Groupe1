@@ -15,16 +15,16 @@ import org.json.JSONArray;
 
 import ca.diro.UserHandlingUtils.Actions.UnauthorizedAction;
 import ca.diro.UserHandlingUtils.Actions.UserAction;
-import ca.diro.UserHandlingUtils.UserPermission;
+import ca.diro.UserHandlingUtils.UserPermissions;
 
 /**
  * Permission handling for database access and other operations.
  * Will handle requests forwarded from {@link ca.diro.RequestHandler}.
  * 
- * @author girardil
+ * @author girardil, lavoiedn
  * @version 1.1
  */
-public class UserPermissionHandler extends AbstractHandler{
+public class UserPermissionsHandler extends AbstractHandler{
 	
 	/**
 	 * The <code>ResultSet</code> of a database query.

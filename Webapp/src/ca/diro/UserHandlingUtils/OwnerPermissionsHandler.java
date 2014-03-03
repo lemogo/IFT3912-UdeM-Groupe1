@@ -11,7 +11,7 @@ import org.eclipse.jetty.server.handler.AbstractHandler;
 
 import ca.diro.UserHandlingUtils.Actions.UnauthorizedAction;
 import ca.diro.UserHandlingUtils.Actions.UserAction;
-import ca.diro.UserHandlingUtils.UserPermission;
+import ca.diro.UserHandlingUtils.UserPermissions;
 
 /**
  * This class will be called by other handlers to handle permission that require
@@ -20,7 +20,7 @@ import ca.diro.UserHandlingUtils.UserPermission;
  * @author lavoiedn
  * 
  */
-public class OwnerPermissionHandler extends AbstractHandler {
+public class OwnerPermissionsHandler extends AbstractHandler {
 
 	/*
 	 * (non-Javadoc)

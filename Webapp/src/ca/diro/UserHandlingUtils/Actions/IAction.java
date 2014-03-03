@@ -3,7 +3,7 @@ package ca.diro.UserHandlingUtils.Actions;
 import java.sql.ResultSet;
 
 import ca.diro.UserHandlingUtils.ActionPermissionsException;
-import ca.diro.UserHandlingUtils.UserPermission;
+import ca.diro.UserHandlingUtils.UserPermissions;
 
 /**
  * The interface for user actions. Every action type that can be performed by a
@@ -33,7 +33,7 @@ public interface IAction {
 	 * 
 	 * @return The <code>UserPermission</code> required to perform this action.
 	 */
-	public UserPermission getRequiredUserPermission();
+	public UserPermissions getRequiredUserPermission();
 
 	/**
 	 * Applies the <code>IAction</code>'s effects. Note that permission handling

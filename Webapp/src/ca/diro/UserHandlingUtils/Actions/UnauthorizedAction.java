@@ -5,7 +5,7 @@ import java.sql.ResultSet;
 import javax.servlet.http.HttpServletRequest;
 
 import ca.diro.UserHandlingUtils.ActionPermissionsException;
-import ca.diro.UserHandlingUtils.UserPermission;
+import ca.diro.UserHandlingUtils.UserPermissions;
 
 /**
  * Class to represent when a <code>HttpServletRequest</code> did not meet the
@@ -39,8 +39,8 @@ public class UnauthorizedAction extends UserAction {
 	 * ca.diro.UserHandlingUtils.Actions.IAction#getRequiredUserPermission()
 	 */
 	@Override
-	public UserPermission getRequiredUserPermission() {
-		return UserPermission.UNAUTHORIZED;
+	public UserPermissions getRequiredUserPermission() {
+		return UserPermissions.UNAUTHORIZED;
 	}
 
 	/*

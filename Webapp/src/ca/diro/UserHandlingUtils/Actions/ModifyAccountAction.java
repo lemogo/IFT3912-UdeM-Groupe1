@@ -1,6 +1,6 @@
 package ca.diro.UserHandlingUtils.Actions;
 
-import ca.diro.UserHandlingUtils.UserPermission;
+import ca.diro.UserHandlingUtils.UserPermissions;
 
 /**
  * The <code>UserAction</code> for account modification.
@@ -34,8 +34,8 @@ public class ModifyAccountAction extends UserAction {
 	 * ca.diro.UserHandlingUtils.Actions.IAction#getRequiredUserPermission()
 	 */
 	@Override
-	public UserPermission getRequiredUserPermission() {
-		return UserPermission.LOGGED_USER;
+	public UserPermissions getRequiredUserPermission() {
+		return UserPermissions.LOGGED_USER;
 	}
 
 }

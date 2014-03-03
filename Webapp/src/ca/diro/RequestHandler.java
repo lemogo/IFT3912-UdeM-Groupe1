@@ -17,12 +17,12 @@ import java.sql.SQLException;
 import java.sql.ResultSet;
 import java.sql.ResultSetMetaData;
 
-import ca.diro.UserHandlingUtils.UserPermissionHandler;
+import ca.diro.UserHandlingUtils.UserPermissionsHandler;
 
 /**
  * Handler for the Jetty server.
  * 
- * @author girardil
+ * @author girardil, lavoiedn
  * @version 1.0
  */
 public class RequestHandler extends AbstractHandler {

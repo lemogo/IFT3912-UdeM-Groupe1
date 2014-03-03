@@ -11,7 +11,7 @@ package ca.diro.UserHandlingUtils;
  * @author lavoiedn
  * 
  */
-public enum UserPermission {
+public enum UserPermissions {
 	/**
 	 * No one can use this. Alternative to "NONE", equivalent to "null".
 	 */
@@ -56,7 +56,7 @@ public enum UserPermission {
 	 *         to perform an action with the given target
 	 *         <code>UserPermission</code>, else <code>false</code>.
 	 */
-	public boolean hasPermission(UserPermission targetPermission) {
+	public boolean hasPermission(UserPermissions targetPermission) {
 		if (this == UNAUTHORIZED) {
 			return false;
 		} else if (this == ADMIN) {
