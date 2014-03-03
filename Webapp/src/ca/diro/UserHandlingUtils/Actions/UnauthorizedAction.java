@@ -4,14 +4,12 @@ import java.sql.ResultSet;
 
 import javax.servlet.http.HttpServletRequest;
 
-import org.eclipse.jetty.server.Request;
-
 import ca.diro.UserHandlingUtils.ActionPermissionsException;
 import ca.diro.UserHandlingUtils.UserPermission;
 
 /**
- * Class to represent when a <code>HttpServletRequest</code> did not meet the required
- * permissions to be executed.
+ * Class to represent when a <code>HttpServletRequest</code> did not meet the
+ * required permissions to be executed.
  * 
  * @author lavoiedn
  * 
@@ -53,8 +51,10 @@ public class UnauthorizedAction extends UserAction {
 	 * .jetty.server.Request)
 	 */
 	@Override
-	public ResultSet performAction(HttpServletRequest request) throws ActionPermissionsException{
-		throw new ActionPermissionsException("Unauthorized to perform requested action.");
+	public ResultSet performAction(HttpServletRequest request)
+			throws ActionPermissionsException {
+		throw new ActionPermissionsException(
+				"Unauthorized to perform requested action.");
 	}
 
 }

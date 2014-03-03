@@ -17,6 +17,8 @@ import java.sql.SQLException;
 import java.sql.ResultSet;
 import java.sql.ResultSetMetaData;
 
+import ca.diro.UserHandlingUtils.UserPermissionHandler;
+
 /**
  * Handler for the Jetty server.
  * 

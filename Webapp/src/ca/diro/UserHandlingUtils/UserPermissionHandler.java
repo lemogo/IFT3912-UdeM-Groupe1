@@ -15,6 +15,7 @@ import org.json.JSONArray;
 
 import ca.diro.UserHandlingUtils.Actions.UnauthorizedAction;
 import ca.diro.UserHandlingUtils.Actions.UserAction;
+import ca.diro.UserHandlingUtils.UserPermission;
 
 /**
  * Permission handling for database access and other operations.
@@ -23,7 +24,7 @@ import ca.diro.UserHandlingUtils.Actions.UserAction;
  * @author girardil
  * @version 1.1
  */
-public class UserPermissionHandling extends AbstractHandler{
+public class UserPermissionHandler extends AbstractHandler{
 	
 	/**
 	 * The <code>ResultSet</code> of a database query.
@@ -57,7 +58,7 @@ public class UserPermissionHandling extends AbstractHandler{
 	 * @return The requested <code>UserAction</code>.
 	 */
 	private UserAction handleRequestPermissions(HttpServletRequest request,
-			HttpServletResponse response) {
+			HttpServletResponse response) throws ActionPermissionsException {
 		UserAction requestedAction = new UnauthorizedAction(0, 0);
 		// TODO Find requested action and return it.
 		return requestedAction;
