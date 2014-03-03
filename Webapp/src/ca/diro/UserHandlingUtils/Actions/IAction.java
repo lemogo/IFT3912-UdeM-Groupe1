@@ -2,8 +2,6 @@ package ca.diro.UserHandlingUtils.Actions;
 
 import java.sql.ResultSet;
 
-import javax.servlet.http.HttpServletRequest;
-
 import ca.diro.UserHandlingUtils.ActionPermissionsException;
 import ca.diro.UserHandlingUtils.UserPermission;
 
@@ -42,14 +40,14 @@ public interface IAction {
 	 * must be done before the <code>IAction</code> is performed.
 	 * 
 	 * @param request
-	 *            The <code>HttpServletRequest</code> containing the required
+	 *            The String containing the required
 	 *            information for this <code>IAction</code>.
 	 * @return The <code>ResultSet</code> resulting from the execution of the
 	 *         given request.
 	 * 
 	 * @throws ActionPermissionsException
 	 */
-	public ResultSet performAction(HttpServletRequest request)
+	public ResultSet performAction(String request)
 			throws ActionPermissionsException;
 
 }

@@ -9,7 +9,7 @@ import ca.diro.UserHandlingUtils.UserPermission;
 
 /**
  * Class to represent when a <code>HttpServletRequest</code> did not meet the
- * required permissions to be executed.
+ * required permissions to be executed. Useful for a default case, for instance.
  * 
  * @author lavoiedn
  * 
@@ -51,7 +51,7 @@ public class UnauthorizedAction extends UserAction {
 	 * .jetty.server.Request)
 	 */
 	@Override
-	public ResultSet performAction(HttpServletRequest request)
+	public ResultSet performAction(String request)
 			throws ActionPermissionsException {
 		throw new ActionPermissionsException(
 				"Unauthorized to perform requested action.");
