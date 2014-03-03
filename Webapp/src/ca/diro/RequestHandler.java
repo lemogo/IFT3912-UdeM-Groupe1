@@ -30,7 +30,7 @@ public class RequestHandler extends AbstractHandler {
 	/**
 	 * The list of supported commands in requests.
 	 */
-	private final static String[] supportedCommands = {};
+	private final static String[] SUPPORTED_COMMANDS = {};
 	/**
 	 * The <code>ResultSet</code> of a database query.
 	 */
