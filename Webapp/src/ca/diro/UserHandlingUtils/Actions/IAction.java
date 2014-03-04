@@ -29,9 +29,9 @@ public interface IAction {
 	public int getCallerID();
 
 	/**
-	 * Returns the <code>UserPermission</code> required to perform this action.
+	 * Returns the <code>UserPermissions</code> required to perform this action.
 	 * 
-	 * @return The <code>UserPermission</code> required to perform this action.
+	 * @return The <code>UserPermissions</code> required to perform this action.
 	 */
 	public UserPermissions getRequiredUserPermission();
 
@@ -47,7 +47,7 @@ public interface IAction {
 	 * 
 	 * @throws ActionPermissionsException
 	 */
-	public ResultSet performAction(String request)
+	public ResultSet performAuthorizedAction(String request)
 			throws ActionPermissionsException;
 
 }

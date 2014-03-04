@@ -1,0 +1,90 @@
+\documentclass[10pt,a4paper]{report}
+\usepackage[utf8]{inputenc}
+\usepackage[francais]{babel}
+\usepackage[T1]{fontenc}
+\usepackage{amsmath}
+\usepackage{amsfonts}
+\usepackage{amssymb}
+\usepackage[left=1cm,right=1cm,top=1cm,bottom=1cm]{geometry}
+\author{Nicolas Lavoie Drapeau \and Alexandre Mathon-Roy \and Luc-Antoine Girardin \and William Tchoudi \and Lionnel Lemogo}
+\title{IFT3912 - Développement et maintenance,\\Architecture\\Groupe1}
+\begin{document}
+\maketitle
+\begin{flushleft}
+\section{Les modules:}
+Dans les sections suivantes, les rôles des différents modules seront décrits brièvement. Pour une description plus poussée des classes et de leurs méthodes, voir la Javadoc.\\
+\bigskip
+\subsection{Module client}
+Le client est l'utilisateur. Il visualise le site web remis pour le premier livrable. Ce site web contient des formulaires (forms) qui seront utilisés pour communiquer les requêtes de l'usager au serveur http qui les enverra ensuite au \textbf{pont}.\\
+\bigskip
+\subsection{Module pont}
+Le module qui s'occupe d'établir le lien de communication entre le \textbf{client} (par le biais du serveur http) et la \textbf{base de données}, de gérer les permissions des utilisateurs ainsi que de traiter l'information qui passe entre les deux autres modules.\\
+\medskip
+Ce module est composé des packages suivant:\\
+\bigskip
+\subsubsection*{ca.diro}
+Contient la logique d'exécution du serveur.\\
+\bigskip
+\begin{description}
+\item[Main] \hfill \\ Initialise le serveur, son moyen de gérer la connexion et l'authentification des utilisateurs. Les champs et méthodes ne requièrent pas vraiment d'explication ici; \emph{main} gère les arguments si applicables et \textit{initSecureServer} s'occupe de lancer le serveur avec les méthodes de sécurité que nous aurons décidées.\\
+\item[RequestHandler] \hfill \\ Toutes les requêtes passeront d'abord par ce \emph{AbstractHandler}, pour s'assurer que le format de la requête est conforme à celui utilisé par le client et le pont. On peut le voir comme un "dispatcher" ou encore comme un "sanitizer", qui filtre les requêtes malicieuses ou erronées. Comme il ne contient qu'une méthode publique héritée de \emph{AbstractHandler}, nous ne justifierons pas ses méthodes.\\
+\end{description}
+\bigskip
+\subsubsection*{ca.diro.UserHandlingUtils}
+Contient la logique de traitement des actions.\\
+\bigskip
+\begin{description}
+\item[ActionPermissionsException] \hfill \\ Une implémentation de \emph{Exception}, elle est lancée si un utilisateur n'a pas les permissions requises pour accéder à une certaine action. Par exemple, un utilisateur qui essaye d'effacer un événement alors que sa session est expirée. Elle a été jugée utile pour avoir un moyen d'informer le client qu'une requête n'a pas pu être exécutée.\\
+\item[UserPermissions] \hfill \\ Un enum qui sert à décrire les différents types de permissions requises pour différentes actions. Pourquoi avoir utilisé un enum? Comme les types d'accès permis étaient déjà définis pour le projet, il ne semblait pas être nécessaire de créer une interface ou une classe abstraite qui implémente \emph{Comparable} et d'utiliser une classe par permission. Les types de permissions sont définis comme suit:\\
+\bigskip
+\begin{description}
+\item[UNAUTHORIZED] \hfill \\ Équivalente au "null", c'est une permission qui est impossible à remplir, même par un administrateur.\\
+\item[ADMIN] \hfill \\ C'est la permission absolue, qui est donnée seulement aux utilisateurs qui administrent le site web.\\
+\item[EVENT\_OWNER] \hfill \\ C'est la permission requise pour modifier un événement. On pourrait aussi rajouter des modérateurs.\\
+\item[COMMENT\_OWNER] \hfill \\ C'est la permission requise pour modifier ou effacer un commentaire. Elle vient après \emph{EVENT\_OWNER} pour qu'on puisse décider que le créateur d'un événement peut retirer tous les commentaires sur son event s'il le désire.\\
+\item[PREMIUM]\hfill \\ Une petite blague, un état élevé de permission pour certains utilisateurs. En même temps, pourrait servir pour créer des modérateurs.\\
+\item[LOGGED\_USER] \hfill \\ Un utilisateur qui a été authentifié peut effectuer l'action qui requiert cette permission.\\
+\item[REGISTERED\_USER] \hfill \\ Un utilisateur qui possède un compte peut effectuer cet action. (Par exemple, la connexion à son compte.)\\
+\item[NONE] \hfill \\ La permission universelle pour les utilisateurs qui ne sont pas connectés.\\
+\end{description}
+\item[UserPermissionsHandler] \hfill \\ Les requêtes qui sont acceptées et qui requièrent des permissions d'accès spécifiques sont passées à ce \emph{Handler}. Il jugera si l'utilisateur a les permissions requises pour faire l'appel ou encore s'il doit propager la requête vers \emph{OwnerPermissionsHandler}.\\
+\item[OwnerPermissionsHandler] \hfill \\ Les requêtes qui requièrent des permissions encore plus particulières, c'est-à-dire les permissions de "Ownership" sont envoyées à ce \emph{Handler}.\\
+\end{description}
+\bigskip
+\subsubsection*{ca.diro.UserHandlingUtils.Actions}
+Contient la spécification des actions possibles, donne l'information sur leur permission requises et utilise une méthode pour appeler la commande attachée à cette action. Notez que la vérification des permissions doit être faite à l'extérieur de cette classe. Ce package contient les classes:\\
+\begin{description}
+\item[IAction] \hfill \\ L'interface pour les actions effectuées dans le pont, en réponse à une requête du client. Elle est utile si nous devons ajouter d'autres types d'actions que les "\emph{UserAction}", par exemple si nous désirons ajouter des modérateurs. On pourrait alors avoir une classe abstraite "\emph{AdminAction}" qui retourne toujours "\emph{UserPermission.ADMIN}" comme permission requise mais dont chaque classe doit implémenter "\emph{performAuthorizedAction}".\\
+\medskip
+Les méthodes définies sont:\\
+\bigskip
+\begin{description}
+\item[getTarget()] \hfill \\ Retourne l'ID de la cible de cette action.
+\item[getCaller()] \hfill \\ Retourne l'ID de l'appelant de cette action.
+\item[getRequiredUserPermission()] \hfill \\ Retourne la permission requise pour effectuer cette action.
+\item[performAuthorizedAction(String request)] \hfill \\ Effectue l'action avec l'information donnée dans \emph{request}. Le nom sert a indiquer qu'elle doit être d'abord autorisée par le pont.
+\end{description}
+\item[UserAction] \hfill \\ La classe abstraite qui doit être implémentée par les actions qui sont demandées par le client. Elles doivent être associées à une \emph{Command} de la base de données initialisée dans le constructeur. Il sera possible de changer la description de la commande dans le future, lorsque les détails d'implémentations seront décidés. Comme cette classe hérite de "IAction", la description des méthodes publiques ne sera pas réécrite.
+\end{description}
+\bigskip
+Le reste des \emph{Action}s héritent de \emph{UserAction} et ne font que définir leur commande spécifique dans le constructeur ainsi que de redéfinir \emph{getRequiredUserPermission()} avec la permission appropriée. Nous n'avons pas utilisé de constante pour ce champ puisqu'il a été jugé plus générique d'utiliser une méthode. La même solution avait été envisagée pour les \emph{Command}, mais il était impossible de retourner une \emph{Command} d'un certain type sans connaître la \emph{String} de la requête.\\
+\medskip
+Une autre alternative à l'utilisation d'un attribut private "command" définit dans le constructeur serait de le définir dans \emph{performAuthorizedAction} et puis d'appeler la méthode de "\emph{super}".\\
+\bigskip
+\subsection*{Module base de données}
+Le module qui s'occupe de gérer la base de donnée - sa création, les accès et requêtes. Il reçoit les requêtes du client qui ont été validées et autorisées par le \textbf{pont}.\\
+\bigskip
+\subsubsection*{ca.diro.DataBase}
+Contient les classes qui gèrent les appels à la base de données.\\
+\bigskip
+\subsubsection*{ca.diro.DataBase.Command}
+Contient les spécifications des commandes de base de données possibles. Comme la plupart des \emph{Commands} ne font que remplir les fonctionnalités spécifiées pour le projet et que leurs noms sont assez descriptifs, elle seront tout simplement énumérées, comme les \emph{Actions}.\\
+\bigskip
+\section{Les librairies externes}
+Nous avons utilisé, en plus de "Jetty" qui nous était donné, les librairies suivantes:\\
+\begin{description}
+\item[org.json] \hfill \\ Pour gérer les requêtes et réponses dans le pont.
+\item[h2] \hfill \\ Qui sera la base de données que nous utiliseront.
+\end{description}
+\end{flushleft}
+\end{document}

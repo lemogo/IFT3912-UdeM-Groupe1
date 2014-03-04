@@ -51,7 +51,7 @@ public class UnauthorizedAction extends UserAction {
 	 * .jetty.server.Request)
 	 */
 	@Override
-	public ResultSet performAction(String request)
+	public ResultSet performAuthorizedAction(String request)
 			throws ActionPermissionsException {
 		throw new ActionPermissionsException(
 				"Unauthorized to perform requested action.");

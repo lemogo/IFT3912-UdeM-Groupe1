@@ -74,7 +74,7 @@ public abstract class UserAction implements IAction {
 	 * .server.Request)
 	 */
 	@Override
-	public ResultSet performAction(String request)
+	public ResultSet performAuthorizedAction(String request)
 			throws ActionPermissionsException {
 		ResultSet results = null;
 		if (command != null) {
