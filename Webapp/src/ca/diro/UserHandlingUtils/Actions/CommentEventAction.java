@@ -33,7 +33,7 @@ public class CommentEventAction extends UserAction {
 	 * @see ca.diro.UserHandlingUtils.IAction#getRequiredPermission()
 	 */
 	@Override
-	public UserPermissions getRequiredUserPermission() {
+	public UserPermissions getRequiredUserPermissions() {
 		// TODO Check CommentActionType before returning required permission.
 		return UserPermissions.LOGGED_USER;
 	}

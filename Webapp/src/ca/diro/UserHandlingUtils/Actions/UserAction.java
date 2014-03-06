@@ -31,7 +31,7 @@ public abstract class UserAction implements IAction {
 	 * The {@link ca.diro.DataBase.Command.Command} associated with this
 	 * <code>UserAction</code>.
 	 */
-	protected Command command;
+	protected Command associatedCommand;
 
 	/**
 	 * Constructor for a <code>UserAction</code>.
@@ -77,7 +77,7 @@ public abstract class UserAction implements IAction {
 	public ResultSet performAuthorizedAction(String request)
 			throws ActionPermissionsException {
 		ResultSet results = null;
-		if (command != null) {
+		if (associatedCommand != null) {
 			// TODO Feed the given request to this action's command.
 		}
 		return results;

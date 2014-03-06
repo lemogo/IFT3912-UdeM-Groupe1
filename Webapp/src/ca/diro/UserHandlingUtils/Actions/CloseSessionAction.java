@@ -34,7 +34,7 @@ public class CloseSessionAction extends UserAction {
 	 * ca.diro.UserHandlingUtils.Actions.IAction#getRequiredUserPermission()
 	 */
 	@Override
-	public UserPermissions getRequiredUserPermission() {
+	public UserPermissions getRequiredUserPermissions() {
 		return UserPermissions.LOGGED_USER;
 	}
 

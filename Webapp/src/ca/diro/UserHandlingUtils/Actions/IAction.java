@@ -33,7 +33,7 @@ public interface IAction {
 	 * 
 	 * @return The <code>UserPermissions</code> required to perform this action.
 	 */
-	public UserPermissions getRequiredUserPermission();
+	public UserPermissions getRequiredUserPermissions();
 
 	/**
 	 * Applies the <code>IAction</code>'s effects. Note that permission handling

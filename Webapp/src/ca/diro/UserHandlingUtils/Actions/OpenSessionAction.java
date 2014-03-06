@@ -34,7 +34,7 @@ public class OpenSessionAction extends UserAction {
 	 * ca.diro.UserHandlingUtils.Actions.IAction#getRequiredUserPermission()
 	 */
 	@Override
-	public UserPermissions getRequiredUserPermission() {
+	public UserPermissions getRequiredUserPermissions() {
 		return UserPermissions.REGISTERED_USER;
 	}
 
