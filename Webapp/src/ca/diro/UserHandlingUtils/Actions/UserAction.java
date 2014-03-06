@@ -2,8 +2,6 @@ package ca.diro.UserHandlingUtils.Actions;
 
 import java.sql.ResultSet;
 
-import javax.servlet.http.HttpServletRequest;
-
 import ca.diro.DataBase.Command.Command;
 import ca.diro.UserHandlingUtils.ActionPermissionsException;
 

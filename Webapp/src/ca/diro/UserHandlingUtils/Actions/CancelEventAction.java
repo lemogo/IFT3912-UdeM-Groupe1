@@ -24,7 +24,7 @@ public class CancelEventAction extends UserAction {
 	 */
 	public CancelEventAction(int userID, int targetID) {
 		super(userID, targetID);
-		// TODO Set command to the appropriate AbstractCommand.
+		// TODO Set associatedCommand field to the appropriate AbstractCommand.
 	}
 
 	/*
