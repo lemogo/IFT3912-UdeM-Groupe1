@@ -15,7 +15,7 @@
 Dans les sections suivantes, les rôles des différents modules seront décrits brièvement. Pour une description plus poussée des classes et de leurs méthodes, voir la Javadoc.\\
 \bigskip
 \subsection{Module client}
-Le client est l'utilisateur. Il visualise le site web remis pour le premier livrable. Ce site web contient des formulaires (forms) qui seront utilisés pour communiquer les requêtes de l'usager au serveur http qui les enverra ensuite au \textbf{pont}.\\
+Le client est l'utilisateur. Il visualise le site web remis pour le premier livrable. Ce site web contient des formulaires (forms) qui seront utilisés pour communiquer les requêtes de l'usager au serveur http, sous format JSON, qui les enverra ensuite au \textbf{pont}.\\
 \bigskip
 \subsection{Module pont}
 Le module qui s'occupe d'établir le lien de communication entre le \textbf{client} (par le biais du serveur http) et la \textbf{base de données}, de gérer les permissions des utilisateurs ainsi que de traiter l'information qui passe entre les deux autres modules.\\
@@ -67,24 +67,30 @@ Les méthodes définies sont:\\
 \item[UserAction] \hfill \\ La classe abstraite qui doit être implémentée par les actions qui sont demandées par le client. Elles doivent être associées à une \emph{Command} de la base de données initialisée dans le constructeur. Il sera possible de changer la description de la commande dans le future, lorsque les détails d'implémentations seront décidés. Comme cette classe hérite de "IAction", la description des méthodes publiques ne sera pas réécrite.
 \end{description}
 \bigskip
-Le reste des \emph{Action}s héritent de \emph{UserAction} et ne font que définir leur commande spécifique dans le constructeur ainsi que de redéfinir \emph{getRequiredUserPermission()} avec la permission appropriée. Nous n'avons pas utilisé de constante pour ce champ puisqu'il a été jugé plus générique d'utiliser une méthode. La même solution avait été envisagée pour les \emph{Command}, mais il était impossible de retourner une \emph{Command} d'un certain type sans connaître la \emph{String} de la requête.\\
+Le reste des \emph{Action}s héritent de \emph{UserAction} et ne font que définir leur commande spécifique dans le constructeur ainsi que de redéfinir \emph{getRequiredUserPermission()} avec la permission appropriée. Nous n'avons pas utilisé de constante pour ce champ puisqu'il a été jugé plus générique d'utiliser une méthode. (Mais il serait toujours possible d'utiliser une constante qui est retournée dans la méthode.) La même solution avait été envisagée pour la \emph{Command} associée à une action, mais il était impossible de retourner une \emph{Command} d'un certain type sans connaître la \emph{String} de la requête.\\
 \medskip
-Une autre alternative à l'utilisation d'un attribut private "command" définit dans le constructeur serait de le définir dans \emph{performAuthorizedAction} et puis d'appeler la méthode de "\emph{super}".\\
+Une autre alternative à l'utilisation d'un attribut private "command" définit dans le constructeur serait de le définir dans \emph{performAuthorizedAction} et puis d'appeler la méthode de "\emph{super}". Comme ce sont des détails d'implémentation, ils seront considérés à la prochaine étape.\\
 \bigskip
 \subsection*{Module base de données}
 Le module qui s'occupe de gérer la base de donnée - sa création, les accès et requêtes. Il reçoit les requêtes du client qui ont été validées et autorisées par le \textbf{pont}.\\
 \bigskip
 \subsubsection*{ca.diro.DataBase}
 Contient les classes qui gèrent les appels à la base de données.\\
+\begin{description}
+\item[DataBase] \hfill \\ Cette classe s'occupe de la création, de l'exécution de commandes et de la gestion de la base de données.
+\end{description}
 \bigskip
 \subsubsection*{ca.diro.DataBase.Command}
-Contient les spécifications des commandes de base de données possibles. Comme la plupart des \emph{Commands} ne font que remplir les fonctionnalités spécifiées pour le projet et que leurs noms sont assez descriptifs, elle seront tout simplement énumérées, comme les \emph{Actions}.\\
+Contient les spécifications des commandes de base de données possibles. Comme la plupart des \emph{Commands} ne font que remplir les fonctionnalités spécifiées pour le projet et que leurs noms sont assez descriptifs, elle ne seront pas énumérées ici. Leur but est de fournir un moyen facile d'invoquer des requêtes SQL. Ces requêtes sont ensuite enveloppées par un objet "UserAction" qui gère leurs permissions.\\
+\begin{description}
+\item[Command] \hfill \\ La classe qui doit être héritée par les commandes d'accès à la DB. Les méthodes requise pour l'exécution d'une requête SQL y sont définies.
+\end{description}
 \bigskip
 \section{Les librairies externes}
 Nous avons utilisé, en plus de "Jetty" qui nous était donné, les librairies suivantes:\\
 \begin{description}
 \item[org.json] \hfill \\ Pour gérer les requêtes et réponses dans le pont.
-\item[h2] \hfill \\ Qui sera la base de données que nous utiliseront.
+\item[h2] \hfill \\ Qui sera la base de données que nous utiliserons.
 \end{description}
 \end{flushleft}
 \end{document}
