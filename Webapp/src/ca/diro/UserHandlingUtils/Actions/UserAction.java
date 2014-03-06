@@ -10,9 +10,9 @@ import ca.diro.UserHandlingUtils.ActionPermissionsException;
 /**
  * Represents the actions that can be performed by a user that affect the user
  * itself. This could also have been done using a multitude of
- * <code>AbstractHandler</code>s. However, I wanted a way to call every command
- * using a list of <code>UserAction</code>s if required. (For instance, if we
- * need to use a queue for requests.)
+ * <code>AbstractHandler</code>s. However, I find this way cleaner and I wanted
+ * a way to call every command using a list of <code>UserAction</code>s if
+ * required. (For instance, if we need to use a queue for requests.)
  * 
  * @author lavoiedn
  * 

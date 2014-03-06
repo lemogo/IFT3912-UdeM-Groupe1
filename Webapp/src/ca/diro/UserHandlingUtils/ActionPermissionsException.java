@@ -27,7 +27,7 @@ public class ActionPermissionsException extends Exception {
 	}
 
 	/**
-	 * Constructor with specifics.
+	 * Constructor with the specifics of an exception.
 	 * 
 	 * @param msg
 	 *            The specifics of this exception.

@@ -18,14 +18,14 @@ import ca.diro.UserHandlingUtils.Actions.UserAction;
 import ca.diro.UserHandlingUtils.UserPermissions;
 
 /**
- * Permission handling for database access and other operations.
- * Will handle requests forwarded from {@link ca.diro.RequestHandler}.
+ * Permission handling for database access and other operations. Will handle
+ * requests forwarded from {@link ca.diro.RequestHandler}.
  * 
  * @author girardil, lavoiedn
  * @version 1.1
  */
-public class UserPermissionsHandler extends AbstractHandler{
-	
+public class UserPermissionsHandler extends AbstractHandler {
+
 	/**
 	 * The <code>ResultSet</code> of a database query.
 	 */
@@ -35,8 +35,12 @@ public class UserPermissionsHandler extends AbstractHandler{
 	 */
 	private JSONArray JSONResult;
 
-	/* (non-Javadoc)
-	 * @see org.eclipse.jetty.server.Handler#handle(java.lang.String, org.eclipse.jetty.server.Request, javax.servlet.http.HttpServletRequest, javax.servlet.http.HttpServletResponse)
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see org.eclipse.jetty.server.Handler#handle(java.lang.String,
+	 * org.eclipse.jetty.server.Request, javax.servlet.http.HttpServletRequest,
+	 * javax.servlet.http.HttpServletResponse)
 	 */
 	@Override
 	public void handle(String target, Request baseRequest,
@@ -63,6 +67,5 @@ public class UserPermissionsHandler extends AbstractHandler{
 		// TODO Find requested action and return it.
 		return requestedAction;
 	}
-
 
 }

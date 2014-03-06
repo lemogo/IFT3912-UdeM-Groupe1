@@ -40,8 +40,8 @@ public interface IAction {
 	 * must be done before the <code>IAction</code> is performed.
 	 * 
 	 * @param request
-	 *            The String containing the required
-	 *            information for this <code>IAction</code>.
+	 *            The String containing the required information for this
+	 *            <code>IAction</code>.
 	 * @return The <code>ResultSet</code> resulting from the execution of the
 	 *         given request.
 	 * 
