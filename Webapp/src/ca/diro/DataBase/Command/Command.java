@@ -23,17 +23,17 @@ public abstract class Command {
 	
 	/**
 	 * Method to execute query 
-	 * @param stat statement for connection to database
-	 * @return false or true useful to check status 
+	 * @param stat <code>Statement</code> for connection to database
+	 * @return true if good connection or false when connection failed.
 	 */
-	public boolean execute(Statement stat) {
+	public boolean executeCommand(Statement stat) {
 		boolean returnValue = false;
 		//TODO execute command
 		return returnValue;
 	}
 	/**
 	 * This method has to be more generic in order to parse Json string in Map type
-	 * @return a Map with string key and string value 
+	 * @return a <code>Map</code> Object with string key and string value 
 	 */
 	protected Map<String, String> parseToMap(String info){
 		//TODO implement generic parsing
@@ -42,7 +42,7 @@ public abstract class Command {
 		
 	/**
 	 * getter
-	 * @return query to be executed
+	 * @return query <code>String</code> Object to be executed
 	 */
 	public String getQuery()
 	{
@@ -51,7 +51,7 @@ public abstract class Command {
 	
 	/**
 	 * getter 
-	 * @return a resultset  
+	 * @return result_ <code>ReSultset</code> Object   
 	 */
 	public ResultSet getResultSet()
 	{

@@ -18,8 +18,8 @@ public class ListPassedEvent extends  Command{
 	}
 	
 	/**
-	 * Method to define query
-	 * @return the query in string
+	 * Method for get available places of each coming event 
+	 * @return place the number of available places for each event 
 	 */
 	public String buildQuery(){
 		String str="" ;

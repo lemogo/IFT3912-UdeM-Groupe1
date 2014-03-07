@@ -24,8 +24,8 @@ public class DataBase {
 
 	
 	/**
-	 * Method to get get database connection
-	 * @return a boolean which is true when good connection established
+	 * Method to establish database connection
+	 * @return  true if good connection or false when connection failed.
 	 */
 	public boolean dbConnect() {
 
@@ -36,7 +36,7 @@ public class DataBase {
 	}
 
 	/**
-	 * Mrthod to clase database
+	 * Method to close database connection
 	 * 
 	 * @throws SQLException
 	 */
@@ -45,8 +45,7 @@ public class DataBase {
 	}
 
 	/**
-	 * delete data base
-	 * 
+	 * Method to delete data base
 	 * @throws SQLException
 	 */
 	public void dbDelete()  {
@@ -55,8 +54,8 @@ public class DataBase {
 	}
 
 	/**
-	 * @return un objet Statement
-	 * @throws SQLException
+	 * Method to get Statement for query 
+	 * @return stat a <code>Statement</code> Object in order to run query 
 	 */
 	private Statement statement()  {
 		Statement stat = null;
@@ -66,7 +65,6 @@ public class DataBase {
 
 	/**
 	 * Method to create tables of the database
-	 * 
 	 * @throws SQLException
 	 */
 	public void createTable()  {
@@ -85,18 +83,16 @@ public class DataBase {
 
 	/**
 	 * Method to execute a query  command on database  .
-	 * @param cmd la commande
-	 * @return true if good connection or false when no connection.
+	 * @param cmd the command
+	 * @return true if good connection or false when connection failed.
 	 * @throws SQLException
 	 */
-	public boolean execute(Command cmd) {
+	public boolean executeDb(Command cmd) {
 		//TODO execute statement
 			return false;
 	}	
 	
 	
-	
-
 	/**
 	 * connection to database
 	 */

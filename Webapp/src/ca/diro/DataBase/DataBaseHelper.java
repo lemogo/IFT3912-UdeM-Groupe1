@@ -4,7 +4,7 @@
 package ca.diro.DataBase;
 
 /**
- * Class to help database command to parse string parameter and build the string query
+ * Class to help database command to parse string parameters and build the string query
  * @author william
  *
  */

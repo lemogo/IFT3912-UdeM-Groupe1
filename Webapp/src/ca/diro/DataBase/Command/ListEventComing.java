@@ -19,12 +19,22 @@ public class ListEventComing extends Command{
 	
 	/**
 	 * Method to define query
-	 * @return the query in string
+	 * @return str <code>String</code> Object the query
 	 */
 	private String buildQuery(){
 		String str="" ;
 		//TODO parse query
 		return str ;
 	}
+	
+	/**
+	 * Method for get available places of each coming event 
+	 * @return place the number of available places for each event 
+	 */
+	public int availablePLaces(){
+		//TODO nombre de place disponible
+		int place = 0 ;
+		return place ;
+	} 
 
 }

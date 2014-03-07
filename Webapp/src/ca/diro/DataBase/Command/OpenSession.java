@@ -11,7 +11,7 @@ package ca.diro.DataBase.Command;
 public class OpenSession  extends Command{
 
 	/**
-	 * @param sessionInfo string to buid query with
+	 * @param sessionInfo String to build query with
 	 */
 	public OpenSession(String sessionInfo) {
 		query_ = buildQuery(sessionInfo);
@@ -21,10 +21,8 @@ public class OpenSession  extends Command{
 	/**
 	 * Method to parse String from JSON format in order to retrieve parameters
 	 * and build the right query
-	 * 
-	 * @param info
-	 *            string to build query
-	 * @return a string that is the query
+	 * @param info String Object
+	 * @return str <code>String</code> Object which is the query
 	 */
 	private String buildQuery(String info) {
 		String str = "";

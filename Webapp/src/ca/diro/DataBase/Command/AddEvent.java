@@ -23,10 +23,8 @@ public class AddEvent extends Command {
 	/**
 	 * Method to parse String from JSON format in order to retrieve parameters
 	 * and build the right query
-	 * 
-	 * @param info
-	 *            string type
-	 * @return a string that is the query
+	 * @param info String Object
+	 * @return <code>String</code> Object which is the query
 	 */
 	private String buildQuery(String info) {
 		String str = "";

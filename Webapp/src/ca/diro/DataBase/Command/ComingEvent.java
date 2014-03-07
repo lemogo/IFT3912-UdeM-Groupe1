@@ -18,7 +18,7 @@ public class ComingEvent  extends Command{
 	
 	/**
 	 * Method to define query
-	 * @return the query in string
+	 * @return str <code>String</code> Object the query
 	 */
 	private String buildQuery(){
 		String str="" ;
