@@ -71,6 +71,8 @@ Les méthodes définies sont:\\
 \end{description}
 \bigskip
 Le reste des \emph{Action}s héritent de \emph{UserAction} et ne font que définir leur \emph{Command} spécifique ainsi que de redéfinir \emph{getRequiredUserPermission()} avec la permission appropriée. Nous n'avons pas utilisé de constante pour ce champ puisqu'il a été jugé plus générique d'utiliser une méthode. (Mais il serait toujours possible d'utiliser une constante qui est retournée dans la méthode.) La même solution avait été envisagée pour la \emph{Command} associée à une action, mais il était impossible de retourner une \emph{Command} d'un certain type sans connaître la \emph{String} de la requête.\\
+\medskip
+Notez qu'il reste plusieurs actions à implémenter, mais comme elles suivaient toutes le modèle de \emph{UserAction}, seulement quelques unes ont été données pour montrer un exemple d'implémentation.\\
 \bigskip
 \subsection*{Module base de données}
 Le module qui s'occupe de gérer la base de donnée - sa création, les accès et requêtes. Il reçoit les requêtes du client qui ont été validées et autorisées par le \textbf{pont}. Le module de base de données retourne des objets \emph{ResultSet} au pont qui les transformera en réponse de format JSON pour les renvoyer au client.\\
