@@ -13,7 +13,7 @@ public class AddEvent extends Command {
 	/**
 	 * Constructor
 	 * 
-	 * @param a string info to parse
+	 * @param info string info to parse
 	 */
 	public AddEvent(String info) {
 		query_ = buildQuery(info);

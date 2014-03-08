@@ -19,7 +19,7 @@ import ca.diro.UserHandlingUtils.UserPermissions;
  * This class will be called by other handlers to handle permission that require
  * the user to be the "Owner" of a certain element, such as an account or event.
  * Will handle requests forwarded from
- * {@link ca.diro.UserHandlingUtils.UserPermissionHandler}.
+ * {@link ca.diro.UserHandlingUtils.UserPermissionsHandler}.
  * 
  * @author lavoiedn
  * 

@@ -11,7 +11,7 @@ package ca.diro.DataBase.Command;
 public class CloseSession extends Command{
 	/**
 	 * Constructor 
-	 * @param a string info to parse 
+	 * @param info string info to parse 
 	 */
 	public CloseSession(String info) {
 		query_ = buildQuery(info);
