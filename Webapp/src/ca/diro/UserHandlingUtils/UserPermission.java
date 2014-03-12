@@ -4,16 +4,16 @@ package ca.diro.UserHandlingUtils;
  * Description of the required permission to perform a certain action.
  * 
  * Do not confuse those with the "roles" given to users. "Roles" only define the
- * different kind of users, these <code>UserPermissions</code> define different
- * states the users can be in, using an enum along with a quick way to compare
+ * different kind of users, these <code>UserPermission</code> define different
+ * states the users can be in using an enum along with a quick way of comparing
  * two values.
  * 
  * @author lavoiedn
  * 
  */
-public enum UserPermissions {
+public enum UserPermission {
 	/**
-	 * No one can use this. Opposite to "NONE", mostly equivalent to "null".
+	 * No one can use this. Alternative to "NONE", equivalent to "null".
 	 */
 	UNAUTHORIZED,
 	/**
@@ -46,17 +46,17 @@ public enum UserPermissions {
 	NONE;
 
 	/**
-	 * Returns <code>true</code> if this <code>UserPermissions</code> is allowed
-	 * to perform an action with the given target <code>UserPermissions</code>,
+	 * Returns <code>true</code> if this <code>UserPermission</code> is allowed
+	 * to perform an action with the given target <code>UserPermission</code>,
 	 * else <code>false</code>.
 	 * 
 	 * @param targetPermission
-	 *            The <code>UserPermissions</code> required.
-	 * @return <code>true</code> if this <code>UserPermissions</code> is allowed
+	 *            The <code>UserPermission</code> required.
+	 * @return <code>true</code> if this <code>UserPermission</code> is allowed
 	 *         to perform an action with the given target
-	 *         <code>UserPermissions</code>, else <code>false</code>.
+	 *         <code>UserPermission</code>, else <code>false</code>.
 	 */
-	public boolean hasPermission(UserPermissions targetPermission) {
+	public boolean hasPermission(UserPermission targetPermission) {
 		if (this == UNAUTHORIZED) {
 			return false;
 		} else if (this == ADMIN) {

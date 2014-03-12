@@ -1,6 +1,6 @@
 package ca.diro.UserHandlingUtils.Actions;
 
-import ca.diro.UserHandlingUtils.UserPermissions;
+import ca.diro.UserHandlingUtils.UserPermission;
 
 /**
  * The <code>UserAction</code> for comment creation.
@@ -33,8 +33,8 @@ public class CommentEventAction extends UserAction {
 	 * @see ca.diro.UserHandlingUtils.IAction#getRequiredPermission()
 	 */
 	@Override
-	public UserPermissions getRequiredUserPermissions() {
+	public UserPermission getRequiredUserPermission() {
 		// TODO Check CommentActionType before returning required permission.
-		return UserPermissions.LOGGED_USER;
+		return UserPermission.LOGGED_USER;
 	}
 }

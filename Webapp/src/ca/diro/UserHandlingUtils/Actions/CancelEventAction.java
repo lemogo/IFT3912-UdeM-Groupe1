@@ -1,6 +1,6 @@
 package ca.diro.UserHandlingUtils.Actions;
 
-import ca.diro.UserHandlingUtils.UserPermissions;
+import ca.diro.UserHandlingUtils.UserPermission;
 
 /**
  * The <code>UserAction</code> for event deletion.
@@ -24,7 +24,7 @@ public class CancelEventAction extends UserAction {
 	 */
 	public CancelEventAction(int userID, int targetID) {
 		super(userID, targetID);
-		// TODO Set associatedCommand field to the appropriate AbstractCommand.
+		// TODO Set command to the appropriate AbstractCommand.
 	}
 
 	/*
@@ -34,8 +34,8 @@ public class CancelEventAction extends UserAction {
 	 * ca.diro.UserHandlingUtils.Actions.IAction#getRequiredUserPermission()
 	 */
 	@Override
-	public UserPermissions getRequiredUserPermissions() {
-		return UserPermissions.EVENT_OWNER;
+	public UserPermission getRequiredUserPermission() {
+		return UserPermission.EVENT_OWNER;
 	}
 
 }

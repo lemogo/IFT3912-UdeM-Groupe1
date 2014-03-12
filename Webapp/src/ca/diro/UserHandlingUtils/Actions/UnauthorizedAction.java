@@ -2,12 +2,16 @@ package ca.diro.UserHandlingUtils.Actions;
 
 import java.sql.ResultSet;
 
+import javax.servlet.http.HttpServletRequest;
+
+import org.eclipse.jetty.server.Request;
+
 import ca.diro.UserHandlingUtils.ActionPermissionsException;
-import ca.diro.UserHandlingUtils.UserPermissions;
+import ca.diro.UserHandlingUtils.UserPermission;
 
 /**
- * Class to represent when a <code>HttpServletRequest</code> did not meet the
- * required permissions to be executed. Useful for a default case, for instance.
+ * Class to represent when a <code>HttpServletRequest</code> did not meet the required
+ * permissions to be executed.
  * 
  * @author lavoiedn
  * 
@@ -37,8 +41,8 @@ public class UnauthorizedAction extends UserAction {
 	 * ca.diro.UserHandlingUtils.Actions.IAction#getRequiredUserPermission()
 	 */
 	@Override
-	public UserPermissions getRequiredUserPermissions() {
-		return UserPermissions.UNAUTHORIZED;
+	public UserPermission getRequiredUserPermission() {
+		return UserPermission.UNAUTHORIZED;
 	}
 
 	/*
@@ -49,10 +53,8 @@ public class UnauthorizedAction extends UserAction {
 	 * .jetty.server.Request)
 	 */
 	@Override
-	public ResultSet performAuthorizedAction(String request)
-			throws ActionPermissionsException {
-		throw new ActionPermissionsException(
-				"Unauthorized to perform requested action.");
+	public ResultSet performAction(HttpServletRequest request) throws ActionPermissionsException{
+		throw new ActionPermissionsException("Unauthorized to perform requested action.");
 	}
 
 }

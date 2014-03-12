@@ -19,7 +19,6 @@ public class ResearchEvent extends Command{
 		query_ = buildQuery(info);
 		
 	}
-	
 	/**
 	 * Method to parse String from JSON format in order to retrieve parameters
 	 * and build the right query

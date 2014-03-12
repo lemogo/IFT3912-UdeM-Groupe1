@@ -4,6 +4,7 @@
 package ca.diro.DataBase.Command;
 
 import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.Map;
 
@@ -28,7 +29,15 @@ public abstract class Command {
 	 */
 	public boolean executeCommand(Statement stat) {
 		boolean returnValue = false;
-		//TODO execute command
+		try {
+			if(this.query_ != null){
+			result_ = stat.executeQuery(query_);
+			returnValue = true;
+			}
+			else return returnValue ;
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
 		return returnValue;
 	}
 	/**
@@ -41,8 +50,8 @@ public abstract class Command {
 	}
 		
 	/**
-	 * getter
-	 * @return query <code>String</code> Object to be executed
+	 * getter 
+	 * @return result_ <code>ReSultset</code> Object   
 	 */
 	public String getQuery()
 	{
@@ -51,7 +60,7 @@ public abstract class Command {
 	
 	/**
 	 * getter 
-	 * @return result_ <code>ReSultset</code> Object   
+	 * @return a resultset  
 	 */
 	public ResultSet getResultSet()
 	{

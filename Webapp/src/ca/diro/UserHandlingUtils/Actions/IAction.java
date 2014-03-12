@@ -2,8 +2,10 @@ package ca.diro.UserHandlingUtils.Actions;
 
 import java.sql.ResultSet;
 
+import javax.servlet.http.HttpServletRequest;
+
 import ca.diro.UserHandlingUtils.ActionPermissionsException;
-import ca.diro.UserHandlingUtils.UserPermissions;
+import ca.diro.UserHandlingUtils.UserPermission;
 
 /**
  * The interface for user actions. Every action type that can be performed by a
@@ -29,25 +31,25 @@ public interface IAction {
 	public int getCallerID();
 
 	/**
-	 * Returns the <code>UserPermissions</code> required to perform this action.
+	 * Returns the <code>UserPermission</code> required to perform this action.
 	 * 
-	 * @return The <code>UserPermissions</code> required to perform this action.
+	 * @return The <code>UserPermission</code> required to perform this action.
 	 */
-	public UserPermissions getRequiredUserPermissions();
+	public UserPermission getRequiredUserPermission();
 
 	/**
 	 * Applies the <code>IAction</code>'s effects. Note that permission handling
 	 * must be done before the <code>IAction</code> is performed.
 	 * 
 	 * @param request
-	 *            The String containing the required information for this
-	 *            <code>IAction</code>.
+	 *            The <code>HttpServletRequest</code> containing the required
+	 *            information for this <code>IAction</code>.
 	 * @return The <code>ResultSet</code> resulting from the execution of the
 	 *         given request.
 	 * 
 	 * @throws ActionPermissionsException
 	 */
-	public ResultSet performAuthorizedAction(String request)
+	public ResultSet performAction(HttpServletRequest request)
 			throws ActionPermissionsException;
 
 }

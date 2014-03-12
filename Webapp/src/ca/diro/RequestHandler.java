@@ -17,12 +17,10 @@ import java.sql.SQLException;
 import java.sql.ResultSet;
 import java.sql.ResultSetMetaData;
 
-import ca.diro.UserHandlingUtils.UserPermissionsHandler;
-
 /**
  * Handler for the Jetty server.
  * 
- * @author girardil, lavoiedn
+ * @author girardil
  * @version 1.0
  */
 public class RequestHandler extends AbstractHandler {
@@ -30,7 +28,7 @@ public class RequestHandler extends AbstractHandler {
 	/**
 	 * The list of supported commands in requests.
 	 */
-	private final static String[] SUPPORTED_COMMANDS = {};
+	private final static String[] supportedCommands = {};
 	/**
 	 * The <code>ResultSet</code> of a database query.
 	 */

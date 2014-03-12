@@ -3,6 +3,10 @@
  */
 package ca.diro.DataBase.Command;
 
+import java.sql.SQLException;
+
+import ca.diro.DataBase.*;
+
 /**
   * this class permit to set query in order to allow a signed user to delete event 
  * @author william
@@ -12,23 +16,52 @@ public class DeleteEvent extends Command{
 
 	/**
 	 * Constructor
-	 * @param info String for query
+	 * @param info string for query
+	 * @throws ClassNotFoundException 
+	 * @throws SQLException 
 	 */
-	public DeleteEvent(String info) {
-		query_ = buildQuery(info);
+	public DeleteEvent(String info) throws ClassNotFoundException, SQLException {
 		
+		myDb  = new DataBase() ;
+		myHelper  = new DBHelper();
+		can = new CancelEvent(info);
 	}
 	
+	
 	/**
-	 * Method to parse String from JSON format in order to retrieve parameters
-	 * and build the right query
-	 * @param info String Object
-	 * @return str <code>String</code> Object which is the query
+	 * Method to delete  event 
+	 * @param info give the eventId
+	 * @return true if event removed well else false 
 	 */
-	private String buildQuery(String info) {
-		String str = "";
-		// TODO parse query
-		return str;
+	public boolean removeEvent(String info) {
+		//TODO perform remove query
+		String  eventId = info;
+		boolean returnValue = false ;
+		//if(myHelper.checkEventStatus(eventId)){
+			//can.nofifySignedUser(eventId) ;
+		//}
+		 try {
+			myDb.statement().executeUpdate("delete from event where eventid = "+ eventId );
+			returnValue = true;
+		} catch (SQLException e) {
+			System.err.println(e.getMessage());
+		}
+		
+		 return returnValue ;
 	}
 
+	/**
+	 * Object DataBase
+	 */
+	DataBase  myDb ; 
+	
+	/**
+	 * Objet DBHelper 
+	 */
+	DBHelper myHelper ;
+	/**
+	 * CancelEvent Object to notify users registered in that event 
+	 */
+	CancelEvent  can ; 
+	
 }

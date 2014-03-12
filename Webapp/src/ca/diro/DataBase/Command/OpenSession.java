@@ -25,7 +25,12 @@ public class OpenSession  extends Command{
 	 * @return str <code>String</code> Object which is the query
 	 */
 	private String buildQuery(String info) {
-		String str = "";
+		String userName = "pat"  ;
+		String password = "patson" ;
+		
+		String str = "select suserid from signeduser " +
+						"where 	username = '"+ userName + "'  and " +
+								"password = '" + password +"'";
 		// TODO parse query
 		return str;
 	}

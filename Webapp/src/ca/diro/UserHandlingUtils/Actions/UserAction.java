@@ -2,15 +2,17 @@ package ca.diro.UserHandlingUtils.Actions;
 
 import java.sql.ResultSet;
 
+import javax.servlet.http.HttpServletRequest;
+
 import ca.diro.DataBase.Command.Command;
 import ca.diro.UserHandlingUtils.ActionPermissionsException;
 
 /**
  * Represents the actions that can be performed by a user that affect the user
  * itself. This could also have been done using a multitude of
- * <code>AbstractHandler</code>s. However, I find this way cleaner and I wanted
- * a way to call every command using a list of <code>UserAction</code>s if
- * required. (For instance, if we need to use a queue for requests.)
+ * <code>AbstractHandler</code>s. However, I wanted a way to call every command
+ * using a list of <code>UserAction</code>s if required. (For instance, if we
+ * need to use a queue for requests.)
  * 
  * @author lavoiedn
  * 
@@ -29,7 +31,7 @@ public abstract class UserAction implements IAction {
 	 * The {@link ca.diro.DataBase.Command.Command} associated with this
 	 * <code>UserAction</code>.
 	 */
-	protected Command associatedCommand;
+	protected Command command;
 
 	/**
 	 * Constructor for a <code>UserAction</code>.
@@ -72,10 +74,10 @@ public abstract class UserAction implements IAction {
 	 * .server.Request)
 	 */
 	@Override
-	public ResultSet performAuthorizedAction(String request)
+	public ResultSet performAction(HttpServletRequest request)
 			throws ActionPermissionsException {
 		ResultSet results = null;
-		if (associatedCommand != null) {
+		if (command != null) {
 			// TODO Feed the given request to this action's command.
 		}
 		return results;

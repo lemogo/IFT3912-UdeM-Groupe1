@@ -14,13 +14,13 @@ import ca.diro.DataBase.DataBase;
  */
 public class CommentEvent extends Command{
 	/**
-	 * @param info String 
+	 * @param info string 
 	 * @throws SQLException 
 	 * @throws ClassNotFoundException 
 	 */
 	public CommentEvent(String info) throws ClassNotFoundException, SQLException {
-		query_ = buildQuery(info);	
 		keepComment(info) ;
+		query_ = buildQuery(info);	
 	}
 	
 	/**
@@ -30,7 +30,13 @@ public class CommentEvent extends Command{
 	 * @return str <code>String</code> Object which is the query
 	 */
 	private String buildQuery(String info) {
-		String str = "";
+		
+		//String description = "blablabla" ;
+		int  S_userId = Integer.parseInt(info);
+		
+		String str = "select username, datecreation from  signeduser, commentevent " +
+						"where 	signeduser.suserid = "+ S_userId +" and " +
+								"signeduser.suserid = commentevent.suserid" ;
 		// TODO parse query
 		return str;
 	}
@@ -42,6 +48,12 @@ public class CommentEvent extends Command{
 	 */
 	public void keepComment(String info) throws SQLException, ClassNotFoundException{
 		
+		String desc = "blablabla" ;
+		int  S_userId = Integer.parseInt(info);
+		int  eventId = Integer.parseInt(info);
+		
+		 db.statement().executeUpdate("insert into commentevent (description, datecreation, eventid, suserid) " +
+				"values("+"'" + desc +"', CURRENT_TIMESTAMP(), "+ eventId + " , "+ S_userId + ")");
 		// TODO parse queryinsert
 	}
 	

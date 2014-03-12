@@ -8,12 +8,12 @@ package ca.diro.DataBase.Command;
  * @author william
  *
  */
-public class ListEventComing extends Command{
+public class ListComingEvent extends Command{
 
 	/**
 	 * Constructor 
 	 */
-	public ListEventComing() {
+	public ListComingEvent() {
 		this.query_ = buildQuery() ;
 	}
 	
@@ -22,7 +22,8 @@ public class ListEventComing extends Command{
 	 * @return str <code>String</code> Object the query
 	 */
 	private String buildQuery(){
-		String str="" ;
+		String str="select eventid, title, location, dateevent, description from event " +
+				"where dateevent > CURRENT_DATE()"  ;
 		//TODO parse query
 		return str ;
 	}

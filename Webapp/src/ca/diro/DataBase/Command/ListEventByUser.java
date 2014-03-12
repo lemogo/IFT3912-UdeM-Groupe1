@@ -13,8 +13,8 @@ public class ListEventByUser extends Command{
 	 * Constructor 
 	 * @param info String to build query 
 	 */
-	public ListEventByUser(String info) {
-		query_ = buildQuery(info);
+	public ListEventByUser(String suserId) {
+		query_ = buildQuery(suserId);
 	}
 	
 	/**
@@ -24,7 +24,12 @@ public class ListEventByUser extends Command{
 	 * @return str <code>String</code> Object which is the query
 	 */
 	private String buildQuery(String info) {
-		String str = "";
+
+		int  S_userId = Integer.parseInt(info);
+		String str = "select event.eventid, title, location, dateevent, event.description from  event " +
+				"where 	event.suserid = "+ S_userId +" and "+
+						" dateevent >= CURRENT_DATE() and " +
+						"UPPER(event.status) != 'CANCELLED' ";
 		// TODO parse query
 		return str;
 	}

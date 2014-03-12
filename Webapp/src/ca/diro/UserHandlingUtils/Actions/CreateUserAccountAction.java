@@ -1,6 +1,6 @@
 package ca.diro.UserHandlingUtils.Actions;
 
-import ca.diro.UserHandlingUtils.UserPermissions;
+import ca.diro.UserHandlingUtils.UserPermission;
 
 
 /**
@@ -35,7 +35,7 @@ public class CreateUserAccountAction extends UserAction {
 	 * ca.diro.UserHandlingUtils.Actions.IAction#getRequiredUserPermission()
 	 */
 	@Override
-	public UserPermissions getRequiredUserPermissions() {
-		return UserPermissions.NONE;
+	public UserPermission getRequiredUserPermission() {
+		return UserPermission.NONE;
 	}
 }

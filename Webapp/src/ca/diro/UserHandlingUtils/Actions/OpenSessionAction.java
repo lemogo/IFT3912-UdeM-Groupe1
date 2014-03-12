@@ -1,6 +1,6 @@
 package ca.diro.UserHandlingUtils.Actions;
 
-import ca.diro.UserHandlingUtils.UserPermissions;
+import ca.diro.UserHandlingUtils.UserPermission;
 
 /**
  * The <code>UserAction</code> used for user log in.
@@ -34,8 +34,8 @@ public class OpenSessionAction extends UserAction {
 	 * ca.diro.UserHandlingUtils.Actions.IAction#getRequiredUserPermission()
 	 */
 	@Override
-	public UserPermissions getRequiredUserPermissions() {
-		return UserPermissions.REGISTERED_USER;
+	public UserPermission getRequiredUserPermission() {
+		return UserPermission.REGISTERED_USER;
 	}
 
 }

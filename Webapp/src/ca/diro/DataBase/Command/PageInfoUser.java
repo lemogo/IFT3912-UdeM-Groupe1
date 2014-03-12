@@ -13,8 +13,8 @@ public class PageInfoUser extends Command{
 	 * Constructor
 	 * @param info String to build query
 	 */
-	public PageInfoUser(String info) {
-		query_ = buildQuery(info);
+	public PageInfoUser(String sUserId) {
+		query_ = buildQuery(sUserId);
 		
 	}
 	
@@ -25,7 +25,9 @@ public class PageInfoUser extends Command{
 	 * @return str <code>String</code> Object which is the query
 	 */
 	private String buildQuery(String info) {
-		String str = "";
+		int  S_userId = Integer.parseInt(info);
+		String str = "select fullname, username, email, age, description from  signeduser " +
+					"where 	suserid = "+ S_userId ;
 		// TODO parse query
 		return str;
 	}
