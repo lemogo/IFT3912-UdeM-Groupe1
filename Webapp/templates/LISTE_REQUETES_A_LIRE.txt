@@ -1,0 +1,21 @@
+Pour ceux qui feront le handler des requêtes :
+
+Liste des requêtes GET
+
+accueil
+liste-des-evenements
+ajouter-un-evenement
+membre  			//Vers le compte connecté en ce moment.
+membre/{member_id}   		//Vers un membre en particulier
+notifications
+deconnexion			//Doit logout puis faire une redirection vers l'accueil
+
+
+Listes variables "globales" à générer
+
+J'utilise le terme variables globales, juste pour dire qu'elles doient être générées dans tous les render de templates.
+Les variables sont faciles à voir. Simplement ouvrir un fichier template en particulier pour une requête et regarder.
+Cependant, il y a quelques cas spéciaux :
+
+user				//Retourne vrai si le user est connecté, faux sinon.
+notifications_number 		//Nombre de notifications. Doit être accessible en tout temps lorsque le user est connecté.
