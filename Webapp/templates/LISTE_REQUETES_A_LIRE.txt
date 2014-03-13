@@ -11,6 +11,10 @@ notifications
 deconnexion			//Doit logout puis faire une redirection vers l'accueil
 enregistrement
 
+Liste des requêtes POST (pour les paramètres POST que je vous envoie, regarder les form dans les templates)
+
+create-event			//Doit rediriger vers "liste-des-evenements" avec une variable nommée "add-success"
+
 
 
 Listes variables "globales" à générer
