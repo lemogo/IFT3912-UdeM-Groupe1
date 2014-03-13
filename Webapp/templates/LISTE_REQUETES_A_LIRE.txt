@@ -19,7 +19,9 @@ evenement/{event_id}		//Voir un événement en particulier
 Liste des requêtes POST (pour les paramètres POST que je vous envoie, regarder les form dans les templates)
 
 create-event			//Doit rediriger vers "liste-des-evenements" avec une variable true nommée "addSuccess"
-connect-user			//Doit rediriger vers "membre" une fois le user connecté
+create-user			//Doit rediriger vers "membre" une fois le user créé
+connect-user			//Idem
+
 
 
 

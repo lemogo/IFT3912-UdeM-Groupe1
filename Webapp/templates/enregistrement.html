@@ -1,0 +1,72 @@
+<link href="css/addEvent.css" rel="stylesheet">
+<link href="css/connexion.css" rel="stylesheet">
+
+		<div class="container theme-showcase">
+			<h1 class="pageTitle">S'enregistrer</h1>
+			<p class="descpage">S'enregistrer est très simple et Bacon ipsum dolor sit amet meatball beef ribs jowl bresaola sirloin pork loin tail shank pork chop short ribs pork. Rump brisket tongue, shankle tri-tip pork chop capicola doner corned beef swine leberkas bresaola andouille bacon. Ham hock tenderloin andouille strip steak. Jerky kevin pork loin drumstick bresaola porchetta boudin turkey pork chop salami.</p>
+			<div class="panel panel-primary">
+				<div class="panel-heading">
+					<h2 class="panel-title">Entrez vos informations de connexion</h2>
+				</div>
+				<div class="panel-collapse collapse in">
+					<form id="formAddEvent" role="form" action="create-user">
+						<div class="form-group">
+							<label class="col-sm-3 control-label">Nom complet:</label>
+							<div class="col-sm-9">
+								<input type="text" class="form-control" placeholder="Exemple : Jack Sparrow" name="fullname" required autofocus />
+							</div>
+						</div>
+						
+						<div class="form-group">
+							<label class="col-sm-3 control-label">Adresse courriel:</label>
+							<div class="col-sm-9">
+								<input type="text" id="datepicker" class="form-control" placeholder="Exemple : imbeautiful@example.com" name="email" required>
+							</div>
+						</div>
+	
+						<div class="form-group">
+							<label class="col-sm-3 control-label">Nom d'utilisateur:</label>
+							<div class="col-sm-9">
+								<input type="text" class="form-control" placeholder="Exemple : jacksparrow" name="username" required>
+							</div>
+						</div>
+						
+						<div class="form-group">
+							<label class="col-sm-3 control-label">Mot de passe:</label>
+							<div class="col-sm-9">
+								<input type="password" class="form-control" placeholder="Choisissez un mot de passe sécure" name="password" required>
+							</div>
+						</div>
+	
+						<div class="form-group">
+							<label class="col-sm-3 control-label">Age:</label>
+							<div class="col-sm-9">
+								<select class="form-control" name="age">
+									<option>18</option>
+									<option>19</option>
+									<option>20</option>
+									<option>21</option>
+									<option>22</option>
+									<option>23</option>
+									<option>24</option>
+									<option>25</option>
+								</select>
+							</div>
+						</div>
+	
+						<div class="form-group description">
+							<label class="col-sm-3 control-label">Description:</label>
+							<div class="col-sm-9">
+								<textarea class="form-control" placeholder="Falcultatif : Décrivez-vous brièvement si vous souhaitez laisser une impression aux autres membres" name="description"></textarea>
+							</div>
+						</div>
+						
+						<div class="form-group">
+							<button class="btn btn-lg btn-primary" type="submit">Créer mon compte</button>
+						</div>
+					</form>
+				</div>
+			</div>
+		</div>
+
+<script src="js/jquery-ui-1.10.4.custom.min.js"></script>
