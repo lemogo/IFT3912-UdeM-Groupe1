@@ -8,8 +8,9 @@ liste-des-evenements/passes	//On affiche la liste des événements passés
 liste-des-evenements/annules	//On affiche la liste des événements annulés
 ajouter-un-evenement
 membre  			//Vers le compte connecté en ce moment.
-membre/{member_id}   		//Vers un membre en particulier
+membre/{member_username}   	//Vers un membre en particulier
 notifications
+connexion
 deconnexion			//Doit logout puis faire une redirection vers l'accueil
 enregistrement
 evenement/{event_id}		//Voir un événement en particulier
@@ -18,6 +19,7 @@ evenement/{event_id}		//Voir un événement en particulier
 Liste des requêtes POST (pour les paramètres POST que je vous envoie, regarder les form dans les templates)
 
 create-event			//Doit rediriger vers "liste-des-evenements" avec une variable true nommée "addSuccess"
+connect-user			//Doit rediriger vers "membre" une fois le user connecté
 
 
 
