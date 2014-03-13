@@ -1,0 +1,64 @@
+<link href="css/connexion.css" rel="stylesheet">
+<link href="css/addEvent.css" rel="stylesheet">
+<link href="css/jquery-ui-1.10.4.custom.min.css" rel="stylesheet">
+
+		<div class="container theme-showcase">
+			<h1 class="pageTitle">Modifier votre événement</h1>
+			<p class="descpage">Modifier votre événement et Bacon ipsum dolor sit amet meatball beef ribs jowl bresaola sirloin pork loin tail shank pork chop short ribs pork. Rump brisket tongue, shankle tri-tip pork chop capicola doner corned beef swine leberkas bresaola andouille bacon. Ham hock tenderloin andouille strip steak. Jerky kevin pork loin drumstick bresaola porchetta boudin turkey pork chop salami.</p>
+				<div class="panel panel-primary">
+					<div class="panel-heading">
+						<h2 class="panel-title">Entrez les informations de l'événement</h2>
+					</div>
+					<div class="panel-collapse collapse in">
+						<form id="formAddEvent" role="form" action="modify-event">
+							<input type="hidden" name="id" value="{{id}}" />
+							<div class="form-group">
+								<label class="col-sm-3 control-label"> Nom de l'événement: </label>
+								<div class="col-sm-9">
+									<input type="text" class="form-control" placeholder="Exemple : Match de volleyball" name="eventName" value="{{title}}" required autofocus />
+								</div>
+							</div>
+							
+							<div class="form-group">
+								<label class="col-sm-3 control-label">Date:</label>
+								<div class="col-sm-9">
+									<input type="text" id="datepicker" class="form-control" placeholder="Choisir une date..."  name="eventDate" value="{{date}}" required>
+								</div>
+							</div>
+		
+							<div class="form-group">
+								<label class="col-sm-3 control-label">Lieu:</label>
+								<div class="col-sm-9">
+									<input type="text" class="form-control" placeholder="Exemple : Cepsum"  name="eventLocation" value="{{location}}" required>
+								</div>
+							</div>
+		
+							<div class="form-group">
+								<label class="col-sm-3 control-label">Nombre de participants recherchés:</label>
+								<div class="col-sm-9">
+									<select class="form-control" name="eventNumPeople">
+										<option value="0">Illimité</option>
+										<option value="1">1</option>
+										<option value="2">2</option>
+										<option value="3">3</option>
+									</select>
+								</div>
+							</div>
+		
+							<div class="form-group description">
+								<label class="col-sm-3 control-label">Description:</label>
+								<div class="col-sm-9">
+									<textarea class="form-control" placeholder="Donnez une description brève, mais précise." name="eventDescription">{{description}}</textarea>
+								</div>
+							</div>
+							
+							<div class="form-group">
+								<button class="btn btn-lg btn-primary" type="submit">Modifier l'événement</button>
+							</div>
+						</form>
+				</div>
+			</div>
+		</div>
+
+<script src="js/jquery-ui-1.10.4.custom.min.js"></script>
+<script src="js/addEvent.js"></script>

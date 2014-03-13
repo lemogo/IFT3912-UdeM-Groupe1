@@ -21,6 +21,7 @@ Liste des requêtes POST (pour les paramètres POST que je vous envoie, regarder l
 
 create-event				//Doit rediriger vers "liste-des-evenements" avec une variable true nommée "addSuccess"
 delete-event				//Doit rediriger vers "liste-des-evenements" avec une variable true nommée "deleteSuccess"
+modify-event				//Doit rediriger vers "evenement/{id}"
 register-event				//Doit rediriger vers "evenement/{id}" avec une variable true nommée "registerSuccess"
 unregister-event			//Doit rediriger vers "evenement/{id}" avec une variable true nommée "unregisterSuccess"
 create-user				//Doit rediriger vers "membre" une fois le user créé
