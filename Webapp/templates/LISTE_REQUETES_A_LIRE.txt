@@ -25,6 +25,7 @@ modify-event				//Doit rediriger vers "evenement/{id}"
 register-event				//Doit rediriger vers "evenement/{id}" avec une variable true nommée "registerSuccess"
 unregister-event			//Doit rediriger vers "evenement/{id}" avec une variable true nommée "unregisterSuccess"
 create-user				//Doit rediriger vers "membre" une fois le user créé
+modify-user				//Idem
 connect-user				//Idem
 
 
