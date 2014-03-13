@@ -1,0 +1,25 @@
+	<!-- Fixed navbar -->
+	<div class="navbar navbar-inverse navbar-fixed-top" role="navigation">
+		<div class="container">
+			<div class="navbar-header">
+				<a class="navbar-brand navlink" href="accueil">UdeM Actif</a>
+			</div>
+			<div class="navbar-collapse collapse">
+				<ul class="nav navbar-nav">
+					<li><a href="liste-des-evenements" class="navlink">Liste des événements</a></li>
+					<li><a href="ajouter-un-evenement"  class="navlink">Créer votre événement</a></li>
+				</ul>
+				<ul class="navbar-nav pull-right navbar-right-links">
+					<li><a href="membre" class="navlink">Mon compte</a></li>
+					
+					<li><a href="notifications"  class="navlink">Notifications 
+					{{#notifications_number}}
+					<span class="badge badgeYellow" data-toggle="tooltip" data-placement="left" title="Vous avez {{notifications_number}} nouvelles notifications">{{notifications_number}}</span>
+					{{/notifications_number}}
+					</a></li>
+					
+					<li><a href="deconnexion"  class="navlink">Déconnexion</a></li>
+				</ul>
+			</div>
+		</div>
+	</div>
