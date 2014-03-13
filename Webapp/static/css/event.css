@@ -1,0 +1,41 @@
+.panel-heading h2 {
+	font-size:24px;
+	padding:0px;
+	margin:0px;
+	color:#fff;
+}
+.panel-heading .smallInfos {
+	font-size:12px;
+	color:#fff;
+	float:right;
+	padding-top:5px;
+}
+.panel-heading .smallInfos a {
+	color:#fff;
+}
+.panel-heading .smallInfos p {
+	float:left;
+	margin-left:20px;
+}
+.panel-heading .smallInfos .title {
+	font-weight:bold;
+}
+.panel-collapse {
+	padding:10px;
+}
+.panel-collapse h3 {
+	color:#145388;
+	font-size:16px;
+}
+
+#comments .panel-heading .username {
+	font-size:14px;
+}
+#comments .panel-heading .date {
+	font-size:12px;
+	color:#535353;
+	margin-left:10px;
+}
+#comments .btn {
+	margin:5px 0 10px 0;
+}

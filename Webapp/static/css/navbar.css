@@ -1,0 +1,22 @@
+.navbar .container {
+	min-width:850px;
+}
+.navbar .container a.navlink {
+	color:#fff;
+}
+.navbar .connect {
+	padding-top:7px;
+}
+.navbar .navbar-right-links {
+	list-style-type:none;
+	color:#fff;
+}
+.navbar .navbar-right-links li {
+	margin-left:30px;
+	padding-top:15px;
+}
+.navbar-header {
+	background:url('../images/logo.png') 0px 5px;
+	background-repeat:no-repeat;
+	padding-left:45px;
+}
