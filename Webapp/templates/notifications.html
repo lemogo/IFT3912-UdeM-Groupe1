@@ -1,0 +1,22 @@
+<link href="css/events.css" rel="stylesheet">
+<link href="css/notifications.css" rel="stylesheet">
+
+		<div class="container theme-showcase">
+			<h1 class="pageTitle">Notifications</h1>
+			<p class="descpage">Gérez vos notifications et Bacon ipsum dolor sit amet meatball beef ribs jowl bresaola sirloin pork loin tail shank pork chop short ribs pork. Rump brisket tongue, shankle tri-tip pork chop capicola doner corned beef swine leberkas bresaola andouille bacon.</p>
+			<div class="panel panel-primary">
+				<div class="panel-heading">
+					<h2 class="panel-title">Liste de vos notifications</h2>
+				</div>
+				<div class="panel-collapse collapse in">
+					{{#notificationsList}}
+					<div class="alert alert-danger">
+				    	L'événement <i>{{title}}</i> créé par <a href="voir-membre.html">{{username}}</a> a été annulé.
+				    	<a type="button" class="btn btn-xs btn-danger deleteNotification">X</a>
+				    </div>
+				    {{/notificationsList}}
+				</div>
+			</div>
+		</div>
+		
+<script src="js/notifications.js"></script>
