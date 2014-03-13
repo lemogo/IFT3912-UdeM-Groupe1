@@ -9,6 +9,8 @@ membre  			//Vers le compte connecté en ce moment.
 membre/{member_id}   		//Vers un membre en particulier
 notifications
 deconnexion			//Doit logout puis faire une redirection vers l'accueil
+enregistrement
+
 
 
 Listes variables "globales" à générer
