@@ -1,0 +1,96 @@
+<link href="css/event.css" rel="stylesheet">
+<link href="css/events.css" rel="stylesheet">
+
+		<div class="container theme-showcase">
+			<h1 class="pageTitle">Détails de l'événement</h1>
+			{{#registerSuccess}}
+			<div class="alert alert-success">
+		    	<strong>Félicitation!</strong> Vous êtes maintenant inscrit à l'événement.
+		    </div>
+		    {{^registerSuccess}}
+		    {{#unregisterSuccess}}
+			<div class="alert alert-danger">
+		    	Vous ne faite plus parti de l'événement.
+		    </div>
+		    {{^unregisterSuccess}}
+			<p class="descpage">Trouvez les informations sur Bacon ipsum dolor sit amet meatball beef ribs jowl bresaola sirloin pork loin tail shank pork chop short ribs pork. Rump brisket tongue, shankle tri-tip pork chop capicola doner corned beef swine leberkas bresaola andouille bacon.</p>
+			<div class="panel panel-primary">
+				<div class="panel-heading">
+					<div class="smallInfos">
+						<p><span class="title">Par: </span><a href="membre/{{creatorUsername}}">barfuhok</a></p>
+						<p><span class="title">Personnes inscrites: </span><span class="badge badgeBlue" data-toggle="tooltip" data-placement="left" title="Personnes inscrites">{{numPeople}}</span></p>
+						<p><span class="title">Places restantes: </span><span class="badge {{badgeClass}}{{!badgeGreen si + que 3, badgeYellow si - que 3 et badgeRed si 0}}" data-toggle="tooltip" data-placement="left" title="Places restantes">{{numPlacesLeft}}</span></p>
+					</div>
+					<h2 class="panel-title">{{title}}</h2>
+				</div>
+				<div class="panel-collapse collapse in">
+					<h3>Quand?</h3>
+					<p class="descpage">{{date}}</p>
+					<h3>À quel endroit?</h3>
+					<p class="descpage">{{location}}</p>
+					<h3>Détails sur l'événement</h3>
+					<p class="descpage">{{description}}</p>
+					{{#isOwner}}
+					<a class="btn btn-primary" href="evenement-modification/{{id}}" role="button">Modifier l'événement</a>
+					<a class="btn btn-danger" href="javascript:if(confirm('Supprimer?'))$('#formDeleteEvent').submit();" role="button">Supprimer l'événement</a>
+					<form id="formDeleteEvent" role="form" action="delete-event">
+						<input type="hidden" name="id" value="{{id}}" />
+					</form>
+					{{/isOwner}}
+					{{^isOwner}}
+						{{^isRegistered}}
+						<a class="btn btn-primary" href="javascript:$('formRegisterEvent').submit();" role="button">S'inscrire!</a>
+						<form id="formRegisterEvent" role="form" action="register-event">
+							<input type="hidden" name="id" value="{{id}}" />
+						</form>
+						{{#isRegistered}}
+						{{^isRegistered}}
+						<a class="btn btn-danger" href="javascript:$('formRegisterEvent').submit();" role="button">Annuler l'inscription</a>
+						<form id="formRegisterEvent" role="form" action="unregister-event">
+							<input type="hidden" name="id" value="{{id}}" />
+						</form>
+						{{#isRegistered}}
+					{{/isOwner}}
+				</div>
+			</div>
+			<div class="panel panel-primary">
+				<div class="panel-heading">
+					<h2 class="panel-title">Exprimez-vous sur cet événement</h2>
+				</div>
+				<div id="comments" class="panel-collapse collapse in">
+					<form id="formAddEvent" role="form" action="#">
+						<textarea class="form-control" placeholder="Écrivez un commentaire" required></textarea>
+						<button class="btn btn-primary" type="submit">Envoyer</button>
+					</form>
+					<!-- Comment box -->
+					<div class="panel panel-info">
+			            <div class="panel-heading">
+			              <h3 class="panel-title"><a class="username" href="voir-membre.html">Barfuhok</a> <span class="date">08h31, 03 Février 2014</span></h3>
+			            </div>
+			            <div class="panel-body">
+			              Vraiment cool!
+			            </div>
+			    	</div>
+			    	
+			    	<!-- Comment box -->
+					<div class="panel panel-info">
+			            <div class="panel-heading">
+			              <h3 class="panel-title"><a class="username" href="voir-membre.html">Valérie</a> <span class="date">08h31, 02 Février 2014</span></h3>
+			            </div>
+			            <div class="panel-body">
+			              Je suis inscrite
+			            </div>
+			    	</div>
+			    	
+			    	<!-- Comment box -->
+					<div class="panel panel-info">
+			            <div class="panel-heading">
+			              <h3 class="panel-title"><a class="username" href="voir-membre.html">Barfuhok</a> <span class="date">08h31, 01 Février 2014</span></h3>
+			            </div>
+			            <div class="panel-body">
+			              Vraiment cool!
+			            </div>
+			    	</div>
+				</div>
+			</div>
+		</div>
