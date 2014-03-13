@@ -1,0 +1,69 @@
+<link href="css/events.css" rel="stylesheet">
+
+		<div class="container theme-showcase">
+			<h1 class="pageTitle">Liste des événements</h1>
+			{{#addSuccess}}
+			<div class="alert alert-success">
+		    	<strong>Félicitation!</strong> Votre événement à bien été créé.
+		    </div>
+		    {{/addSuccess}}
+		    {{#deleteSuccess}}
+			<div class="alert alert-danger">
+		    	Vous avez supprimer votre événement
+		    </div>
+		    {{/deleteSuccess}}
+			<p class="descpage">Rechercher un événement et Bacon ipsum dolor sit amet meatball beef ribs jowl bresaola sirloin pork loin tail shank pork chop short ribs pork. Rump brisket tongue, shankle tri-tip pork chop capicola doner corned beef swine leberkas bresaola andouille bacon.</p>
+			<div class="panel panel-primary">
+				<div class="panel-heading">
+					<div class="input-group" id="search">					
+						<div class="filterSearch">
+							<button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown">Événements à venir <span class="caret"></span></button>
+							<ul class="dropdown-menu">
+								<li><a href="liste-des-evenements">Événements à venir</a></li>
+								<li><a href="liste-des-evenements/passes">Événements passés</a></li>
+								<li><a href="liste-des-evenements/annules">Événements annulés</a></li>
+							</ul>
+						</div>
+						<input type="text" class="form-control searchInput" placeholder="recherche..." />
+						<button type="button" class="btn btn btn-default">Recherche</button>
+					</div>
+				</div>
+	
+				<div class="panel-body">
+					<div class="panel-group">
+						{{#events}}
+						<!-- Event -->
+						<div class="panel panel-info">
+							<div class="panel-heading">
+								<div class="detailsButtons">
+									<a class="btn btn-primary" href="evenement/{{id}}" role="button">Voir les détails / S'inscrire</a>
+								</div>
+								<h4 class="panel-title">
+									<a  href="evenement.html">{{title}}</a>
+									<span class="place-left">
+										<span class="badge {{badgeClass}}{{!badgeGreen si + que 3, badgeYellow - que 3 et badgeRed si 0}}" data-toggle="tooltip" data-placement="left" title="Places restantes">{{numPlacesLeft}}</span> places restantes
+									</span>
+								</h4>
+							</div>
+	
+							<div class="panel-collapse collapse in">
+								<div class="panel panel-default">
+									<div class="panel-body">
+										<h5 class="panel-title-item-heading">Date et heure</h5>
+										<p>{{date}}</p>
+										<h5 class="panel-title-item-heading">Lieu</h5>
+										<p>{{location}}</p>
+										<h5 class="panel-title-item-heading">Description</h5>
+										<p>{{description}}</p>
+									</div>
+								</div>
+							</div>
+						</div>
+						{{/events}}					
+					</div>
+				</div>
+	
+			</div>
+		</div>
+
+<script src="js/events.js"></script>

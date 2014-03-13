@@ -3,17 +3,21 @@ Pour ceux qui feront le handler des requêtes :
 Liste des requêtes GET
 
 accueil
-liste-des-evenements
+liste-des-evenements		//Par défaut on affiche ceux à venir
+liste-des-evenements/passes	//On affiche la liste des événements passés
+liste-des-evenements/annules	//On affiche la liste des événements annulés
 ajouter-un-evenement
 membre  			//Vers le compte connecté en ce moment.
 membre/{member_id}   		//Vers un membre en particulier
 notifications
 deconnexion			//Doit logout puis faire une redirection vers l'accueil
 enregistrement
+evenement/{event_id}		//Voir un événement en particulier
+
 
 Liste des requêtes POST (pour les paramètres POST que je vous envoie, regarder les form dans les templates)
 
-create-event			//Doit rediriger vers "liste-des-evenements" avec une variable nommée "add-success"
+create-event			//Doit rediriger vers "liste-des-evenements" avec une variable true nommée "addSuccess"
 
 
 
