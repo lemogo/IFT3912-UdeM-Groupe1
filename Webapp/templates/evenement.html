@@ -7,13 +7,17 @@
 			<div class="alert alert-success">
 		    	<strong>Félicitation!</strong> Vous êtes maintenant inscrit à l'événement.
 		    </div>
+			{{/registerSuccess}}
 		    {{^registerSuccess}}
 		    {{#unregisterSuccess}}
 			<div class="alert alert-danger">
 		    	Vous ne faite plus parti de l'événement.
 		    </div>
+		    {{/unregisterSuccess}}
+			{{/registerSuccess}}
 		    {{^unregisterSuccess}}
 			<p class="descpage">Trouvez les informations sur Bacon ipsum dolor sit amet meatball beef ribs jowl bresaola sirloin pork loin tail shank pork chop short ribs pork. Rump brisket tongue, shankle tri-tip pork chop capicola doner corned beef swine leberkas bresaola andouille bacon.</p>
+		    {{/unregisterSuccess}}
 			<div class="panel panel-primary">
 				<div class="panel-heading">
 					<div class="smallInfos">
@@ -43,13 +47,13 @@
 						<form id="formRegisterEvent" role="form" action="register-event">
 							<input type="hidden" name="id" value="{{id}}" />
 						</form>
+						{{/isRegistered}}
 						{{#isRegistered}}
-						{{^isRegistered}}
 						<a class="btn btn-danger" href="javascript:$('formRegisterEvent').submit();" role="button">Annuler l'inscription</a>
 						<form id="formRegisterEvent" role="form" action="unregister-event">
 							<input type="hidden" name="id" value="{{id}}" />
 						</form>
-						{{#isRegistered}}
+						{{/isRegistered}}
 					{{/isOwner}}
 				</div>
 			</div>
