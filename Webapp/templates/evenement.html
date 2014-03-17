@@ -7,13 +7,17 @@
 			<div class="alert alert-success">
 		    	<strong>Félicitation!</strong> Vous êtes maintenant inscrit à l'événement.
 		    </div>
+			{{/registerSuccess}}
 		    {{^registerSuccess}}
 		    {{#unregisterSuccess}}
 			<div class="alert alert-danger">
 		    	Vous ne faite plus parti de l'événement.
 		    </div>
+		    {{/unregisterSuccess}}
+			{{/registerSuccess}}
 		    {{^unregisterSuccess}}
 			<p class="descpage">Trouvez les informations sur Bacon ipsum dolor sit amet meatball beef ribs jowl bresaola sirloin pork loin tail shank pork chop short ribs pork. Rump brisket tongue, shankle tri-tip pork chop capicola doner corned beef swine leberkas bresaola andouille bacon.</p>
+		    {{/unregisterSuccess}}
 			<div class="panel panel-primary">
 				<div class="panel-heading">
 					<div class="smallInfos">
@@ -24,12 +28,14 @@
 					<h2 class="panel-title">{{title}}</h2>
 				</div>
 				<div class="panel-collapse collapse in">
+				{{#event}}
 					<h3>Quand?</h3>
 					<p class="descpage">{{date}}</p>
 					<h3>À quel endroit?</h3>
 					<p class="descpage">{{location}}</p>
 					<h3>Détails sur l'événement</h3>
 					<p class="descpage">{{description}}</p>
+				{{/event}}
 					{{#isOwner}}
 					<a class="btn btn-primary" href="evenement-modification/{{id}}" role="button">Modifier l'événement</a>
 					<a class="btn btn-danger" href="javascript:if(confirm('Supprimer?'))$('#formDeleteEvent').submit();" role="button">Supprimer l'événement</a>
@@ -43,13 +49,13 @@
 						<form id="formRegisterEvent" role="form" action="register-event">
 							<input type="hidden" name="id" value="{{id}}" />
 						</form>
+						{{/isRegistered}}
 						{{#isRegistered}}
-						{{^isRegistered}}
 						<a class="btn btn-danger" href="javascript:$('formRegisterEvent').submit();" role="button">Annuler l'inscription</a>
 						<form id="formRegisterEvent" role="form" action="unregister-event">
 							<input type="hidden" name="id" value="{{id}}" />
 						</form>
-						{{#isRegistered}}
+						{{/isRegistered}}
 					{{/isOwner}}
 				</div>
 			</div>

@@ -16,6 +16,7 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.eclipse.jetty.server.Request;
 import org.eclipse.jetty.server.handler.AbstractHandler;
+import org.h2.store.Data;
 import org.json.JSONArray;
 import org.json.JSONObject;
 import org.json.JSONException;
@@ -28,6 +29,7 @@ import java.sql.SQLException;
 import java.sql.ResultSet;
 import java.sql.ResultSetMetaData;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -60,12 +62,12 @@ public class RequestHandler extends AbstractHandler {
 	private static File	rootDir		= new File(".");
 
 	// Ressources statiques -> ne seront pas interpretees par Mustache
-	private static File	staticDir	= new File(rootDir, "static");
+	protected static File	staticDir	= new File(rootDir, "static");
 
 	// Ressources dynamiques -> seront interpretees par Mustache
-	private static File	dynamicDir	= new File(rootDir, "templates");
+	protected static File	dynamicDir	= new File(rootDir, "templates");
 
-	private String siteName = "Webapp";
+	protected String siteName = "Webapp";
 
 	/*
 	 * (non-Javadoc)
@@ -81,16 +83,21 @@ public class RequestHandler extends AbstractHandler {
 		// TODO Implement handling logic for simple requests (and command
 		// validation) and forwarding for requests that require specific
 		// permissions or handling.
-		System.out.println("In handler");
+		System.out.println("In requestHandler\t"+baseRequest.getMethod()+"\ttarget:"+target+"\t"+baseRequest.getPathInfo()+"\tContext:"+request.getContextPath());
 		try
 		{
 
-			String pathInfo = request.getPathInfo().substring(1);
-			if (pathInfo.endsWith("/"))
-				pathInfo += "index.html";
+			String pathInfo = request.getPathInfo();
+			if(target.startsWith("/")) pathInfo = pathInfo.substring(1);
+			
+			if ( (request.getContextPath().equalsIgnoreCase("/Webapp")&&target.equals("/") )||pathInfo.equals("accueil")) pathInfo = "accueil.html";
+			if(pathInfo.length()<=1){
+				baseRequest.setHandled(true);
+				return;
+			}
 
-			if (pathInfo.startsWith(siteName)) pathInfo = pathInfo.substring(siteName.length());
-System.out.println(pathInfo+"/t"+request.getPathInfo());				
+System.out.println(request.getContextPath()+"\t"+pathInfo+"\t"+request.getPathInfo());	
+
 			// create a handle to the resource
 			File staticResource = new File(staticDir, pathInfo);
 			File dynamicResource = new File(dynamicDir, pathInfo);
@@ -100,6 +107,38 @@ System.out.println(pathInfo+"/t"+request.getPathInfo());
 			if (target.endsWith(".css"))
 			{
 				response.setContentType("text/css");
+			}
+			else if (target.endsWith(".js"))
+			{
+				System.out.println("set js");
+				response.setContentType("text/javascript");
+			}
+			else if (target.endsWith(".png"))
+			{
+				System.out.println("set png");
+				response.setContentType("image/png");
+//				response.setContentLength();
+			}
+			else if (target.endsWith(".jpg"))
+			{
+				System.out.println("set jpg");
+				response.setContentType("image/jpg");
+//				response.setContentLength(Data.LENGTH_INT);
+			}
+			else if (target.endsWith(".ico"))
+			{
+				System.out.println("set ico");
+				response.setContentType("image/x-icon");
+			}
+			else if (target.endsWith(".ttf"))
+			{
+				System.out.println("set ttf");
+				response.setContentType("application/x-font-ttf");
+			}
+			else if (target.endsWith(".woff"))
+			{
+				System.out.println("set woff");
+				response.setContentType("application/x-font-woff");
 			}
 			else
 			{
@@ -123,7 +162,14 @@ System.out.println(pathInfo+"/t"+request.getPathInfo());
 			else
 			{
 				response.setStatus(HttpServletResponse.SC_OK);
-				processTemplate(request, response, filename);
+				processTemplate(request, response, "header.html");
+				
+				//to display user navbar
+				HashMap sources = new HashMap();
+				sources.put("user", "false");
+
+				processTemplate(request, response, filename,sources);
+				processTemplate(request, response, "footer.html");
 			}
 
 			baseRequest.setHandled(true);
@@ -159,11 +205,6 @@ System.out.println(pathInfo+"/t"+request.getPathInfo());
 		return JSONResult;
 	}
 	
-	
-	
-	
-	
-
 
 	/**
 	 * 
@@ -220,13 +261,14 @@ System.out.println(pathInfo+"/t"+request.getPathInfo());
 	 * @throws FileNotFoundException
 	 * @throws IOException
 	 */
-	private void processTemplate(HttpServletRequest req, HttpServletResponse res, String filename, Object... scopes) throws UnsupportedEncodingException, FileNotFoundException, IOException
+	protected void processTemplate(HttpServletRequest req, HttpServletResponse res, String filename, Object... scopes) throws UnsupportedEncodingException, FileNotFoundException, IOException
 	{
 		MustacheFactory mc = new DefaultMustacheFactory(dynamicDir);
+		mc = new DefaultMustacheFactory(dynamicDir);
 		Mustache mustache = mc.compile(filename);
 
 		Map parameters = new HashMap<Object, Object>(req.getParameterMap())
-		{
+				{
 			@Override
 			public Object get(Object o)
 			{
@@ -241,18 +283,17 @@ System.out.println(pathInfo+"/t"+request.getPathInfo());
 				}
 				return result;
 			}
-		};
-
-		List<Object> scs = new ArrayList<Object>();
-		scs.add(parameters);
-		for (Object o : scopes)
-		{
-			scs.add(o);
-		}
-
-		mustache.execute(res.getWriter(), scs.toArray());
+				};
+				List<Object> scs = new ArrayList<Object>();
+				scs.add(parameters);
+				for (Object o : scopes)
+				{
+					scs.add(o);
+				}
+				mustache.execute(res.getWriter(), scs.toArray());
 	}
 
+	
 	private String simpleEscape(String string)
 	{
 		return string.replace("&", "&amp;").replace("<", "&lt;").replace(">", "&gt;");
