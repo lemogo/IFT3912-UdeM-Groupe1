@@ -27,6 +27,13 @@ public interface IAction {
 	 * @return The user ID of the user who initiated this <code>IAction</code>.
 	 */
 	public int getCallerID();
+	
+	/**
+	 * Returns the JSON request associated with this action.
+	 * 
+	 * @return The JSON request associated with this action.
+	 */
+	public String getJSONRequest();
 
 	/**
 	 * Returns the <code>UserPermissions</code> required to perform this action.

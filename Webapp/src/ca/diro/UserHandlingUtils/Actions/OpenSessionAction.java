@@ -1,5 +1,6 @@
 package ca.diro.UserHandlingUtils.Actions;
 
+import ca.diro.DataBase.Command.OpenSession;
 import ca.diro.UserHandlingUtils.UserPermissions;
 
 /**
@@ -19,12 +20,14 @@ public class OpenSessionAction extends UserAction {
 	 *            The ID of the user who initiated this <code>UserAction</code>.
 	 * @param targetID
 	 *            The ID of the target of this <code>UserAction</code>.
+	 * @param JSONRequest
+	 *            The JSON request for this <code>UserAction</code>.
 	 * 
 	 * @see ca.diro.UserHandlingUtils.Actions.UserAction#UserAction(int, int)
 	 */
-	public OpenSessionAction(int userID, int targetID) {
-		super(userID, targetID);
-		// TODO Set command to appropriate AbstractCommand.
+	public OpenSessionAction(int userID, int targetID, String JSONRequest) {
+		super(userID, targetID, JSONRequest);
+		associatedCommand = new OpenSession(JSONRequest);
 	}
 
 	/*

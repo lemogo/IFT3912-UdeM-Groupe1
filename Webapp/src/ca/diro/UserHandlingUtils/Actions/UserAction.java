@@ -25,6 +25,11 @@ public abstract class UserAction implements IAction {
 	 * The ID of the target of this <code>UserAction</code>.
 	 */
 	private int targetID;
+
+	/**
+	 * The JSON request associated with this <code>UserAction</code>.
+	 */
+	private String JSONRequest;
 	/**
 	 * The {@link ca.diro.DataBase.Command.Command} associated with this
 	 * <code>UserAction</code>.
@@ -38,10 +43,13 @@ public abstract class UserAction implements IAction {
 	 *            The ID of the user who initiated this <code>UserAction</code>.
 	 * @param targetID
 	 *            The ID of the target of this <code>UserAction</code>.
+	 * @param JSONRequest
+	 *            The JSON request for this <code>UserAction</code>.
 	 */
-	public UserAction(int userID, int targetID) {
+	public UserAction(int userID, int targetID, String JSONRequest) {
 		this.userID = userID;
 		this.targetID = targetID;
+		this.JSONRequest = JSONRequest;
 	}
 
 	/*
@@ -62,6 +70,16 @@ public abstract class UserAction implements IAction {
 	@Override
 	public int getTargetID() {
 		return targetID;
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see ca.diro.UserHandlingUtils.Actions.IAction#getJSONRequest()
+	 */
+	@Override
+	public String getJSONRequest() {
+		return JSONRequest;
 	}
 
 	/*

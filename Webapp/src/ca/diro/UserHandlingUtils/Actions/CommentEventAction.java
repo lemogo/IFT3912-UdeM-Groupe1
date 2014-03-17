@@ -1,5 +1,8 @@
 package ca.diro.UserHandlingUtils.Actions;
 
+import java.sql.SQLException;
+
+import ca.diro.DataBase.Command.CommentEvent;
 import ca.diro.UserHandlingUtils.UserPermissions;
 
 /**
@@ -19,12 +22,15 @@ public class CommentEventAction extends UserAction {
 	 *            The ID of the user who initiated this <code>UserAction</code>.
 	 * @param targetID
 	 *            The ID of the target of this <code>UserAction</code>.
-	 * 
+	 * @param JSONRequest
+	 *            The JSON request for this <code>UserAction</code>.
+	 * @throws SQLException 
+	 * @throws ClassNotFoundException 
 	 * @see ca.diro.UserHandlingUtils.Actions.UserAction#UserAction(int, int)
 	 */
-	public CommentEventAction(int userID, int targetID) {
-		super(userID, targetID);
-		// TODO Set command to appropriate AbstractCommand.
+	public CommentEventAction(int userID, int targetID, String JSONRequest) throws ClassNotFoundException, SQLException {
+		super(userID, targetID, JSONRequest);
+		associatedCommand = new CommentEvent(JSONRequest);
 	}
 
 	/*

@@ -22,10 +22,12 @@ public enum UserPermissions {
 	ADMIN,
 	/**
 	 * The user must be the owner of an event to alter it.
+	 * No longer in use now that the database enforces ownership.
 	 */
 	EVENT_OWNER,
 	/**
 	 * The user must be the owner of a comment to alter it.
+	 * No longer in use now that the database enforces ownership.
 	 */
 	COMMENT_OWNER,
 	/**

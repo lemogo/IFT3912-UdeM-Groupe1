@@ -63,7 +63,7 @@ public class UserPermissionsHandler extends AbstractHandler {
 	 */
 	private UserAction handleRequestPermissions(HttpServletRequest request,
 			HttpServletResponse response) throws ActionPermissionsException {
-		UserAction requestedAction = new UnauthorizedAction(0, 0);
+		UserAction requestedAction = new UnauthorizedAction(0, 0, "");
 		// TODO Find requested action and return it.
 		return requestedAction;
 	}

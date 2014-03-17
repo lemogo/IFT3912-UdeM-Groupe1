@@ -1,5 +1,6 @@
 package ca.diro.UserHandlingUtils.Actions;
 
+import ca.diro.DataBase.Command.CancelEvent;
 import ca.diro.UserHandlingUtils.UserPermissions;
 
 /**
@@ -19,12 +20,13 @@ public class CancelEventAction extends UserAction {
 	 *            The ID of the user who initiated this <code>UserAction</code>.
 	 * @param targetID
 	 *            The ID of the target of this <code>UserAction</code>.
-	 * 
+	 * @param JSONRequest
+	 *            The JSON request for this <code>UserAction</code>.
 	 * @see ca.diro.UserHandlingUtils.Actions.UserAction#UserAction(int, int)
 	 */
-	public CancelEventAction(int userID, int targetID) {
-		super(userID, targetID);
-		// TODO Set associatedCommand field to the appropriate AbstractCommand.
+	public CancelEventAction(int userID, int targetID, String JSONRequest) {
+		super(userID, targetID, JSONRequest);
+		associatedCommand = new CancelEvent(JSONRequest);
 	}
 
 	/*
@@ -35,7 +37,7 @@ public class CancelEventAction extends UserAction {
 	 */
 	@Override
 	public UserPermissions getRequiredUserPermissions() {
-		return UserPermissions.EVENT_OWNER;
+		return UserPermissions.LOGGED_USER;
 	}
 
 }

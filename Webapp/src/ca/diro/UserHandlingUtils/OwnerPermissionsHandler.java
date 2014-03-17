@@ -56,7 +56,7 @@ public class OwnerPermissionsHandler extends AbstractHandler {
 	 */
 	private UserAction identifyUserAction() throws ActionPermissionsException {
 		// TODO: Implement UserAction identification.
-		return new UnauthorizedAction(0, 0);
+		return new UnauthorizedAction(0, 0, "");
 	}
 
 }
