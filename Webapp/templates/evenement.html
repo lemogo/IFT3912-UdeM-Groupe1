@@ -28,12 +28,14 @@
 					<h2 class="panel-title">{{title}}</h2>
 				</div>
 				<div class="panel-collapse collapse in">
+				{{#event}}
 					<h3>Quand?</h3>
 					<p class="descpage">{{date}}</p>
 					<h3>À quel endroit?</h3>
 					<p class="descpage">{{location}}</p>
 					<h3>Détails sur l'événement</h3>
 					<p class="descpage">{{description}}</p>
+				{{/event}}
 					{{#isOwner}}
 					<a class="btn btn-primary" href="evenement-modification/{{id}}" role="button">Modifier l'événement</a>
 					<a class="btn btn-danger" href="javascript:if(confirm('Supprimer?'))$('#formDeleteEvent').submit();" role="button">Supprimer l'événement</a>

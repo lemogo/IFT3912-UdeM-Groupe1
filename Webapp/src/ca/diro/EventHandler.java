@@ -33,21 +33,19 @@ public class EventHandler extends RequestHandler {
 		{
 			
 			String pathInfo = request.getPathInfo().substring(1);
-			if (pathInfo.startsWith(siteName)) pathInfo = pathInfo.substring(siteName.length());
+			System.out.println("in Event - pathInfo:"+pathInfo);
 
-			if(!(
-					pathInfo.contains("/evenement")
-					)) {
+			if(
+					pathInfo.contains(".")
+//					!pathInfo.contains("/evenement")
+					) {
+				super.handle(target, baseRequest, request, response);
 				return;
 			}
 
 			// create a handle to the resource
 			String filename = "evenement.html"; 
 
-//			if(request.getParameterMap().size()==0){
-//				filename="modifier-un-evenement.html";
-//			}
-			
 			File staticResource = new File(staticDir, filename);
 			File dynamicResource = new File(dynamicDir, filename);
 
@@ -66,11 +64,11 @@ public class EventHandler extends RequestHandler {
 				processTemplate(request, response, "header.html");
 				//add event info here!!
 				HashMap sources = new HashMap();
-				sources.put("events",Arrays.asList(
+				sources.put("event",
 						new Event("Event_username1", "Event_title1", "Event_date1",
 						"Event_location1", "Event_description1", "Event_id1",
 						"Event_badgeClass1")
-						));
+						);
 				//to display success message
 				sources.put("addSuccess", "true");
 				sources.put("isOwner", "true");

@@ -83,38 +83,25 @@ public class RequestHandler extends AbstractHandler {
 		// TODO Implement handling logic for simple requests (and command
 		// validation) and forwarding for requests that require specific
 		// permissions or handling.
-		System.out.println("In handler\t"+baseRequest.getMethod()+"\ttarget:"+target+"\t"+baseRequest.getPathInfo());
+		System.out.println("In requestHandler\t"+baseRequest.getMethod()+"\ttarget:"+target+"\t"+baseRequest.getPathInfo()+"\tContext:"+request.getContextPath());
 		try
 		{
 
-			String pathInfo = request.getPathInfo().substring(1);
-			if (pathInfo.endsWith("Webapp/")||pathInfo.endsWith("Webapp"))
-				pathInfo = "accueil";
-			if(request.getMethod().equals("GET")){
-				if(
-						pathInfo.contains("/evenement")||
-						pathInfo.contains("/membre")||
-//						pathInfo.endsWith("/ajouter-un-evenement")||pathInfo.endsWith("/ajouter-un-evenement.html")||
-						pathInfo.contains("/liste-des-evenements")
-						) {
-					return;
-				}
-			}
-			else if(request.getMethod().equals("POST")){
+			String pathInfo = request.getPathInfo();
+			if(target.startsWith("/")) pathInfo = pathInfo.substring(1);
+			
+			if ( (request.getContextPath().equalsIgnoreCase("/Webapp")&&target.equals("/") )||pathInfo.equals("accueil")) pathInfo = "accueil.html";
+			if(pathInfo.length()<=1){
+				baseRequest.setHandled(true);
 				return;
-				
-				
 			}
 
-			if (pathInfo.startsWith(siteName)) pathInfo = pathInfo.substring(siteName.length());
-			if (!pathInfo.endsWith(".html")&&!pathInfo.contains("."))pathInfo+=".html";
+System.out.println(request.getContextPath()+"\t"+pathInfo+"\t"+request.getPathInfo());	
 
-System.out.println(request.getContextPath()+"\t"+pathInfo+"\t"+request.getPathInfo());				
 			// create a handle to the resource
 			File staticResource = new File(staticDir, pathInfo);
 			File dynamicResource = new File(dynamicDir, pathInfo);
 
-			System.out.println(target);
 			// A changer pour supporter des images, peut-etre par extension ou
 			// par repertoire
 			if (target.endsWith(".css"))
@@ -182,7 +169,6 @@ System.out.println(request.getContextPath()+"\t"+pathInfo+"\t"+request.getPathIn
 				sources.put("user", "false");
 
 				processTemplate(request, response, filename,sources);
-
 				processTemplate(request, response, "footer.html");
 			}
 
