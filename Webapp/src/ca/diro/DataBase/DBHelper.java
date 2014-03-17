@@ -4,6 +4,9 @@
 package ca.diro.DataBase;
 
 import java.sql.*;
+import java.util.Arrays;
+import java.util.Set;
+import java.util.TreeSet;
 
 /**
  * Class to help database command to parse string parameter and build the string query
@@ -16,59 +19,27 @@ public class DBHelper {
 	 * Constructor 
 	 * @throws ClassNotFoundException 
 	 */
-	public DBHelper() throws ClassNotFoundException  {
+	public DBHelper(DataBase db ) throws ClassNotFoundException  {
 		// TODO something
-		myDb  = new DataBase();
+		myDb  = db;
 		
 	}
 	
 	/**
-	 * Method to get the number of person who attend the event 
-	 * @param eventId a <code>String</code> giving the Id of the event 
-	 * @return
+	 * Static method to Convert a string table to a Set
+	 * 
+	 * @param table
+	 *            an array <code>String</code>
+	 * @return setTable a <code>TreeSet</code> Object to keep all objects from
+	 *         array
 	 */
-	public  int getAttendPlaces(String eventId){
-		//TODO attended places
-		int place = 0 ;
-		ResultSet rs =  null ;
-		String str = "select count(eventid) from subscriteEvent " +
-					"where eventid = "+ Integer.parseInt(eventId) ;
-		try {
-			
-			rs = myDb.statement().executeQuery(str);
-			while (rs.next()) {
-				place = rs.getInt(1);
-				//System.out.println(rs.getInt(1));
-			}
-		} catch (SQLException e) {
-			System.err.println(e.getMessage());
-		}
-		//place = rs.getInt(1);
-		return place ;
+	public static Set<String> convertToSet(String[] table) {
+
+		Set<String> setTable = new TreeSet<String>(Arrays.asList(table));
+		return setTable;
 	}
-	/**
-	 * Method to get the number of person who remain to complete  the event 
-	 * @param eventId a <code>String</code> giving the Id of the event 
-	 * @return
-	 */
-	public  int getRemainingPlaces(String eventId){
-		//TODO total places 
-		int place = 0 ;
-		String str = "select numberplaces  from event " +
-					"where eventid = "+ Integer.parseInt(eventId) ;
-		try {
-			
-			ResultSet rs = myDb.statement().executeQuery(str);
-			while (rs.next()) {
-				place = rs.getInt(1);
-				//System.out.println(rs.getInt(1));
-			}
-		} catch (SQLException e) {
-			System.err.println(e.getMessage());
-		}
-		
-		return  place - this.getAttendPlaces(eventId) ;
-	}
+	
+	
 	
 	/**
 	 * Method to give user'name, password and  of all users 
@@ -112,18 +83,6 @@ public class DBHelper {
 		return  status.toUpperCase().equals("CANCELLED");
 		
 	}
-	
-	
-	
-	
-	/**
-	 * getter to get user'name, full name, password and email of all signed users  
-	 * @return allUser a <code>ResultSet</code> Object giving list of 
-	 * all signed user 
-	 */
-	//public ResultSet getAllUser() {
-		//return allUser;
-	//}
 	
 	
 	/**

@@ -6,6 +6,8 @@ package ca.diro.DataBase.Command;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
+import org.json.JSONException;
+
 import ca.diro.DataBase.DataBase;
 
 /**
@@ -18,7 +20,15 @@ public class CommentEvent extends Command{
 	 * @throws SQLException 
 	 * @throws ClassNotFoundException 
 	 */
-	public CommentEvent(String info) throws ClassNotFoundException, SQLException {
+	public CommentEvent(String info, DataBase db) throws ClassNotFoundException, SQLException {
+		
+		myDb = db ;
+		try {
+			jsonInfo = parseToJson(info);
+		} catch (JSONException e) {
+			
+			e.printStackTrace();
+		}
 		keepComment(info) ;
 		query_ = buildQuery(info);	
 	}
@@ -46,21 +56,30 @@ public class CommentEvent extends Command{
 	 * @throws SQLException
 	 * @throws ClassNotFoundException
 	 */
-	public void keepComment(String info) throws SQLException, ClassNotFoundException{
+	private void keepComment(String info) {
 		
-		String desc = "blablabla" ;
-		int  S_userId = Integer.parseInt(info);
-		int  eventId = Integer.parseInt(info);
-		
-		 db.statement().executeUpdate("insert into commentevent (description, datecreation, eventid, suserid) " +
-				"values("+"'" + desc +"', CURRENT_TIMESTAMP(), "+ eventId + " , "+ S_userId + ")");
+
+		 try {
+			 
+			String  eventId = jsonInfo.getString("eventId") ;
+			String userId = jsonInfo.getString("userId") ;
+			String description = jsonInfo.getString("description") ;
+			myDb.statement().executeUpdate("insert into commentevent (description, datecreation, eventid, suserid) " +
+					"values("+"'" + description +"', CURRENT_TIMESTAMP(), "+ eventId + " , "+ userId + ")");
+		 } catch (SQLException e) {
+			 System.err.println(e.getMessage());
+		}
+		 catch (JSONException e1) {
+			 	System.err.println(e1.getMessage());
+				e1.printStackTrace();
+			}
 		// TODO parse queryinsert
 	}
 	
 	/**
 	 * object DataBase 
 	 */
-	DataBase db = new DataBase() ;
+	DataBase myDb ; 
 	/**
 	 * result giving list of users who have to be notify after a cancelled event 
 	 */

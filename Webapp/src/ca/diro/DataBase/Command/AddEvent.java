@@ -5,6 +5,8 @@ package ca.diro.DataBase.Command;
 
 import java.sql.SQLException;
 
+import org.json.JSONException;
+
 import ca.diro.DataBase.DataBase;
 
 /**
@@ -18,11 +20,17 @@ public class AddEvent extends Command {
 	 * Constructor
 	 * 
 	 * @param a string info to parse
+	 * @throws JSONException 
 	 * @throws ClassNotFoundException 
 	 */
-	public AddEvent(String info) throws ClassNotFoundException {
-		query_ = buildQuery(info);
-		myDb = new DataBase() ;
+	public AddEvent(String info, DataBase db )   {
+		myDb  = db;
+		try {
+			jsonInfo = parseToJson(info);
+		} catch (JSONException e) {
+			
+			e.printStackTrace();
+		}
 	}
 
 	/**
@@ -41,25 +49,29 @@ public class AddEvent extends Command {
 	 * Method to handle creation of account from anonymous user 
 	 * @param info <code>String</code> Object to data of new created event get d
 	 * @return true if successful execution else false
+	 * @throws  
 	 */
-	public boolean addNewEvent(String info){
-		
-		String title = "bataille de chocolat" ;
-		String date = "2014-12-07 23:21:45";
-		String location = "plateau mont royal" ;
-		String place = "42";
-		String description = "je de peche tres evmouvant ";
-		String userId = "1" ;
-		//String  eventId = "1";
+	public boolean addNewEvent() {
 		
 		boolean returnValue = false ;
 		try {
+				String userId = jsonInfo.getString("userId") ;
+				String title = jsonInfo.getString("title") ;
+				String date = jsonInfo.getString("datetime") ;
+				String location = jsonInfo.getString("location") ;
+				String nbplace = jsonInfo.getString("numberplaces") ;
+				String description = jsonInfo.getString("description") ;
+			
 				myDb.statement().executeUpdate("insert into event  (title, suserid, dateevent, location, description, numberplaces) "  +
-						"values('" + title +"', '" + userId +"', '" + date +"', '"+ location  +"', '" + description + "' , "+ place + ")");
+						"values('" + title +"', '" + userId +"', '" + date +"', '"+ location  +"', '" + description + "' , "+ nbplace + ")");
 				returnValue = true ;
 				
 		 } catch (SQLException e) {
-			 System.err.println(e.getMessage());
+			 	System.err.println(e.getMessage());
+		}
+		catch (JSONException e1) {
+			 	System.err.println(e1.getMessage());
+				e1.printStackTrace();
 		}
 		return returnValue ;
 		

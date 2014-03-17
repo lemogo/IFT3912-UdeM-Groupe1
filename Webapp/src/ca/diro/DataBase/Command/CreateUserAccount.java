@@ -5,6 +5,8 @@ package ca.diro.DataBase.Command;
 
 import java.sql.SQLException;
 
+import org.json.JSONException;
+
 import ca.diro.DataBase.DataBase;
 
 /**
@@ -22,25 +24,21 @@ public class CreateUserAccount extends Command {
 	/**
 	 * Constructor
 	 * @param info string 
+	 * @throws JSONException 
 	 * @throws ClassNotFoundException 
+	 * @throws SQLException 
 	 */
-	public CreateUserAccount(String info) throws ClassNotFoundException {
-		query_ = buildQuery(info);
-		myDb  = new DataBase();
+	public CreateUserAccount(String info , DataBase db)  {
+		myDb  = db;
+		try {
+			jsonInfo = parseToJson(info);
+		} catch (JSONException e) {
+			
+			e.printStackTrace();
+		}
 
 	}
 
-	/**
-	 * Method to parse String from JSON format in order to retrieve parameters
-	 * and build the right query
-	 * @param info String Object
-	 * @return str <code>String</code> Object which is the query
-	 */
-	public String buildQuery(String info) {
-		String str = "";
-		// TODO parse query
-		return str;
-	}
 	
 	/**
 	 * Method to handle creation of account from anonymous user 
@@ -48,26 +46,30 @@ public class CreateUserAccount extends Command {
 	 * @return true if successful execution else false
 	 */
 	public boolean createNewAccount(String info){
-		
-		String fullName = "kolo gordo" ;
-		String userName = "igor";
-		String password = "kolo" ;
-		String age = "22";
-		String email = "vandeurg@inscription.com";
-		String desc = "je suis cool avec le tenis" ;
-		//String  eventId = "1";
-		
+	
 		boolean returnValue = false ;
 		try {
-				myDb.statement().executeUpdate("insert into signeduser  (username, password,fullname,email,age,description)"  +
-						"values('" + userName +"', '" + password +"', '" + fullName +"', '"+ email  +"', " + Integer.parseInt(age) + " , '"+ desc + "')");
-				myDb.statement().executeUpdate("insert into sessionuser (datecreation, email ) " +
+				
+			String fullName = jsonInfo.getString("fullName");
+			String userName = jsonInfo.getString("userName");
+			String password = jsonInfo.getString("password");
+			String age = jsonInfo.getString("age");
+			String email = jsonInfo.getString("email");
+			String desc = jsonInfo.getString("description") ;
+		
+			myDb.statement().executeUpdate("insert into signeduser  (username, password,fullname,email,age,description)"  +
+					"values('" + userName +"', '" + password +"', '" + fullName +"', '"+ email  +"', " + Integer.parseInt(age) + " , '"+ desc + "')");
+			myDb.statement().executeUpdate("insert into sessionuser (datecreation, email ) " +
 						"values(CURRENT_DATE(),'" + email +"')");
 				
 				returnValue = true ;
 				
 		 } catch (SQLException e) {
 			 System.err.println(e.getMessage());
+		}
+		catch (JSONException e1) {
+		 	System.err.println(e1.getMessage());
+			e1.printStackTrace();
 		}
 		 return returnValue ;
 		

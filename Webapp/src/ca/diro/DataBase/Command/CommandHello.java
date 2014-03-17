@@ -15,7 +15,7 @@ public class CommandHello extends Command{
 	 */
 	public CommandHello() {
 		String eventId = "1";
-		this.query_ =  "select * from signeduser" ;
+		this.query_ =  "select * from event" ;
 				
 				//"select numberplaces  from event " +
 				//"where eventid = "+ Integer.parseInt(eventId) ;

@@ -5,6 +5,8 @@ package ca.diro.DataBase.Command;
 
 import java.sql.SQLException;
 
+import org.json.JSONException;
+
 import ca.diro.DataBase.*;
 
 /**
@@ -20,11 +22,15 @@ public class DeleteEvent extends Command{
 	 * @throws ClassNotFoundException 
 	 * @throws SQLException 
 	 */
-	public DeleteEvent(String info) throws ClassNotFoundException, SQLException {
-		
-		myDb  = new DataBase() ;
-		myHelper  = new DBHelper();
-		can = new CancelEvent(info);
+	public DeleteEvent(String info , DataBase db) throws ClassNotFoundException, SQLException {
+		myDb  = db;
+		try {
+			jsonInfo = parseToJson(info);
+		} catch (JSONException e) {
+			
+			e.printStackTrace();
+		}
+
 	}
 	
 	
@@ -35,17 +41,22 @@ public class DeleteEvent extends Command{
 	 */
 	public boolean removeEvent(String info) {
 		//TODO perform remove query
-		String  eventId = info;
+		
 		boolean returnValue = false ;
 		//if(myHelper.checkEventStatus(eventId)){
 			//can.nofifySignedUser(eventId) ;
 		//}
 		 try {
+			 String  eventId = jsonInfo.getString("eventId") ;
 			myDb.statement().executeUpdate("delete from event where eventid = "+ eventId );
 			returnValue = true;
 		} catch (SQLException e) {
 			System.err.println(e.getMessage());
 		}
+		 catch (JSONException e1) {
+			 	System.err.println(e1.getMessage());
+				e1.printStackTrace();
+			}
 		
 		 return returnValue ;
 	}

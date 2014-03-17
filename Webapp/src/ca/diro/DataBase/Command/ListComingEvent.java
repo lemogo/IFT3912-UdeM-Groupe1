@@ -28,14 +28,6 @@ public class ListComingEvent extends Command{
 		return str ;
 	}
 	
-	/**
-	 * Method for get available places of each coming event 
-	 * @return place the number of available places for each event 
-	 */
-	public int availablePLaces(){
-		//TODO nombre de place disponible
-		int place = 0 ;
-		return place ;
-	} 
+	
 
 }

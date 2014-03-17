@@ -26,13 +26,6 @@ public class ListCancelledEvent extends  Command{
 		//TODO parse query
 		return str ;
 	}
-	/**
-	 * Method for getting attending  places of each passed event 
-	 * @return available places for each event 
-	 */
-	public int attendedPLaces(){
-		//TODO nombre de place disponible
-		return 0 ;
-	} 
+	
 
 }

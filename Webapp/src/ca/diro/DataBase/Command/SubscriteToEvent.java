@@ -5,6 +5,8 @@ package ca.diro.DataBase.Command;
 
 import java.sql.SQLException;
 
+import org.json.JSONException;
+
 import ca.diro.DataBase.DataBase;
 
 /**
@@ -18,22 +20,18 @@ public class SubscriteToEvent extends Command{
 	 * Constructor 
 	 * @param info String to build query
 	 * @throws ClassNotFoundException 
+	 * @throws SQLException 
 	 */
-	public SubscriteToEvent(String info) throws ClassNotFoundException {
-		query_ = buildQuery(info);
-		 myDb = new DataBase();
+	public SubscriteToEvent(String info , DataBase db)  {
+		myDb  = db;
+		try {
+			jsonInfo = parseToJson(info);
+		} catch (JSONException e) {
+			
+			e.printStackTrace();
+		}
+
 		
-	}
-	/**
-	 * Method to parse String from JSON format in order to retrieve parameters
-	 * and build the right query
-	 * @param info String Object
-	 * @return str <code>String</code> Object which is the query
-	 */
-	private String buildQuery(String info) {
-		String str = "";
-		// TODO parse query
-		return str;
 	}
 	
 	/**
@@ -43,24 +41,22 @@ public class SubscriteToEvent extends Command{
 	 */
 	public boolean anonymSubsEvent(String info){
 		
-		String fullName = "gaston" ;
-		String age = "22";
-		String email = "vandeurg@inscription.com";
-		String desc = "je suis cool avec le tenis" ;
-		String  eventId = "1";
 		
 		
 		boolean returnValue = false ;
 		try {
-	
-				myDb.statement().executeUpdate("insert into generaluser (fullname,email,age,description) " +
-						"values('" + fullName +"', '"+ email  +"', " + Integer.parseInt(age) + " , '"+ desc + "')");
+				int eventId = jsonInfo.getInt("eventId");
+				myDb.statement().executeUpdate("insert into generaluser" );
 			 
-				myDb.statement().executeUpdate("insert into subsEventGeneral values("+ Integer.parseInt(eventId) + ", '"+ email +"')");
+				myDb.statement().executeUpdate("insert into subsEventGeneral values("+ eventId +")");
 				returnValue = true ;
-				return returnValue ;
+				
 		 } catch (SQLException e) {
 			 System.err.println(e.getMessage());
+		}
+		 catch (JSONException e1) {
+			 	System.err.println(e1.getMessage());
+				e1.printStackTrace();
 		}
 		 return returnValue ;
 		
@@ -74,15 +70,19 @@ public class SubscriteToEvent extends Command{
 	 */
 	public boolean signedUserSubs(String info){
 		//TODO signed user subscription event
-		String userId = "1";
-		String eventId = "3";
+		
 		boolean returnValue = false ;
 		try {
-	
-			myDb.statement().executeUpdate("insert into subsEventSigned values("+ Integer.parseInt(eventId) + ", "+ Integer.parseInt(userId) +")");
+			int eventId = jsonInfo.getInt("eventId");
+			int userId = jsonInfo.getInt("userId");
+			myDb.statement().executeUpdate("insert into subsEventSigned values("+ eventId + ", "+ userId +")");
 			returnValue = true ;
 		 } catch (SQLException e) {
 			 System.err.println(e.getMessage());
+		}
+		 catch (JSONException e1) {
+			 	System.err.println(e1.getMessage());
+				e1.printStackTrace();
 		}
 		 return returnValue ;
 	}
