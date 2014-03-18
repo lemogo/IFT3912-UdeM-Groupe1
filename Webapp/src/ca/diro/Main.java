@@ -12,6 +12,9 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.eclipse.jetty.rewrite.handler.RedirectPatternRule;
+import org.eclipse.jetty.rewrite.handler.RewriteHandler;
+import org.eclipse.jetty.rewrite.handler.RewritePatternRule;
 import org.eclipse.jetty.security.ConstraintMapping;
 import org.eclipse.jetty.security.ConstraintSecurityHandler;
 import org.eclipse.jetty.security.HashLoginService;
@@ -24,6 +27,13 @@ import org.eclipse.jetty.server.handler.ContextHandler;
 import org.eclipse.jetty.server.handler.ContextHandlerCollection;
 import org.eclipse.jetty.server.handler.HandlerCollection;
 import org.eclipse.jetty.util.security.Constraint;
+
+import ca.diro.RequestHandlingUtil.CreateEventHandler;
+import ca.diro.RequestHandlingUtil.EventHandler;
+import ca.diro.RequestHandlingUtil.EventListHandler;
+import ca.diro.RequestHandlingUtil.MemberHandler;
+import ca.diro.RequestHandlingUtil.ModifyEventHandler;
+import ca.diro.RequestHandlingUtil.RequestHandler;
 
 /**
  * The main class. It serves to initialize the server and its security measures.
@@ -46,8 +56,6 @@ public class Main {
 	 * Stores the path of the Realm's properties.
 	 */
 	private static String realmProperties = "resources/realm.properties";
-	public static ContextHandler reauestContext;
-	public static ContextHandler eventContext;
 
 	/**
 	 * This is the main. It makes things run.
@@ -67,29 +75,35 @@ public class Main {
 	 * current server. The required classes are listed in this class' imports.
 	 */
 	private static void initSecureServer() {
-		
 		handlerCollection = new ContextHandlerCollection();
+
 		ContextHandler modifyContext = new ContextHandler("/Webapp/modify-event");
 		modifyContext.setResourceBase(".");
 		modifyContext.setClassLoader(Thread.currentThread().getContextClassLoader());
-		modifyContext.setHandler(new ModifyEventHandler());
-
-		eventContext = new ContextHandler("/Webapp/evenement");
-		eventContext.setResourceBase(".");
-		eventContext.setClassLoader(Thread.currentThread().getContextClassLoader());
-		eventContext.setHandler(new EventHandler());
-
-		reauestContext = new ContextHandler("/Webapp");
-		reauestContext.setResourceBase(".");
-		reauestContext.setClassLoader(Thread.currentThread().getContextClassLoader());
-		reauestContext.setHandler(new RequestHandler());
-		
-		handlerCollection.addHandler(reauestContext);
+		ModifyEventHandler modifyEventHandler = new ModifyEventHandler();
+		modifyEventHandler.setOriginalPathAttribute("*/Webapp/modify-event");
+		modifyContext.setHandler(modifyEventHandler);
+		modifyEventHandler.setRewriteRequestURI(true);
+				
 		handlerCollection.addHandler(modifyContext);
-		handlerCollection.addHandler(eventContext);
-        
+		handlerCollection.addHandler(createContextHandler("/Webapp", new RequestHandler()));
+//		handlerCollection.addHandler(createContextHandler("/Webapp/evenement-modification", new RequestHandler()));
+		handlerCollection.addHandler(createContextHandler("/Webapp", new RequestHandler()));
+		handlerCollection.addHandler(createContextHandler("/create-event", new CreateEventHandler()));
+		handlerCollection.addHandler( createContextHandler("/Webapp/evenement", new EventHandler()) );
+		handlerCollection.addHandler( createContextHandler("/Webapp/membre", new MemberHandler()) );
+		handlerCollection.addHandler( createContextHandler("/Webapp/liste-des-evenements", new EventListHandler()) );
+
 		server = new Server(DEFAULT_PORT);
 		server.setHandler(handlerCollection);
+	}
+
+	private static ContextHandler createContextHandler(String contextPath, RequestHandler handler) {
+		ContextHandler contextHandler = new ContextHandler(contextPath);
+		contextHandler.setResourceBase(".");
+		contextHandler.setClassLoader(Thread.currentThread().getContextClassLoader());
+		contextHandler.setHandler(handler);
+		return contextHandler;
 	}
 
 }

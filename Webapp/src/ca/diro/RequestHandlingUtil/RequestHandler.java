@@ -1,4 +1,4 @@
-package ca.diro;
+package ca.diro.RequestHandlingUtil;
 
 import java.io.ByteArrayOutputStream;
 import java.io.File;
@@ -14,6 +14,8 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.eclipse.jetty.rewrite.handler.RedirectPatternRule;
+import org.eclipse.jetty.rewrite.handler.RewriteHandler;
 import org.eclipse.jetty.server.Request;
 import org.eclipse.jetty.server.handler.AbstractHandler;
 import org.h2.store.Data;
@@ -42,7 +44,7 @@ import ca.diro.UserHandlingUtils.UserPermissionsHandler;
  * @author girardil, lavoiedn
  * @version 1.0
  */
-public class RequestHandler extends AbstractHandler {
+public class RequestHandler extends RewriteHandler {
 
 	/**
 	 * The list of supported commands in requests.
@@ -67,7 +69,10 @@ public class RequestHandler extends AbstractHandler {
 	// Ressources dynamiques -> seront interpretees par Mustache
 	protected static File	dynamicDir	= new File(rootDir, "templates");
 
-	protected String siteName = "Webapp";
+	public RequestHandler() {
+		super();
+		// TODO Auto-generated constructor stub
+	}
 
 	/*
 	 * (non-Javadoc)
