@@ -2,6 +2,7 @@ package ca.diro.UserHandlingUtils.Actions;
 
 import java.sql.SQLException;
 
+import ca.diro.Main;
 import ca.diro.DataBase.Command.CommentEvent;
 import ca.diro.UserHandlingUtils.UserPermissions;
 
@@ -30,7 +31,7 @@ public class CommentEventAction extends UserAction {
 	 */
 	public CommentEventAction(int userID, int targetID, String JSONRequest) throws ClassNotFoundException, SQLException {
 		super(userID, targetID, JSONRequest);
-		associatedCommand = new CommentEvent(JSONRequest);
+		associatedCommand = new CommentEvent(JSONRequest, Main.getDatabase());
 	}
 
 	/*

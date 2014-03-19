@@ -1,5 +1,6 @@
 package ca.diro.UserHandlingUtils.Actions;
 
+import ca.diro.Main;
 import ca.diro.DataBase.Command.AddEvent;
 import ca.diro.UserHandlingUtils.UserPermissions;
 
@@ -27,7 +28,7 @@ public class AddEventAction extends UserAction {
 	 */
 	public AddEventAction(int userID, int targetID, String JSONRequest) {
 		super(userID, targetID, JSONRequest);
-		associatedCommand = new AddEvent(JSONRequest);
+		associatedCommand = new AddEvent(JSONRequest, Main.getDatabase());
 	}
 
 	/*

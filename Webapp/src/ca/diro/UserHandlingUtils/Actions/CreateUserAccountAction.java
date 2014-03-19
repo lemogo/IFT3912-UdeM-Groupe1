@@ -1,5 +1,6 @@
 package ca.diro.UserHandlingUtils.Actions;
 
+import ca.diro.Main;
 import ca.diro.DataBase.Command.CreateUserAccount;
 import ca.diro.UserHandlingUtils.UserPermissions;
 
@@ -27,7 +28,7 @@ public class CreateUserAccountAction extends UserAction {
 	 */
 	public CreateUserAccountAction(int userID, int targetID, String JSONRequest) {
 		super(userID, targetID, JSONRequest);
-		associatedCommand = new CreateUserAccount(JSONRequest);
+		associatedCommand = new CreateUserAccount(JSONRequest, Main.getDatabase());
 	}
 
 	/*

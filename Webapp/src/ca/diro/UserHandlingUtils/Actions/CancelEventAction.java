@@ -1,5 +1,6 @@
 package ca.diro.UserHandlingUtils.Actions;
 
+import ca.diro.Main;
 import ca.diro.DataBase.Command.CancelEvent;
 import ca.diro.UserHandlingUtils.UserPermissions;
 
@@ -26,7 +27,7 @@ public class CancelEventAction extends UserAction {
 	 */
 	public CancelEventAction(int userID, int targetID, String JSONRequest) {
 		super(userID, targetID, JSONRequest);
-		associatedCommand = new CancelEvent(JSONRequest);
+		associatedCommand = new CancelEvent(JSONRequest, Main.getDatabase());
 	}
 
 	/*

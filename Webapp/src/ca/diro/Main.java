@@ -28,6 +28,7 @@ import org.eclipse.jetty.server.handler.ContextHandlerCollection;
 import org.eclipse.jetty.server.handler.HandlerCollection;
 import org.eclipse.jetty.util.security.Constraint;
 
+import ca.diro.DataBase.DataBase;
 import ca.diro.RequestHandlingUtil.CreateEventHandler;
 import ca.diro.RequestHandlingUtil.CreateUserHandler;
 import ca.diro.RequestHandlingUtil.DeleteEventHandler;
@@ -64,6 +65,11 @@ public class Main {
 	 * Stores the path of the Realm's properties.
 	 */
 	private static String realmProperties = "resources/realm.properties";
+	private static DataBase database;
+
+	public static DataBase getDatabase() {
+		return database;
+	}
 
 	/**
 	 * This is the main. It makes things run.
@@ -76,6 +82,8 @@ public class Main {
 		initSecureServer();
 		server.start();
 		server.join();
+		database = new DataBase();
+		database.dbConnect();
 	}
 
 	/**

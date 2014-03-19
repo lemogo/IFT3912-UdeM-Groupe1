@@ -1,5 +1,6 @@
 package ca.diro.UserHandlingUtils.Actions;
 
+import ca.diro.Main;
 import ca.diro.DataBase.Command.ModifyAccount;
 import ca.diro.UserHandlingUtils.UserPermissions;
 
@@ -27,7 +28,7 @@ public class ModifyAccountAction extends UserAction {
 	 */
 	public ModifyAccountAction(int userID, int targetID, String JSONRequest) {
 		super(userID, targetID, JSONRequest);
-		associatedCommand = new ModifyAccount(JSONRequest);
+		associatedCommand = new ModifyAccount(JSONRequest, Main.getDatabase());
 	}
 
 	/*
