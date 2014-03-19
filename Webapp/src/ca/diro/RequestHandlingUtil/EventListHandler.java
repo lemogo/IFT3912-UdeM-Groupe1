@@ -1,12 +1,9 @@
 package ca.diro.RequestHandlingUtil;
 
-import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.IOException;
-import java.io.PrintStream;
 import java.util.Arrays;
 import java.util.HashMap;
-import java.util.Map;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
@@ -88,18 +85,7 @@ public class EventListHandler extends RequestHandler {
 		}
 		catch (Exception e)
 		{
-			// Pour deboggage, on va afficher le stacktrace
-			Map<String, String> params = new HashMap<String, String>();
-			ByteArrayOutputStream out = new ByteArrayOutputStream();
-			PrintStream pout = new PrintStream(out);
-			e.printStackTrace(pout);
-			params.put("stacktrace", out.toString());
-			out.close();
-
-			// Template d'erreur
-			response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
-			processTemplate(request, response, "500.html", params);
-			baseRequest.setHandled(true);
+			catchHelper(baseRequest, request, response, e);
 		}
 
 	}

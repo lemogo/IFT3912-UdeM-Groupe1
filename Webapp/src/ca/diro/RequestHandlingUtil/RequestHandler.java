@@ -180,21 +180,46 @@ System.out.println(request.getContextPath()+"\t"+pathInfo+"\t"+request.getPathIn
 		}
 		catch (Exception e)
 		{
-			// Pour deboggage, on va afficher le stacktrace
-			Map<String, String> params = new HashMap<String, String>();
-			ByteArrayOutputStream out = new ByteArrayOutputStream();
-			PrintStream pout = new PrintStream(out);
-			e.printStackTrace(pout);
-			params.put("stacktrace", out.toString());
-			out.close();
-
-			// Template d'erreur
-			response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
-			processTemplate(request, response, "500.html", params);
-			baseRequest.setHandled(true);
+			catchHelper(baseRequest, request, response, e);
 		}
 
 	}
+
+	protected void catchHelper(Request baseRequest, HttpServletRequest request,
+			HttpServletResponse response, Exception e) throws IOException,
+			UnsupportedEncodingException, FileNotFoundException {
+		// Pour deboggage, on va afficher le stacktrace
+		Map<String, String> params = new HashMap<String, String>();
+		ByteArrayOutputStream out = new ByteArrayOutputStream();
+		PrintStream pout = new PrintStream(out);
+		e.printStackTrace(pout);
+		params.put("stacktrace", out.toString());
+		out.close();
+
+		// Template d'erreur
+		response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+		processTemplate(request, response, "500.html", params);
+		baseRequest.setHandled(true);
+	}
+	
+	protected void redirectRequest(String target, Request baseRequest,
+			HttpServletRequest request, HttpServletResponse response,
+			String setPattern, String setLocation) throws IOException,
+			ServletException {
+		if (isStarted())
+		{
+			redirect.setPattern(setPattern);
+			redirect.setLocation(setLocation);  
+		    RuleContainer _rules = new RuleContainer();
+		    _rules.setRules(this.getRules());
+		    String returned = _rules.matchAndApply(target, request, response);
+		    target = (returned == null) ? target : returned;
+
+		    if (!baseRequest.isHandled())
+		        super.handle(target, baseRequest, request, response);
+		}
+	}
+
 
 	/**
 	 * Utility method. Returns the ResultSet as a JSONArray, to be converted
@@ -305,25 +330,20 @@ System.out.println(request.getContextPath()+"\t"+pathInfo+"\t"+request.getPathIn
 	protected void redirectToPathContext(String target, Request baseRequest,
 			HttpServletRequest request, HttpServletResponse response,
 			String path) throws IOException, ServletException {
-		if (isStarted()){
+		System.out.println("in Event redirect- pathInfo:"+path);
+		String setPattern = "*/"+path;
+		String setLocation = "/Webapp/"+path;
+        redirectRequest(target, baseRequest, request, response, setPattern,
+				setLocation);
 
-			redirect.setPattern("*/"+path);
-			redirect.setLocation("/Webapp/"+path);  
-			System.out.println("in Event redirect- pathInfo:"+path);
-			RuleContainer _rules = new RuleContainer();
-			_rules.setRules(this.getRules());
-			String returned = _rules.matchAndApply(target, request, response);
-			target = (returned == null) ? target : returned;
-			if (!baseRequest.isHandled())
-				super.handle(target, baseRequest, request, response);
-		}
 	}
 
 	protected boolean isAnotherContext(String pathInfo) {
 		return pathInfo.equals("accueil")||pathInfo.equals("liste-des-evenements")||pathInfo.equals("modifier-un-evenement")
 			||pathInfo.equals("membre")||pathInfo.equals("notifications")||pathInfo.equals("connexion")||pathInfo.equals("deconnexion")
 			||pathInfo.equals("enregistrement")||pathInfo.equals("ajouter-un-evenement")||pathInfo.equals("evenement")||pathInfo.contains("evenement/")
-			||pathInfo.equals("deconnexion")||pathInfo.startsWith("evenement-modification/");
+			||pathInfo.equals("deconnexion")||pathInfo.startsWith("evenement-modification/")||pathInfo.equals("modify-event")||pathInfo.equals("delete-event")
+		||pathInfo.equals("register-event")||pathInfo.startsWith("unregister-event")||pathInfo.equals("connect-user")||pathInfo.equals("create-user");
 	}
 
 	

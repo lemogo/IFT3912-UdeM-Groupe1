@@ -1,22 +1,11 @@
 package ca.diro.RequestHandlingUtil;
 
-import java.io.ByteArrayOutputStream;
-import java.io.File;
 import java.io.IOException;
-import java.io.PrintStream;
-import java.net.URI;
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.Map;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import org.eclipse.jetty.client.RedirectProtocolHandler;
-import org.eclipse.jetty.rewrite.handler.RedirectPatternRule;
-import org.eclipse.jetty.rewrite.handler.RewriteHandler;
-import org.eclipse.jetty.rewrite.handler.RewritePatternRule;
 import org.eclipse.jetty.rewrite.handler.RuleContainer;
 import org.eclipse.jetty.server.Request;
 
@@ -51,34 +40,15 @@ public class ModifyEventHandler extends RequestHandler {
 			request.getParameter("eventDescription");
 			
 			//redirects the current request to the newly created event
-	        if (isStarted())
-	        {
-	    		redirect.setPattern("/");
-	    		redirect.setLocation("/Webapp/evenement/"+request.getParameter("id"));  
-	            RuleContainer _rules = new RuleContainer();
-	            _rules.setRules(this.getRules());
-	            String returned = _rules.matchAndApply("id", request, response);
-	            target = (returned == null) ? target : returned;
+			String setPattern = "/";
+			String setLocation = "/Webapp/evenement/"+request.getParameter("id");
+	        redirectRequest(target, baseRequest, request, response, setPattern,
+					setLocation);
 
-	            if (!baseRequest.isHandled())
-	                super.handle(target, baseRequest, request, response);
-	        }
-			
 		}
 		catch (Exception e)
 		{
-			// Pour deboggage, on va afficher le stacktrace
-			Map<String, String> params = new HashMap<String, String>();
-			ByteArrayOutputStream out = new ByteArrayOutputStream();
-			PrintStream pout = new PrintStream(out);
-			e.printStackTrace(pout);
-			params.put("stacktrace", out.toString());
-			out.close();
-
-			// Template d'erreur
-			response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
-			processTemplate(request, response, "500.html", params);
-			baseRequest.setHandled(true);
+			catchHelper(baseRequest, request, response, e);
 		}
 
 	}

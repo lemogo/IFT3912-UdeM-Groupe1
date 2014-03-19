@@ -1,18 +1,11 @@
 package ca.diro.RequestHandlingUtil;
 
-import java.io.ByteArrayOutputStream;
-import java.io.File;
 import java.io.IOException;
-import java.io.PrintStream;
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.Map;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import org.eclipse.jetty.rewrite.handler.RuleContainer;
 import org.eclipse.jetty.server.Request;
 
 public class CreateEventHandler extends RequestHandler {
@@ -57,79 +50,14 @@ public class CreateEventHandler extends RequestHandler {
 
 			//TODO: Redirect to liste-des-evenements.html 
 			//redirects the current request to the newly created event
-	        if (isStarted())
-	        {
-	    		redirect.setPattern("/");
-	    		redirect.setLocation("/Webapp/liste-des-evenements/"+request.getParameter("eventName"));  
-	            RuleContainer _rules = new RuleContainer();
-	            _rules.setRules(this.getRules());
-	            String returned = _rules.matchAndApply("id", request, response);
-	            target = (returned == null) ? target : returned;
-
-	            if (!baseRequest.isHandled())
-	                super.handle(target, baseRequest, request, response);
-	        }
-/*
-			// create a handle to the resource
-			String filename = "liste-des-evenements.html"; 
-
-			if(request.getParameterMap().size()==0){
-				filename="ajouter-un-evenement.html";
-			}
-
-			File staticResource = new File(staticDir, filename);
-			File dynamicResource = new File(dynamicDir, filename);
-
-			// Ressource existe
-			if (!staticResource.exists() && !dynamicResource.exists())
-			{
-				response.setStatus(HttpServletResponse.SC_NOT_FOUND);
-				processTemplate(request, response, "404.html");
-			}
-			else
-			{
-				response.setContentType("text/html");
-				response.setCharacterEncoding("utf-8");
-				response.setStatus(HttpServletResponse.SC_OK);
-
-				processTemplate(request, response, "header.html");
-
-				//add event info here!!
-				HashMap sources = new HashMap();
-				sources.put("events",Arrays.asList(
-						new Event("username1", "title1", "date1",
-								"location1", "description1", "id1",
-								"badgeClass1")
-						,new Event("username2", "title2", "date2",
-								"location2", "description2", "id2",
-								"badgeClass2")
-						));
-				//to display success message
-				sources.put("addSuccess", "true");
-				sources.put("user", "true");
-				sources.put("notifications_number", "0");
-
-				processTemplate(request, response, filename,sources);
-				processTemplate(request, response, "footer.html");
-			}
-
-			baseRequest.setHandled(true);
-	*/
+			String setPattern = "/";
+			String setLocation = "/Webapp/liste-des-evenements/"+request.getParameter("eventName");
+	        redirectRequest(target, baseRequest, request, response, setPattern,
+					setLocation);
 		}
 		catch (Exception e)
 		{
-			// Pour deboggage, on va afficher le stacktrace
-			Map<String, String> params = new HashMap<String, String>();
-			ByteArrayOutputStream out = new ByteArrayOutputStream();
-			PrintStream pout = new PrintStream(out);
-			e.printStackTrace(pout);
-			params.put("stacktrace", out.toString());
-			out.close();
-
-			// Template d'erreur
-			response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
-			processTemplate(request, response, "500.html", params);
-			baseRequest.setHandled(true);
+			catchHelper(baseRequest, request, response, e);
 		}
 
 	}
