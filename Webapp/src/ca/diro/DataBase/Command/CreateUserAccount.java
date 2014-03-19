@@ -50,8 +50,8 @@ public class CreateUserAccount extends Command {
 		boolean returnValue = false ;
 		try {
 				
-			String fullName = jsonInfo.getString("fullName");
-			String userName = jsonInfo.getString("userName");
+			String fullName = jsonInfo.getString("fullname");
+			String userName = jsonInfo.getString("username");
 			String password = jsonInfo.getString("password");
 			String age = jsonInfo.getString("age");
 			String email = jsonInfo.getString("email");

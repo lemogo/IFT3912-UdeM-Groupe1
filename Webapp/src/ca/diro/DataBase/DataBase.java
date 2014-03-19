@@ -122,8 +122,7 @@ public class DataBase {
 
 			Statement statement = this.statement();
 			return cmd.executeCommand(statement);
-		}
-		else {
+		} else {
 			return false;
 		}
 	}
@@ -364,32 +363,26 @@ public class DataBase {
 		return tableSet;
 	}
 
-
-
-	/*public static void main(String[] args) throws Exception {
-		DataBase myDb = new DataBase();
-		// String restore = "DataBaseRestore.sql" ;
-		// DataBase myDb = new DataBase(restore);
-		// myDb.dbConnect() ;
-		// myDb.dbDelete();
-
-		// myDb.createTables();
-		// myDb.populateTable();
-		String info = "{eventId:1}";
-		Command cmd = new PageInfoEvent(info, myDb);
-		boolean boo = myDb.executeDb(cmd);
-
-		ResultSet rs = cmd.getResultSet();
-
-		while (rs.next()) {
-			System.out.println(rs.getString(2));
-		}
-
-		myDb.dbClose();
-	}*/
+	
+	 public static void main(String[] args) throws Exception { 
+		 DataBase myDb =
+		 new DataBase(); // String restore = "DataBaseRestore.sql" ; // DataBase
+		 //myDb = new DataBase(restore); // myDb.dbConnect() ; // myDb.dbDelete();
+		 
+		   myDb.createTables(); // 
+		   myDb.populateTable();
+		   String info = "{eventId:1}"; Command cmd = new PageInfoEvent(info, myDb); boolean boo =
+		 myDb.executeDb(cmd);
+		 
+		 ResultSet rs = cmd.getResultSet();
+		 
+		 while (rs.next()) { System.out.println(rs.getString(2)); }
+		 
+	}
+	
 
 	/**
-	 * connection to database
+	  connection to database
 	 */
 	private Connection con = null;
 	/**

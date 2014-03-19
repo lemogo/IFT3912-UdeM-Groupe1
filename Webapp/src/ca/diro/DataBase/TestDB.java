@@ -292,7 +292,7 @@ public class TestDB {
 	public void testCreateUserAcount()  {
 		// test verify creation of user account 
 		 
-		String info =  "{ fullName:billy joe ,userName:bil, password:bilson," +
+		String info =  "{ fullname:billy joe ,userName:bil, password:bilson," +
 							"email:bily@crabler.bi, age:456, description:jouer de tenis }";
 		Command cmd = new CreateUserAccount(info,myDb);
 		boolean boo = ((CreateUserAccount) cmd).createNewAccount(info); 
@@ -311,7 +311,8 @@ public class TestDB {
 		ResultSet rs = cmd.getResultSet();
 		
 		while (rs.next()) {
-			//System.out.println(rs.getString(1));
+			System.out.println(rs.getString(1));
+			//System.out.println(rs);
 		}
 		assertTrue(boo);
 	}
