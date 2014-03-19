@@ -4,8 +4,12 @@
 package ca.diro.DataBase.Command;
 
 import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.Map;
+
+import org.json.JSONException;
+import org.json.JSONObject;
 
 /**
  * This Abstract class allowing to create and encapsulate  query that has to be executed 
@@ -28,21 +32,31 @@ public abstract class Command {
 	 */
 	public boolean executeCommand(Statement stat) {
 		boolean returnValue = false;
-		//TODO execute command
+		try {
+			if(this.query_ != null && !this.query_.equals("")){
+			result_ = stat.executeQuery(query_);
+			returnValue = true;
+			}
+			else return returnValue ;
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
 		return returnValue;
 	}
 	/**
 	 * This method has to be more generic in order to parse Json string in Map type
-	 * @return a <code>Map</code> Object with string key and string value 
+	 * @return a <code>JSONObject</code> Object with string key and string value 
+	 * @throws JSONException 
 	 */
-	protected Map<String, String> parseToMap(String info){
+	protected JSONObject  parseToJson(String info) throws JSONException{
 		//TODO implement generic parsing
-		return null ;
+	
+		return new JSONObject(info);
 	}
 		
 	/**
-	 * getter
-	 * @return query <code>String</code> Object to be executed
+	 * getter 
+	 * @return result_ <code>ReSultset</code> Object   
 	 */
 	public String getQuery()
 	{
@@ -51,7 +65,7 @@ public abstract class Command {
 	
 	/**
 	 * getter 
-	 * @return result_ <code>ReSultset</code> Object   
+	 * @return a resultset  
 	 */
 	public ResultSet getResultSet()
 	{
@@ -66,4 +80,9 @@ public abstract class Command {
 	 * Result getting from database
 	 */
 	protected  ResultSet result_;
+	
+	protected JSONObject jsonInfo ; 
+	//= new JSONObject(str);
+	//String n = obj.getString("name");
+	//int a = obj.getInt("age");
 }

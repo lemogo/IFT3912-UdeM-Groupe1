@@ -3,6 +3,12 @@
  */
 package ca.diro.DataBase.Command;
 
+import java.sql.SQLException;
+
+import org.json.JSONException;
+
+import ca.diro.DataBase.DataBase;
+
 /**
  * this command allow signed user to add an event in his account
  * 
@@ -13,23 +19,70 @@ public class AddEvent extends Command {
 	/**
 	 * Constructor
 	 * 
-	 * @param info string info to parse
+	 * @param a string info to parse
+	 * @throws JSONException 
+	 * @throws ClassNotFoundException 
 	 */
-	public AddEvent(String info) {
-		query_ = buildQuery(info);
-
+	public AddEvent(String info, DataBase db )   {
+		myDb  = db;
+		try {
+			jsonInfo = parseToJson(info);
+		} catch (JSONException e) {
+			
+			e.printStackTrace();
+		}
 	}
 
 	/**
 	 * Method to parse String from JSON format in order to retrieve parameters
 	 * and build the right query
-	 * @param info String Object
-	 * @return <code>String</code> Object which is the query
+	 * @param info string type
+	 * @return a string that is the query
 	 */
 	private String buildQuery(String info) {
 		String str = "";
 		// TODO parse query
 		return str;
 	}
+	
+	/**
+	 * Method to handle creation of account from anonymous user 
+	 * @param info <code>String</code> Object to data of new created event get d
+	 * @return true if successful execution else false
+	 * @throws  
+	 */
+	public boolean addNewEvent() {
+		
+		boolean returnValue = false ;
+		try {
+				String userId = jsonInfo.getString("userId") ;
+				String title = jsonInfo.getString("title") ;
+				String date = jsonInfo.getString("datetime") ;
+				String location = jsonInfo.getString("location") ;
+				String nbplace = jsonInfo.getString("numberplaces") ;
+				String description = jsonInfo.getString("description") ;
+			
+				myDb.statement().executeUpdate("insert into event  (title, suserid, dateevent, location, description, numberplaces) "  +
+						"values('" + title +"', '" + userId +"', '" + date +"', '"+ location  +"', '" + description + "' , "+ nbplace + ")");
+				returnValue = true ;
+				
+		 } catch (SQLException e) {
+			 	System.err.println(e.getMessage());
+		}
+		catch (JSONException e1) {
+			 	System.err.println(e1.getMessage());
+				e1.printStackTrace();
+		}
+		return returnValue ;
+		
+		//TODO create user account  	
+	}
+	
+	
+	/**
+	 * object DataBase 
+	 */
+	private DataBase myDb ;
+	
 
 }

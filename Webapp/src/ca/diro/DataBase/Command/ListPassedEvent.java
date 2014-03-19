@@ -22,7 +22,9 @@ public class ListPassedEvent extends  Command{
 	 * @return place the number of available places for each event 
 	 */
 	public String buildQuery(){
-		String str="" ;
+		String str="select eventid, title, location, dateevent, description from event " +
+				"where dateevent < CURRENT_DATE()"  ;
+		//idevent, title, location, dateevent, description,
 		//TODO parse query
 		return str ;
 	}

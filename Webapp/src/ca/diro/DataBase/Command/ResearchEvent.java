@@ -3,6 +3,8 @@
  */
 package ca.diro.DataBase.Command;
 
+import java.util.LinkedList;
+
 /**
  * This class run build query for searching event using events at title and description as criteria 
  * @author william
@@ -15,20 +17,36 @@ public class ResearchEvent extends Command{
 	 * Constructor 
 	 * @param info String to build query
 	 */
-	public ResearchEvent(String info) {
-		query_ = buildQuery(info);
+	public ResearchEvent(LinkedList<String> stack) {
+		
+		//this.stack  = stack ;
+		query_ = buildQuery(stack);
 		
 	}
-	
 	/**
-	 * Method to parse String from JSON format in order to retrieve parameters
-	 * and build the right query
+	 * Iterative  Method to parse String from <code>LinkedLis</code> Object containing parameters
+	 * and build the right query to make research for event
 	 * @param info String Object
 	 * @return str <code>String</code> Object which is the query
 	 */
-	private String buildQuery(String info) {
-		String str = "";
-		// TODO parse query
+	 
+	
+	public  String buildQuery(LinkedList<String> info ) {
+		if (info.size() < 1) {
+		    //OR ERROR
+		    return "";
+		}
+		String str =  "SELECT eventid, title, suserid, dateevent, location, description, numberplaces FROM Event where " ;
+		String st ="";
+		for (String mot : info) {
+			st += "or title LIKE '%" + mot+ "%' or description LIKE '%" + mot + "%'  " ;
+			//System.out.println(mot);
+		}
+		st = st.replaceFirst("or", " ") ;
+		str += st  ;
+		
 		return str;
 	}
+
+	
 }
