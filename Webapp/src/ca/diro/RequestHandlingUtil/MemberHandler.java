@@ -33,29 +33,21 @@ public class MemberHandler extends RequestHandler {
 		{
 			
 			String pathInfo = request.getPathInfo().substring(1);
-////			if (pathInfo.startsWith(siteName)) pathInfo = pathInfo.substring(siteName.length());
-//
-//			if(!(
-//					pathInfo.contains("/membre")
-//					)) {
-//				return;
-//			}
-
-			if(
-					pathInfo.contains(".")
-//					!pathInfo.contains("/evenement")
-					) {
+			
+			//The current request must be a file -> redirect to requestHandler
+			if(	pathInfo.contains(".")) {
 				super.handle(target, baseRequest, request, response);
+				return;
+			}
+			if(isAnotherContext(pathInfo)&&!pathInfo.equals("")){//&&!request.getContextPath().equals("/Webapp/"+pathInfo)){ 	        
+				redirectToPathContext(target, baseRequest, request, response,
+						pathInfo);
 				return;
 			}
 
 			// create a handle to the resource
 			String filename = "membre.html"; 
 
-//			if(request.getParameterMap().size()==0){
-//				filename="modifier-un-evenement.html";
-//			}
-			
 			File staticResource = new File(staticDir, filename);
 			File dynamicResource = new File(dynamicDir, filename);
 
@@ -71,9 +63,10 @@ public class MemberHandler extends RequestHandler {
 				response.setCharacterEncoding("utf-8");
 				response.setStatus(HttpServletResponse.SC_OK);
 
-				//add event info here!!
+				//Add User info here!!
 				HashMap sources = new HashMap();
 				sources.put("isOwner", "true");
+				
 //				sources.putAll(new HashMap<String,String>());
 				sources.put("username","ownerUsername");
 				sources.put("fullname","ownerFullname");
@@ -94,6 +87,7 @@ public class MemberHandler extends RequestHandler {
 						"registeredEvents_location1", "registeredEvents_description1", "registeredEvents_id1",
 						"registeredEvents_badgeClass1")
 						));
+				
 				//to display success message
 				sources.put("addSuccess", "true");
 //				sources.put("registerSuccess", "true");

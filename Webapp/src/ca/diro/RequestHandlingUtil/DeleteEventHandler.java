@@ -1,11 +1,8 @@
 package ca.diro.RequestHandlingUtil;
 
 import java.io.ByteArrayOutputStream;
-import java.io.File;
 import java.io.IOException;
 import java.io.PrintStream;
-import java.net.URI;
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -13,15 +10,10 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import org.eclipse.jetty.client.RedirectProtocolHandler;
-import org.eclipse.jetty.rewrite.handler.RedirectPatternRule;
-import org.eclipse.jetty.rewrite.handler.RewriteHandler;
-import org.eclipse.jetty.rewrite.handler.RewritePatternRule;
 import org.eclipse.jetty.rewrite.handler.RuleContainer;
 import org.eclipse.jetty.server.Request;
 
-public class ModifyEventHandler extends RequestHandler {
-
+public class DeleteEventHandler extends RequestHandler {
 	/*
 	 * (non-Javadoc)
 	 * 
@@ -38,26 +30,24 @@ public class ModifyEventHandler extends RequestHandler {
 		// permissions or handling.
 		try
 		{
-			String pathInfo = request.getPathInfo().substring(1);
-			System.out.println("in modify - pathInfo:"+pathInfo+"\tURL:"+baseRequest.getRequestURL()+"\tlocation:"+baseRequest.getRequestURI()+"\tresponse:"+response.getLocale());
-			System.out.println("in modify - event name:"+request.getParameter("eventName"));
+//			String pathInfo = request.getPathInfo().substring(1);
 
-			//TODO:modify the event in the database
+			//TODO:Remove the event from the database
 			request.getParameter("id");
-			request.getParameter("eventName");
-			request.getParameter("eventDate");
-			request.getParameter("eventLocation");
-			request.getParameter("eventNumPeople");
-			request.getParameter("eventDescription");
+//			request.getParameter("eventName");
+//			request.getParameter("eventDate");
+//			request.getParameter("eventLocation");
+//			request.getParameter("eventNumPeople");
+//			request.getParameter("eventDescription");
 			
 			//redirects the current request to the newly created event
 	        if (isStarted())
 	        {
 	    		redirect.setPattern("/");
-	    		redirect.setLocation("/Webapp/evenement/"+request.getParameter("id"));  
+	    		redirect.setLocation("/Webapp/liste-des-evenements/");  
 	            RuleContainer _rules = new RuleContainer();
 	            _rules.setRules(this.getRules());
-	            String returned = _rules.matchAndApply("id", request, response);
+	            String returned = _rules.matchAndApply(target, request, response);
 	            target = (returned == null) ? target : returned;
 
 	            if (!baseRequest.isHandled())

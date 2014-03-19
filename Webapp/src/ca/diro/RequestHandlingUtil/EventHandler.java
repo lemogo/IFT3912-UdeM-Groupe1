@@ -12,6 +12,8 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.eclipse.jetty.rewrite.handler.RedirectPatternRule;
+import org.eclipse.jetty.rewrite.handler.RuleContainer;
 import org.eclipse.jetty.server.Request;
 
 public class EventHandler extends RequestHandler {
@@ -31,17 +33,22 @@ public class EventHandler extends RequestHandler {
 		// permissions or handling.
 		try
 		{
-			
-			String pathInfo = request.getPathInfo().substring(1);
-			System.out.println("in Event - pathInfo:"+pathInfo);
 
-			if(
-					pathInfo.contains(".")
-//					!pathInfo.contains("/evenement")
-					) {
+			String pathInfo = request.getPathInfo().substring(1);
+			System.out.println("in Event - pathInfo:"+pathInfo+"\tcontextPath:"+request.getContextPath());
+			System.out.println("in Event - pathInfo:"+pathInfo+"\tcontextPath:"+("/Webapp/"+pathInfo));
+
+			//The current request must be a file -> redirect to requestHandler
+			if(	pathInfo.contains(".")) {
 				super.handle(target, baseRequest, request, response);
 				return;
 			}
+			if(isAnotherContext(pathInfo)&&!pathInfo.equals("")){//&&!request.getContextPath().equals("/Webapp/"+pathInfo)){ 	        
+				redirectToPathContext(target, baseRequest, request, response,
+						pathInfo);
+				return;
+			}
+
 
 			// create a handle to the resource
 			String filename = "evenement.html"; 
@@ -62,18 +69,23 @@ public class EventHandler extends RequestHandler {
 				response.setStatus(HttpServletResponse.SC_OK);
 
 				processTemplate(request, response, "header.html");
-				//add event info here!!
+				
+				String eventID = pathInfo;
+				//TODO:Get the user event info from the database
+				
+				//TODO:Add event info here!!
 				HashMap sources = new HashMap();
 				sources.put("event",
 						new Event("Event_username1", "Event_title1", "Event_date1",
-						"Event_location1", "Event_description1", "Event_id1",
-						"Event_badgeClass1")
+								"Event_location1", "Event_description1", "Event_id1",
+								"Event_badgeClass1")
 						);
+				
 				//to display success message
 				sources.put("addSuccess", "true");
 				sources.put("isOwner", "true");
-//				sources.put("registerSuccess", "true");
-//				sources.put("unregisterSuccess", "false");
+				//				sources.put("registerSuccess", "true");
+				//				sources.put("unregisterSuccess", "false");
 				sources.put("user", "true");
 				sources.put("notifications_number", "0");
 

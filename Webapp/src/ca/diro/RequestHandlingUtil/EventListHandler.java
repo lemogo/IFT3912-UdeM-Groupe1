@@ -34,13 +34,15 @@ public class EventListHandler extends RequestHandler {
 		{
 
 			String pathInfo = request.getPathInfo().substring(1);
-////			if (pathInfo.startsWith(siteName)) pathInfo = pathInfo.substring(siteName.length());
-//
-			if(
-					pathInfo.contains(".")
-//					!pathInfo.contains("/evenement")
-					) {
+			
+			//The current request must be a file -> redirect to requestHandler
+			if(	pathInfo.contains(".")) {
 				super.handle(target, baseRequest, request, response);
+				return;
+			}
+			if(isAnotherContext(pathInfo)&&!pathInfo.equals("")){//&&!request.getContextPath().equals("/Webapp/"+pathInfo)){ 	        
+				redirectToPathContext(target, baseRequest, request, response,
+						pathInfo);
 				return;
 			}
 

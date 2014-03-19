@@ -4,7 +4,6 @@ import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.IOException;
 import java.io.PrintStream;
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -14,7 +13,7 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.eclipse.jetty.server.Request;
 
-public class CreateEventHandler extends RequestHandler {
+public class EventModificationPageHandler extends RequestHandler {
 	/*
 	 * (non-Javadoc)
 	 * 
@@ -33,27 +32,23 @@ public class CreateEventHandler extends RequestHandler {
 		{
 
 			String pathInfo = request.getPathInfo().substring(1);
-			//			if (pathInfo.startsWith(siteName)) pathInfo = pathInfo.substring(siteName.length());
+			System.out.println("in EventModification - pathInfo:"+pathInfo+"\tcontextPath:"+request.getContextPath());
+			System.out.println("in EventModification - pathInfo:"+pathInfo+"\tcontextPath:"+("/Webapp/"+pathInfo));
 
 			//The current request must be a file -> redirect to requestHandler
 			if(	pathInfo.contains(".")) {
 				super.handle(target, baseRequest, request, response);
 				return;
 			}
-			if(isAnotherContext(pathInfo)&&!pathInfo.equals("")){//&&!request.getContextPath().equals("/Webapp/"+pathInfo)){ 	        
+			if((isAnotherContext(pathInfo)&&!pathInfo.equals(""))||target.contains("evenement-modification/")){//&&!request.getContextPath().equals("/Webapp/"+pathInfo)){ 	        
 				redirectToPathContext(target, baseRequest, request, response,
 						pathInfo);
 				return;
 			}
 
-			System.out.println("\nParameters"+ request.getParameterNames()					);
 
 			// create a handle to the resource
-			String filename = "liste-des-evenements.html"; 
-
-			if(request.getParameterMap().size()==0){
-				filename="ajouter-un-evenement.html";
-			}
+			String filename = "evenement.html"; 
 
 			File staticResource = new File(staticDir, filename);
 			File dynamicResource = new File(dynamicDir, filename);
@@ -71,21 +66,26 @@ public class CreateEventHandler extends RequestHandler {
 				response.setStatus(HttpServletResponse.SC_OK);
 
 				processTemplate(request, response, "header.html");
-
-				//add event info here!!
+				
+				String eventID = pathInfo;
+				//TODO:Get the user event info from the database
+				
+				//TODO:Add event info here!!
 				HashMap sources = new HashMap();
-				sources.put("events",Arrays.asList(
-						new Event("username1", "title1", "date1",
-								"location1", "description1", "id1",
-								"badgeClass1")
-						,new Event("username2", "title2", "date2",
-								"location2", "description2", "id2",
-								"badgeClass2")
-						));
+				sources.put("event",
+						new Event("Event_username1", "Event_title1", "Event_date1",
+								"Event_location1", "Event_description1", "Event_id1",
+								"Event_badgeClass1")
+						);
+				
 				//to display success message
 				sources.put("addSuccess", "true");
+				sources.put("isOwner", "true");
+				//				sources.put("registerSuccess", "true");
+				//				sources.put("unregisterSuccess", "false");
 				sources.put("user", "true");
 				sources.put("notifications_number", "0");
+
 
 				processTemplate(request, response, filename,sources);
 				processTemplate(request, response, "footer.html");
@@ -110,6 +110,5 @@ public class CreateEventHandler extends RequestHandler {
 		}
 
 	}
-
 
 }

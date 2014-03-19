@@ -16,6 +16,7 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.eclipse.jetty.rewrite.handler.RedirectPatternRule;
 import org.eclipse.jetty.rewrite.handler.RewriteHandler;
+import org.eclipse.jetty.rewrite.handler.RuleContainer;
 import org.eclipse.jetty.server.Request;
 import org.eclipse.jetty.server.handler.AbstractHandler;
 import org.h2.store.Data;
@@ -69,10 +70,13 @@ public class RequestHandler extends RewriteHandler {
 	// Ressources dynamiques -> seront interpretees par Mustache
 	protected static File	dynamicDir	= new File(rootDir, "templates");
 
+	protected RedirectPatternRule redirect;
+
 	public RequestHandler() {
 		super();
-		// TODO Auto-generated constructor stub
-	}
+		redirect = new RedirectPatternRule();
+		this.addRule(redirect);
+}
 
 	/*
 	 * (non-Javadoc)
@@ -95,11 +99,13 @@ public class RequestHandler extends RewriteHandler {
 			String pathInfo = request.getPathInfo();
 			if(target.startsWith("/")) pathInfo = pathInfo.substring(1);
 			
-			if ( (request.getContextPath().equalsIgnoreCase("/Webapp")&&target.equals("/") )||pathInfo.equals("accueil")) pathInfo = "accueil.html";
 			if(pathInfo.length()<=1){
 				baseRequest.setHandled(true);
 				return;
 			}
+			if ( (request.getContextPath().equalsIgnoreCase("/Webapp")&&target.equals("/") )||pathInfo.equals("accueil")) pathInfo = "accueil.html";
+			else if ( pathInfo.equals("enregistrement") || pathInfo.equals("ajouter-un-evenement") 
+					||pathInfo.equals("notifications")||pathInfo.equals("connexion")) pathInfo = pathInfo+".html";
 
 System.out.println(request.getContextPath()+"\t"+pathInfo+"\t"+request.getPathInfo());	
 
@@ -115,34 +121,26 @@ System.out.println(request.getContextPath()+"\t"+pathInfo+"\t"+request.getPathIn
 			}
 			else if (target.endsWith(".js"))
 			{
-				System.out.println("set js");
 				response.setContentType("text/javascript");
 			}
 			else if (target.endsWith(".png"))
 			{
-				System.out.println("set png");
 				response.setContentType("image/png");
-//				response.setContentLength();
 			}
 			else if (target.endsWith(".jpg"))
 			{
-				System.out.println("set jpg");
 				response.setContentType("image/jpg");
-//				response.setContentLength(Data.LENGTH_INT);
 			}
 			else if (target.endsWith(".ico"))
 			{
-				System.out.println("set ico");
 				response.setContentType("image/x-icon");
 			}
 			else if (target.endsWith(".ttf"))
 			{
-				System.out.println("set ttf");
 				response.setContentType("application/x-font-ttf");
 			}
 			else if (target.endsWith(".woff"))
 			{
-				System.out.println("set woff");
 				response.setContentType("application/x-font-woff");
 			}
 			else
@@ -299,11 +297,33 @@ System.out.println(request.getContextPath()+"\t"+pathInfo+"\t"+request.getPathIn
 	}
 
 	
-	private String simpleEscape(String string)
-	{
+	private String simpleEscape(String string){
 		return string.replace("&", "&amp;").replace("<", "&lt;").replace(">", "&gt;");
 	}
 
-	
+	protected void redirectToPathContext(String target, Request baseRequest,
+			HttpServletRequest request, HttpServletResponse response,
+			String path) throws IOException, ServletException {
+		if (isStarted()){
+
+			redirect.setPattern("*/"+path);
+			redirect.setLocation("/Webapp/"+path);  
+			System.out.println("in Event redirect- pathInfo:"+path);
+			RuleContainer _rules = new RuleContainer();
+			_rules.setRules(this.getRules());
+			String returned = _rules.matchAndApply(target, request, response);
+			target = (returned == null) ? target : returned;
+			if (!baseRequest.isHandled())
+				super.handle(target, baseRequest, request, response);
+		}
+	}
+
+	protected boolean isAnotherContext(String pathInfo) {
+		return pathInfo.equals("accueil")||pathInfo.equals("liste-des-evenements")||pathInfo.equals("modifier-un-evenement")
+			||pathInfo.equals("membre")||pathInfo.equals("notifications")||pathInfo.equals("connexion")||pathInfo.equals("deconnexion")
+			||pathInfo.equals("enregistrement")||pathInfo.equals("ajouter-un-evenement")||pathInfo.equals("evenement")||pathInfo.contains("evenement/")
+			||pathInfo.equals("deconnexion")||pathInfo.equals("evenement-modification");
+	}
+
 	
 }
