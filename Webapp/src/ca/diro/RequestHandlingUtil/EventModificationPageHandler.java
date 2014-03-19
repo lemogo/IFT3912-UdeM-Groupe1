@@ -48,7 +48,7 @@ public class EventModificationPageHandler extends RequestHandler {
 
 
 			// create a handle to the resource
-			String filename = "evenement.html"; 
+			String filename = "modifier-un-evenement.html"; 
 
 			File staticResource = new File(staticDir, filename);
 			File dynamicResource = new File(dynamicDir, filename);

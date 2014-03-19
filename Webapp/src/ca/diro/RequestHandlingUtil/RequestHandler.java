@@ -93,6 +93,7 @@ public class RequestHandler extends RewriteHandler {
 		// validation) and forwarding for requests that require specific
 		// permissions or handling.
 		System.out.println("In requestHandler\t"+baseRequest.getMethod()+"\ttarget:"+target+"\t"+baseRequest.getPathInfo()+"\tContext:"+request.getContextPath());
+//		System.out.println("\nSession"+ request.getSession()+"\tAuthentification"+request.getAuthType()					);
 		try
 		{
 
@@ -322,7 +323,7 @@ System.out.println(request.getContextPath()+"\t"+pathInfo+"\t"+request.getPathIn
 		return pathInfo.equals("accueil")||pathInfo.equals("liste-des-evenements")||pathInfo.equals("modifier-un-evenement")
 			||pathInfo.equals("membre")||pathInfo.equals("notifications")||pathInfo.equals("connexion")||pathInfo.equals("deconnexion")
 			||pathInfo.equals("enregistrement")||pathInfo.equals("ajouter-un-evenement")||pathInfo.equals("evenement")||pathInfo.contains("evenement/")
-			||pathInfo.equals("deconnexion")||pathInfo.equals("evenement-modification");
+			||pathInfo.equals("deconnexion")||pathInfo.startsWith("evenement-modification/");
 	}
 
 	

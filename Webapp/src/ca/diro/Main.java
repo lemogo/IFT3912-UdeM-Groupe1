@@ -85,27 +85,27 @@ public class Main {
 	private static void initSecureServer() {
 		handlerCollection = new ContextHandlerCollection();
 
-		
+
 		ModifyEventHandler modifyEventHandler = new ModifyEventHandler();
-//		modifyEventHandler.setOriginalPathAttribute("*/Webapp/modify-event");
+		//		modifyEventHandler.setOriginalPathAttribute("*/Webapp/modify-event");
 		modifyEventHandler.setRewriteRequestURI(true);
 
 		ContextHandler modifyContext = new ContextHandler("/Webapp/modify-event");
 		modifyContext.setResourceBase(".");
 		modifyContext.setClassLoader(Thread.currentThread().getContextClassLoader());
 		modifyContext.setHandler(modifyEventHandler);
-				
+
 		handlerCollection.addHandler(modifyContext);
 		ContextHandler webappContextHandler = createContextHandler("/Webapp","", new RequestHandler());
 		handlerCollection.addHandler(webappContextHandler);
-//		handlerCollection.addHandler(createContextHandler("/Webapp/evenement-modification", new RequestHandler()));
-//		handlerCollection.addHandler(createContextHandler("/Webapp", new RequestHandler()));
+		//		handlerCollection.addHandler(createContextHandler("/Webapp/evenement-modification", new RequestHandler()));
+		//		handlerCollection.addHandler(createContextHandler("/Webapp", new RequestHandler()));
 		handlerCollection.addHandler(createContextHandler("/Webapp/","create-event", new CreateEventHandler()));
 		handlerCollection.addHandler( createContextHandler("/Webapp/","evenement", new EventHandler()) );
 		handlerCollection.addHandler( createContextHandler("/Webapp/","membre", new MemberHandler()) );
 		handlerCollection.addHandler( createContextHandler("/Webapp/","liste-des-evenements", new EventListHandler()) );
 		handlerCollection.addHandler( createContextHandler("/Webapp/","evenement-modification", new EventModificationPageHandler()) );
-		
+
 		handlerCollection.addHandler(createContextHandler("/Webapp/","deconnexion", new DisconnectUserHandler()));
 		handlerCollection.addHandler(createContextHandler("/Webapp/","delete-event", new DeleteEventHandler()));
 		handlerCollection.addHandler(createContextHandler("/Webapp/","register-event", new RegisterToEventHandler()));
@@ -113,7 +113,7 @@ public class Main {
 		handlerCollection.addHandler(createContextHandler("/Webapp/","create-user", new CreateUserHandler()));
 		handlerCollection.addHandler(createContextHandler("/Webapp/","modify-user", new ModifyUserInfoHandler()));
 		handlerCollection.addHandler(createContextHandler("/Webapp/","connect-user", new ConnectUserHandler()));
-		
+
 		server = new Server(DEFAULT_PORT);
 		server.setHandler(handlerCollection);
 	}
@@ -125,6 +125,10 @@ public class Main {
 		contextHandler.setHandler(handler);
 		handler.setRewriteRequestURI(true);
 		return contextHandler;
+	}
+
+	public static Server getServer() {
+		return server;		
 	}
 
 }

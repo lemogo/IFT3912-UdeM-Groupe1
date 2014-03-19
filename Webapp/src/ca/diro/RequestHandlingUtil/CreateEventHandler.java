@@ -12,6 +12,7 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.eclipse.jetty.rewrite.handler.RuleContainer;
 import org.eclipse.jetty.server.Request;
 
 public class CreateEventHandler extends RequestHandler {
@@ -46,8 +47,29 @@ public class CreateEventHandler extends RequestHandler {
 				return;
 			}
 
-			System.out.println("\nParameters"+ request.getParameterNames()					);
+			System.out.println("\nParameters"+ request.getParameterNames()					//);
+			+"\t"+request.getParameter("id")
+			+"\t"+request.getParameter("eventName")
+			+"\t"+request.getParameter("eventDate")
+			+"\t"+request.getParameter("eventLocation")
+			+"\t"+request.getParameter("eventNumPeople")
+			+"\t"+request.getParameter("eventDescription"));
 
+			//TODO: Redirect to liste-des-evenements.html 
+			//redirects the current request to the newly created event
+	        if (isStarted())
+	        {
+	    		redirect.setPattern("/");
+	    		redirect.setLocation("/Webapp/liste-des-evenements/"+request.getParameter("eventName"));  
+	            RuleContainer _rules = new RuleContainer();
+	            _rules.setRules(this.getRules());
+	            String returned = _rules.matchAndApply("id", request, response);
+	            target = (returned == null) ? target : returned;
+
+	            if (!baseRequest.isHandled())
+	                super.handle(target, baseRequest, request, response);
+	        }
+/*
 			// create a handle to the resource
 			String filename = "liste-des-evenements.html"; 
 
@@ -92,6 +114,7 @@ public class CreateEventHandler extends RequestHandler {
 			}
 
 			baseRequest.setHandled(true);
+	*/
 		}
 		catch (Exception e)
 		{
