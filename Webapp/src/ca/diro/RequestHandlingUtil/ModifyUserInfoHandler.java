@@ -25,23 +25,27 @@ public class ModifyUserInfoHandler extends RequestHandler {
 		// permissions or handling.
 		try
 		{
-//			String pathInfo = request.getPathInfo().substring(1);
+			Boolean modifiedSuccessfully = true;
 
 			//TODO:Modify User's Information in the database
-			request.getParameter("id");
-//			request.getParameter("eventName");
-//			request.getParameter("eventDate");
-//			request.getParameter("eventLocation");
-//			request.getParameter("eventNumPeople");
-//			request.getParameter("eventDescription");
-			
-//			String eventID = request.getParameter("id");
-			//redirects the current request to the newly created event
-			String setPattern = "/";
-			String setLocation = "/Webapp/membre/";
-	        redirectRequest(target, baseRequest, request, response, setPattern,
-					setLocation);
-			
+			String id = request.getParameter("id");
+			String fullname = request.getParameter("fullname");
+			String email = request.getParameter("email");
+			String username = request.getParameter("username");
+			String password = request.getParameter("password");
+			String age = request.getParameter("age");
+			String description = request.getParameter("description");
+
+			if(modifiedSuccessfully){
+				//redirects the current request to the newly created event
+				String setPattern = "/";
+				String setLocation = "/Webapp/membre/"+username;
+				redirectRequest(target, baseRequest, request, response, setPattern,
+						setLocation);
+			}else{
+				//TODO:Show modification error message
+			}
+
 		}
 		catch (Exception e)
 		{

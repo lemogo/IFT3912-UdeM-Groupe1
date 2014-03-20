@@ -27,23 +27,25 @@ public class ModifyEventHandler extends RequestHandler {
 		// permissions or handling.
 		try
 		{
-			String pathInfo = request.getPathInfo().substring(1);
-			System.out.println("in modify - pathInfo:"+pathInfo+"\tURL:"+baseRequest.getRequestURL()+"\tlocation:"+baseRequest.getRequestURI()+"\tresponse:"+response.getLocale());
-			System.out.println("in modify - event name:"+request.getParameter("eventName"));
+			Boolean modifiedSuccessfully = true;
 
 			//TODO:modify the event in the database
-			request.getParameter("id");
-			request.getParameter("eventName");
-			request.getParameter("eventDate");
-			request.getParameter("eventLocation");
-			request.getParameter("eventNumPeople");
-			request.getParameter("eventDescription");
-			
-			//redirects the current request to the newly created event
-			String setPattern = "/";
-			String setLocation = "/Webapp/evenement/"+request.getParameter("id");
-	        redirectRequest(target, baseRequest, request, response, setPattern,
-					setLocation);
+			String id = request.getParameter("id");
+			String eventName = request.getParameter("eventName");
+			String eventDate = request.getParameter("eventDate");
+			String eventLocation = request.getParameter("eventLocation");
+			String eventNumPeople = request.getParameter("eventNumPeople");
+			String eventDescription = request.getParameter("eventDescription");
+
+			if(modifiedSuccessfully){
+				//redirects the current request to the newly created event
+				String setPattern = "/";
+				String setLocation = "/Webapp/evenement/"+id;
+				redirectRequest(target, baseRequest, request, response, setPattern,
+						setLocation);
+			}else{
+				//TODO:show modification error message
+			}
 
 		}
 		catch (Exception e)

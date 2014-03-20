@@ -37,7 +37,7 @@ public class EventHandler extends RequestHandler {
 				super.handle(target, baseRequest, request, response);
 				return;
 			}
-			if(isAnotherContext(pathInfo)&&!pathInfo.equals("")){//&&!request.getContextPath().equals("/Webapp/"+pathInfo)){ 	        
+			if(isAnotherContext(pathInfo)&&!pathInfo.equals("")){ 	        
 				redirectToPathContext(target, baseRequest, request, response,
 						pathInfo);
 				return;
@@ -83,10 +83,10 @@ public class EventHandler extends RequestHandler {
 				sources.put("user", "true");
 				sources.put("notifications_number", "0");
 
-				System.out.println("in eventHandler");
+//				System.out.println("in eventHandler");
 
 				processTemplate(request, response, filename,sources);
-				System.out.println("in eventHandler after template");
+//				System.out.println("in eventHandler after template");
 				processTemplate(request, response, "footer.html");
 			}
 

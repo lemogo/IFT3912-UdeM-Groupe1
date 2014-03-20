@@ -60,7 +60,7 @@ public class RequestHandler extends RewriteHandler {
 	 */
 	private JSONArray JSONResult;
 
-	
+
 	// La racine des ressources a presenter
 	private static File	rootDir		= new File(".");
 
@@ -76,7 +76,7 @@ public class RequestHandler extends RewriteHandler {
 		super();
 		redirect = new RedirectPatternRule();
 		this.addRule(redirect);
-}
+	}
 
 	/*
 	 * (non-Javadoc)
@@ -88,18 +88,17 @@ public class RequestHandler extends RewriteHandler {
 	@Override
 	public void handle(String target, Request baseRequest,
 			HttpServletRequest request, HttpServletResponse response)
-			throws IOException, ServletException {
+					throws IOException, ServletException {
 		// TODO Implement handling logic for simple requests (and command
 		// validation) and forwarding for requests that require specific
 		// permissions or handling.
-		System.out.println("In requestHandler\t"+baseRequest.getMethod()+"\ttarget:"+target+"\t"+baseRequest.getPathInfo()+"\tContext:"+request.getContextPath());
-//		System.out.println("\nSession"+ request.getSession()+"\tAuthentification"+request.getAuthType()					);
 		try
 		{
+			System.out.println("In requestHandler\t"+baseRequest.getMethod()+"\ttarget:"+target+"\t"+baseRequest.getPathInfo()+"\tContext:"+request.getContextPath());
 
 			String pathInfo = request.getPathInfo();
 			if(target.startsWith("/")) pathInfo = pathInfo.substring(1);
-			
+
 			if(pathInfo.length()<=1){
 				baseRequest.setHandled(true);
 				return;
@@ -108,46 +107,11 @@ public class RequestHandler extends RewriteHandler {
 			else if ( pathInfo.equals("enregistrement") || pathInfo.equals("ajouter-un-evenement") 
 					||pathInfo.equals("notifications")||pathInfo.equals("connexion")) pathInfo = pathInfo+".html";
 
-System.out.println(request.getContextPath()+"\t"+pathInfo+"\t"+request.getPathInfo());	
-
 			// create a handle to the resource
 			File staticResource = new File(staticDir, pathInfo);
 			File dynamicResource = new File(dynamicDir, pathInfo);
 
-			// A changer pour supporter des images, peut-etre par extension ou
-			// par repertoire
-			if (target.endsWith(".css"))
-			{
-				response.setContentType("text/css");
-			}
-			else if (target.endsWith(".js"))
-			{
-				response.setContentType("text/javascript");
-			}
-			else if (target.endsWith(".png"))
-			{
-				response.setContentType("image/png");
-			}
-			else if (target.endsWith(".jpg"))
-			{
-				response.setContentType("image/jpg");
-			}
-			else if (target.endsWith(".ico"))
-			{
-				response.setContentType("image/x-icon");
-			}
-			else if (target.endsWith(".ttf"))
-			{
-				response.setContentType("application/x-font-ttf");
-			}
-			else if (target.endsWith(".woff"))
-			{
-				response.setContentType("application/x-font-woff");
-			}
-			else
-			{
-				response.setContentType("text/html");
-			}
+			setResponseContentType(target, response);
 			response.setCharacterEncoding("utf-8");
 
 			String filename = pathInfo;
@@ -167,7 +131,7 @@ System.out.println(request.getContextPath()+"\t"+pathInfo+"\t"+request.getPathIn
 			{
 				response.setStatus(HttpServletResponse.SC_OK);
 				processTemplate(request, response, "header.html");
-				
+
 				//to display user navbar
 				HashMap sources = new HashMap();
 				sources.put("user", "false");
@@ -183,6 +147,43 @@ System.out.println(request.getContextPath()+"\t"+pathInfo+"\t"+request.getPathIn
 			catchHelper(baseRequest, request, response, e);
 		}
 
+	}
+
+	protected void setResponseContentType(String target, HttpServletResponse response) {
+		// A changer pour supporter des images, peut-etre par extension ou
+		// par repertoire
+		if (target.endsWith(".css"))
+		{
+			response.setContentType("text/css");
+		}
+		else if (target.endsWith(".js"))
+		{
+			response.setContentType("text/javascript");
+		}
+		else if (target.endsWith(".png"))
+		{
+			response.setContentType("image/png");
+		}
+		else if (target.endsWith(".jpg"))
+		{
+			response.setContentType("image/jpg");
+		}
+		else if (target.endsWith(".ico"))
+		{
+			response.setContentType("image/x-icon");
+		}
+		else if (target.endsWith(".ttf"))
+		{
+			response.setContentType("application/x-font-ttf");
+		}
+		else if (target.endsWith(".woff"))
+		{
+			response.setContentType("application/x-font-woff");
+		}
+		else
+		{
+			response.setContentType("text/html");
+		}
 	}
 
 	protected void catchHelper(Request baseRequest, HttpServletRequest request,
@@ -201,7 +202,7 @@ System.out.println(request.getContextPath()+"\t"+pathInfo+"\t"+request.getPathIn
 		processTemplate(request, response, "500.html", params);
 		baseRequest.setHandled(true);
 	}
-	
+
 	protected void redirectRequest(String target, Request baseRequest,
 			HttpServletRequest request, HttpServletResponse response,
 			String setPattern, String setLocation) throws IOException,
@@ -210,13 +211,13 @@ System.out.println(request.getContextPath()+"\t"+pathInfo+"\t"+request.getPathIn
 		{
 			redirect.setPattern(setPattern);
 			redirect.setLocation(setLocation);  
-		    RuleContainer _rules = new RuleContainer();
-		    _rules.setRules(this.getRules());
-		    String returned = _rules.matchAndApply(target, request, response);
-		    target = (returned == null) ? target : returned;
+			RuleContainer _rules = new RuleContainer();
+			_rules.setRules(this.getRules());
+			String returned = _rules.matchAndApply(target, request, response);
+			target = (returned == null) ? target : returned;
 
-		    if (!baseRequest.isHandled())
-		        super.handle(target, baseRequest, request, response);
+			if (!baseRequest.isHandled())
+				super.handle(target, baseRequest, request, response);
 		}
 	}
 
@@ -233,7 +234,7 @@ System.out.println(request.getContextPath()+"\t"+pathInfo+"\t"+request.getPathIn
 		// instead of being returned.
 		return JSONResult;
 	}
-	
+
 
 	/**
 	 * 
@@ -322,7 +323,7 @@ System.out.println(request.getContextPath()+"\t"+pathInfo+"\t"+request.getPathIn
 				mustache.execute(res.getWriter(), scs.toArray());
 	}
 
-	
+
 	private String simpleEscape(String string){
 		return string.replace("&", "&amp;").replace("<", "&lt;").replace(">", "&gt;");
 	}
@@ -333,18 +334,18 @@ System.out.println(request.getContextPath()+"\t"+pathInfo+"\t"+request.getPathIn
 		System.out.println("in Event redirect- pathInfo:"+path);
 		String setPattern = "*/"+path;
 		String setLocation = "/Webapp/"+path;
-        redirectRequest(target, baseRequest, request, response, setPattern,
+		redirectRequest(target, baseRequest, request, response, setPattern,
 				setLocation);
 
 	}
 
 	protected boolean isAnotherContext(String pathInfo) {
 		return pathInfo.equals("accueil")||pathInfo.equals("liste-des-evenements")||pathInfo.equals("modifier-un-evenement")
-			||pathInfo.equals("membre")||pathInfo.equals("notifications")||pathInfo.equals("connexion")||pathInfo.equals("deconnexion")
-			||pathInfo.equals("enregistrement")||pathInfo.equals("ajouter-un-evenement")||pathInfo.equals("evenement")||pathInfo.contains("evenement/")
-			||pathInfo.equals("deconnexion")||pathInfo.startsWith("evenement-modification/")||pathInfo.equals("modify-event")||pathInfo.equals("delete-event")
-		||pathInfo.equals("register-event")||pathInfo.startsWith("unregister-event")||pathInfo.equals("connect-user")||pathInfo.equals("create-user");
+				||pathInfo.equals("membre")||pathInfo.equals("notifications")||pathInfo.equals("connexion")||pathInfo.equals("deconnexion")
+				||pathInfo.equals("enregistrement")||pathInfo.equals("ajouter-un-evenement")||pathInfo.equals("evenement")||pathInfo.contains("evenement/")
+				||pathInfo.equals("deconnexion")||pathInfo.startsWith("evenement-modification/")||pathInfo.equals("modify-event")||pathInfo.equals("delete-event")
+				||pathInfo.equals("register-event")||pathInfo.startsWith("unregister-event")||pathInfo.equals("connect-user")||pathInfo.equals("create-user");
 	}
 
-	
+
 }

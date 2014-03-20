@@ -93,7 +93,6 @@ public class Main {
 	private static void initSecureServer() {
 		handlerCollection = new ContextHandlerCollection();
 
-
 		ModifyEventHandler modifyEventHandler = new ModifyEventHandler();
 		//		modifyEventHandler.setOriginalPathAttribute("*/Webapp/modify-event");
 		modifyEventHandler.setRewriteRequestURI(true);

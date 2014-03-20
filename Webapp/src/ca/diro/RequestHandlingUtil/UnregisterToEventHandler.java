@@ -25,7 +25,7 @@ public class UnregisterToEventHandler extends RequestHandler {
 		// permissions or handling.
 		try
 		{
-			//			String pathInfo = request.getPathInfo().substring(1);
+			Boolean unregisteredSuccessfully = true;
 
 			//TODO:Unregister the User to the event in the database
 			request.getParameter("id");
@@ -36,11 +36,16 @@ public class UnregisterToEventHandler extends RequestHandler {
 			//			request.getParameter("eventDescription");
 
 			String eventID = request.getParameter("id");
-			//redirects the current request to the newly created event
-			String setPattern = "/";
-			String setLocation = "/Webapp/evenement/"+eventID;
-			redirectRequest(target, baseRequest, request, response, setPattern,
-					setLocation);
+
+			if(unregisteredSuccessfully){
+				//redirects the current request to the newly created event
+				String setPattern = "/";
+				String setLocation = "/Webapp/evenement/"+eventID;
+				redirectRequest(target, baseRequest, request, response, setPattern,
+						setLocation);
+			}else{
+				//TODO:show logout error message
+			}
 
 		}
 		catch (Exception e)

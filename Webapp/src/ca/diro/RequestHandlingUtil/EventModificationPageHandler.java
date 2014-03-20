@@ -40,12 +40,11 @@ public class EventModificationPageHandler extends RequestHandler {
 				super.handle(target, baseRequest, request, response);
 				return;
 			}
-			if((isAnotherContext(pathInfo)&&!pathInfo.equals(""))||target.contains("evenement-modification/")){//&&!request.getContextPath().equals("/Webapp/"+pathInfo)){ 	        
+			if((isAnotherContext(pathInfo)&&!pathInfo.equals(""))||target.contains("evenement-modification/")){ 	        
 				redirectToPathContext(target, baseRequest, request, response,
 						pathInfo);
 				return;
 			}
-
 
 			// create a handle to the resource
 			String filename = "modifier-un-evenement.html"; 

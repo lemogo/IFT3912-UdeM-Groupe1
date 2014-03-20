@@ -32,28 +32,23 @@ public class ConnectUserHandler extends RequestHandler {
 		// permissions or handling.
 		try
 		{
-			//			String pathInfo = request.getPathInfo().substring(1);
-
 			//TODO:Verify User's credential and retrieve User id from the database
-			request.getParameter("id");
-			//			request.getParameter("eventName");
-			//			request.getParameter("eventDate");
-			//			request.getParameter("eventLocation");
-			//			request.getParameter("eventNumPeople");
-			//			request.getParameter("eventDescription");
-			//			SessionHandler session = new SessionHandler();
-			//			new ContextHandler(ContextHandler.STARTED);
-			//			session.setHandler(basicAuth("test_username", "test_password", "test_realm"));
-			//			session.setServer(Main.getServer());
-			//			Main.getServer();
+			String username = request.getParameter("username");
+			String password = request.getParameter("password");
+			
+			Boolean authenticatedSuccessfully = true;
+			//TODO:Authenticate the user here
 
-			//			String eventID = request.getParameter("id");
-			//redirects the current request to the newly created event
-
+			
+			if (authenticatedSuccessfully){
+			//Redirects the current request to the newly created event
 			String setPattern = "/";
-			String setLocation = "/Webapp/membre/";
+			String setLocation = "/Webapp/membre/"+username;
 			redirectRequest(target, baseRequest, request, response, setPattern,
 					setLocation);
+			}else{
+				//TODO:send error message to user and return to login page
+			}
 
 		}
 		catch (Exception e)
@@ -63,28 +58,28 @@ public class ConnectUserHandler extends RequestHandler {
 
 	}
 
-	private static final SecurityHandler basicAuth(String username, String password, String realm) {
-
-		HashLoginService l = new HashLoginService();
-		l.putUser(username, Credential.getCredential(password), new String[] {"user"});
-		l.setName(realm);
-
-		Constraint constraint = new Constraint();
-		constraint.setName(Constraint.__BASIC_AUTH);
-		constraint.setRoles(new String[]{"user"});
-		constraint.setAuthenticate(true);
-
-		ConstraintMapping cm = new ConstraintMapping();
-		cm.setConstraint(constraint);
-		cm.setPathSpec("/*");
-
-		ConstraintSecurityHandler csh = new ConstraintSecurityHandler();
-		csh.setAuthenticator(new BasicAuthenticator());
-		csh.setRealmName("myrealm");
-		csh.addConstraintMapping(cm);
-		csh.setLoginService(l);
-
-		return csh;
-
-	}
+//	private static final SecurityHandler basicAuth(String username, String password, String realm) {
+//
+//		HashLoginService l = new HashLoginService();
+//		l.putUser(username, Credential.getCredential(password), new String[] {"user"});
+//		l.setName(realm);
+//
+//		Constraint constraint = new Constraint();
+//		constraint.setName(Constraint.__BASIC_AUTH);
+//		constraint.setRoles(new String[]{"user"});
+//		constraint.setAuthenticate(true);
+//
+//		ConstraintMapping cm = new ConstraintMapping();
+//		cm.setConstraint(constraint);
+//		cm.setPathSpec("/*");
+//
+//		ConstraintSecurityHandler csh = new ConstraintSecurityHandler();
+//		csh.setAuthenticator(new BasicAuthenticator());
+//		csh.setRealmName("myrealm");
+//		csh.addConstraintMapping(cm);
+//		csh.setLoginService(l);
+//
+//		return csh;
+//
+//	}
 }

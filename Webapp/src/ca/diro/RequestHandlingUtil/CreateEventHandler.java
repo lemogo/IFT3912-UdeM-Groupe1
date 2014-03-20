@@ -27,33 +27,46 @@ public class CreateEventHandler extends RequestHandler {
 		{
 
 			String pathInfo = request.getPathInfo().substring(1);
-			//			if (pathInfo.startsWith(siteName)) pathInfo = pathInfo.substring(siteName.length());
 
 			//The current request must be a file -> redirect to requestHandler
 			if(	pathInfo.contains(".")) {
 				super.handle(target, baseRequest, request, response);
 				return;
 			}
-			if(isAnotherContext(pathInfo)&&!pathInfo.equals("")){//&&!request.getContextPath().equals("/Webapp/"+pathInfo)){ 	        
+			if(isAnotherContext(pathInfo)&&!pathInfo.equals("")){ 	        
 				redirectToPathContext(target, baseRequest, request, response,
 						pathInfo);
 				return;
 			}
+			String id = request.getParameter("id");
+			String eventName = request.getParameter("eventName");
+			String eventDate = request.getParameter("eventDate");
+			String eventLocation = request.getParameter("eventLocation");
+			String eventNumPeople = request.getParameter("eventNumPeople");
+			String eventDescription = request.getParameter("eventDescription");
 
 			System.out.println("\nParameters"+ request.getParameterNames()					//);
-			+"\t"+request.getParameter("id")
-			+"\t"+request.getParameter("eventName")
-			+"\t"+request.getParameter("eventDate")
-			+"\t"+request.getParameter("eventLocation")
-			+"\t"+request.getParameter("eventNumPeople")
-			+"\t"+request.getParameter("eventDescription"));
-
-			//TODO: Redirect to liste-des-evenements.html 
+					+"\t"+id
+					+"\t"+eventName
+					+"\t"+eventDate
+					+"\t"+eventLocation
+					+"\t"+eventNumPeople
+					+"\t"+eventDescription);
+			
+			Boolean addedSuccessfully = true;
+			//TODO: Add the event to the database
+			
+			
+			if (addedSuccessfully){
 			//redirects the current request to the newly created event
 			String setPattern = "/";
-			String setLocation = "/Webapp/liste-des-evenements/"+request.getParameter("eventName");
-	        redirectRequest(target, baseRequest, request, response, setPattern,
+			String setLocation = "/Webapp/liste-des-evenements/"+eventName;
+			redirectRequest(target, baseRequest, request, response, setPattern,
 					setLocation);
+			}else{
+				//redirect the user to the event page with the same info
+				//if possible indicate to the user the reason of the failure to create the event 
+			}
 		}
 		catch (Exception e)
 		{

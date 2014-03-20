@@ -25,23 +25,29 @@ public class CreateUserHandler extends RequestHandler {
 		// permissions or handling.
 		try
 		{
-			//			String pathInfo = request.getPathInfo().substring(1);
 
-			//TODO:Unregister the User to the event in the database
-			request.getParameter("id");
-			//			request.getParameter("eventName");
-			//			request.getParameter("eventDate");
-			//			request.getParameter("eventLocation");
-			//			request.getParameter("eventNumPeople");
-			//			request.getParameter("eventDescription");
+			Boolean userAddedSuccessfully = true;
 
-			//			String eventID = request.getParameter("id");
-			//redirects the current request to the newly created event
+			String fullname = request.getParameter("fullname");
+			String email = request.getParameter("email");
+			String username = request.getParameter("username");
+			String password = request.getParameter("password");
+			String age = request.getParameter("age");
+			String description = request.getParameter("description");
 
-			String setPattern = "/";
-			String setLocation = "/Webapp/membre/";
-			redirectRequest(target, baseRequest, request, response, setPattern,
-					setLocation);
+			//TODO:Add the User in the database
+
+
+			if (userAddedSuccessfully){
+				//redirects the current request to the newly created event
+				String setPattern = "/";
+				String setLocation = "/Webapp/membre/"+username;
+				redirectRequest(target, baseRequest, request, response, setPattern,
+						setLocation);
+			}else{
+				//return to the account creation page 
+				//and try to indicate to the user the source of the account creation failure 
+			}
 
 		}
 		catch (Exception e)

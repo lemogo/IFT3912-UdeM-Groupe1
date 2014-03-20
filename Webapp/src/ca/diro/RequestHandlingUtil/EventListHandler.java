@@ -37,7 +37,7 @@ public class EventListHandler extends RequestHandler {
 				super.handle(target, baseRequest, request, response);
 				return;
 			}
-			if(isAnotherContext(pathInfo)&&!pathInfo.equals("")){//&&!request.getContextPath().equals("/Webapp/"+pathInfo)){ 	        
+			if(isAnotherContext(pathInfo)&&!pathInfo.equals("")){ 	        
 				redirectToPathContext(target, baseRequest, request, response,
 						pathInfo);
 				return;
