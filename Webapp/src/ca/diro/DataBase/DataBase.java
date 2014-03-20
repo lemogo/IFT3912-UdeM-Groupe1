@@ -51,7 +51,7 @@ public class DataBase {
 		else
 			this.dbName = this.dbFileName;
 
-		this.dbpath = "jdbc:h2:data/database/" + dbName;
+		this.dbpath = "jdbc:h2:dat/database/" + dbName;
 
 		dbConnect();
 	}
@@ -322,7 +322,7 @@ public class DataBase {
 
 		this.statement().setQueryTimeout(50);
 		this.statement().execute(
-				"script to 'data/database/" + this.restoreScript + "'");
+				"script to 'dat/database/" + this.restoreScript + "'");
 		this.statement().close();
 	}
 
@@ -335,7 +335,7 @@ public class DataBase {
 
 		this.statement().setQueryTimeout(50);
 		this.statement().execute(
-				"runscript from 'data/database/" + this.restoreScript + "'");
+				"runscript from 'dat/database/" + this.restoreScript + "'");
 		this.statement().close();
 	}
 
