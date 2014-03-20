@@ -2,6 +2,7 @@ package ca.diro.RequestHandlingUtil;
 
 import java.io.File;
 import java.io.IOException;
+import java.sql.ResultSet;
 import java.util.HashMap;
 
 import javax.servlet.ServletException;
@@ -9,6 +10,11 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.eclipse.jetty.server.Request;
+
+import ca.diro.Main;
+import ca.diro.DataBase.DataBase;
+import ca.diro.DataBase.Command.Command;
+import ca.diro.DataBase.Command.PageInfoEvent;
 
 public class EventHandler extends RequestHandler {
 	/*
@@ -61,33 +67,45 @@ public class EventHandler extends RequestHandler {
 				response.setContentType("text/html");
 				response.setCharacterEncoding("utf-8");
 				response.setStatus(HttpServletResponse.SC_OK);
+				String eventID = pathInfo;
 
 				processTemplate(request, response, "header.html");
-				
-				String eventID = pathInfo;
+
+
 				//TODO:Get the user event info from the database
-				
-				//TODO:Add event info here!!
-				HashMap sources = new HashMap();
-				sources.put("event",
-						new Event("Event_username1", "Event_title1", "Event_date1",
-								"Event_location1", "Event_description1", "Event_id1",
-								"Event_badgeClass1")
-						);
-				
-				//to display success message
-				sources.put("addSuccess", "true");
-				sources.put("isOwner", "true");
-				//				sources.put("registerSuccess", "true");
-				//				sources.put("unregisterSuccess", "false");
-				sources.put("user", "true");
-				sources.put("notifications_number", "0");
+				DataBase myDb = Main.getDatabase();//new DataBase(restore);
+				String info = "{eventId:"+eventID+"}" ;//"1}" ;
+				Command cmd = new PageInfoEvent(info,myDb);
+				boolean boo = myDb.executeDb(cmd); 
+				ResultSet rs = cmd.getResultSet();
 
-//				System.out.println("in eventHandler");
+				if (rs.next()) {
+					//title,dateevent,location, numberplaces, description
+//					System.out.println("Database value:"+rs.getString("title")+"\t"+rs.getString("dateevent"));
 
-				processTemplate(request, response, filename,sources);
-//				System.out.println("in eventHandler after template");
-				processTemplate(request, response, "footer.html");
+					//TODO:Add event info here!!
+					HashMap sources = new HashMap();
+					sources.put("event",
+							new Event("Event_username1", rs.getString("title"), rs.getString("dateevent"),
+									rs.getString("location"), rs.getString("description"), eventID,
+									rs.getString("numberplaces"))
+							);
+
+					//to display success message
+					sources.put("addSuccess", "false");
+					sources.put("isOwner", "false");
+					//				sources.put("registerSuccess", "true");
+					//				sources.put("unregisterSuccess", "false");
+					sources.put("user", "false");
+					sources.put("notifications_number", "0");
+
+
+					processTemplate(request, response, filename,sources);
+					//				System.out.println("in eventHandler after template");
+					processTemplate(request, response, "footer.html");
+				}else{
+					//TODO:show error message -- The event ____ does not exist
+				}
 			}
 
 			baseRequest.setHandled(true);

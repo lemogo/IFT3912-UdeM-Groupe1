@@ -2,14 +2,26 @@ package ca.diro.RequestHandlingUtil;
 
 import java.io.File;
 import java.io.IOException;
+import java.sql.ResultSet;
 import java.util.Arrays;
 import java.util.HashMap;
+import java.util.LinkedList;
+import java.util.List;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.eclipse.jetty.server.Request;
+
+import ca.diro.Main;
+import ca.diro.DataBase.DataBase;
+import ca.diro.DataBase.Command.Command;
+import ca.diro.DataBase.Command.ListCancelledEvent;
+import ca.diro.DataBase.Command.ListComingEvent;
+import ca.diro.DataBase.Command.ListEventComing;
+import ca.diro.DataBase.Command.ListPassedEvent;
+import ca.diro.DataBase.Command.PageInfoEvent;
 
 public class EventListHandler extends RequestHandler {
 
@@ -31,12 +43,13 @@ public class EventListHandler extends RequestHandler {
 		{
 
 			String pathInfo = request.getPathInfo().substring(1);
-			
+
 			//The current request must be a file -> redirect to requestHandler
 			if(	pathInfo.contains(".")) {
 				super.handle(target, baseRequest, request, response);
 				return;
 			}
+						if(!pathInfo.equals("passes")&&!pathInfo.equals("annules"))
 			if(isAnotherContext(pathInfo)&&!pathInfo.equals("")){ 	        
 				redirectToPathContext(target, baseRequest, request, response,
 						pathInfo);
@@ -61,22 +74,43 @@ public class EventListHandler extends RequestHandler {
 				response.setStatus(HttpServletResponse.SC_OK);
 
 				processTemplate(request, response, "header.html");
+
+				//TODO:Get the user lisr event info from the database
+				Command cmd= new ListComingEvent();
+				if(pathInfo.equals("passes"))
+					cmd = new ListPassedEvent();
+				else if(pathInfo.equals("annules"))
+					cmd = new ListCancelledEvent();
+
+				DataBase myDb = Main.getDatabase();//new DataBase(restore);
+				boolean boo = myDb.executeDb(cmd); 
+				ResultSet rs = cmd.getResultSet();
+				List<Event> eventList = new LinkedList<Event>();  
+				while(rs.next())
+					eventList.add(							new Event("Event_username1", rs.getString("title"), rs.getString("dateevent"),
+							rs.getString("location"), rs.getString("description"), rs.getString("eventId"),
+							"Event_badgeClass1"));
+//				""+rs.getString("eventId"),
+//				""+rs.getString("numberplaces")));
 				
 				//add event info here!!
 				HashMap sources = new HashMap();
-				sources.put("events",Arrays.asList(
-						new Event("username1", "title1", "date1",
-						"location1", "description1", "id1",
-						"badgeClass1")
-						,new Event("username2", "title2", "date2",
-								"location2", "description2", "id2",
-								"badgeClass2")
-								));
+				sources.put("events",eventList);
+
+				//				sources.put("events",Arrays.asList(
+				//						new Event("username1", "title1", "date1",
+				//						"location1", "description1", "id1",
+				//						"badgeClass1")
+				//						,new Event("username2", "title2", "date2",
+				//								"location2", "description2", "id2",
+				//								"badgeClass2")
+				//								));
+
 				//to display success message
-//				sources.put("addSuccess", "true");
+				//				sources.put("addSuccess", "true");
 				sources.put("user", "true");
 				sources.put("notifications_number", "0");
-				
+
 				processTemplate(request, response, filename,sources);
 				processTemplate(request, response, "footer.html");
 			}

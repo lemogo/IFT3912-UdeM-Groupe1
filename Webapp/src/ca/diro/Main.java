@@ -4,6 +4,7 @@ import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.IOException;
 import java.io.PrintStream;
+import java.sql.SQLException;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
@@ -79,11 +80,50 @@ public class Main {
 	 * @throws Exception
 	 */
 	public static void main(String[] args) throws Exception {
+		restoreDatabase();
+		AddDatabaseShutdownHook hook = new AddDatabaseShutdownHook();
+		hook.attachShutDownHook();
+
 		initSecureServer();
 		server.start();
 		server.join();
-		database = new DataBase();
-		database.dbConnect();
+
+		System.exit(0);
+		//		database = new DataBase();
+		//		database.dbConnect();
+	}
+
+	private static void restoreDatabase() {
+		String restore = "DataBaseRestore.sql" ;
+		try {
+			database = new DataBase(restore);
+			database.createTables();
+		} catch (ClassNotFoundException | SQLException e1) {
+			e1.printStackTrace();
+		}
+		database.populateTable();
+	}
+
+	public static class AddDatabaseShutdownHook {
+		public void attachShutDownHook(){
+			Runtime.getRuntime().addShutdownHook(new Thread() {
+
+				@Override
+				public void run() {
+
+					database.emptyDataBase();
+					try {
+						database.dbClose();
+					} catch (SQLException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
+					database = null;
+				}
+
+			});
+//			System.out.println("Shut Down Hook Attached.");
+		}
 	}
 
 	/**

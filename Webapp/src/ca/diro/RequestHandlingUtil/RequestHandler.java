@@ -340,9 +340,9 @@ public class RequestHandler extends RewriteHandler {
 	}
 
 	protected boolean isAnotherContext(String pathInfo) {
-		return pathInfo.equals("accueil")||pathInfo.equals("liste-des-evenements")||pathInfo.equals("modifier-un-evenement")
-				||pathInfo.equals("membre")||pathInfo.equals("notifications")||pathInfo.equals("connexion")||pathInfo.equals("deconnexion")
-				||pathInfo.equals("enregistrement")||pathInfo.equals("ajouter-un-evenement")||pathInfo.equals("evenement")||pathInfo.contains("evenement/")
+		return pathInfo.equals("accueil")||pathInfo.startsWith("liste-des-evenements")||pathInfo.equals("modifier-un-evenement")
+				||pathInfo.startsWith("membre")||pathInfo.equals("notifications")||pathInfo.equals("connexion")||pathInfo.equals("deconnexion")
+				||pathInfo.equals("enregistrement")||pathInfo.equals("ajouter-un-evenement")||pathInfo.equals("evenement")||pathInfo.startsWith("evenement/")
 				||pathInfo.equals("deconnexion")||pathInfo.startsWith("evenement-modification/")||pathInfo.equals("modify-event")||pathInfo.equals("delete-event")
 				||pathInfo.equals("register-event")||pathInfo.startsWith("unregister-event")||pathInfo.equals("connect-user")||pathInfo.equals("create-user");
 	}
