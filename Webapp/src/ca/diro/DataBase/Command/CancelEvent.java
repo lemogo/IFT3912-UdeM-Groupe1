@@ -40,6 +40,19 @@ public class CancelEvent extends Command {
 		removeSubcriteEvent();
 
 	}
+	
+	public CancelEvent(int eventId,DataBase db)  {
+		this.myDb = db;
+				
+		try {
+			cancelQuery(eventId) ;
+			nofifySignedUser(eventId) ;
+			removeSubcriteEvent(eventId);
+		} catch (SQLException e) {
+			System.err.println(e.getMessage());
+		}
+
+	}
 	/**
 	 * Method to parse String from JSON format in order to retrieve parameters
 	 * and build the right query
@@ -52,9 +65,7 @@ public class CancelEvent extends Command {
 		
 		try {
 			int  eventId = jsonInfo.getInt("eventId") ;
-			myDb.statement().executeUpdate("update event set status = 'cancelled' " +
-					"where eventid = "+ eventId);
-			returnValue = true ;
+			returnValue = cancelQuery(eventId);
 		} catch (SQLException e) {
 			System.err.println(e.getMessage());
 		}
@@ -65,6 +76,13 @@ public class CancelEvent extends Command {
 		// TODO parse query
 		return returnValue ;
 		
+	}
+	public boolean cancelQuery(int eventId) throws SQLException {
+		boolean returnValue;
+		myDb.statement().executeUpdate("update event set status = 'cancelled' " +
+				"where eventid = "+ eventId);
+		returnValue = true ;
+		return returnValue;
 	}
 	/**
 	 * Method to remove subscripted event 
@@ -77,9 +95,7 @@ public class CancelEvent extends Command {
 		boolean returnValue = false ;
 		 try {
 			 int  eventId = jsonInfo.getInt("eventId") ;
-			 myDb.statement().executeUpdate("delete from subsEventSigned where eventid = "+ eventId );
-			 myDb.statement().executeUpdate("delete from subsEventGeneral where eventid = " + eventId );
-			returnValue = true;
+			 returnValue = removeSubcriteEvent(eventId);
 		} catch (SQLException e) {
 			System.err.println(e.getMessage());
 		}
@@ -88,6 +104,13 @@ public class CancelEvent extends Command {
 				e1.printStackTrace();
 		}
 		 return returnValue ;
+	}
+	public boolean removeSubcriteEvent(int eventId) throws SQLException {
+		boolean returnValue;
+		myDb.statement().executeUpdate("delete from subsEventSigned where eventid = "+ eventId );
+		 myDb.statement().executeUpdate("delete from subsEventGeneral where eventid = " + eventId );
+		returnValue = true;
+		return returnValue;
 	}
 	
 	/**
@@ -102,9 +125,7 @@ public class CancelEvent extends Command {
 		
 		try {
 			int  eventId = jsonInfo.getInt("eventId") ;
-			result_ = myDb.statement().executeQuery("select suserId from  subsEventSigned " +
-													"where 	eventid = "+ eventId);
-			returnValue = true ;
+			returnValue = nofifySignedUser(eventId);
 		} catch (SQLException e) {
 			System.err.println(e.getMessage());
 		}
@@ -114,6 +135,13 @@ public class CancelEvent extends Command {
 		}
 		return returnValue;
 		
+	}
+	public boolean nofifySignedUser(int eventId) throws SQLException {
+		boolean returnValue;
+		result_ = myDb.statement().executeQuery("select suserId from  subsEventSigned " +
+												"where 	eventid = "+ eventId);
+		returnValue = true ;
+		return returnValue;
 	}
 		
 	/**

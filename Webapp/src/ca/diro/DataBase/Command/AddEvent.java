@@ -32,6 +32,15 @@ public class AddEvent extends Command {
 			e.printStackTrace();
 		}
 	}
+	public AddEvent(String userId, String title, String date,
+			String location, String nbplace, String description, DataBase db )   {
+		try {
+			addNewEvent(userId, title, date, location, nbplace, description);
+		} catch (SQLException e) {
+		 	System.err.println(e.getMessage());
+		}
+		myDb  = db;
+	}
 
 	/**
 	 * Method to parse String from JSON format in order to retrieve parameters
@@ -62,9 +71,8 @@ public class AddEvent extends Command {
 				String nbplace = jsonInfo.getString("numberplaces") ;
 				String description = jsonInfo.getString("description") ;
 			
-				myDb.statement().executeUpdate("insert into event  (title, suserid, dateevent, location, description, numberplaces) "  +
-						"values('" + title +"', '" + userId +"', '" + date +"', '"+ location  +"', '" + description + "' , "+ nbplace + ")");
-				returnValue = true ;
+				returnValue = addNewEvent(userId, title, date, location,
+						nbplace, description);
 				
 		 } catch (SQLException e) {
 			 	System.err.println(e.getMessage());
@@ -76,6 +84,16 @@ public class AddEvent extends Command {
 		return returnValue ;
 		
 		//TODO create user account  	
+	}
+
+	public boolean addNewEvent(String userId, String title, String date,
+			String location, String nbplace, String description)
+			throws SQLException {
+		boolean returnValue;
+		myDb.statement().executeUpdate("insert into event  (title, suserid, dateevent, location, description, numberplaces) "  +
+				"values('" + title +"', '" + userId +"', '" + date +"', '"+ location  +"', '" + description + "' , "+ nbplace + ")");
+		returnValue = true ;
+		return returnValue;
 	}
 	
 	
