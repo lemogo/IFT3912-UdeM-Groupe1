@@ -19,7 +19,6 @@ import ca.diro.DataBase.DataBase;
 import ca.diro.DataBase.Command.Command;
 import ca.diro.DataBase.Command.ListCancelledEvent;
 import ca.diro.DataBase.Command.ListComingEvent;
-import ca.diro.DataBase.Command.ListEventComing;
 import ca.diro.DataBase.Command.ListPassedEvent;
 import ca.diro.DataBase.Command.PageInfoEvent;
 
