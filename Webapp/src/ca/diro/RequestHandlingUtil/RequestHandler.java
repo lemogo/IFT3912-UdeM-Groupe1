@@ -9,6 +9,11 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.io.PrintStream;
 import java.io.UnsupportedEncodingException;
+import java.sql.ResultSet;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
@@ -18,26 +23,16 @@ import org.eclipse.jetty.rewrite.handler.RedirectPatternRule;
 import org.eclipse.jetty.rewrite.handler.RewriteHandler;
 import org.eclipse.jetty.rewrite.handler.RuleContainer;
 import org.eclipse.jetty.server.Request;
-import org.eclipse.jetty.server.handler.AbstractHandler;
-import org.h2.store.Data;
 import org.json.JSONArray;
-import org.json.JSONObject;
-import org.json.JSONException;
+
+import ca.diro.Main;
+import ca.diro.DataBase.DataBase;
+import ca.diro.DataBase.Command.AddEvent;
+import ca.diro.DataBase.Command.Command;
 
 import com.github.mustachejava.DefaultMustacheFactory;
 import com.github.mustachejava.Mustache;
 import com.github.mustachejava.MustacheFactory;
-
-import java.sql.SQLException;
-import java.sql.ResultSet;
-import java.sql.ResultSetMetaData;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
-import ca.diro.UserHandlingUtils.UserPermissionsHandler;
 
 /**
  * Handler for the Jetty server.
@@ -95,10 +90,33 @@ public class RequestHandler extends RewriteHandler {
 		try
 		{
 			System.out.println("In requestHandler\t"+baseRequest.getMethod()+"\ttarget:"+target+"\t"+baseRequest.getPathInfo()+"\tContext:"+request.getContextPath());
+//			String userId = "";//request.getParameter("id");
+//			String title = request.getParameter("eventName");
+//			String date = request.getParameter("eventDate");
+//			String location = request.getParameter("eventLocation");
+//			String nbplace = request.getParameter("eventNumPeople");
+//			String description = request.getParameter("eventDescription");
+
 
 			String pathInfo = request.getPathInfo();
-			if(target.startsWith("/")) pathInfo = pathInfo.substring(1);
+if(pathInfo.startsWith("/"))pathInfo = pathInfo.substring(1);
+//			System.out.println("\nParameters"
+//					+pathInfo
+////					+ request.getParameterNames()					//);
+//					+"\t"+userId
+//					+"\t"+title
+//					+"\t"+date
+//					+"\t"+location
+//					+"\t"+nbplace
+//					+"\t"+description);
+//			if(target.startsWith("/")) pathInfo = pathInfo.substring(1);
 
+//if(pathInfo.startsWith("create-event")&&!pathInfo.contains(".")){
+//	this.handleCreate(target, baseRequest, request, response);
+//	return;
+//}else {
+//	pathInfo = pathInfo.substring(pathInfo.indexOf("/"));
+//}
 			if(pathInfo.length()<=1){
 				baseRequest.setHandled(true);
 				return;
@@ -133,7 +151,7 @@ public class RequestHandler extends RewriteHandler {
 				processTemplate(request, response, "header.html");
 
 				//to display user navbar
-				HashMap sources = new HashMap();
+				HashMap<String, Object> sources = new HashMap<String, Object>();
 				sources.put("user", "false");
 
 				processTemplate(request, response, filename,sources);
@@ -291,13 +309,14 @@ public class RequestHandler extends RewriteHandler {
 	 * @throws FileNotFoundException
 	 * @throws IOException
 	 */
+	@SuppressWarnings("serial")
 	protected void processTemplate(HttpServletRequest req, HttpServletResponse res, String filename, Object... scopes) throws UnsupportedEncodingException, FileNotFoundException, IOException
 	{
 		MustacheFactory mc = new DefaultMustacheFactory(dynamicDir);
 		mc = new DefaultMustacheFactory(dynamicDir);
 		Mustache mustache = mc.compile(filename);
 
-		Map parameters = new HashMap<Object, Object>(req.getParameterMap())
+		Map<Object, Object> parameters = new HashMap<Object, Object>(req.getParameterMap())
 				{
 			@Override
 			public Object get(Object o)
@@ -331,21 +350,99 @@ public class RequestHandler extends RewriteHandler {
 	protected void redirectToPathContext(String target, Request baseRequest,
 			HttpServletRequest request, HttpServletResponse response,
 			String path) throws IOException, ServletException {
-		System.out.println("in Event redirect- pathInfo:"+path);
+		System.out.println("in Event redirect- pathInfo:"+path+"*");
 		String setPattern = "*/"+path;
-		String setLocation = "/Webapp/"+path;
+		String setLocation = "/Webapp/"+path;//+"*";
 		redirectRequest(target, baseRequest, request, response, setPattern,
 				setLocation);
 
 	}
 
 	protected boolean isAnotherContext(String pathInfo) {
-		return pathInfo.equals("accueil")||pathInfo.startsWith("liste-des-evenements")||pathInfo.equals("modifier-un-evenement")
+		return pathInfo.equals("accueil")||pathInfo.startsWith("liste-des-evenements")||pathInfo.startsWith("modifier-un-evenement")
 				||pathInfo.startsWith("membre")||pathInfo.equals("notifications")||pathInfo.equals("connexion")||pathInfo.equals("deconnexion")
-				||pathInfo.equals("enregistrement")||pathInfo.equals("ajouter-un-evenement")||pathInfo.equals("evenement")||pathInfo.startsWith("evenement/")
-				||pathInfo.equals("deconnexion")||pathInfo.startsWith("evenement-modification/")||pathInfo.equals("modify-event")||pathInfo.equals("delete-event")
-				||pathInfo.equals("register-event")||pathInfo.startsWith("unregister-event")||pathInfo.equals("connect-user")||pathInfo.equals("create-user");
+				||pathInfo.equals("enregistrement")||pathInfo.startsWith("ajouter-un-evenement")
+				||pathInfo.equals("evenement")||pathInfo.startsWith("evenement/")
+				||pathInfo.equals("deconnexion")||pathInfo.startsWith("evenement-modification/")||pathInfo.startsWith("modify-event")||pathInfo.startsWith("delete-event")
+				||pathInfo.equals("register-event")||pathInfo.startsWith("unregister-event")||pathInfo.equals("connect-user")||pathInfo.equals("create-user")
+				||pathInfo.startsWith("create-event");
 	}
 
+	public void handleCreate(String target, Request baseRequest,
+			HttpServletRequest request, HttpServletResponse response)
+					throws IOException, ServletException {
+		// TODO Implement handling logic for simple requests (and command
+		// validation) and forwarding for requests that require specific
+		// permissions or handling.
+		try
+		{
+
+			String pathInfo = request.getPathInfo().substring(1);
+
+			String userId = "";//request.getParameter("id");
+			String title = request.getParameter("eventName");
+			String date = request.getParameter("eventDate");
+			String location = request.getParameter("eventLocation");
+			String nbplace = request.getParameter("eventNumPeople");
+			String description = request.getParameter("eventDescription");
+
+			System.out.println("\nIn create event - Parameters:"
+					+pathInfo
+//					+ request.getParameterNames()					//);
+							+"\t"+userId
+							+"\t"+title
+							+"\t"+date
+							+"\t"+location
+							+"\t"+nbplace
+							+"\t"+description);
+
+			
+			//The current request must be a file -> redirect to requestHandler
+			if(	pathInfo.contains(".")) {
+				super.handle(target, baseRequest, request, response);
+				return;
+			}
+			if(isAnotherContext(pathInfo)&&!pathInfo.equals("")){ 	        
+				redirectToPathContext(target, baseRequest, request, response,
+						pathInfo);
+				return;
+			}
+			
+System.out.println("before database call");
+
+			DataBase db = Main.getDatabase();//new DataBase(restore);
+//			String info = "{eventId:"+eventID+"}" ;//"1}" ;
+			
+
+			Command cmd = new AddEvent(
+					"2",//userId, 
+					"Dancer",//title, 
+					"2015-01-01 10:30:00.00",//date,
+					"Unversity","50",
+//					location,
+//					nbplace, 
+					description, db);
+			boolean addedSuccessfully = db.executeDb(cmd); 
+System.out.println("database addedSuccessfully:"+addedSuccessfully);
+			//TODO: Add the event to the database
+			
+			
+			if (addedSuccessfully){
+			//redirects the current request to the newly created event
+			String setPattern = "/";
+			String setLocation = "/Webapp/liste-des-evenements/";
+			redirectRequest(target, baseRequest, request, response, setPattern,
+					setLocation);
+			}else{
+				//redirect the user to the event page with the same info
+				//if possible indicate to the user the reason of the failure to create the event 
+			}
+		}
+		catch (Exception e)
+		{
+			catchHelper(baseRequest, request, response, e);
+		}
+
+	}
 
 }

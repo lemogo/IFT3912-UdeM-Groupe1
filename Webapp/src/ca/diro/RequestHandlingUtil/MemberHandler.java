@@ -61,7 +61,7 @@ public class MemberHandler extends RequestHandler {
 				response.setStatus(HttpServletResponse.SC_OK);
 
 				//Add User info here!!
-				HashMap sources = new HashMap();
+				HashMap<String, Object> sources = new HashMap<String, Object>();
 				sources.put("isOwner", "true");
 				
 //				sources.putAll(new HashMap<String,String>());

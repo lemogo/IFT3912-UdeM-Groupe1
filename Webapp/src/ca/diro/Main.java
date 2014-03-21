@@ -80,7 +80,9 @@ public class Main {
 	 * @throws Exception
 	 */
 	public static void main(String[] args) throws Exception {
-		restoreDatabase();
+		//restoreDatabase();
+		database = new DataBase();
+
 		AddDatabaseShutdownHook hook = new AddDatabaseShutdownHook();
 		hook.attachShutDownHook();
 
@@ -110,8 +112,7 @@ public class Main {
 
 				@Override
 				public void run() {
-
-					database.emptyDataBase();
+					//database.emptyDataBase();
 					try {
 						database.dbClose();
 					} catch (SQLException e) {
@@ -143,8 +144,8 @@ public class Main {
 		modifyContext.setHandler(modifyEventHandler);
 
 		handlerCollection.addHandler(modifyContext);
-		ContextHandler webappContextHandler = createContextHandler("/Webapp","", new RequestHandler());
-		handlerCollection.addHandler(webappContextHandler);
+//		ContextHandler webappContextHandler = createContextHandler("/Webapp","", new RequestHandler());
+		handlerCollection.addHandler(createContextHandler("/Webapp","", new RequestHandler()));
 		//		handlerCollection.addHandler(createContextHandler("/Webapp/evenement-modification", new RequestHandler()));
 		//		handlerCollection.addHandler(createContextHandler("/Webapp", new RequestHandler()));
 		handlerCollection.addHandler(createContextHandler("/Webapp/","create-event", new CreateEventHandler()));
@@ -170,7 +171,7 @@ public class Main {
 		contextHandler.setResourceBase(".");
 		contextHandler.setClassLoader(Thread.currentThread().getContextClassLoader());
 		contextHandler.setHandler(handler);
-		handler.setRewriteRequestURI(true);
+//		handler.setRewritePathInfo(true);//handler.setRewriteRequestURI(true);
 		return contextHandler;
 	}
 

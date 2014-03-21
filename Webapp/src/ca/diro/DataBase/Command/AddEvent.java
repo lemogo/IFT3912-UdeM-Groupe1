@@ -34,12 +34,12 @@ public class AddEvent extends Command {
 	}
 	public AddEvent(String userId, String title, String date,
 			String location, String nbplace, String description, DataBase db )   {
+		myDb  = db;
 		try {
 			addNewEvent(userId, title, date, location, nbplace, description);
 		} catch (SQLException e) {
 		 	System.err.println(e.getMessage());
 		}
-		myDb  = db;
 	}
 
 	/**

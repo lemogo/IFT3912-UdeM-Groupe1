@@ -6,9 +6,12 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import org.eclipse.jetty.rewrite.handler.RuleContainer;
 import org.eclipse.jetty.server.Request;
 
+/**
+ * @author Lionnel
+ *
+ */
 public class ModifyEventHandler extends RequestHandler {
 
 	/*
@@ -31,12 +34,25 @@ public class ModifyEventHandler extends RequestHandler {
 
 			//TODO:modify the event in the database
 			String id = request.getParameter("id");
-			String eventName = request.getParameter("eventName");
-			String eventDate = request.getParameter("eventDate");
-			String eventLocation = request.getParameter("eventLocation");
-			String eventNumPeople = request.getParameter("eventNumPeople");
-			String eventDescription = request.getParameter("eventDescription");
+			String userId = "";//request.getParameter("id");
+			String title = request.getParameter("eventName");
+			String date = request.getParameter("eventDate");
+			String location = request.getParameter("eventLocation");
+			String nbplace = request.getParameter("eventNumPeople");
+			String description = request.getParameter("eventDescription");
 
+			System.out.println("\nIn modify Parameters"
+					+target
+//					+ request.getParameterNames()					//);
+							+"\t"+userId
+							+"\t"+title
+							+"\t"+date
+							+"\t"+location
+							+"\t"+nbplace
+							+"\t"+description);
+
+			
+			
 			if(modifiedSuccessfully){
 				//redirects the current request to the newly created event
 				String setPattern = "/";

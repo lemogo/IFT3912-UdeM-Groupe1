@@ -1,11 +1,8 @@
 package ca.diro.RequestHandlingUtil;
 
-import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.IOException;
-import java.io.PrintStream;
 import java.util.HashMap;
-import java.util.Map;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
@@ -66,11 +63,12 @@ public class EventModificationPageHandler extends RequestHandler {
 
 				processTemplate(request, response, "header.html");
 				
-				String eventID = pathInfo;
+//				String eventID = pathInfo;
 				//TODO:Get the user event info from the database
 				
+				
 				//TODO:Add event info here!!
-				HashMap sources = new HashMap();
+				HashMap<String, Object> sources = new HashMap<String, Object>();
 				sources.put("event",
 						new Event("Event_username1", "Event_title1", "Event_date1",
 								"Event_location1", "Event_description1", "Event_id1",

@@ -3,7 +3,6 @@ package ca.diro.RequestHandlingUtil;
 import java.io.File;
 import java.io.IOException;
 import java.sql.ResultSet;
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
@@ -19,9 +18,7 @@ import ca.diro.DataBase.DataBase;
 import ca.diro.DataBase.Command.Command;
 import ca.diro.DataBase.Command.ListCancelledEvent;
 import ca.diro.DataBase.Command.ListComingEvent;
-import ca.diro.DataBase.Command.ListEventComing;
 import ca.diro.DataBase.Command.ListPassedEvent;
-import ca.diro.DataBase.Command.PageInfoEvent;
 
 public class EventListHandler extends RequestHandler {
 
@@ -83,18 +80,18 @@ public class EventListHandler extends RequestHandler {
 					cmd = new ListCancelledEvent();
 
 				DataBase myDb = Main.getDatabase();//new DataBase(restore);
-				boolean boo = myDb.executeDb(cmd); 
+				if( myDb.executeDb(cmd)){ 
 				ResultSet rs = cmd.getResultSet();
 				List<Event> eventList = new LinkedList<Event>();  
 				while(rs.next())
-					eventList.add(							new Event("Event_username1", rs.getString("title"), rs.getString("dateevent"),
+					eventList.add(							new Event("Event_Bidon_username", rs.getString("title"), rs.getString("dateevent"),
 							rs.getString("location"), rs.getString("description"), rs.getString("eventId"),
 							"Event_badgeClass1"));
 //				""+rs.getString("eventId"),
 //				""+rs.getString("numberplaces")));
 				
 				//add event info here!!
-				HashMap sources = new HashMap();
+				HashMap<String, Object> sources = new HashMap<String, Object>();
 				sources.put("events",eventList);
 
 				//				sources.put("events",Arrays.asList(
@@ -116,6 +113,7 @@ public class EventListHandler extends RequestHandler {
 			}
 
 			baseRequest.setHandled(true);
+			}
 		}
 		catch (Exception e)
 		{

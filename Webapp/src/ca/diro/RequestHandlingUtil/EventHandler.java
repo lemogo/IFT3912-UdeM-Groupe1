@@ -76,39 +76,41 @@ public class EventHandler extends RequestHandler {
 				DataBase myDb = Main.getDatabase();//new DataBase(restore);
 				String info = "{eventId:"+eventID+"}" ;//"1}" ;
 				Command cmd = new PageInfoEvent(info,myDb);
-				boolean boo = myDb.executeDb(cmd); 
-				ResultSet rs = cmd.getResultSet();
 
-				if (rs.next()) {
-					//title,dateevent,location, numberplaces, description
-//					System.out.println("Database value:"+rs.getString("title")+"\t"+rs.getString("dateevent"));
+				if( myDb.executeDb(cmd)){ 
+					ResultSet rs = cmd.getResultSet();
 
-					//TODO:Add event info here!!
-					HashMap sources = new HashMap();
-					sources.put("event",
-							new Event("Event_username1", rs.getString("title"), rs.getString("dateevent"),
-									rs.getString("location"), rs.getString("description"), eventID,
-									rs.getString("numberplaces"))
-							);
+					if (rs.next()) {
+						//title,dateevent,location, numberplaces, description
+						//					System.out.println("Database value:"+rs.getString("title")+"\t"+rs.getString("dateevent"));
 
-					//to display success message
-					sources.put("addSuccess", "false");
-					sources.put("isOwner", "false");
-					//				sources.put("registerSuccess", "true");
-					//				sources.put("unregisterSuccess", "false");
-					sources.put("user", "false");
-					sources.put("notifications_number", "0");
+						//TODO:Add event info here!!
+						HashMap<String, Object> sources = new HashMap<String, Object>();
+						sources.put("event",
+								new Event("Event_username1", rs.getString("title"), rs.getString("dateevent"),
+										rs.getString("location"), rs.getString("description"), eventID,
+										rs.getString("numberplaces"))
+								);
+
+						//to display success message
+						sources.put("addSuccess", "false");
+						sources.put("isOwner", "false");
+						//				sources.put("registerSuccess", "true");
+						//				sources.put("unregisterSuccess", "false");
+						sources.put("user", "false");
+						sources.put("notifications_number", "0");
 
 
-					processTemplate(request, response, filename,sources);
-					//				System.out.println("in eventHandler after template");
-					processTemplate(request, response, "footer.html");
-				}else{
-					//TODO:show error message -- The event ____ does not exist
+						processTemplate(request, response, filename,sources);
+						//				System.out.println("in eventHandler after template");
+						processTemplate(request, response, "footer.html");
+					}else{
+						//TODO:show error message -- The event ____ does not exist
+					}
 				}
-			}
 
-			baseRequest.setHandled(true);
+				baseRequest.setHandled(true);
+			}
 		}
 		catch (Exception e)
 		{

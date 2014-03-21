@@ -29,17 +29,17 @@ public class ModifyUserInfoHandler extends RequestHandler {
 
 			//TODO:Modify User's Information in the database
 			String id = request.getParameter("id");
-			String fullname = request.getParameter("fullname");
-			String email = request.getParameter("email");
-			String username = request.getParameter("username");
-			String password = request.getParameter("password");
-			String age = request.getParameter("age");
-			String description = request.getParameter("description");
+//			String fullname = request.getParameter("fullname");
+//			String email = request.getParameter("email");
+//			String username = request.getParameter("username");
+//			String password = request.getParameter("password");
+//			String age = request.getParameter("age");
+//			String description = request.getParameter("description");
 
 			if(modifiedSuccessfully){
 				//redirects the current request to the newly created event
 				String setPattern = "/";
-				String setLocation = "/Webapp/membre/"+username;
+				String setLocation = "/Webapp/membre/"+id;
 				redirectRequest(target, baseRequest, request, response, setPattern,
 						setLocation);
 			}else{

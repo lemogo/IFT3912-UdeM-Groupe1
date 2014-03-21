@@ -26,22 +26,33 @@ public class CreateUserHandler extends RequestHandler {
 		try
 		{
 
-			Boolean userAddedSuccessfully = true;
-
 			String fullname = request.getParameter("fullname");
 			String email = request.getParameter("email");
 			String username = request.getParameter("username");
 			String password = request.getParameter("password");
 			String age = request.getParameter("age");
 			String description = request.getParameter("description");
-
+			
+			System.out.println("In creae User parameters:"
+					+fullname+"\t"
+					+username+"\t"
+					+password+"\t"
+					+age+"\t"
+					+description+"\t"
+					+email+"\t"
+					);
+			
 			//TODO:Add the User in the database
+			Boolean userAddedSuccessfully = true;
 
-
+			//TODO:get user id from database
+			String userID = "";
+			
+			
 			if (userAddedSuccessfully){
 				//redirects the current request to the newly created event
 				String setPattern = "/";
-				String setLocation = "/Webapp/membre/"+username;
+				String setLocation = "/Webapp/membre/"+userID;
 				redirectRequest(target, baseRequest, request, response, setPattern,
 						setLocation);
 			}else{

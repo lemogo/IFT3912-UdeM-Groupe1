@@ -8,6 +8,11 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.eclipse.jetty.server.Request;
 
+import ca.diro.Main;
+import ca.diro.DataBase.DataBase;
+import ca.diro.DataBase.Command.AddEvent;
+import ca.diro.DataBase.Command.Command;
+
 public class CreateEventHandler extends RequestHandler {
 	/*
 	 * (non-Javadoc)
@@ -28,6 +33,24 @@ public class CreateEventHandler extends RequestHandler {
 
 			String pathInfo = request.getPathInfo().substring(1);
 
+			String userId = "";//request.getParameter("id");
+			String title = request.getParameter("eventName");
+			String date = request.getParameter("eventDate");
+			String location = request.getParameter("eventLocation");
+			String nbplace = request.getParameter("eventNumPeople");
+			String description = request.getParameter("eventDescription");
+
+			System.out.println("\nIn create event - Parameters:"
+					+pathInfo
+//					+ request.getParameterNames()					//);
+							+"\t"+userId
+							+"\t"+title
+							+"\t"+date
+							+"\t"+location
+							+"\t"+nbplace
+							+"\t"+description);
+
+			
 			//The current request must be a file -> redirect to requestHandler
 			if(	pathInfo.contains(".")) {
 				super.handle(target, baseRequest, request, response);
@@ -38,29 +61,30 @@ public class CreateEventHandler extends RequestHandler {
 						pathInfo);
 				return;
 			}
-			String id = request.getParameter("id");
-			String eventName = request.getParameter("eventName");
-			String eventDate = request.getParameter("eventDate");
-			String eventLocation = request.getParameter("eventLocation");
-			String eventNumPeople = request.getParameter("eventNumPeople");
-			String eventDescription = request.getParameter("eventDescription");
-
-			System.out.println("\nParameters"+ request.getParameterNames()					//);
-					+"\t"+id
-					+"\t"+eventName
-					+"\t"+eventDate
-					+"\t"+eventLocation
-					+"\t"+eventNumPeople
-					+"\t"+eventDescription);
 			
-			Boolean addedSuccessfully = true;
+System.out.println("before database call");
+
+			DataBase db = Main.getDatabase();//new DataBase(restore);
+//			String info = "{eventId:"+eventID+"}" ;//"1}" ;
+			
+
+			Command cmd = new AddEvent(
+					"2",//userId, 
+					title, 
+					"2015-01-01 10:30:00.00",//date,
+					"Unversity","50",
+//					location,
+//					nbplace, 
+					description, db);
+			boolean addedSuccessfully = db.executeDb(cmd); 
+System.out.println("database addedSuccessfully:"+addedSuccessfully);
 			//TODO: Add the event to the database
 			
 			
 			if (addedSuccessfully){
 			//redirects the current request to the newly created event
 			String setPattern = "/";
-			String setLocation = "/Webapp/liste-des-evenements/"+eventName;
+			String setLocation = "/Webapp/liste-des-evenements/";
 			redirectRequest(target, baseRequest, request, response, setPattern,
 					setLocation);
 			}else{
