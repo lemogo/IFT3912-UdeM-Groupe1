@@ -13,6 +13,7 @@ import ca.diro.UserHandlingUtils.ActionPermissionsException;
  * required. (For instance, if we need to use a queue for requests.)
  * 
  * @author lavoiedn
+ * @deprecated
  * 
  */
 public abstract class UserAction implements IAction {

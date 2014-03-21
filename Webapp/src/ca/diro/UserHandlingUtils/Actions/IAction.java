@@ -10,6 +10,7 @@ import ca.diro.UserHandlingUtils.UserPermissions;
  * user that requires a permission should implement this interface.
  * 
  * @author lavoiedn
+ * @deprecated
  * 
  */
 public interface IAction {
