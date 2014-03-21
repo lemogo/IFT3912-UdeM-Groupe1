@@ -148,7 +148,7 @@ public class Main {
 		handlerCollection.addHandler(createContextHandler("/Webapp","", new RequestHandler()));
 		//		handlerCollection.addHandler(createContextHandler("/Webapp/evenement-modification", new RequestHandler()));
 		//		handlerCollection.addHandler(createContextHandler("/Webapp", new RequestHandler()));
-		handlerCollection.addHandler(createContextHandler("/Webapp/","create-event", new CreateEventHandler()));
+//		handlerCollection.addHandler(createContextHandler("/Webapp/","create-event", new CreateEventHandler()));
 		handlerCollection.addHandler( createContextHandler("/Webapp/","evenement", new EventHandler()) );
 		handlerCollection.addHandler( createContextHandler("/Webapp/","membre", new MemberHandler()) );
 		handlerCollection.addHandler( createContextHandler("/Webapp/","liste-des-evenements", new EventListHandler()) );
