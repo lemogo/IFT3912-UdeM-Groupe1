@@ -1,0 +1,12 @@
+Groupe 1
+
+Luc-Antoine Girardin	GIRL 1709 9107
+Nicolas Lavoie Drapeau	LAVN 2106 9007
+Lionnel Lemogo		LEML 1201 8203
+Alexandre Mathon-Roy	MATA 2403 8802
+William Tchoudi 	TCHW 1403 8105
+
+
+Port 		8080
+Username	"group1"
+Password 	""	(no password)
