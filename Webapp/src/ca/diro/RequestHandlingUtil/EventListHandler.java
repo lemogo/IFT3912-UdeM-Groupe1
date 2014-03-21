@@ -94,15 +94,6 @@ public class EventListHandler extends RequestHandler {
 				HashMap<String, Object> sources = new HashMap<String, Object>();
 				sources.put("events",eventList);
 
-				//				sources.put("events",Arrays.asList(
-				//						new Event("username1", "title1", "date1",
-				//						"location1", "description1", "id1",
-				//						"badgeClass1")
-				//						,new Event("username2", "title2", "date2",
-				//								"location2", "description2", "id2",
-				//								"badgeClass2")
-				//								));
-
 				//to display success message
 				//				sources.put("addSuccess", "true");
 				sources.put("user", "true");

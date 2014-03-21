@@ -25,6 +25,9 @@ public class ListEventByUser extends Command{
 		}
 		
 	}
+	public ListEventByUser(int userId) {
+			query_ = buildQuery(userId);		
+	}
 	
 	/**
 	 * Method to parse String from JSON format in order to retrieve parameters
@@ -36,11 +39,16 @@ public class ListEventByUser extends Command{
 	private String buildQuery() throws JSONException {
 		
 		int userId = jsonInfo.getInt("userId") ;
+		String str = buildQuery(userId);
+		// TODO parse query
+		return str;
+	}
+
+	private String buildQuery(int userId) {
 		String str = "select event.eventid, title, location, dateevent, event.description from  event " +
 				"where 	event.suserid = "+ userId +" and "+
 						" dateevent >= CURRENT_DATE() and " +
 						"UPPER(event.status) != 'CANCELLED' ";
-		// TODO parse query
 		return str;
 	}
 }

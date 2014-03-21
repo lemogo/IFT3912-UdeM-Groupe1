@@ -24,9 +24,17 @@ public class PageInfoUser extends Command{
 		else{
 			query_ = null ;
 		}
-		
 	}
-	
+
+	public PageInfoUser(int userId) throws JSONException {
+//		if (userId != -1){
+			query_ = buildQuery(userId);
+//		}
+//		else{
+//			query_ = null ;
+//		}
+	}
+
 	/**
 	 * Method to parse String from JSON format in order to retrieve parameters
 	 * and build the right query
@@ -37,9 +45,14 @@ public class PageInfoUser extends Command{
 	private String buildQuery() throws JSONException {
 		
 		int userId = jsonInfo.getInt("userId");
+		String str = buildQuery(userId);
+		// TODO parse query
+		return str;
+	}
+
+	private String buildQuery(int userId) {
 		String str = "select fullname, username, email, age, description from  signeduser " +
 					"where 	suserid = "+ userId ;
-		// TODO parse query
 		return str;
 	}
 	

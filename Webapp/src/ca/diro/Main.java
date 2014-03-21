@@ -174,7 +174,7 @@ public class Main {
 		handlerCollection.addHandler(createContextHandler("/Webapp/","unregister-event", new UnregisterToEventHandler()));
 		handlerCollection.addHandler(createContextHandler("/Webapp/","create-user", new CreateUserHandler()));
 		handlerCollection.addHandler(createContextHandler("/Webapp/","modify-user", new ModifyUserInfoHandler()));
-		handlerCollection.addHandler(createContextHandler("/Webapp/","connect-user", new ConnectUserHandler()));
+//		handlerCollection.addHandler(createContextHandler("/Webapp/","connect-user", new ConnectUserHandler()));
 	}
 
 	private static ContextHandler createContextHandler(String baseContextPath, String contextPath, RequestHandler handler) {
