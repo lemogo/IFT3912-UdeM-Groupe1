@@ -28,7 +28,6 @@ import org.json.JSONArray;
 import ca.diro.Main;
 import ca.diro.DataBase.DataBase;
 import ca.diro.DataBase.Command.AddEvent;
-import ca.diro.DataBase.Command.Command;
 
 import com.github.mustachejava.DefaultMustacheFactory;
 import com.github.mustachejava.Mustache;
@@ -337,12 +336,12 @@ public class RequestHandler extends RewriteHandler {
 		System.out.println("in Event redirect- pathInfo:"+path);
 		String setPattern = "*/"+path;
 		String setLocation = "/Webapp/"+path;//+"*";
-		
+
 		if(path.startsWith("create-event")){
 			handleCreate(path, baseRequest, request, response);
 			return;
 		}
-		
+
 		redirectRequest(target, baseRequest, request, response, setPattern,
 				setLocation);
 
@@ -359,81 +358,80 @@ public class RequestHandler extends RewriteHandler {
 				;
 	}
 
-		public void handleCreate(String target, Request baseRequest,
-				HttpServletRequest request, HttpServletResponse response)
-						throws IOException, ServletException {
-			// TODO Implement handling logic for simple requests (and command
-			// validation) and forwarding for requests that require specific
-			// permissions or handling.
-			try
-			{
-	
-				String pathInfo = request.getPathInfo().substring(1);
-	
-				String userId = "";//request.getParameter("id");
-				String title = request.getParameter("eventName");
-				String date = request.getParameter("eventDate");
-				String location = request.getParameter("eventLocation");
-				String nbplace = request.getParameter("eventNumPeople");
-				String description = request.getParameter("eventDescription");
-	
-				System.out.println("\nIn create event - Parameters:"
-						+pathInfo
-	//					+ request.getParameterNames()					//);
-								+"\t"+userId
-								+"\t"+title
-								+"\t"+date
-								+"\t"+location
-								+"\t"+nbplace
-								+"\t"+description);
-	
-				
-				//The current request must be a file -> redirect to requestHandler
-				if(	pathInfo.contains(".")) {
-					super.handle(target, baseRequest, request, response);
-					return;
-				}
-//				if(isAnotherContext(pathInfo)&&!pathInfo.equals("")){ 	        
-//					redirectToPathContext(target, baseRequest, request, response,
-//							pathInfo);
-//					return;
-//				}
-				
-	System.out.println("before database call");
-	
-				DataBase db = Main.getDatabase();//new DataBase(restore);
-	
-				Command cmd = new AddEvent(
-						"1",//userId, 
-//						"Dancerrr",//
-						title, 
-						"2015-02-01 10:30:00.00",//date,
-						"Unversity","50",
-	//					location,
-	//					nbplace, 
-						description, db);
-				boolean addedSuccessfully = db.executeDb(cmd); 
-	System.out.println("database addedSuccessfully:"+addedSuccessfully);
-				//TODO: Add the event to the database
-				
-				
-				if (addedSuccessfully){
+	public void handleCreate(String target, Request baseRequest,
+			HttpServletRequest request, HttpServletResponse response)
+					throws IOException, ServletException {
+		// TODO Implement handling logic for simple requests (and command
+		// validation) and forwarding for requests that require specific
+		// permissions or handling.
+		try
+		{
+
+			String pathInfo = request.getPathInfo().substring(1);
+
+			String userId = "";//request.getParameter("id");
+			String title = request.getParameter("eventName");
+			String date = request.getParameter("eventDate");
+			String location = request.getParameter("eventLocation");
+			String nbplace = request.getParameter("eventNumPeople");
+			String description = request.getParameter("eventDescription");
+
+			System.out.println("\nIn create event - Parameters:"
+					+pathInfo
+					//					+ request.getParameterNames()					//);
+					+"\t"+userId
+					+"\t"+title
+					+"\t"+date
+					+"\t"+location
+					+"\t"+nbplace
+					+"\t"+description);
+
+
+			//The current request must be a file -> redirect to requestHandler
+			if(	pathInfo.contains(".")) {
+				super.handle(target, baseRequest, request, response);
+				return;
+			}
+
+			//				System.out.println("before database call");
+
+			//TODO: Add the event to the database	
+			DataBase db = Main.getDatabase();//new DataBase(restore);	
+			AddEvent cmd = new AddEvent(db);
+			boolean addedSuccessfully = cmd.addNewEvent(						
+					"2",//userId, 
+					//						"Vollerrrrr",//
+					title, 
+					//						"2015-05-11 10:30:00.00",
+					date,
+					//						"Unversity","50",
+					location,
+					nbplace.equals("Illimité") ? ""+Integer.MAX_VALUE : nbplace, 
+							description
+							//						"description"
+					);
+
+			System.out.println("database addedSuccessfully:"+addedSuccessfully);
+
+
+
+			if (addedSuccessfully){
 				//redirects the current request to the newly created event
 				String setPattern = "/";
 				String setLocation = "/Webapp/liste-des-evenements/";
 				redirectRequest(target, baseRequest, request, response, setPattern,
 						setLocation);
-				}else{
-					System.out.println("failled to add event");
-					//redirect the user to the event page with the same info
-					//if possible indicate to the user the reason of the failure to create the event 
-				}
+			}else{
+				System.out.println("failled to add event");
+				//redirect the user to the event page with the same info
+				//if possible indicate to the user the reason of the failure to create the event 
 			}
-			catch (Exception e)
-			{
-				catchHelper(baseRequest, request, response, e);
-			}
-	
 		}
+		catch (Exception e)
+		{
+			catchHelper(baseRequest, request, response, e);
+		}
+
+	}
 
 }

@@ -32,14 +32,8 @@ public class AddEvent extends Command {
 			e.printStackTrace();
 		}
 	}
-	public AddEvent(String userId, String title, String date,
-			String location, String nbplace, String description, DataBase db )   {
+	public AddEvent( DataBase db )   {
 		myDb  = db;
-		try {
-			addNewEvent(userId, title, date, location, nbplace, description);
-		} catch (SQLException e) {
-		 	System.err.println(e.getMessage());
-		}
 	}
 
 	/**

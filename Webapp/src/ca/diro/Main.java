@@ -27,6 +27,7 @@ import org.eclipse.jetty.server.Server;
 import org.eclipse.jetty.server.handler.ContextHandler;
 import org.eclipse.jetty.server.handler.ContextHandlerCollection;
 import org.eclipse.jetty.server.handler.HandlerCollection;
+import org.eclipse.jetty.server.session.HashSessionIdManager;
 import org.eclipse.jetty.util.security.Constraint;
 
 import ca.diro.DataBase.DataBase;
@@ -82,6 +83,8 @@ public class Main {
 	public static void main(String[] args) throws Exception {
 		//restoreDatabase();
 		database = new DataBase();
+//		database.createTables(); // 
+//		database.populateTable(); 
 
 		AddDatabaseShutdownHook hook = new AddDatabaseShutdownHook();
 		hook.attachShutDownHook();
@@ -132,6 +135,17 @@ public class Main {
 	 * current server. The required classes are listed in this class' imports.
 	 */
 	private static void initSecureServer() {
+		createHandlerCollection();
+
+		server = new Server(DEFAULT_PORT);
+		
+		HashSessionIdManager sessionIdManager = new HashSessionIdManager();
+		
+		server.setHandler(handlerCollection);
+		server.setSessionIdManager(sessionIdManager);
+	}
+
+	private static void createHandlerCollection() {
 		handlerCollection = new ContextHandlerCollection();
 
 		ModifyEventHandler modifyEventHandler = new ModifyEventHandler();
@@ -161,9 +175,6 @@ public class Main {
 		handlerCollection.addHandler(createContextHandler("/Webapp/","create-user", new CreateUserHandler()));
 		handlerCollection.addHandler(createContextHandler("/Webapp/","modify-user", new ModifyUserInfoHandler()));
 		handlerCollection.addHandler(createContextHandler("/Webapp/","connect-user", new ConnectUserHandler()));
-
-		server = new Server(DEFAULT_PORT);
-		server.setHandler(handlerCollection);
 	}
 
 	private static ContextHandler createContextHandler(String baseContextPath, String contextPath, RequestHandler handler) {
