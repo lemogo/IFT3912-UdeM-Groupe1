@@ -70,7 +70,9 @@ public class MemberHandler extends RequestHandler {
 				//Add User info here!!
 				HashMap<String, Object> sources = new HashMap<String, Object>();
 				sources.put("isOwner", "true");
-				System.out.println("before executing first database command");
+//				System.out.println("before executing first database command");
+				
+				//TODO:Get the user id using the database and/or if there's no path info the id from the session variable 
 				int userId = 2;
 				PageInfoUser cmd = new PageInfoUser(userId) ; //add cast if necessary
 				Boolean asExecuted = Main.getDatabase().executeDb(cmd); //true check si la requete est bien exécuté 
@@ -91,9 +93,8 @@ public class MemberHandler extends RequestHandler {
 					//TODO:send error message to user and return to login page
 				}
 
-				System.out.println("username="+username+"\tpassword="+password+"\tfullname="+fullname+"\temail="+email+"age="+age+"\tdescription="+description);
+//				System.out.println("username="+username+"\tpassword="+password+"\tfullname="+fullname+"\temail="+email+"age="+age+"\tdescription="+description);
 
-				//				sources.putAll(new HashMap<String,String>());
 				sources.put("username",username);
 				sources.put("fullname",fullname);
 				sources.put("registeredSince","ownerRegisteredSince");
@@ -105,16 +106,17 @@ public class MemberHandler extends RequestHandler {
 				asExecuted = Main.getDatabase().executeDb(userEventList);
 				rs = userEventList.getResultSet();
 				List<Event> eventList = new LinkedList<Event>();  
-//event.eventid, title, location, dateevent, event.description
+
 				while(rs.next()){
 					eventList.add(							
 							new Event(username, rs.getString("title"), rs.getString("dateevent"),
 									rs.getString("location"), rs.getString("description"), rs.getString("eventid"),
 									"Event_badgeClass1"));
-					System.out.println("in while loop - adding:"+rs.getString("title"));
-					//add event info here!!
+//					System.out.println("in while loop - adding:"+rs.getString("title"));
 				}
 				sources.put("ownerEventsList",eventList);
+				
+				//TODO: Get the user's registeredEventsList from the database
 				sources.put("registeredEventsList",Arrays.asList(
 						new Event("BIDON_registeredEvents_username1", "BIDON_registeredEvents_title1", "BIDON_registeredEvents_date1",
 								"BIDON_registeredEvents_location1", "BIDON_registeredEvents_description1", "BIDON_registeredEvents_id1",
@@ -127,8 +129,6 @@ public class MemberHandler extends RequestHandler {
 				//				sources.put("unregisterSuccess", "false");
 				sources.put("user", "true");
 				//				sources.put("notifications_number", "0");
-
-				System.out.println("in MemberHandler");
 
 				processTemplate(request, response, "header.html",sources);
 				processTemplate(request, response, filename,sources);

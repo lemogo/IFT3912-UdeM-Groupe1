@@ -1,43 +1,20 @@
 package ca.diro;
 
-import java.io.ByteArrayOutputStream;
-import java.io.File;
-import java.io.IOException;
-import java.io.PrintStream;
 import java.sql.SQLException;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.Map;
 
-import javax.servlet.ServletException;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-
-import org.eclipse.jetty.rewrite.handler.RedirectPatternRule;
-import org.eclipse.jetty.rewrite.handler.RewriteHandler;
-import org.eclipse.jetty.rewrite.handler.RewritePatternRule;
-import org.eclipse.jetty.security.ConstraintMapping;
-import org.eclipse.jetty.security.ConstraintSecurityHandler;
-import org.eclipse.jetty.security.HashLoginService;
-import org.eclipse.jetty.security.LoginService;
-import org.eclipse.jetty.security.authentication.BasicAuthenticator;
 import org.eclipse.jetty.server.Handler;
-import org.eclipse.jetty.server.Request;
 import org.eclipse.jetty.server.Server;
 import org.eclipse.jetty.server.handler.ContextHandler;
 import org.eclipse.jetty.server.handler.ContextHandlerCollection;
-import org.eclipse.jetty.server.handler.HandlerCollection;
 import org.eclipse.jetty.server.session.HashSessionIdManager;
-import org.eclipse.jetty.util.security.Constraint;
+import org.eclipse.jetty.server.session.SessionHandler;
 
 import ca.diro.DataBase.DataBase;
-import ca.diro.RequestHandlingUtil.CreateEventHandler;
 import ca.diro.RequestHandlingUtil.CreateUserHandler;
 import ca.diro.RequestHandlingUtil.DeleteEventHandler;
+import ca.diro.RequestHandlingUtil.DisconnectUserHandler;
 import ca.diro.RequestHandlingUtil.EventHandler;
 import ca.diro.RequestHandlingUtil.EventListHandler;
-import ca.diro.RequestHandlingUtil.ConnectUserHandler;
-import ca.diro.RequestHandlingUtil.DisconnectUserHandler;
 import ca.diro.RequestHandlingUtil.EventModificationPageHandler;
 import ca.diro.RequestHandlingUtil.MemberHandler;
 import ca.diro.RequestHandlingUtil.ModifyEventHandler;
@@ -56,7 +33,7 @@ public class Main {
 
 	public final static int DEFAULT_PORT = 8080;
 	private static Server server;
-	private static 	ContextHandlerCollection handlerCollection;
+//	private static 	ContextHandlerCollection handlerCollection;
 
 
 	/**
@@ -86,16 +63,13 @@ public class Main {
 //		database.createTables(); // 
 //		database.populateTable(); 
 
-		AddDatabaseShutdownHook hook = new AddDatabaseShutdownHook();
-		hook.attachShutDownHook();
-
 		initSecureServer();
 		server.start();
 		server.join();
 
+		AddShutdownHook hook = new AddShutdownHook();
+		hook.attachShutDownHook();
 		System.exit(0);
-		//		database = new DataBase();
-		//		database.dbConnect();
 	}
 
 	private static void restoreDatabase() {
@@ -109,7 +83,7 @@ public class Main {
 		database.populateTable();
 	}
 
-	public static class AddDatabaseShutdownHook {
+	public static class AddShutdownHook {
 		public void attachShutDownHook(){
 			Runtime.getRuntime().addShutdownHook(new Thread() {
 
@@ -123,10 +97,11 @@ public class Main {
 						e.printStackTrace();
 					}
 					database = null;
+					
+					//TODO:remove all logged users
 				}
 
 			});
-//			System.out.println("Shut Down Hook Attached.");
 		}
 	}
 
@@ -135,7 +110,7 @@ public class Main {
 	 * current server. The required classes are listed in this class' imports.
 	 */
 	private static void initSecureServer() {
-		createHandlerCollection();
+		ContextHandlerCollection handlerCollection = createHandlerCollection();
 
 		server = new Server(DEFAULT_PORT);
 		
@@ -145,11 +120,10 @@ public class Main {
 		server.setSessionIdManager(sessionIdManager);
 	}
 
-	private static void createHandlerCollection() {
-		handlerCollection = new ContextHandlerCollection();
+	private static ContextHandlerCollection createHandlerCollection() {
+		ContextHandlerCollection handlerCollection = new ContextHandlerCollection();
 
 		ModifyEventHandler modifyEventHandler = new ModifyEventHandler();
-		//		modifyEventHandler.setOriginalPathAttribute("*/Webapp/modify-event");
 		modifyEventHandler.setRewriteRequestURI(true);
 
 		ContextHandler modifyContext = new ContextHandler("/Webapp/modify-event");
@@ -158,30 +132,32 @@ public class Main {
 		modifyContext.setHandler(modifyEventHandler);
 
 		handlerCollection.addHandler(modifyContext);
-//		ContextHandler webappContextHandler = createContextHandler("/Webapp","", new RequestHandler());
-		handlerCollection.addHandler(createContextHandler("/Webapp","", new RequestHandler()));
-		//		handlerCollection.addHandler(createContextHandler("/Webapp/evenement-modification", new RequestHandler()));
-		//		handlerCollection.addHandler(createContextHandler("/Webapp", new RequestHandler()));
-//		handlerCollection.addHandler(createContextHandler("/Webapp/","create-event", new CreateEventHandler()));
-		handlerCollection.addHandler( createContextHandler("/Webapp/","evenement", new EventHandler()) );
-		handlerCollection.addHandler( createContextHandler("/Webapp/","membre", new MemberHandler()) );
-		handlerCollection.addHandler( createContextHandler("/Webapp/","liste-des-evenements", new EventListHandler()) );
-		handlerCollection.addHandler( createContextHandler("/Webapp/","evenement-modification", new EventModificationPageHandler()) );
+		SessionHandler session = new SessionHandler();
+		session.setHandler(new RequestHandler());
+		handlerCollection.addHandler(createContextHandler("", session));
+//		handlerCollection.addHandler(createContextHandler("create-event", new CreateEventHandler()));
+		handlerCollection.addHandler( createContextHandler("/evenement", new EventHandler()) );
+		handlerCollection.addHandler( createContextHandler("/membre", new MemberHandler()) );
+		handlerCollection.addHandler( createContextHandler("/liste-des-evenements", new EventListHandler()) );
+		handlerCollection.addHandler( createContextHandler("/evenement-modification", new EventModificationPageHandler()) );
 
-		handlerCollection.addHandler(createContextHandler("/Webapp/","deconnexion", new DisconnectUserHandler()));
-		handlerCollection.addHandler(createContextHandler("/Webapp/","delete-event", new DeleteEventHandler()));
-		handlerCollection.addHandler(createContextHandler("/Webapp/","register-event", new RegisterToEventHandler()));
-		handlerCollection.addHandler(createContextHandler("/Webapp/","unregister-event", new UnregisterToEventHandler()));
-		handlerCollection.addHandler(createContextHandler("/Webapp/","create-user", new CreateUserHandler()));
-		handlerCollection.addHandler(createContextHandler("/Webapp/","modify-user", new ModifyUserInfoHandler()));
-//		handlerCollection.addHandler(createContextHandler("/Webapp/","connect-user", new ConnectUserHandler()));
+		handlerCollection.addHandler(createContextHandler("/deconnexion", new DisconnectUserHandler()));
+		handlerCollection.addHandler(createContextHandler("/delete-event", new DeleteEventHandler()));
+		handlerCollection.addHandler(createContextHandler("/register-event", new RegisterToEventHandler()));
+		handlerCollection.addHandler(createContextHandler("/unregister-event", new UnregisterToEventHandler()));
+		handlerCollection.addHandler(createContextHandler("/create-user", new CreateUserHandler()));
+		handlerCollection.addHandler(createContextHandler("/modify-user", new ModifyUserInfoHandler()));
+//		handlerCollection.addHandler(createContextHandler("connect-user", new ConnectUserHandler()));
+		return handlerCollection;
 	}
 
-	private static ContextHandler createContextHandler(String baseContextPath, String contextPath, RequestHandler handler) {
-		ContextHandler contextHandler = new ContextHandler(baseContextPath+contextPath);
+	private static ContextHandler createContextHandler(String contextPath, Handler handler) {
+		ContextHandler contextHandler = new ContextHandler("/Webapp"+contextPath);
 		contextHandler.setResourceBase(".");
 		contextHandler.setClassLoader(Thread.currentThread().getContextClassLoader());
 		contextHandler.setHandler(handler);
+//		contextHandler.setResourceBase("/Webapp");
+//		handler.setOriginalPathAttribute("*/Webapp/");
 //		handler.setRewritePathInfo(true);//handler.setRewriteRequestURI(true);
 		return contextHandler;
 	}

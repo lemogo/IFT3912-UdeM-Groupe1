@@ -39,10 +39,10 @@ public class ConnectUserHandler extends RequestHandler {
 			//TODO:Authenticate the user here
 
 			String JSONRequest = "{ username : " + username + ", password : " +
-			password + " }";
-System.out.println(JSONRequest);
+					password + " }";
+			System.out.println(JSONRequest);
 			CreateUserAccount userCreation = new CreateUserAccount(JSONRequest,
-			Main.getDatabase());
+					Main.getDatabase());
 
 			Main.getDatabase().executeDb(userCreation);
 			ResultSet results = userCreation.getResultSet();
@@ -50,16 +50,28 @@ System.out.println(JSONRequest);
 			results.next();
 			int userID = results.getInt(0);
 
+			Integer accessCount = new Integer(0);
+
 			HttpSession newUserSession = request.getSession(true);
 
-			newUserSession.setAttribute("UserID", userID);
-						
+			if (newUserSession.isNew()){
+				newUserSession.setAttribute("UserID", userID);
+//				System.out.println("new user session");
+			}else{
+				Integer oldAccessCount = (Integer)newUserSession.getAttribute("accessCount"); 
+				if (oldAccessCount != null) {
+					accessCount = new Integer(oldAccessCount.intValue() + 1);
+				}
+//				System.out.println("old user session");
+			}
+			newUserSession.setAttribute("accessCount", accessCount);
+			
 			if (authenticatedSuccessfully){
-			//Redirects the current request to the newly created event
-			String setPattern = "/";
-			String setLocation = "/Webapp/membre/"+username;
-			redirectRequest(target, baseRequest, request, response, setPattern,
-					setLocation);
+				//Redirects the current request to the newly created event
+				String setPattern = "/";
+				String setLocation = "/Webapp/membre/"+username;
+				redirectRequest(target, baseRequest, request, response, setPattern,
+						setLocation);
 			}else{
 				//TODO:send error message to user and return to login page
 			}
