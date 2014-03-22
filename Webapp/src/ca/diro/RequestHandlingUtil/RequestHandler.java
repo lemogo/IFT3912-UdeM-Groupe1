@@ -453,6 +453,12 @@ public class RequestHandler extends RewriteHandler {
 			//TODO:Verify User's credential and retrieve User id from the database
 			String username = request.getParameter("username");
 			String password = request.getParameter("password");
+			if(username.equals("")||password.equals("")){
+				redirectRequest(target, baseRequest, request, response, "/",
+						"/Webapp/connexion");
+				return;
+			}
+
 
 			Boolean authenticatedSuccessfully = true;
 			//TODO:Authenticate the user here
@@ -464,6 +470,13 @@ public class RequestHandler extends RewriteHandler {
 			OpenSession userCreation = new OpenSession(JSONRequest);
 
 			authenticatedSuccessfully = Main.getDatabase().executeDb(userCreation);
+			
+			if (!authenticatedSuccessfully){
+				redirectRequest(target, baseRequest, request, response, "/",
+						"/Webapp/connexion");
+				return;
+			}
+			
 			ResultSet results = userCreation.getResultSet();
 			System.out.println("authenticatedSuccessfully:"+authenticatedSuccessfully);
 			int userID =-1 ;
@@ -496,6 +509,8 @@ public class RequestHandler extends RewriteHandler {
 						setLocation);
 			}else{
 				//TODO:send error message to user and return to login page
+				redirectRequest(target, baseRequest, request, response, "/",
+						"/Webapp/connexion");
 			}
 
 		}

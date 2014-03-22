@@ -74,6 +74,10 @@ public class ConnectUserHandler extends RequestHandler {
 						setLocation);
 			}else{
 				//TODO:send error message to user and return to login page
+				String setPattern = "/";
+				String setLocation = "/Webapp/connexion";
+				redirectRequest(target, baseRequest, request, response, setPattern,
+						setLocation);
 			}
 
 		}
