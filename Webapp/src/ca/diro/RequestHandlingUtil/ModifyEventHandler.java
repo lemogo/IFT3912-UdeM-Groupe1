@@ -1,6 +1,7 @@
 package ca.diro.RequestHandlingUtil;
 
 import java.io.IOException;
+import java.nio.file.Path;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
@@ -41,22 +42,23 @@ public class ModifyEventHandler extends RequestHandler {
 			String nbplace = request.getParameter("eventNumPeople");
 			String description = request.getParameter("eventDescription");
 
-			System.out.println("\nIn modify Parameters"
-					+target
-//					+ request.getParameterNames()					//);
-							+"\t"+userId
-							+"\t"+title
-							+"\t"+date
-							+"\t"+location
-							+"\t"+nbplace
-							+"\t"+description);
+//			System.out.println("\nIn modify Parameters"
+//					+target
+////					+ request.getParameterNames()					//);
+//							+"\t"+userId
+//							+"\t"+title
+//							+"\t"+date
+//							+"\t"+location
+//							+"\t"+nbplace
+//							+"\t"+description);
 
-			
-			
+						
 			if(modifiedSuccessfully){
+				String pathInfo = target.startsWith("/")?target.substring(1):target;
 				//redirects the current request to the newly created event
 				String setPattern = "/";
-				String setLocation = "/Webapp/evenement/"+id;
+//				String setLocation = "/Webapp/evenement/"+pathInfo;
+				String setLocation = "/Webapp/liste-des-evenements/";
 				redirectRequest(target, baseRequest, request, response, setPattern,
 						setLocation);
 			}else{
