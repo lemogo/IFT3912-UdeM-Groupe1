@@ -9,8 +9,6 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import org.eclipse.jetty.server.Request;
-
 import ca.diro.Main;
 import ca.diro.DataBase.DataBase;
 import ca.diro.DataBase.Command.Command;
@@ -25,7 +23,7 @@ public class EventHandler extends RequestHandler {
 	 * javax.servlet.http.HttpServletResponse)
 	 */
 	@Override
-	public void handle(String target, Request baseRequest,
+	public void doGet(
 			HttpServletRequest request, HttpServletResponse response)
 					throws IOException, ServletException {
 		// TODO Implement handling logic for simple requests (and command
@@ -33,22 +31,24 @@ public class EventHandler extends RequestHandler {
 		// permissions or handling.
 		try
 		{
-
 			String pathInfo = request.getPathInfo().substring(1);
 			System.out.println("in Event - pathInfo:"+pathInfo+"\tcontextPath:"+request.getContextPath());
 			System.out.println("in Event - pathInfo:"+pathInfo+"\tcontextPath:"+("/Webapp/"+pathInfo));
 
 			//The current request must be a file -> redirect to requestHandler
 			if(	pathInfo.contains(".")) {
-				super.handle(target, baseRequest, request, response);
+				handleToTheRessource(request, response, pathInfo);
 				return;
 			}
-			if(isAnotherContext(pathInfo)&&!pathInfo.equals("")){ 	        
-				redirectToPathContext(target, baseRequest, request, response,
-						pathInfo);
+			if(pathInfo.startsWith("modify-event")||pathInfo.startsWith("delete-event")){
+				String setLocation = "/Webapp/"+pathInfo;
+				response.sendRedirect(setLocation);
+				return;
+			}else if(isAnotherContext(pathInfo)&&!pathInfo.equals("")){ 	        
+				String setLocation = "/Webapp/"+pathInfo;//"/";
+				response.sendRedirect(setLocation);
 				return;
 			}
-
 
 			// create a handle to the resource
 			String filename = "evenement.html"; 
@@ -70,7 +70,6 @@ public class EventHandler extends RequestHandler {
 				String eventID = pathInfo;
 
 				processTemplate(request, response, "header.html");
-
 
 				//TODO:Get the user event info from the database
 				DataBase myDb = Main.getDatabase();//new DataBase(restore);
@@ -97,24 +96,28 @@ public class EventHandler extends RequestHandler {
 						sources.put("isOwner", "false");
 						//				sources.put("registerSuccess", "true");
 						//				sources.put("unregisterSuccess", "false");
-						sources.put("user", "false");
+
+						boolean isLoggedIn=request.getRequestedSessionId()==null? false:true;
+
+						System.out.println(request.getRequestedSessionId());//.request.getRequestedSessionId()==null? false:true;
+						
+						sources.put("user", isLoggedIn);
 						sources.put("notifications_number", "0");
 
-
 						processTemplate(request, response, filename,sources);
-						//				System.out.println("in eventHandler after template");
 						processTemplate(request, response, "footer.html");
 					}else{
 						//TODO:show error message -- The event ____ does not exist
 					}
 				}
 
-				baseRequest.setHandled(true);
+				//				baseRequest.setHandled(true);
 			}
 		}
 		catch (Exception e)
 		{
-			catchHelper(baseRequest, request, response, e);
+			System.out.println("In catch exception");
+			//			catchHelper(baseRequest, request, response, e);
 		}
 
 	}

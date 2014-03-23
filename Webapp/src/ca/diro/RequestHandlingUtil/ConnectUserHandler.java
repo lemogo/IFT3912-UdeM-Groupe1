@@ -8,10 +8,8 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
-import org.eclipse.jetty.server.Request;
-
 import ca.diro.Main;
-import ca.diro.DataBase.Command.CreateUserAccount;
+import ca.diro.DataBase.Command.OpenSession;
 
 public class ConnectUserHandler extends RequestHandler {
 	/*
@@ -22,68 +20,69 @@ public class ConnectUserHandler extends RequestHandler {
 	 * javax.servlet.http.HttpServletResponse)
 	 */
 	@Override
-	public void handle(String target, Request baseRequest,
+	public void doPost(
 			HttpServletRequest request, HttpServletResponse response)
 					throws IOException, ServletException {
 		// TODO Implement handling logic for simple requests (and command
 		// validation) and forwarding for requests that require specific
 		// permissions or handling.
-		try
-		{
-
+		try{
+			//TODO:verify if the user is currently login another account. 
+			//If so,ask the user if he wants to logout from account X and proceed with login 
+			
 			//TODO:Verify User's credential and retrieve User id from the database
 			String username = request.getParameter("username");
 			String password = request.getParameter("password");
 
-			Boolean authenticatedSuccessfully = true;
 			//TODO:Authenticate the user here
 
-			String JSONRequest = "{ username : " + username + ", password : " +
+			String JSONRequest = "{ userName : " + username + ", password : " +
 					password + " }";
 			System.out.println(JSONRequest);
-			CreateUserAccount userCreation = new CreateUserAccount(JSONRequest,
-					Main.getDatabase());
+			OpenSession openCommand = new OpenSession(JSONRequest);
 
-			Main.getDatabase().executeDb(userCreation);
-			ResultSet results = userCreation.getResultSet();
+//			System.out.println("before database execution");
+			
+			Boolean authenticatedSuccessfully  = Main.getDatabase().executeDb(openCommand);
+			ResultSet results = openCommand.getResultSet();
 
-			results.next();
-			int userID = results.getInt(0);
+			int userID =-1;
+			if (results.next())
+			userID = results.getInt(1);
+			else authenticatedSuccessfully = false;
 
 			Integer accessCount = new Integer(0);
 
+			System.out.println("before requesting session");
 			HttpSession newUserSession = request.getSession(true);
 
 			if (newUserSession.isNew()){
 				newUserSession.setAttribute("UserID", userID);
-//				System.out.println("new user session");
+				System.out.println("new user session");
 			}else{
 				Integer oldAccessCount = (Integer)newUserSession.getAttribute("accessCount"); 
 				if (oldAccessCount != null) {
 					accessCount = new Integer(oldAccessCount.intValue() + 1);
 				}
-//				System.out.println("old user session");
+				System.out.println("old user session");
 			}
 			newUserSession.setAttribute("accessCount", accessCount);
 			
 			if (authenticatedSuccessfully){
 				//Redirects the current request to the newly created event
-				String setPattern = "/";
 				String setLocation = "/Webapp/membre/"+username;
-				redirectRequest(target, baseRequest, request, response, setPattern,
-						setLocation);
+				response.sendRedirect(setLocation);
+//				RequestDispatcher dispatcher = request.getRequestDispatcher(setLocation);
+//				dispatcher.forward(request, response);
 			}else{
 				//TODO:send error message to user and return to login page
-				String setPattern = "/";
-				String setLocation = "/Webapp/connexion";
-				redirectRequest(target, baseRequest, request, response, setPattern,
-						setLocation);
+				String setLocation = "Webapp/connexion";
+				response.sendRedirect(setLocation);
 			}
 
 		}
-		catch (Exception e)
-		{
-			catchHelper(baseRequest, request, response, e);		
+		catch (Exception e){
+			catchHelper( request, response, e);		
 		}
 
 	}

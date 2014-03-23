@@ -16,21 +16,11 @@ import java.util.List;
 import java.util.Map;
 
 import javax.servlet.ServletException;
+import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
 
-import org.eclipse.jetty.rewrite.handler.RedirectPatternRule;
-import org.eclipse.jetty.rewrite.handler.RewriteHandler;
-import org.eclipse.jetty.rewrite.handler.RuleContainer;
-import org.eclipse.jetty.server.Request;
 import org.json.JSONArray;
-
-import ca.diro.Main;
-import ca.diro.DataBase.DataBase;
-import ca.diro.DataBase.Command.AddEvent;
-import ca.diro.DataBase.Command.CreateUserAccount;
-import ca.diro.DataBase.Command.OpenSession;
 
 import com.github.mustachejava.DefaultMustacheFactory;
 import com.github.mustachejava.Mustache;
@@ -42,8 +32,7 @@ import com.github.mustachejava.MustacheFactory;
  * @author girardil, lavoiedn
  * @version 1.0
  */
-public class RequestHandler extends RewriteHandler {
-
+public class RequestHandler extends HttpServlet {
 	/**
 	 * The list of supported commands in requests.
 	 */
@@ -57,23 +46,16 @@ public class RequestHandler extends RewriteHandler {
 	 */
 	private JSONArray JSONResult;
 
-
 	// La racine des ressources a presenter
 	private static File	rootDir		= new File(".");
 
 	// Ressources statiques -> ne seront pas interpretees par Mustache
+//	protected static File	staticDir	= new File("static");
 	protected static File	staticDir	= new File(rootDir, "./static");
 
 	// Ressources dynamiques -> seront interpretees par Mustache
+//	protected static File	dynamicDir	= new File( "templates");
 	protected static File	dynamicDir	= new File(rootDir, "templates");
-
-	protected RedirectPatternRule redirect;
-
-	public RequestHandler() {
-		super();
-		redirect = new RedirectPatternRule();
-		this.addRule(redirect);
-	}
 
 	/*
 	 * (non-Javadoc)
@@ -83,114 +65,122 @@ public class RequestHandler extends RewriteHandler {
 	 * javax.servlet.http.HttpServletResponse)
 	 */
 	@Override
-	public void handle(String target, Request baseRequest,
-			HttpServletRequest request, HttpServletResponse response)
+	public void doGet(HttpServletRequest request, HttpServletResponse response)
 					throws IOException, ServletException {
 		// TODO Implement handling logic for simple requests (and command
 		// validation) and forwarding for requests that require specific
 		// permissions or handling.
 		try
 		{
-			System.out.println("In requestHandler\t"+baseRequest.getMethod()+"\ttarget:"+target+"\t"+baseRequest.getPathInfo()+"\tContext:"+request.getContextPath());
-
+			//			System.out.println("In requestHandler\t"+baseRequest.getMethod()+"\ttarget:"+target+"\t"+baseRequest.getPathInfo()+"\tContext:"+request.getContextPath());
 			String pathInfo = request.getPathInfo();
 			if(pathInfo.startsWith("/"))pathInfo = pathInfo.substring(1);
 
 			if(pathInfo.length()<=1){
-				baseRequest.setHandled(true);
+System.out.println("returns because it's a null pathInfo");
+				//				baseRequest.setHandled(true);
 				return;
 			}
-			if ( (request.getContextPath().equalsIgnoreCase("/Webapp")&&target.equals("/") )||pathInfo.equals("accueil")) pathInfo = "accueil.html";
-			else if ( pathInfo.equals("enregistrement") || pathInfo.equals("ajouter-un-evenement") 
-					||pathInfo.equals("notifications")||pathInfo.equals("connexion")) pathInfo = pathInfo+".html";
-			else if(isAnotherContext(pathInfo)){
-				redirectToPathContext(target, baseRequest, request, response, pathInfo);
-			}
-
-			// create a handle to the resource
-			File staticResource = new File(staticDir, pathInfo);
-			File dynamicResource = new File(dynamicDir, pathInfo);
-
-			setResponseContentType(target, response);
-			response.setCharacterEncoding("utf-8");
-
-			String filename = pathInfo;
-
-			// Ressource existe
-			if(pathInfo.startsWith("https://")){
-				response.setStatus(HttpServletResponse.SC_OK);
-				copy(staticResource, response.getOutputStream());
-			}
-			else if (!staticResource.exists() && !dynamicResource.exists())
-			{
-				response.setStatus(HttpServletResponse.SC_NOT_FOUND);
-				processTemplate(request, response, "404.html");
-			}
-			else if (staticResource.exists())
-			{
-				response.setStatus(HttpServletResponse.SC_OK);
-				copy(staticResource, response.getOutputStream());
-			}
-			else
-			{
-				response.setStatus(HttpServletResponse.SC_OK);
-				processTemplate(request, response, "header.html");
-
-				//to display user navbar
-				HashMap<String, Object> sources = new HashMap<String, Object>();
-				sources.put("user", "false");
-
-				processTemplate(request, response, filename,sources);
-				processTemplate(request, response, "footer.html");
-			}
-
-			baseRequest.setHandled(true);
+			handleToTheRessource(request, response, pathInfo);
 		}
 		catch (Exception e)
 		{
-			catchHelper(baseRequest, request, response, e);
+//			System.out.println("In catch exception");
+						catchHelper(request, response, e);
 		}
 
+	}
+
+	protected void handleToTheRessource(HttpServletRequest request,
+			HttpServletResponse response, String pathInfo) throws IOException,
+			UnsupportedEncodingException, FileNotFoundException {
+System.out.println("In handleToTheRessource\t"+request.getMethod()+"\tpathInfo:"+pathInfo+"\t"+request.getPathInfo()+"\tContext:"+request.getContextPath());
+
+		if ( pathInfo.equals("accueil")) pathInfo = "accueil.html";
+		else if ( pathInfo.equals("enregistrement") || pathInfo.equals("ajouter-un-evenement") 
+				||pathInfo.equals("notifications")||pathInfo.equals("connexion")) pathInfo = pathInfo+".html";
+		else if(isAnotherContext(pathInfo)&&!pathInfo.equals("")){ 	        
+			String setLocation = "/Webapp/"+pathInfo;//"/";
+			response.sendRedirect(setLocation);
+			return;
+		}
+
+
+		// create a handle to the resource
+		File staticResource = new File(staticDir, pathInfo);
+		File dynamicResource = new File(dynamicDir, pathInfo);
+
+		//			setResponseContentType(target, response);
+		setResponseContentType(pathInfo, response);
+		response.setCharacterEncoding("utf-8");
+
+		String filename = pathInfo;
+System.out.println("static ressource:"+staticResource.getAbsolutePath()+"\tdynamicResource"+dynamicResource.getAbsolutePath());
+
+		// Ressource existe
+		if(pathInfo.startsWith("https://")){
+			System.out.println("http request");
+			response.setStatus(HttpServletResponse.SC_OK);
+//			copy(staticResource, response.getOutputStream());
+			//TODO:find out how to deal with this case
+		}
+		else if (!staticResource.exists() && !dynamicResource.exists()){
+			System.out.println("NOT FOUND :: \tstatic ressource:\t"+staticResource+"\tdynamicResource:\t"+dynamicResource);
+			response.setStatus(HttpServletResponse.SC_NOT_FOUND);
+			processTemplate(request, response, "404.html");
+	}
+		else if (staticResource.exists()){
+			System.out.println("Exist static ressource:"+staticResource);
+			response.setStatus(HttpServletResponse.SC_OK);
+			copy(staticResource, response.getOutputStream());
+		}
+		else{
+			System.out.println("Thinks it a dynamic ressource:\t"+dynamicResource);
+			response.setStatus(HttpServletResponse.SC_OK);
+
+			boolean isLoggedIn=request.getRequestedSessionId()==null? false:true;
+					System.out.println(request.getRequestedSessionId());//.request.getRequestedSessionId()==null? false:true;
+			//to display user navbar
+			HashMap<String, Object> sources = new HashMap<String, Object>();
+			sources.put("user", isLoggedIn);
+
+			processTemplate(request, response, "header.html", sources);
+			processTemplate(request, response, filename,sources);
+			processTemplate(request, response, "footer.html");
+		}
+		//			baseRequest.setHandled(true);
 	}
 
 	protected void setResponseContentType(String target, HttpServletResponse response) {
 		// A changer pour supporter des images, peut-etre par extension ou
 		// par repertoire
-		if (target.endsWith(".css"))
-		{
+		if (target.endsWith(".css")){
 			response.setContentType("text/css");
 		}
-		else if (target.endsWith(".js"))
-		{
+		else if (target.endsWith(".js")){
 			response.setContentType("text/javascript");
 		}
-		else if (target.endsWith(".png"))
-		{
+		else if (target.endsWith(".png")){
 			response.setContentType("image/png");
 		}
-		else if (target.endsWith(".jpg"))
-		{
+		else if (target.endsWith(".jpg")){
 			response.setContentType("image/jpg");
 		}
-		else if (target.endsWith(".ico"))
-		{
+		else if (target.endsWith(".ico")){
 			response.setContentType("image/x-icon");
 		}
-		else if (target.endsWith(".ttf"))
-		{
+		else if (target.endsWith(".ttf")){
 			response.setContentType("application/x-font-ttf");
 		}
-		else if (target.endsWith(".woff"))
-		{
+		else if (target.endsWith(".woff")){
 			response.setContentType("application/x-font-woff");
 		}
-		else
-		{
+		else{
 			response.setContentType("text/html");
 		}
 	}
 
-	protected void catchHelper(Request baseRequest, HttpServletRequest request,
+	protected void catchHelper( HttpServletRequest request,
 			HttpServletResponse response, Exception e) throws IOException,
 			UnsupportedEncodingException, FileNotFoundException {
 		// Pour deboggage, on va afficher le stacktrace
@@ -204,25 +194,6 @@ public class RequestHandler extends RewriteHandler {
 		// Template d'erreur
 		response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
 		processTemplate(request, response, "500.html", params);
-		baseRequest.setHandled(true);
-	}
-
-	protected void redirectRequest(String target, Request baseRequest,
-			HttpServletRequest request, HttpServletResponse response,
-			String setPattern, String setLocation) throws IOException,
-			ServletException {
-		if (isStarted())
-		{
-			redirect.setPattern(setPattern);
-			redirect.setLocation(setLocation);  
-			RuleContainer _rules = new RuleContainer();
-			_rules.setRules(this.getRules());
-			String returned = _rules.matchAndApply(target, request, response);
-			target = (returned == null) ? target : returned;
-
-			if (!baseRequest.isHandled())
-				super.handle(target, baseRequest, request, response);
-		}
 	}
 
 
@@ -333,193 +304,15 @@ public class RequestHandler extends RewriteHandler {
 		return string.replace("&", "&amp;").replace("<", "&lt;").replace(">", "&gt;");
 	}
 
-	protected void redirectToPathContext(String target, Request baseRequest,
-			HttpServletRequest request, HttpServletResponse response,
-			String path) throws IOException, ServletException {
-		System.out.println("in Event redirect- pathInfo:"+path);
-		String setPattern = "*/"+path;
-		String setLocation = "/Webapp/"+path;//+"*";
-
-		if(path.startsWith("create-event")){
-			handleCreate(path, baseRequest, request, response);
-			return;
-		}
-		if(path.startsWith("connect-user")){
-			handleConnectUser(path, baseRequest, request, response);
-			return;
-		}
-
-		redirectRequest(target, baseRequest, request, response, setPattern,
-				setLocation);
-
-	}
-
 	protected boolean isAnotherContext(String pathInfo) {
 		return pathInfo.equals("accueil")||pathInfo.startsWith("liste-des-evenements")||pathInfo.startsWith("modifier-un-evenement")
-				||pathInfo.startsWith("membre")||pathInfo.equals("notifications")||pathInfo.equals("connexion")||pathInfo.equals("deconnexion")
-				||pathInfo.equals("enregistrement")||pathInfo.startsWith("ajouter-un-evenement")
-				||pathInfo.equals("evenement")||pathInfo.startsWith("evenement/")
-				||pathInfo.equals("deconnexion")||pathInfo.startsWith("evenement-modification/")||pathInfo.startsWith("modify-event")||pathInfo.startsWith("delete-event")
-				||pathInfo.equals("register-event")||pathInfo.startsWith("unregister-event")||pathInfo.equals("connect-user")||pathInfo.equals("create-user")
+				||pathInfo.startsWith("membre")||pathInfo.startsWith("notifications")||pathInfo.startsWith("connexion")||pathInfo.equals("deconnexion")
+				||pathInfo.startsWith("enregistrement")||pathInfo.startsWith("ajouter-un-evenement")
+				||pathInfo.startsWith("evenement")||pathInfo.startsWith("evenement/")
+				||pathInfo.startsWith("deconnexion")||pathInfo.startsWith("evenement-modification/")||pathInfo.startsWith("modify-event")||pathInfo.startsWith("delete-event")
+				||pathInfo.equals("register-event")||pathInfo.startsWith("unregister-event")||pathInfo.startsWith("connect-user")||pathInfo.equals("create-user")
 				||pathInfo.startsWith("create-event")
 				;
 	}
-
-	public void handleCreate(String target, Request baseRequest,
-			HttpServletRequest request, HttpServletResponse response)
-					throws IOException, ServletException {
-		// TODO Implement handling logic for simple requests (and command
-		// validation) and forwarding for requests that require specific
-		// permissions or handling.
-		try
-		{
-
-			String pathInfo = request.getPathInfo().substring(1);
-
-			String userId = "";//request.getParameter("id");
-			String title = request.getParameter("eventName");
-			String date = request.getParameter("eventDate");
-			String location = request.getParameter("eventLocation");
-			String nbplace = request.getParameter("eventNumPeople");
-			String description = request.getParameter("eventDescription");
-
-			System.out.println("\nIn create event - Parameters:"
-					+pathInfo
-					//					+ request.getParameterNames()					//);
-					+"\t"+userId
-					+"\t"+title
-					+"\t"+date
-					+"\t"+location
-					+"\t"+nbplace
-					+"\t"+description);
-
-
-			//The current request must be a file -> redirect to requestHandler
-			if(	pathInfo.contains(".")) {
-				super.handle(target, baseRequest, request, response);
-				return;
-			}
-
-			//				System.out.println("before database call");
-
-			//TODO: Add the event to the database	
-			DataBase db = Main.getDatabase();//new DataBase(restore);	
-			AddEvent cmd = new AddEvent(db);
-			boolean addedSuccessfully = cmd.addNewEvent(						
-					"2",//userId, 
-					//						"Vollerrrrr",//
-					title, 
-					//						"2015-05-11 10:30:00.00",
-					date,
-					//						"Unversity","50",
-					location,
-					nbplace.equals("Illimité") ? ""+Integer.MAX_VALUE : nbplace, 
-							description
-							//						"description"
-					);
-
-			System.out.println("database addedSuccessfully:"+addedSuccessfully);
-
-
-
-			if (addedSuccessfully){
-				//redirects the current request to the newly created event
-				String setPattern = "/";
-				String setLocation = "/Webapp/liste-des-evenements/";
-				redirectRequest(target, baseRequest, request, response, setPattern,
-						setLocation);
-			}else{
-				System.out.println("failled to add event");
-				//redirect the user to the event page with the same info
-				//if possible indicate to the user the reason of the failure to create the event 
-			}
-		}
-		catch (Exception e)
-		{
-			catchHelper(baseRequest, request, response, e);
-		}
-
-	}
-
-	public void handleConnectUser(String target, Request baseRequest,
-			HttpServletRequest request, HttpServletResponse response)
-					throws IOException, ServletException {
-		// TODO Implement handling logic for simple requests (and command
-		// validation) and forwarding for requests that require specific
-		// permissions or handling.
-		try
-		{
-
-			//TODO:Verify User's credential and retrieve User id from the database
-			String username = request.getParameter("username");
-			String password = request.getParameter("password");
-			if(username.equals("")||password.equals("")){
-				redirectRequest(target, baseRequest, request, response, "/",
-						"/Webapp/connexion");
-				return;
-			}
-
-
-			Boolean authenticatedSuccessfully = true;
-			//TODO:Authenticate the user here
-
-			String JSONRequest = "{ userName :" + username + ", password :" +
-					password + " }";
-			System.out.println(JSONRequest);
-
-			OpenSession userCreation = new OpenSession(JSONRequest);
-
-			authenticatedSuccessfully = Main.getDatabase().executeDb(userCreation);
-			
-			if (!authenticatedSuccessfully){
-				redirectRequest(target, baseRequest, request, response, "/",
-						"/Webapp/connexion");
-				return;
-			}
-			
-			ResultSet results = userCreation.getResultSet();
-			System.out.println("authenticatedSuccessfully:"+authenticatedSuccessfully);
-			int userID =-1 ;
-			if(results.next()){
-				//				System.out.println("before get Int"+userID);
-				userID = results.getInt(1);
-
-				System.out.println(userID);
-//				if(request.getSession()==null){
-				HttpSession newUserSession = request.getSession(true);
-				System.out.println("session created with id :"+userID);
-				newUserSession.setAttribute("UserID", userID);
-				System.out.println("session attribute was set");
-//				}else{
-//					//do nothing session already exist
-//					System.out.println("session already exist");
-//				}
-			}
-			else{
-				authenticatedSuccessfully = false;
-				System.out.println("no authetification ID");
-			}
-
-			if (authenticatedSuccessfully){
-				//Redirects the current request to the newly created event
-				System.out.println("redirecting request to member/"+username);
-				String setPattern = "/";
-				String setLocation = "/Webapp/membre/"+username;
-				redirectRequest(target, baseRequest, request, response, setPattern,
-						setLocation);
-			}else{
-				//TODO:send error message to user and return to login page
-				redirectRequest(target, baseRequest, request, response, "/",
-						"/Webapp/connexion");
-			}
-
-		}
-		catch (Exception e)
-		{
-			catchHelper(baseRequest, request, response, e);		
-		}
-
-	}
-
 
 }

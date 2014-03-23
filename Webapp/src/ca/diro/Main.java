@@ -2,14 +2,14 @@ package ca.diro;
 
 import java.sql.SQLException;
 
-import org.eclipse.jetty.server.Handler;
 import org.eclipse.jetty.server.Server;
-import org.eclipse.jetty.server.handler.ContextHandler;
 import org.eclipse.jetty.server.handler.ContextHandlerCollection;
 import org.eclipse.jetty.server.session.HashSessionIdManager;
-import org.eclipse.jetty.server.session.SessionHandler;
+import org.eclipse.jetty.servlet.ServletContextHandler;
+import org.eclipse.jetty.servlet.ServletHolder;
 
 import ca.diro.DataBase.DataBase;
+import ca.diro.RequestHandlingUtil.ConnectUserHandler;
 import ca.diro.RequestHandlingUtil.CreateUserHandler;
 import ca.diro.RequestHandlingUtil.DeleteEventHandler;
 import ca.diro.RequestHandlingUtil.DisconnectUserHandler;
@@ -33,8 +33,6 @@ public class Main {
 
 	public final static int DEFAULT_PORT = 8080;
 	private static Server server;
-//	private static 	ContextHandlerCollection handlerCollection;
-
 
 	/**
 	 * Stores the constant name for the Realm used for login and auth.
@@ -45,10 +43,6 @@ public class Main {
 	 */
 	private static String realmProperties = "resources/realm.properties";
 	private static DataBase database;
-
-	public static DataBase getDatabase() {
-		return database;
-	}
 
 	/**
 	 * This is the main. It makes things run.
@@ -93,7 +87,6 @@ public class Main {
 					try {
 						database.dbClose();
 					} catch (SQLException e) {
-						// TODO Auto-generated catch block
 						e.printStackTrace();
 					}
 					database = null;
@@ -116,6 +109,7 @@ public class Main {
 		
 		HashSessionIdManager sessionIdManager = new HashSessionIdManager();
 		
+//		ServletContextHandler servelet = new ServletContextHandler(handlerCollection, "/Webapp", new SessionHandler(), new SecurityHandler)
 		server.setHandler(handlerCollection);
 		server.setSessionIdManager(sessionIdManager);
 	}
@@ -123,47 +117,33 @@ public class Main {
 	private static ContextHandlerCollection createHandlerCollection() {
 		ContextHandlerCollection handlerCollection = new ContextHandlerCollection();
 
-		ModifyEventHandler modifyEventHandler = new ModifyEventHandler();
-		modifyEventHandler.setRewriteRequestURI(true);
+		ServletContextHandler handler = new ServletContextHandler(ServletContextHandler.SESSIONS);//new ServletContextHandler() ;
+		handler.setContextPath("/Webapp");
+		handlerCollection.addHandler(  handler );
+		
+		handler.addServlet(new ServletHolder( new RequestHandler()), "/*");
+		handler.addServlet(new ServletHolder( new EventListHandler()), "/liste-des-evenements/*");
+		handler.addServlet(new ServletHolder( new EventHandler()), "/evenement/*");
+		handler.addServlet(new ServletHolder( new CreateUserHandler()), "/create-user");
+		handler.addServlet(new ServletHolder( new MemberHandler()), "/membre/*");
+		handler.addServlet(new ServletHolder( new ConnectUserHandler()), "/connect-user");
 
-		ContextHandler modifyContext = new ContextHandler("/Webapp/modify-event");
-		modifyContext.setResourceBase(".");
-		modifyContext.setClassLoader(Thread.currentThread().getContextClassLoader());
-		modifyContext.setHandler(modifyEventHandler);
+		handler.addServlet(new ServletHolder( new DisconnectUserHandler()), "/deconnexion");
+		handler.addServlet(new ServletHolder( new DeleteEventHandler()), "/delete-event");
+		handler.addServlet(new ServletHolder( new RegisterToEventHandler()), "/register-event");
+		handler.addServlet(new ServletHolder( new UnregisterToEventHandler()), "/unregister-event");
+		handler.addServlet(new ServletHolder( new ModifyUserInfoHandler()), "/modify-user");
+		handler.addServlet(new ServletHolder( new EventModificationPageHandler()), "/evenement-modification/*");
+		handler.addServlet(new ServletHolder( new ModifyEventHandler()), "/modify-event");
 
-		handlerCollection.addHandler(modifyContext);
-		SessionHandler session = new SessionHandler();
-		session.setHandler(new RequestHandler());
-		handlerCollection.addHandler(createContextHandler("", session));
-//		handlerCollection.addHandler(createContextHandler("create-event", new CreateEventHandler()));
-		handlerCollection.addHandler( createContextHandler("/evenement", new EventHandler()) );
-		handlerCollection.addHandler( createContextHandler("/membre", new MemberHandler()) );
-		handlerCollection.addHandler( createContextHandler("/liste-des-evenements", new EventListHandler()) );
-		handlerCollection.addHandler( createContextHandler("/evenement-modification", new EventModificationPageHandler()) );
-
-		handlerCollection.addHandler(createContextHandler("/deconnexion", new DisconnectUserHandler()));
-		handlerCollection.addHandler(createContextHandler("/delete-event", new DeleteEventHandler()));
-		handlerCollection.addHandler(createContextHandler("/register-event", new RegisterToEventHandler()));
-		handlerCollection.addHandler(createContextHandler("/unregister-event", new UnregisterToEventHandler()));
-		handlerCollection.addHandler(createContextHandler("/create-user", new CreateUserHandler()));
-		handlerCollection.addHandler(createContextHandler("/modify-user", new ModifyUserInfoHandler()));
-//		handlerCollection.addHandler(createContextHandler("connect-user", new ConnectUserHandler()));
 		return handlerCollection;
-	}
-
-	private static ContextHandler createContextHandler(String contextPath, Handler handler) {
-		ContextHandler contextHandler = new ContextHandler("/Webapp"+contextPath);
-		contextHandler.setResourceBase(".");
-		contextHandler.setClassLoader(Thread.currentThread().getContextClassLoader());
-		contextHandler.setHandler(handler);
-//		contextHandler.setResourceBase("/Webapp");
-//		handler.setOriginalPathAttribute("*/Webapp/");
-//		handler.setRewritePathInfo(true);//handler.setRewriteRequestURI(true);
-		return contextHandler;
 	}
 
 	public static Server getServer() {
 		return server;		
 	}
 
+	public static DataBase getDatabase() {
+		return database;
+	}
 }

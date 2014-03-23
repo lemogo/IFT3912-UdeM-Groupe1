@@ -2,6 +2,7 @@ package ca.diro.RequestHandlingUtil;
 
 import java.io.IOException;
 
+import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -17,7 +18,7 @@ public class CreateUserHandler extends RequestHandler {
 	 * javax.servlet.http.HttpServletResponse)
 	 */
 	@Override
-	public void handle(String target, Request baseRequest,
+	public void doPost(
 			HttpServletRequest request, HttpServletResponse response)
 					throws IOException, ServletException {
 		// TODO Implement handling logic for simple requests (and command
@@ -51,19 +52,23 @@ public class CreateUserHandler extends RequestHandler {
 			
 			if (userAddedSuccessfully){
 				//redirects the current request to the newly created event
-				String setPattern = "/";
 				String setLocation = "/Webapp/membre/"+userID;
-				redirectRequest(target, baseRequest, request, response, setPattern,
-						setLocation);
+				response.sendRedirect(setLocation);
 			}else{
 				//return to the account creation page 
 				//and try to indicate to the user the source of the account creation failure 
+				System.out.println("failled to create new user account");
+				String setLocation = "/Webapp/enregistrement";
+				response.sendRedirect(setLocation);
+				RequestDispatcher dispatcher = request.getRequestDispatcher(setLocation);
+				dispatcher.forward(request, response);
 			}
 
 		}
 		catch (Exception e)
 		{
-			catchHelper(baseRequest, request, response, e);		
+			System.out.println("In catch exception");
+//			catchHelper(baseRequest, request, response, e);		
 		}
 
 	}

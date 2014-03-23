@@ -7,6 +7,7 @@ import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 
+import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -21,7 +22,6 @@ import ca.diro.DataBase.Command.ListComingEvent;
 import ca.diro.DataBase.Command.ListPassedEvent;
 
 public class EventListHandler extends RequestHandler {
-
 	/*
 	 * (non-Javadoc)
 	 * 
@@ -30,7 +30,7 @@ public class EventListHandler extends RequestHandler {
 	 * javax.servlet.http.HttpServletResponse)
 	 */
 	@Override
-	public void handle(String target, Request baseRequest,
+	public void doGet(
 			HttpServletRequest request, HttpServletResponse response)
 					throws IOException, ServletException {
 		// TODO Implement handling logic for simple requests (and command
@@ -40,18 +40,21 @@ public class EventListHandler extends RequestHandler {
 		{
 
 			String pathInfo = request.getPathInfo().substring(1);
+			System.out.println("In event list - pathInfo="+pathInfo+"\tcontext="+request.getContextPath());
 
 			//The current request must be a file -> redirect to requestHandler
 			if(	pathInfo.contains(".")) {
-				super.handle(target, baseRequest, request, response);
+				System.out.println("In event list - pathInfo="+pathInfo+"\tcontext="+request.getContextPath());
+				//				super.handle(target, baseRequest, request, response);
+				handleToTheRessource(request, response, pathInfo);
 				return;
 			}
-						if(!pathInfo.equals("passes")&&!pathInfo.equals("annules"))
-			if(isAnotherContext(pathInfo)&&!pathInfo.equals("")){ 	        
-				redirectToPathContext(target, baseRequest, request, response,
-						pathInfo);
-				return;
-			}
+			if(!pathInfo.equals("passes")&&!pathInfo.equals("annules")&&!pathInfo.equals("futur"))
+				if(isAnotherContext(pathInfo)&&!pathInfo.equals("")){ 	        
+					String setLocation = "/Webapp/"+pathInfo;//"/";
+					response.sendRedirect(setLocation);
+					return;
+				}
 
 			// create a handle to the resource
 			String filename = "liste-des-evenements.html"; 
@@ -59,19 +62,16 @@ public class EventListHandler extends RequestHandler {
 			File dynamicResource = new File(dynamicDir, filename);
 
 			// Ressource existe
-			if (!staticResource.exists() && !dynamicResource.exists())
-			{
+			if (!staticResource.exists() && !dynamicResource.exists()){
 				response.setStatus(HttpServletResponse.SC_NOT_FOUND);
 				processTemplate(request, response, "404.html");
 			}
-			else
-			{
+			else{
 				response.setContentType("text/html");
 				response.setCharacterEncoding("utf-8");
 				response.setStatus(HttpServletResponse.SC_OK);
 
-				processTemplate(request, response, "header.html");
-
+//System.out.println("before database command");
 				//TODO:Get the user lisr event info from the database
 				Command cmd= new ListComingEvent();
 				if(pathInfo.equals("passes"))
@@ -81,34 +81,36 @@ public class EventListHandler extends RequestHandler {
 
 				DataBase myDb = Main.getDatabase();//new DataBase(restore);
 				if( myDb.executeDb(cmd)){ 
-				ResultSet rs = cmd.getResultSet();
-				List<Event> eventList = new LinkedList<Event>();  
-				while(rs.next())
-					eventList.add(							new Event("Event_Bidon_username", rs.getString("title"), rs.getString("dateevent"),
-							rs.getString("location"), rs.getString("description"), rs.getString("eventId"),
-							"Event_badgeClass1"));
-//				""+rs.getString("eventId"),
-//				""+rs.getString("numberplaces")));
-				
-				//add event info here!!
-				HashMap<String, Object> sources = new HashMap<String, Object>();
-				sources.put("events",eventList);
+					ResultSet rs = cmd.getResultSet();
+					List<Event> eventList = new LinkedList<Event>();  
+					while(rs.next()) 
+						eventList.add(
+								new Event("Event_Bidon_username", rs.getString("title"), rs.getString("dateevent"),
+								rs.getString("location"), rs.getString("description"), rs.getString("eventId"),
+								"Event_badgeClass1"));
 
-				//to display success message
-				//				sources.put("addSuccess", "true");
-				sources.put("user", "true");
-				sources.put("notifications_number", "0");
+					//add event info here!!
+					HashMap<String, Object> sources = new HashMap<String, Object>();
+					sources.put("events",eventList);
 
-				processTemplate(request, response, filename,sources);
-				processTemplate(request, response, "footer.html");
-			}
+					//to display success message
+					//				sources.put("addSuccess", "true");
+					boolean isLoggedIn=request.getRequestedSessionId()==null? false:true;
+					System.out.println("\nUser is login is:"+request.getRequestedSessionId()+"\n");//.request.getRequestedSessionId()==null? false:true;
+					//to display user navbar
+					sources.put("user", isLoggedIn);
 
-			baseRequest.setHandled(true);
+					sources.put("notifications_number", "0");
+
+					processTemplate(request, response, "header.html", sources);
+					processTemplate(request, response, filename, sources);
+					processTemplate(request, response, "footer.html");
+				}
+				//			baseRequest.setHandled(true);
 			}
 		}
-		catch (Exception e)
-		{
-			catchHelper(baseRequest, request, response, e);
+		catch (Exception e){
+			catchHelper( request, response, e);		
 		}
 
 	}
