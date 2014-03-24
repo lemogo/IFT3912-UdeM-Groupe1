@@ -5,9 +5,11 @@ import java.io.IOException;
 import java.sql.ResultSet;
 import java.util.HashMap;
 
+import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 import ca.diro.Main;
 import ca.diro.DataBase.DataBase;
@@ -92,14 +94,16 @@ public class EventHandler extends RequestHandler {
 								);
 
 						//to display success message
+						sources.put("id", pathInfo);
 						sources.put("addSuccess", "false");
 						sources.put("isOwner", "false");
 						//				sources.put("registerSuccess", "true");
 						//				sources.put("unregisterSuccess", "false");
 
-						boolean isLoggedIn=request.getRequestedSessionId()==null? false:true;
+						HttpSession session = request.getSession(true);
+						boolean isLoggedIn=session.getAttribute("auth")==null? false:true;
 
-						System.out.println(request.getRequestedSessionId());//.request.getRequestedSessionId()==null? false:true;
+						System.out.println("isLoggedIn:"+isLoggedIn+"\t"+request.getRequestedSessionId());//.request.getRequestedSessionId()==null? false:true;
 						
 						sources.put("user", isLoggedIn);
 						sources.put("notifications_number", "0");
@@ -114,12 +118,58 @@ public class EventHandler extends RequestHandler {
 				//				baseRequest.setHandled(true);
 			}
 		}
-		catch (Exception e)
-		{
-			System.out.println("In catch exception");
-			//			catchHelper(baseRequest, request, response, e);
+		catch (Exception e){
+			System.out.println("In eventHanler catch exception");
+			catchHelper(request, response, e);
 		}
 
 	}
 
+	
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see org.eclipse.jetty.server.Handler#handle(java.lang.String,
+	 * org.eclipse.jetty.server.Request, javax.servlet.http.HttpServletRequest,
+	 * javax.servlet.http.HttpServletResponse)
+	 */
+	@Override
+	public void doPost(
+			HttpServletRequest request, HttpServletResponse response)
+					throws IOException, ServletException {
+		// TODO Implement handling logic for simple requests (and command
+		// validation) and forwarding for requests that require specific
+		// permissions or handling.
+		try
+		{
+			String pathInfo = request.getPathInfo().substring(1);
+			System.out.println("in Event, context Post - pathInfo:"+pathInfo+"\tcontextPath:"+request.getContextPath());
+			System.out.println("in Event, context Post - pathInfo:"+pathInfo+"\tcontextPath:"+("/Webapp/"+pathInfo));
+
+			//The current request must be a file -> redirect to requestHandler
+			if(	pathInfo.contains(".")) {
+				handleToTheRessource(request, response, pathInfo);
+				return;
+			}
+			if(pathInfo.startsWith("modify-event")||pathInfo.startsWith("delete-event")){
+				String setLocation = //"/Webapp/"+
+						"/"+pathInfo;
+				System.out.println("\nredirecting to:"+setLocation+"\tid:"+request.getParameter("id"));
+				RequestDispatcher dispatcher = request.getRequestDispatcher(setLocation);
+				dispatcher.forward(request, response);
+//				response.sendRedirect(setLocation);
+				return;
+			}else if(isAnotherContext(pathInfo)&&!pathInfo.equals("")){ 	        
+				String setLocation = "/Webapp/"+pathInfo;//"/";
+				response.sendRedirect(setLocation);
+				return;
+			}
+		}catch (Exception e){
+			System.out.println("In eventHanler catch exception");
+			catchHelper(request, response, e);
+		}
+
+	}
+
+	
 }

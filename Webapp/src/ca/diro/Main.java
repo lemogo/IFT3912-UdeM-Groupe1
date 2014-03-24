@@ -10,6 +10,7 @@ import org.eclipse.jetty.servlet.ServletHolder;
 
 import ca.diro.DataBase.DataBase;
 import ca.diro.RequestHandlingUtil.ConnectUserHandler;
+import ca.diro.RequestHandlingUtil.CreateEventHandler;
 import ca.diro.RequestHandlingUtil.CreateUserHandler;
 import ca.diro.RequestHandlingUtil.DeleteEventHandler;
 import ca.diro.RequestHandlingUtil.DisconnectUserHandler;
@@ -127,6 +128,7 @@ public class Main {
 		handler.addServlet(new ServletHolder( new CreateUserHandler()), "/create-user");
 		handler.addServlet(new ServletHolder( new MemberHandler()), "/membre/*");
 		handler.addServlet(new ServletHolder( new ConnectUserHandler()), "/connect-user");
+		handler.addServlet(new ServletHolder( new CreateEventHandler()), "/create-event");
 
 		handler.addServlet(new ServletHolder( new DisconnectUserHandler()), "/deconnexion");
 		handler.addServlet(new ServletHolder( new DeleteEventHandler()), "/delete-event");

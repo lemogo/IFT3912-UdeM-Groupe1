@@ -6,9 +6,12 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import org.eclipse.jetty.server.Request;
-
 public class RegisterToEventHandler extends RequestHandler {
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = -1300865621629348308L;
+
 	/*
 	 * (non-Javadoc)
 	 * 
@@ -17,7 +20,7 @@ public class RegisterToEventHandler extends RequestHandler {
 	 * javax.servlet.http.HttpServletResponse)
 	 */
 	@Override
-	public void handle(String target, Request baseRequest,
+	public void doPost(
 			HttpServletRequest request, HttpServletResponse response)
 					throws IOException, ServletException {
 		// TODO Implement handling logic for simple requests (and command
@@ -26,6 +29,7 @@ public class RegisterToEventHandler extends RequestHandler {
 		try
 		{
 			Boolean registeredSuccessfully = true;
+			//TODO:check if the user is logged in and not already registered to the event
 
 			//TODO:Register the User to the event in the database
 			request.getParameter("id");
@@ -35,14 +39,12 @@ public class RegisterToEventHandler extends RequestHandler {
 			//			request.getParameter("eventNumPeople");
 			//			request.getParameter("eventDescription");
 
-			String eventID = request.getParameter("id");
+			String eventID = "2"; request.getParameter("id");
 
 			if(registeredSuccessfully){
 				//redirects the current request to the newly created event
-				String setPattern = "/";
 				String setLocation = "/Webapp/evenement/"+eventID;
-				redirectRequest(target, baseRequest, request, response, setPattern,
-						setLocation);
+				response.sendRedirect(setLocation);
 			}else{
 				//TODO:show error message
 			}
@@ -50,7 +52,7 @@ public class RegisterToEventHandler extends RequestHandler {
 		}
 		catch (Exception e)
 		{
-			catchHelper(baseRequest, request, response, e);
+			catchHelper( request, response, e);
 		}
 
 	}

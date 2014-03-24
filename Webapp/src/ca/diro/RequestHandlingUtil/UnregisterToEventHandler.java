@@ -6,8 +6,6 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import org.eclipse.jetty.server.Request;
-
 public class UnregisterToEventHandler extends RequestHandler {
 	/*
 	 * (non-Javadoc)
@@ -17,14 +15,13 @@ public class UnregisterToEventHandler extends RequestHandler {
 	 * javax.servlet.http.HttpServletResponse)
 	 */
 	@Override
-	public void handle(String target, Request baseRequest,
+	public void doPost(
 			HttpServletRequest request, HttpServletResponse response)
 					throws IOException, ServletException {
 		// TODO Implement handling logic for simple requests (and command
 		// validation) and forwarding for requests that require specific
 		// permissions or handling.
-		try
-		{
+		try{
 			Boolean unregisteredSuccessfully = true;
 
 			//TODO:Unregister the User to the event in the database
@@ -35,24 +32,20 @@ public class UnregisterToEventHandler extends RequestHandler {
 			//			request.getParameter("eventNumPeople");
 			//			request.getParameter("eventDescription");
 
-			String eventID = request.getParameter("id");
+			String eventID = "2"; request.getParameter("id");
 
 			if(unregisteredSuccessfully){
 				//redirects the current request to the newly created event
-				String setPattern = "/";
 				String setLocation = "/Webapp/evenement/"+eventID;
-				redirectRequest(target, baseRequest, request, response, setPattern,
-						setLocation);
+				response.sendRedirect(setLocation);
 			}else{
 				//TODO:show logout error message
 			}
 
 		}
-		catch (Exception e)
-		{
-			catchHelper(baseRequest, request, response, e);		
+		catch (Exception e){
+			catchHelper(request, response, e);		
 		}
 
 	}
-
 }

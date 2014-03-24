@@ -19,6 +19,7 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 import org.json.JSONArray;
 
@@ -57,6 +58,7 @@ public class RequestHandler extends HttpServlet {
 //	protected static File	dynamicDir	= new File( "templates");
 	protected static File	dynamicDir	= new File(rootDir, "templates");
 
+	public static final String USER_ID_ATTRIBUTE="UserID";
 	/*
 	 * (non-Javadoc)
 	 * 
@@ -70,8 +72,7 @@ public class RequestHandler extends HttpServlet {
 		// TODO Implement handling logic for simple requests (and command
 		// validation) and forwarding for requests that require specific
 		// permissions or handling.
-		try
-		{
+		try{
 			//			System.out.println("In requestHandler\t"+baseRequest.getMethod()+"\ttarget:"+target+"\t"+baseRequest.getPathInfo()+"\tContext:"+request.getContextPath());
 			String pathInfo = request.getPathInfo();
 			if(pathInfo.startsWith("/"))pathInfo = pathInfo.substring(1);
@@ -81,10 +82,10 @@ System.out.println("returns because it's a null pathInfo");
 				//				baseRequest.setHandled(true);
 				return;
 			}
+			if ( pathInfo.equals("accueil")||pathInfo.equals("")) pathInfo = "accueil.html";
 			handleToTheRessource(request, response, pathInfo);
 		}
-		catch (Exception e)
-		{
+		catch (Exception e){
 //			System.out.println("In catch exception");
 						catchHelper(request, response, e);
 		}
@@ -97,6 +98,13 @@ System.out.println("returns because it's a null pathInfo");
 System.out.println("In handleToTheRessource\t"+request.getMethod()+"\tpathInfo:"+pathInfo+"\t"+request.getPathInfo()+"\tContext:"+request.getContextPath());
 
 		if ( pathInfo.equals("accueil")) pathInfo = "accueil.html";
+		else if ( pathInfo.equals("ajouter-un-evenement") 
+				) {
+			//if user is not logged in redirect him to sign up page (or maybe sign in) 
+			pathInfo = pathInfo+".html";
+			HttpSession session = request.getSession(true);
+			if (session.getAttribute("auth")==null) response.sendRedirect("/Webapp/connexion");
+		}
 		else if ( pathInfo.equals("enregistrement") || pathInfo.equals("ajouter-un-evenement") 
 				||pathInfo.equals("notifications")||pathInfo.equals("connexion")) pathInfo = pathInfo+".html";
 		else if(isAnotherContext(pathInfo)&&!pathInfo.equals("")){ 	        
@@ -137,8 +145,9 @@ System.out.println("static ressource:"+staticResource.getAbsolutePath()+"\tdynam
 		else{
 			System.out.println("Thinks it a dynamic ressource:\t"+dynamicResource);
 			response.setStatus(HttpServletResponse.SC_OK);
-
-			boolean isLoggedIn=request.getRequestedSessionId()==null? false:true;
+			HttpSession session = request.getSession(true);
+			boolean isLoggedIn=session.getAttribute("auth")==null? false:true;
+//			boolean isLoggedIn=request.getRequestedSessionId()==null? false:true;
 					System.out.println(request.getRequestedSessionId());//.request.getRequestedSessionId()==null? false:true;
 			//to display user navbar
 			HashMap<String, Object> sources = new HashMap<String, Object>();
@@ -220,8 +229,7 @@ System.out.println("static ressource:"+staticResource.getAbsolutePath()+"\tdynam
 	 * @throws IOException
 	 *             if there is a copy error
 	 */
-	private void copy(File staticres, OutputStream outputStream) throws IOException
-	{
+	private void copy(File staticres, OutputStream outputStream) throws IOException{
 		FileInputStream fis = new FileInputStream(staticres);
 		copy(fis, outputStream);
 		fis.close();
@@ -236,14 +244,12 @@ System.out.println("static ressource:"+staticResource.getAbsolutePath()+"\tdynam
 	 * @throws IOException
 	 *             if underlying error arises
 	 */
-	private long copy(InputStream in, OutputStream out) throws IOException
-	{
+	private long copy(InputStream in, OutputStream out) throws IOException{
 		long bytes = 0;
 		byte[] buffer = new byte[1024];
 		int len = in.read(buffer);
 		bytes += len;
-		while (len != -1)
-		{
+		while (len != -1){
 			out.write(buffer, 0, len);
 			len = in.read(buffer);
 			bytes += len;
@@ -267,23 +273,18 @@ System.out.println("static ressource:"+staticResource.getAbsolutePath()+"\tdynam
 	 * @throws IOException
 	 */
 	@SuppressWarnings("serial")
-	protected void processTemplate(HttpServletRequest req, HttpServletResponse res, String filename, Object... scopes) throws UnsupportedEncodingException, FileNotFoundException, IOException
-	{
+	protected void processTemplate(HttpServletRequest req, HttpServletResponse res, String filename, Object... scopes) throws UnsupportedEncodingException, FileNotFoundException, IOException{
 		MustacheFactory mc = new DefaultMustacheFactory(dynamicDir);
 		mc = new DefaultMustacheFactory(dynamicDir);
 		Mustache mustache = mc.compile(filename);
 
-		Map<Object, Object> parameters = new HashMap<Object, Object>(req.getParameterMap())
-				{
+		Map<Object, Object> parameters = new HashMap<Object, Object>(req.getParameterMap()){
 			@Override
-			public Object get(Object o)
-			{
+			public Object get(Object o){
 				Object result = super.get(o);
-				if (result instanceof String[])
-				{
+				if (result instanceof String[]){
 					String[] strings = (String[]) result;
-					if (strings.length == 1)
-					{
+					if (strings.length == 1){
 						return strings[0];
 					}
 				}
@@ -292,13 +293,11 @@ System.out.println("static ressource:"+staticResource.getAbsolutePath()+"\tdynam
 				};
 				List<Object> scs = new ArrayList<Object>();
 				scs.add(parameters);
-				for (Object o : scopes)
-				{
+				for (Object o : scopes){
 					scs.add(o);
 				}
 				mustache.execute(res.getWriter(), scs.toArray());
 	}
-
 
 	private String simpleEscape(String string){
 		return string.replace("&", "&amp;").replace("<", "&lt;").replace(">", "&gt;");

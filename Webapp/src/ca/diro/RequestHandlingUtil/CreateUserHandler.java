@@ -1,6 +1,7 @@
 package ca.diro.RequestHandlingUtil;
 
 import java.io.IOException;
+import java.sql.ResultSet;
 
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
@@ -8,6 +9,10 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.eclipse.jetty.server.Request;
+
+import ca.diro.Main;
+import ca.diro.DataBase.Command.Command;
+import ca.diro.DataBase.Command.CreateUserAccount;
 
 public class CreateUserHandler extends RequestHandler {
 	/*
@@ -24,30 +29,37 @@ public class CreateUserHandler extends RequestHandler {
 		// TODO Implement handling logic for simple requests (and command
 		// validation) and forwarding for requests that require specific
 		// permissions or handling.
-		try
-		{
+		try{
+			boolean isLoggedIn=request.getRequestedSessionId()==null? false:true;
 
 			String fullname = request.getParameter("fullname");
 			String email = request.getParameter("email");
-			String username = request.getParameter("username");
-			String password = request.getParameter("password");
+			String userName = request.getParameter("username");
+			String password = (String)request.getParameter("password");
 			String age = request.getParameter("age");
 			String description = request.getParameter("description");
-			
-			System.out.println("In creae User parameters:"
-					+fullname+"\t"
-					+username+"\t"
-					+password+"\t"
-					+age+"\t"
-					+description+"\t"
-					+email+"\t"
-					);
+//			System.out.println("In creae User parameters:"
+//					+fullname+"\t"
+//					+username+"\t"
+//					+password+"\t"
+//					+age+"\t"
+//					+description+"\t"
+//					+email+"\t"
+//					);
 			
 			//TODO:Add the User in the database
-			Boolean userAddedSuccessfully = true;
-
+			String info =  "{ fullname:"+fullname+" ,username:"+userName+" ,password:"+password+", " +
+					"email:"+email+",age:"+age+", description:"+description+"}";
+			CreateUserAccount cmd = new CreateUserAccount(info,Main.getDatabase());
+			boolean userAddedSuccessfully = cmd.createNewAccount(info); 
+			
 			//TODO:get user id from database
 			String userID = "";
+			ResultSet rs = cmd.getResultSet();
+			if(rs.next()){
+				System.out.println("New user Id:"+rs.getString(1));
+				userID = rs.getString(1);
+			}
 			
 			
 			if (userAddedSuccessfully){

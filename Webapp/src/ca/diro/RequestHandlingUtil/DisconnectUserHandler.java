@@ -5,8 +5,7 @@ import java.io.IOException;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-
-import org.eclipse.jetty.server.Request;
+import javax.servlet.http.HttpSession;
 
 public class DisconnectUserHandler extends RequestHandler {
 	/*
@@ -17,7 +16,7 @@ public class DisconnectUserHandler extends RequestHandler {
 	 * javax.servlet.http.HttpServletResponse)
 	 */
 	@Override
-	public void handle(String target, Request baseRequest,
+	public void doPost(
 			HttpServletRequest request, HttpServletResponse response)
 					throws IOException, ServletException {
 		// TODO Implement handling logic for simple requests (and command
@@ -25,26 +24,41 @@ public class DisconnectUserHandler extends RequestHandler {
 		// permissions or handling.
 		try
 		{
-			Boolean disconnectedSuccessfully = true;
-
-			//TODO:End user session
-			request.getParameter("id");
-
-			//redirects the current request to the newly created event
-			if(disconnectedSuccessfully){
-				String setPattern = "/";
-				String setLocation = "/Webapp/accueil";
-				redirectRequest(target, baseRequest, request, response, setPattern,
-						setLocation);
-			}else{
-				//TODO:Show diconnection error message
-			}
+			disconnectHelper(request, response);
 		}
-		catch (Exception e)
+		catch (Exception e){
+			catchHelper( request, response, e);		
+		}
+	}
+	
+	@Override
+	public void doGet(
+			HttpServletRequest request, HttpServletResponse response)
+					throws IOException, ServletException {
+		// TODO Implement handling logic for simple requests (and command
+		// validation) and forwarding for requests that require specific
+		// permissions or handling.
+		try
 		{
-			catchHelper(baseRequest, request, response, e);
+			disconnectHelper(request, response);
 		}
-
+		catch (Exception e){
+			catchHelper( request, response, e);		
+		}
 	}
 
+	private void disconnectHelper(HttpServletRequest request,
+			HttpServletResponse response) throws IOException {
+		HttpSession session = request.getSession(true);
+		boolean isLoggedIn=session.getAttribute("auth")==null? false:true;
+
+		if (isLoggedIn)
+			request.getSession(false).invalidate();
+		
+		else{
+			//Do nothing the user is already logout
+		}
+			String setLocation = "/Webapp/accueil";
+			response.sendRedirect(setLocation);
+	}
 }

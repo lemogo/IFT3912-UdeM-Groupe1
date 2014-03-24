@@ -7,12 +7,10 @@ import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 
-import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-
-import org.eclipse.jetty.server.Request;
+import javax.servlet.http.HttpSession;
 
 import ca.diro.Main;
 import ca.diro.DataBase.DataBase;
@@ -45,12 +43,11 @@ public class EventListHandler extends RequestHandler {
 			//The current request must be a file -> redirect to requestHandler
 			if(	pathInfo.contains(".")) {
 				System.out.println("In event list - pathInfo="+pathInfo+"\tcontext="+request.getContextPath());
-				//				super.handle(target, baseRequest, request, response);
 				handleToTheRessource(request, response, pathInfo);
 				return;
 			}
-			if(!pathInfo.equals("passes")&&!pathInfo.equals("annules")&&!pathInfo.equals("futur"))
-				if(isAnotherContext(pathInfo)&&!pathInfo.equals("")){ 	        
+			if(!pathInfo.equals("passes")&&!pathInfo.equals("annules")&&!pathInfo.equals("futur")&&!pathInfo.equals(""))
+				if(isAnotherContext(pathInfo)){ 	        
 					String setLocation = "/Webapp/"+pathInfo;//"/";
 					response.sendRedirect(setLocation);
 					return;
@@ -72,14 +69,14 @@ public class EventListHandler extends RequestHandler {
 				response.setStatus(HttpServletResponse.SC_OK);
 
 //System.out.println("before database command");
-				//TODO:Get the user lisr event info from the database
-				Command cmd= new ListComingEvent();
+				Command cmd;
 				if(pathInfo.equals("passes"))
 					cmd = new ListPassedEvent();
 				else if(pathInfo.equals("annules"))
 					cmd = new ListCancelledEvent();
+				else cmd= new ListComingEvent();
 
-				DataBase myDb = Main.getDatabase();//new DataBase(restore);
+				DataBase myDb = Main.getDatabase();
 				if( myDb.executeDb(cmd)){ 
 					ResultSet rs = cmd.getResultSet();
 					List<Event> eventList = new LinkedList<Event>();  
@@ -95,11 +92,13 @@ public class EventListHandler extends RequestHandler {
 
 					//to display success message
 					//				sources.put("addSuccess", "true");
-					boolean isLoggedIn=request.getRequestedSessionId()==null? false:true;
-					System.out.println("\nUser is login is:"+request.getRequestedSessionId()+"\n");//.request.getRequestedSessionId()==null? false:true;
+					HttpSession session = request.getSession(true);
+					boolean isLoggedIn=session.getAttribute("auth")==null? false:true;
+					
+					System.out.println("\nUser is login is:"+request.getRequestedSessionId()+"\n");
+
 					//to display user navbar
 					sources.put("user", isLoggedIn);
-
 					sources.put("notifications_number", "0");
 
 					processTemplate(request, response, "header.html", sources);

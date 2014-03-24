@@ -17,7 +17,7 @@ public class ModifyUserInfoHandler extends RequestHandler {
 	 * javax.servlet.http.HttpServletResponse)
 	 */
 	@Override
-	public void handle(String target, Request baseRequest,
+	public void doPost(
 			HttpServletRequest request, HttpServletResponse response)
 					throws IOException, ServletException {
 		// TODO Implement handling logic for simple requests (and command
@@ -28,30 +28,62 @@ public class ModifyUserInfoHandler extends RequestHandler {
 			Boolean modifiedSuccessfully = true;
 
 			//TODO:Modify User's Information in the database
-			String id = request.getParameter("id");
-//			String fullname = request.getParameter("fullname");
-//			String email = request.getParameter("email");
-//			String username = request.getParameter("username");
-//			String password = request.getParameter("password");
-//			String age = request.getParameter("age");
-//			String description = request.getParameter("description");
+			String id = "2";//request.getParameter("id");
+			String fullname = request.getParameter("fullname");
+			String email = request.getParameter("email");
+			String username = request.getParameter("username");
+			String password = request.getParameter("password");
+			String age = request.getParameter("age");
+			String description = request.getParameter("description");
 
 			if(modifiedSuccessfully){
 				//redirects the current request to the newly created event
-				String setPattern = "/";
-				String setLocation = "/Webapp/membre/"+id;
-				redirectRequest(target, baseRequest, request, response, setPattern,
-						setLocation);
+				String setLocation = "/Webapp/membre/"+username;
+				response.sendRedirect(setLocation);
 			}else{
 				//TODO:Show modification error message
 			}
 
 		}
-		catch (Exception e)
-		{
-			catchHelper(baseRequest, request, response, e);
+		catch (Exception e){
+			catchHelper( request, response, e);
 		}
 
 	}
 
+//	@Override
+//	public void doGet(
+//			HttpServletRequest request, HttpServletResponse response)
+//					throws IOException, ServletException {
+//		// TODO Implement handling logic for simple requests (and command
+//		// validation) and forwarding for requests that require specific
+//		// permissions or handling.
+//		try
+//		{
+//			Boolean modifiedSuccessfully = true;
+//
+//			//TODO:Modify User's Information in the database
+//			String id = "2";//request.getParameter("id");
+////			String fullname = request.getParameter("fullname");
+////			String email = request.getParameter("email");
+////			String username = request.getParameter("username");
+////			String password = request.getParameter("password");
+////			String age = request.getParameter("age");
+////			String description = request.getParameter("description");
+//
+//			if(modifiedSuccessfully){
+//				//redirects the current request to the newly created event
+//				String setLocation = "/Webapp/membre/"+id;
+//				response.sendRedirect(setLocation);
+//			}else{
+//				//TODO:Show modification error message
+//			}
+//
+//		}
+//		catch (Exception e)
+//		{
+//			catchHelper( request, response, e);
+//		}
+//
+//	}
 }

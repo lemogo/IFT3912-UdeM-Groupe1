@@ -39,20 +39,20 @@
 					{{#isOwner}}
 					<a class="btn btn-primary" href="evenement-modification/{{id}}" role="button">Modifier l'événement</a>
 					<a class="btn btn-danger" href="javascript:if(confirm('Supprimer?'))$('#formDeleteEvent').submit();" role="button">Supprimer l'événement</a>
-					<form id="formDeleteEvent" role="form" action="delete-event">
+					<form id="formDeleteEvent" role="form" action="delete-event" method="POST">
 						<input type="hidden" name="id" value="{{id}}" />
 					</form>
 					{{/isOwner}}
 					{{^isOwner}}
 						{{^isRegistered}}
 						<a class="btn btn-primary" href="javascript:$('formRegisterEvent').submit();" role="button">S'inscrire!</a>
-						<form id="formRegisterEvent" role="form" action="register-event">
+						<form id="formRegisterEvent" role="form" action="register-event" method="POST">
 							<input type="hidden" name="id" value="{{id}}" />
 						</form>
 						{{/isRegistered}}
 						{{#isRegistered}}
 						<a class="btn btn-danger" href="javascript:$('formRegisterEvent').submit();" role="button">Annuler l'inscription</a>
-						<form id="formRegisterEvent" role="form" action="unregister-event">
+						<form id="formRegisterEvent" role="form" action="unregister-event" method="POST">
 							<input type="hidden" name="id" value="{{id}}" />
 						</form>
 						{{/isRegistered}}
@@ -64,7 +64,7 @@
 					<h2 class="panel-title">Exprimez-vous sur cet événement</h2>
 				</div>
 				<div id="comments" class="panel-collapse collapse in">
-					<form id="formAddEvent" role="form" action="#">
+					<form id="formAddEvent" role="form" action="#" method="POST">
 						<textarea class="form-control" placeholder="Écrivez un commentaire" required></textarea>
 						<button class="btn btn-primary" type="submit">Envoyer</button>
 					</form>
