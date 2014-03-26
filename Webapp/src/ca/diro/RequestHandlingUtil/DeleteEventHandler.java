@@ -2,6 +2,7 @@ package ca.diro.RequestHandlingUtil;
 
 import java.io.IOException;
 
+import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -25,9 +26,8 @@ public class DeleteEventHandler extends RequestHandler {
 		// TODO Implement handling logic for simple requests (and command
 		// validation) and forwarding for requests that require specific
 		// permissions or handling.
-		System.out.println("In delete event");
-		try
-		{
+		try{
+			System.out.println("In delete event");
 //			HttpSession session = request.getSession(true);
 //			boolean isLoggedIn=session.getAttribute("auth")==null? false:true;
 
@@ -39,16 +39,12 @@ public class DeleteEventHandler extends RequestHandler {
 //			if(isLoggedIn){
 //				userID = (String)session.getAttribute(USER_ID_ATTRIBUTE);
 				//TODO:Remove the event from the database
-				DataBase myDb = Main.getDatabase();//new DataBase(restore);
-				String info = "{eventId: "+eventID+"}" ;//"1}" ;
-				DeleteEvent cmd = new DeleteEvent(info,myDb);
-//				if( myDb.executeDb(cmd)){ 
-				if(cmd.removeEvent(eventID)){
-//					ResultSet rs = cmd.getResultSet();
-//					if (rs.next());
+				DataBase myDb = Main.getDatabase();
+//				String info = "{eventId: "+eventID+"}" ;//"1}" ;
+				DeleteEvent cmd = new DeleteEvent(myDb);
+				if(cmd.removeEvent(Integer.parseInt(eventID))){
 					System.out.println("Deleted event: "+eventID);
 					deletedSuccessfully=true;
-//				}
 				
 				}
 //			if(!isLoggedIn) deletedSuccessfully =false;
@@ -56,11 +52,15 @@ public class DeleteEventHandler extends RequestHandler {
 
 			if(deletedSuccessfully){
 				//redirects the current request to the list of events
-				String setLocation = "/Webapp/liste-des-evenements/";
-				response.sendRedirect(setLocation);
+//				String setLocation = "/Webapp/liste-des-evenements/";
+//				response.sendRedirect(setLocation);
+				String setLocation = "/liste-des-evenements/";
+				response.addHeader("deleteSuccess", "true");
+				RequestDispatcher dispacher = request.getRequestDispatcher(setLocation);
+				dispacher.forward(request, response);
 			}else{
 				//TODO:stay on current page and show error message
-				System.out.println("failled to create new user account");
+				System.out.println("failled to delete event:"+eventID);
 				String setLocation = "/Webapp/evenement/"+eventID;
 				response.sendRedirect(setLocation);
 			}

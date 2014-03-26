@@ -2,6 +2,7 @@ package ca.diro.RequestHandlingUtil;
 
 import java.io.IOException;
 
+import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -68,8 +69,11 @@ System.out.println("isLoggedIn: "+isLoggedIn);
 //					if(rs.next()) id = rs.getString(1);
 					System.out.println("resultset id:"+id);
 					//redirects the current request to the newly created event
-					String setLocation = "/Webapp/evenement/"+id;
-					response.sendRedirect(setLocation);
+					String setLocation = "/liste-des-evenements/";
+					response.addHeader("addSuccess", "true");
+//					response.sendRedirect(setLocation);
+					RequestDispatcher dispacher = request.getRequestDispatcher(setLocation);
+					dispacher.forward(request, response);
 				}else{
 					//redirect the user to the create event page with the same info
 					//if possible indicate to the user the reason of the failure to create the event 

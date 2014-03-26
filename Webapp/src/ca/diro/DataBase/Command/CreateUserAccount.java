@@ -39,6 +39,10 @@ public class CreateUserAccount extends Command {
 
 	}
 
+	public CreateUserAccount(DataBase db)  {
+		myDb  = db;
+		
+	}
 	
 	/**
 	 * Method to handle creation of account from anonymous user 
@@ -57,12 +61,7 @@ public class CreateUserAccount extends Command {
 			String email = jsonInfo.getString("email");
 			String desc = jsonInfo.getString("description") ;
 		
-			myDb.statement().executeUpdate("insert into signeduser  (username, password,fullname,email,age,description)"  +
-					"values('" + userName +"', '" + password +"', '" + fullName +"', '"+ email  +"', " + Integer.parseInt(age) + " , '"+ desc + "')");
-			myDb.statement().executeUpdate("insert into sessionuser (datecreation, email ) " +
-						"values(CURRENT_DATE(),'" + email +"')");
-				
-				returnValue = true ;
+			returnValue = createNewAccount(fullName, userName, password, age, email, desc);
 				
 		 } catch (SQLException e) {
 			 System.err.println(e.getMessage());
@@ -74,6 +73,17 @@ public class CreateUserAccount extends Command {
 		 return returnValue ;
 		
 		//TODO create user account  	
+	}
+
+
+	public boolean createNewAccount(String fullName, String userName,
+			String password, String age, String email, String desc)
+			throws SQLException {
+		int returnValue = myDb.statement().executeUpdate("insert into signeduser  (username, password,fullname,email,age,description)"  +
+				"values('" + userName +"', '" + password +"', '" + fullName +"', '"+ email  +"', " + Integer.parseInt(age) + " , '"+ desc + "')");
+		myDb.statement().executeUpdate("insert into sessionuser (datecreation, email ) " +
+					"values(CURRENT_DATE(),'" + email +"')");
+		return true;
 	}
 	
 	/**

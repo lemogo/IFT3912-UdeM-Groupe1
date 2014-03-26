@@ -2,6 +2,7 @@ package ca.diro.RequestHandlingUtil;
 
 import java.io.IOException;
 import java.sql.ResultSet;
+import java.sql.SQLException;
 
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
@@ -50,16 +51,23 @@ public class CreateUserHandler extends RequestHandler {
 			//TODO:Add the User in the database
 			String info =  "{ fullname:"+fullname+" ,username:"+userName+" ,password:"+password+", " +
 					"email:"+email+",age:"+age+", description:"+description+"}";
-			CreateUserAccount cmd = new CreateUserAccount(info,Main.getDatabase());
-			boolean userAddedSuccessfully = cmd.createNewAccount(info); 
+			System.out.println(info);
+			CreateUserAccount cmd = new CreateUserAccount(Main.getDatabase());
+			boolean userAddedSuccessfully=false; 
+			try{
+				userAddedSuccessfully = cmd.createNewAccount(fullname, userName, password, age, email, description); 
+			}catch(SQLException e){
+				e.printStackTrace();
+			}
+			System.out.println("userAddedSuccessfully:"+userAddedSuccessfully);
 			
 			//TODO:get user id from database
 			String userID = "";
-			ResultSet rs = cmd.getResultSet();
-			if(rs.next()){
-				System.out.println("New user Id:"+rs.getString(1));
-				userID = rs.getString(1);
-			}
+//			ResultSet rs = cmd.getResultSet();
+//			if(rs.next()){
+//				System.out.println("New user Id:"+rs.getString(1));
+//				userID = rs.getString(1);
+//			}
 			
 			
 			if (userAddedSuccessfully){
@@ -79,7 +87,7 @@ public class CreateUserHandler extends RequestHandler {
 		}
 		catch (Exception e)
 		{
-			System.out.println("In catch exception");
+			System.out.println("In CreateUserHandler catch exception");
 //			catchHelper(baseRequest, request, response, e);		
 		}
 

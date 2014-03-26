@@ -71,12 +71,11 @@ public class EventHandler extends RequestHandler {
 				response.setStatus(HttpServletResponse.SC_OK);
 				String eventID = pathInfo;
 
-				processTemplate(request, response, "header.html");
 
 				//TODO:Get the user event info from the database
 				DataBase myDb = Main.getDatabase();//new DataBase(restore);
 				String info = "{eventId:"+eventID+"}" ;//"1}" ;
-				Command cmd = new PageInfoEvent(info,myDb);
+				PageInfoEvent cmd = new PageInfoEvent(info,myDb);
 
 				if( myDb.executeDb(cmd)){ 
 					ResultSet rs = cmd.getResultSet();
@@ -96,7 +95,13 @@ public class EventHandler extends RequestHandler {
 						//to display success message
 						sources.put("id", pathInfo);
 						sources.put("addSuccess", "false");
-						sources.put("isOwner", "false");
+						String isOwner = "false";
+						System.out.println("before checking isOwner"+request.getHeader("isOwner"));
+						if(response.getHeader("isOwner")!=null) {
+							System.out.println("\nisOwner=true");
+							isOwner = "true";
+						}
+						sources.put("isOwner", isOwner);
 						//				sources.put("registerSuccess", "true");
 						//				sources.put("unregisterSuccess", "false");
 
@@ -108,6 +113,7 @@ public class EventHandler extends RequestHandler {
 						sources.put("user", isLoggedIn);
 						sources.put("notifications_number", "0");
 
+						processTemplate(request, response, "header.html");
 						processTemplate(request, response, filename,sources);
 						processTemplate(request, response, "footer.html");
 					}else{
@@ -142,6 +148,12 @@ public class EventHandler extends RequestHandler {
 		// permissions or handling.
 		try
 		{
+			//redirects via post the form
+//			System.out.println("before checking isOwner"+request.getHeader("isOwner"));
+//			if(response.getHeader("isOwner")!=null) {
+//				System.out.println("\nisOwner=true");
+//			}
+			
 			String pathInfo = request.getPathInfo().substring(1);
 			System.out.println("in Event, context Post - pathInfo:"+pathInfo+"\tcontextPath:"+request.getContextPath());
 			System.out.println("in Event, context Post - pathInfo:"+pathInfo+"\tcontextPath:"+("/Webapp/"+pathInfo));
@@ -152,8 +164,7 @@ public class EventHandler extends RequestHandler {
 				return;
 			}
 			if(pathInfo.startsWith("modify-event")||pathInfo.startsWith("delete-event")){
-				String setLocation = //"/Webapp/"+
-						"/"+pathInfo;
+				String setLocation = "/"+pathInfo;
 				System.out.println("\nredirecting to:"+setLocation+"\tid:"+request.getParameter("id"));
 				RequestDispatcher dispatcher = request.getRequestDispatcher(setLocation);
 				dispatcher.forward(request, response);

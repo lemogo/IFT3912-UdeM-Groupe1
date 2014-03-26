@@ -1,0 +1,11 @@
+
+-Issues, one email address can only be assigned to one account
+Unique index or primary key violation: "CONSTRAINT_INDEX_E ON PUBLIC.SIGNEDUSER(EMAIL) VALUES ( /* 5 */ 'frank@bidon.com' )"; SQL statement:
+insert into signeduser  (username, password,fullname,email,age,description)values('franklyBidon', '12345', 'Frank', 'frank@bidon.com', 18 , 'Bidon') [23505-175]
+
+-The event list page only shows one event when displayed in Internet Explorer 11
+
+-In eventHandler find ways to receive these values
+						sources.put("addSuccess", "false");
+						sources.put("isOwner", "false");
+						sources.put("notifications_number", "0");

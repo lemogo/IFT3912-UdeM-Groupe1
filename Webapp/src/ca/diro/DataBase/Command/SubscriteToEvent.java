@@ -34,6 +34,10 @@ public class SubscriteToEvent extends Command{
 		
 	}
 	
+	public SubscriteToEvent(DataBase database) {
+		myDb=database;
+	}
+
 	/**
 	 * Method to handle subscription in event by anonymous user 
 	 * @param info <code>String</code> Object to retrieve anonymous user subscription information
@@ -46,10 +50,7 @@ public class SubscriteToEvent extends Command{
 		boolean returnValue = false ;
 		try {
 				int eventId = jsonInfo.getInt("eventId");
-				myDb.statement().executeUpdate("insert into generaluser" );
-			 
-				myDb.statement().executeUpdate("insert into subsEventGeneral values("+ eventId +")");
-				returnValue = true ;
+				returnValue = anonymSubsEvent(eventId);
 				
 		 } catch (SQLException e) {
 			 System.err.println(e.getMessage());
@@ -63,6 +64,16 @@ public class SubscriteToEvent extends Command{
 		//TODO anonym user subscription event 
 		
 	}
+
+	public boolean anonymSubsEvent(int eventId) throws SQLException {
+		boolean returnValue;
+		myDb.statement().executeUpdate("insert into generaluser" );
+ 
+		myDb.statement().executeUpdate("insert into subsEventGeneral values("+ eventId +")");
+		returnValue = true ;
+		return returnValue;
+	}
+
 	/**
 	 * Method to handle subscription in event by signed user 
 	 * @param info <code>String</code> Object to retrieve anonymous user subscription information
@@ -75,8 +86,7 @@ public class SubscriteToEvent extends Command{
 		try {
 			int eventId = jsonInfo.getInt("eventId");
 			int userId = jsonInfo.getInt("userId");
-			myDb.statement().executeUpdate("insert into subsEventSigned values("+ eventId + ", "+ userId +")");
-			returnValue = true ;
+			returnValue = signedUserSubs(eventId, userId);
 		 } catch (SQLException e) {
 			 System.err.println(e.getMessage());
 		}
@@ -85,6 +95,13 @@ public class SubscriteToEvent extends Command{
 				e1.printStackTrace();
 		}
 		 return returnValue ;
+	}
+
+	public boolean signedUserSubs(int eventId, int userId) throws SQLException {
+		boolean returnValue;
+		myDb.statement().executeUpdate("insert into subsEventSigned values("+ eventId + ", "+ userId +")");
+		returnValue = true ;
+		return returnValue;
 	}
 	
 	

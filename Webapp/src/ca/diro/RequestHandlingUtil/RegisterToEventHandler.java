@@ -5,6 +5,10 @@ import java.io.IOException;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
+
+import ca.diro.Main;
+import ca.diro.DataBase.Command.SubscriteToEvent;
 
 public class RegisterToEventHandler extends RequestHandler {
 	/**
@@ -26,10 +30,28 @@ public class RegisterToEventHandler extends RequestHandler {
 		// TODO Implement handling logic for simple requests (and command
 		// validation) and forwarding for requests that require specific
 		// permissions or handling.
-		try
-		{
+		try{
 			Boolean registeredSuccessfully = true;
 			//TODO:check if the user is logged in and not already registered to the event
+			HttpSession session = request.getSession(true);
+			boolean isLoggedIn=session.getAttribute("auth")==null? false:true;
+			
+			String eventID = request.getParameter("id") == null ? "2":request.getParameter("id");
+
+			if(!isLoggedIn){
+//				String info = "{eventId:1}";
+				SubscriteToEvent cmd = new SubscriteToEvent(Main.getDatabase());
+				boolean isRegisteredSucessfully = cmd.anonymSubsEvent(Integer.parseInt(eventID)); 
+				if(!isRegisteredSucessfully){
+					//TODO:Error message
+				}
+
+			}else{
+				int userId = 2;
+//				String info = "{eventId:1,userId:2}" ;
+				SubscriteToEvent cmd = new SubscriteToEvent(Main.getDatabase());
+				boolean boo = cmd.signedUserSubs(Integer.parseInt(eventID), userId); 
+
 
 			//TODO:Register the User to the event in the database
 			request.getParameter("id");
@@ -39,8 +61,8 @@ public class RegisterToEventHandler extends RequestHandler {
 			//			request.getParameter("eventNumPeople");
 			//			request.getParameter("eventDescription");
 
-			String eventID = "2"; request.getParameter("id");
-
+			}
+			
 			if(registeredSuccessfully){
 				//redirects the current request to the newly created event
 				String setLocation = "/Webapp/evenement/"+eventID;
@@ -48,10 +70,8 @@ public class RegisterToEventHandler extends RequestHandler {
 			}else{
 				//TODO:show error message
 			}
-
 		}
-		catch (Exception e)
-		{
+		catch (Exception e){
 			catchHelper( request, response, e);
 		}
 
