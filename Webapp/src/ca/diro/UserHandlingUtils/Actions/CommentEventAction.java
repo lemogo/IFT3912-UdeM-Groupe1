@@ -31,7 +31,7 @@ public class CommentEventAction extends UserAction {
 	 */
 	public CommentEventAction(int userID, int targetID, String JSONRequest) throws ClassNotFoundException, SQLException {
 		super(userID, targetID, JSONRequest);
-		associatedCommand = new CommentEvent(JSONRequest, Main.getDatabase());
+//		associatedCommand = new CommentEvent(JSONRequest, Main.getDatabase());
 	}
 
 	/*

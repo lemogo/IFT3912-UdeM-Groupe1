@@ -28,7 +28,7 @@ public class ModifyAccountAction extends UserAction {
 	 */
 	public ModifyAccountAction(int userID, int targetID, String JSONRequest) {
 		super(userID, targetID, JSONRequest);
-		associatedCommand = new ModifyAccount(JSONRequest, Main.getDatabase());
+//		associatedCommand = new ModifyAccount(JSONRequest, Main.getDatabase());
 	}
 
 	/*

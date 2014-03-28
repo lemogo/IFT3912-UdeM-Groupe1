@@ -27,7 +27,7 @@ public class OpenSessionAction extends UserAction {
 	 */
 	public OpenSessionAction(int userID, int targetID, String JSONRequest) {
 		super(userID, targetID, JSONRequest);
-		associatedCommand = new OpenSession(JSONRequest);
+//		associatedCommand = new OpenSession(JSONRequest);
 	}
 
 	/*

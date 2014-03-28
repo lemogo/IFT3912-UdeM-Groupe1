@@ -9,6 +9,7 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import ca.diro.Main;
+import ca.diro.DataBase.DataBase;
 import ca.diro.DataBase.Command.SubscriteToEvent;
 
 public class RegisterToEventHandler extends RequestHandler {
@@ -39,13 +40,13 @@ public class RegisterToEventHandler extends RequestHandler {
 			HttpSession session = request.getSession(true);
 			boolean isLoggedIn=session.getAttribute("auth")==null? false:true;
 			eventID = request.getParameter("id") == null ? "1":request.getParameter("id");
-
+			DataBase db = Main.getDatabase();
 //			System.out.println("\n\nIn register, eventID:"+eventID);
 			
 			if(!isLoggedIn){
 //				String info = "{eventId:1}";
-				SubscriteToEvent cmd = new SubscriteToEvent(Main.getDatabase());
-				isRegisteredSucessfully = cmd.anonymSubsEvent(Integer.parseInt(eventID)); 
+				SubscriteToEvent cmd = new SubscriteToEvent(userId, eventID, false);// (Main.getDatabase());
+				isRegisteredSucessfully = db.executeDb(cmd);//cmd..anonymSubsEvent(Integer.parseInt(eventID)); 
 				if(isRegisteredSucessfully) {
 					response.addHeader("isRegistered", "true");
 					response.addHeader("registerSuccess", "true");
@@ -57,8 +58,8 @@ public class RegisterToEventHandler extends RequestHandler {
 				//TODO:Register the User to the event in the database
 				userId = (String) (session.getAttribute(USER_ID_ATTRIBUTE)==null?1:session.getAttribute(USER_ID_ATTRIBUTE));
 //				String info = "{eventId:1,userId:2}" ;
-				SubscriteToEvent cmd = new SubscriteToEvent(Main.getDatabase());
-				isRegisteredSucessfully = cmd.signedUserSubs(Integer.parseInt(eventID), Integer.parseInt(userId)); 
+				SubscriteToEvent cmd = new SubscriteToEvent(userId, eventID, true); //(Main.getDatabase());
+				isRegisteredSucessfully = db.executeDb(cmd);//cmd.signedUserSubs(Integer.parseInt(eventID), Integer.parseInt(userId)); 
 				if(isRegisteredSucessfully) response.addHeader("registerSuccess", "true");
 				response.addHeader("isRegistered", "true");
 			}

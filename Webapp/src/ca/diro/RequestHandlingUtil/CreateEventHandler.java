@@ -50,16 +50,22 @@ System.out.println("isLoggedIn: "+isLoggedIn);
 				DataBase db = Main.getDatabase();//new DataBase(restore);
 				//			String info = "{eventId:"+eventID+"}" ;//"1}" ;
 
-				AddEvent cmd = new AddEvent(db);
-				boolean addedSuccessfully = cmd.addNewEvent(						
+				AddEvent cmd = new AddEvent(
+//						userId, title, date, location, nbplace, description, db
+//						)
+//						(db);
+//				boolean addedSuccessfully = cmd.addNewEvent
+//						(						
 						userId, 
 						title, 
 						date,
 						location,
 						nbplace.equals("Illimité") ? ""+Integer.MAX_VALUE : nbplace, 
-								description
+								description,
+								db
 						);
-				
+				boolean addedSuccessfully = db.executeDb(cmd);
+				cmd.getCurentId();
 				System.out.println("database addedSuccessfully:"+addedSuccessfully);
 				//TODO: Add the event to the database
 				if (addedSuccessfully){

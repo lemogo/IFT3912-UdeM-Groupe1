@@ -12,6 +12,7 @@ import javax.servlet.http.HttpServletResponse;
 import org.eclipse.jetty.server.Request;
 
 import ca.diro.Main;
+import ca.diro.DataBase.DataBase;
 import ca.diro.DataBase.Command.Command;
 import ca.diro.DataBase.Command.CreateUserAccount;
 
@@ -52,10 +53,11 @@ public class CreateUserHandler extends RequestHandler {
 			String info =  "{ fullname:"+fullname+" ,username:"+userName+" ,password:"+password+", " +
 					"email:"+email+",age:"+age+", description:"+description+"}";
 			System.out.println(info);
-			CreateUserAccount cmd = new CreateUserAccount(Main.getDatabase());
+			DataBase db = Main.getDatabase();
+			CreateUserAccount cmd = new CreateUserAccount(userName, password, fullname, email, age, description, db);// (Main.getDatabase());
 			boolean userAddedSuccessfully=false; 
 			try{
-				userAddedSuccessfully = cmd.createNewAccount(fullname, userName, password, age, email, description); 
+				userAddedSuccessfully =db.executeDb(cmd);//. cmd.createNewAccount(fullname, userName, password, age, email, description); 
 			}catch(SQLException e){
 				e.printStackTrace();
 			}

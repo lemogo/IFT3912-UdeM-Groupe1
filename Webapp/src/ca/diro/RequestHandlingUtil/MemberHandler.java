@@ -218,7 +218,7 @@ public class MemberHandler extends RequestHandler {
 			HashMap<String, Object> sources, int userId, String username)
 			throws SQLException {
 		//Get Users Event list 
-		ListEventByUser userEventList = new ListEventByUser(userId);
+		ListEventByUser userEventList = new ListEventByUser(""+userId);
 //			System.out.println("before executing second database command");
 		Boolean asExecuted2 = Main.getDatabase().executeDb(userEventList);
 		if(!asExecuted2) return;
@@ -241,7 +241,7 @@ public class MemberHandler extends RequestHandler {
 
 	private String addUserInfoToMustacheSources(HashMap<String, Object> sources, int userId)
 			throws JSONException, SQLException {
-		PageInfoUser cmd = new PageInfoUser(userId) ; //add cast if necessary
+		PageInfoUser cmd = new PageInfoUser(""+userId) ; //add cast if necessary
 		Boolean asExecuted = Main.getDatabase().executeDb(cmd); //true check si la requete est bien exécuté 
 		ResultSet rs = cmd.getResultSet(); //retourne (username,password,fullname,email,age,description)
 

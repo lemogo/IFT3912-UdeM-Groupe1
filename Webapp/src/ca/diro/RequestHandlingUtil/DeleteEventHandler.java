@@ -41,8 +41,8 @@ public class DeleteEventHandler extends RequestHandler {
 				//TODO:Remove the event from the database
 				DataBase myDb = Main.getDatabase();
 //				String info = "{eventId: "+eventID+"}" ;//"1}" ;
-				DeleteEvent cmd = new DeleteEvent(myDb);
-				if(cmd.removeEvent(Integer.parseInt(eventID))){
+				DeleteEvent cmd = new DeleteEvent(eventID);// (myDb);
+				if(myDb.executeDb(cmd)){//cmd.removeEvent(Integer.parseInt(eventID))){
 					System.out.println("Deleted event: "+eventID);
 					deletedSuccessfully=true;
 				

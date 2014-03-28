@@ -28,7 +28,7 @@ public class CreateUserAccountAction extends UserAction {
 	 */
 	public CreateUserAccountAction(int userID, int targetID, String JSONRequest) {
 		super(userID, targetID, JSONRequest);
-		associatedCommand = new CreateUserAccount(JSONRequest, Main.getDatabase());
+//		associatedCommand = new CreateUserAccount(JSONRequest, Main.getDatabase());
 	}
 
 	/*
