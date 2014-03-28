@@ -9,14 +9,17 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import org.eclipse.jetty.server.Request;
-
 import ca.diro.Main;
 import ca.diro.DataBase.DataBase;
 import ca.diro.DataBase.Command.Command;
 import ca.diro.DataBase.Command.PageInfoEvent;
 
 public class EventModificationPageHandler extends RequestHandler {
+
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = -8940116469004925945L;
 
 	/*
 	 * (non-Javadoc)
@@ -138,12 +141,10 @@ public class EventModificationPageHandler extends RequestHandler {
 		// TODO Implement handling logic for simple requests (and command
 		// validation) and forwarding for requests that require specific
 		// permissions or handling.
-		try
-		{
-
+		try{
 			String pathInfo = request.getPathInfo().substring(1);
-			System.out.println("in EventModification - pathInfo:"+pathInfo+"\tcontextPath:"+request.getContextPath());
-			System.out.println("in EventModification - pathInfo:"+pathInfo+"\tcontextPath:"+("/Webapp/"+pathInfo));
+//			System.out.println("in EventModification - pathInfo:"+pathInfo+"\tcontextPath:"+request.getContextPath());
+//			System.out.println("in EventModification - pathInfo:"+pathInfo+"\tcontextPath:"+("/Webapp/"+pathInfo));
 
 			//The current request must be a file -> redirect to requestHandler
 			if(	pathInfo.contains(".")) {
@@ -167,7 +168,7 @@ public class EventModificationPageHandler extends RequestHandler {
 				response.setStatus(HttpServletResponse.SC_OK);
 
 				String eventID = pathInfo;
-System.out.println("in event modification - eventID:"+eventID);
+//System.out.println("in event modification - eventID:"+eventID);
 				DataBase myDb = Main.getDatabase();//new DataBase(restore);
 				String info = "{eventId:"+eventID+"}" ;//"1}" ;
 				Command cmd = new PageInfoEvent(info,myDb);
@@ -183,22 +184,12 @@ System.out.println("in event modification - eventID:"+eventID);
 										rs.getString("location"), rs.getString("description"), eventID,
 										rs.getString("numberplaces"))
 								);
-					else
-						sources.put("event",
-								new Event("Event_username1", "Event_title1", "Event_date1",
-										"Event_location1", "Event_description1", "Event_id1",
-										"Event_badgeClass1")
-								);
-
-
-					//to display success message
-					sources.put("id", pathInfo);
-					sources.put("addSuccess", "false");
-					sources.put("isOwner", "false");
-					//				sources.put("registerSuccess", "true");
-					//				sources.put("unregisterSuccess", "false");
-
-
+//					else
+//						sources.put("event",
+//								new Event("Event_username1", "Event_title1", "Event_date1",
+//										"Event_location1", "Event_description1", "Event_id1",
+//										"Event_badgeClass1")
+//								);
 
 					processTemplate(request, response, "header.html");
 
@@ -210,25 +201,23 @@ System.out.println("in event modification - eventID:"+eventID);
 					//				HashMap<String, Object> sources = new HashMap<String, Object>();
 
 					//to display success message
-					sources.put("addSuccess", "true");
-					sources.put("isOwner", "true");
+					sources.put("id", pathInfo);
+					//to display success message
+//					sources.put("addSuccess", "true");
+//					sources.put("isOwner", "true");
 					//				sources.put("registerSuccess", "true");
 					//				sources.put("unregisterSuccess", "false");
 					sources.put("user", "true");
 					sources.put("notifications_number", "0");
 
-
 					processTemplate(request, response, filename,sources);
 					processTemplate(request, response, "footer.html");
 				}
 			}
-
 			//			baseRequest.setHandled(true);
 		}
-		catch (Exception e)
-		{
+		catch (Exception e){
 			catchHelper( request, response, e);
 		}
-
 	}
 }

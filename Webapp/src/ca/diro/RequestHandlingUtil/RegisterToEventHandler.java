@@ -2,6 +2,7 @@ package ca.diro.RequestHandlingUtil;
 
 import java.io.IOException;
 
+import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -30,51 +31,55 @@ public class RegisterToEventHandler extends RequestHandler {
 		// TODO Implement handling logic for simple requests (and command
 		// validation) and forwarding for requests that require specific
 		// permissions or handling.
+		String eventID="";
+		String userId="";
 		try{
-			Boolean registeredSuccessfully = true;
+			Boolean isRegisteredSucessfully = false;
 			//TODO:check if the user is logged in and not already registered to the event
 			HttpSession session = request.getSession(true);
 			boolean isLoggedIn=session.getAttribute("auth")==null? false:true;
-			
-			String eventID = request.getParameter("id") == null ? "2":request.getParameter("id");
+			eventID = request.getParameter("id") == null ? "1":request.getParameter("id");
 
+//			System.out.println("\n\nIn register, eventID:"+eventID);
+			
 			if(!isLoggedIn){
 //				String info = "{eventId:1}";
 				SubscriteToEvent cmd = new SubscriteToEvent(Main.getDatabase());
-				boolean isRegisteredSucessfully = cmd.anonymSubsEvent(Integer.parseInt(eventID)); 
-				if(!isRegisteredSucessfully){
+				isRegisteredSucessfully = cmd.anonymSubsEvent(Integer.parseInt(eventID)); 
+				if(isRegisteredSucessfully) {
+					response.addHeader("isRegistered", "true");
+					response.addHeader("registerSuccess", "true");
+				}
+				else{
 					//TODO:Error message
 				}
-
 			}else{
-				int userId = 2;
+				//TODO:Register the User to the event in the database
+				userId = (String) (session.getAttribute(USER_ID_ATTRIBUTE)==null?1:session.getAttribute(USER_ID_ATTRIBUTE));
 //				String info = "{eventId:1,userId:2}" ;
 				SubscriteToEvent cmd = new SubscriteToEvent(Main.getDatabase());
-				boolean boo = cmd.signedUserSubs(Integer.parseInt(eventID), userId); 
-
-
-			//TODO:Register the User to the event in the database
-			request.getParameter("id");
-			//			request.getParameter("eventName");
-			//			request.getParameter("eventDate");
-			//			request.getParameter("eventLocation");
-			//			request.getParameter("eventNumPeople");
-			//			request.getParameter("eventDescription");
-
+				isRegisteredSucessfully = cmd.signedUserSubs(Integer.parseInt(eventID), Integer.parseInt(userId)); 
+				if(isRegisteredSucessfully) response.addHeader("registerSuccess", "true");
+				response.addHeader("isRegistered", "true");
 			}
-			
-			if(registeredSuccessfully){
-				//redirects the current request to the newly created event
-				String setLocation = "/Webapp/evenement/"+eventID;
-				response.sendRedirect(setLocation);
-			}else{
-				//TODO:show error message
-			}
+//			System.out.println("isRegisteredSucessfully:"+isRegisteredSucessfully);
+//			if(isRegisteredSucessfully){
+//				//redirects the current request to the newly created event
+//				response.addHeader("registerSuccess", "true");
+//			}else{
+//				//TODO:show error message
+//			}
 		}
 		catch (Exception e){
 			catchHelper( request, response, e);
+		}finally{
+//			response.addHeader("isRegistered", "true");
+//			String setLocation = "/Webapp/evenement/"+eventID;
+			String setLocation = "/evenement/"+eventID;
+			System.out.println("\n\nIn registerEvent, redirecting to :"+setLocation+"\tuserId:"+userId+""+"\n\n");
+//			response.sendRedirect(setLocation);
+			RequestDispatcher dispacher = request.getRequestDispatcher(setLocation);
+			dispacher.forward(request, response);
 		}
-
 	}
-
 }

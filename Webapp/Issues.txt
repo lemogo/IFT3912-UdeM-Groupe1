@@ -9,3 +9,7 @@ insert into signeduser  (username, password,fullname,email,age,description)value
 						sources.put("addSuccess", "false");
 						sources.put("isOwner", "false");
 						sources.put("notifications_number", "0");
+
+-Verify that a user can only register to an event once, I had to modify the SQL statement and had distinct
+
+-we need to be able to get the userID with just the username (ex. when a user wants to see another user's info page, i.e. to know who's the Owner

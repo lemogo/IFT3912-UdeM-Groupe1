@@ -1,7 +1,9 @@
 package ca.diro.RequestHandlingUtil;
 
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.io.UnsupportedEncodingException;
 import java.sql.ResultSet;
 import java.util.HashMap;
 
@@ -31,18 +33,27 @@ public class EventHandler extends RequestHandler {
 		// TODO Implement handling logic for simple requests (and command
 		// validation) and forwarding for requests that require specific
 		// permissions or handling.
+		processRequestHelper(request, response);
+
+	}
+
+
+	public void processRequestHelper(HttpServletRequest request,
+			HttpServletResponse response) throws IOException,
+			UnsupportedEncodingException, FileNotFoundException {
 		try
 		{
 			String pathInfo = request.getPathInfo().substring(1);
-			System.out.println("in Event - pathInfo:"+pathInfo+"\tcontextPath:"+request.getContextPath());
-			System.out.println("in Event - pathInfo:"+pathInfo+"\tcontextPath:"+("/Webapp/"+pathInfo));
+//			System.out.println("in Event GET - pathInfo:"+pathInfo+"\tcontextPath:"+request.getContextPath());
+//			System.out.println("in Event GET - pathInfo:"+pathInfo+"\tcontextPath:"+("/Webapp/"+pathInfo));
 
 			//The current request must be a file -> redirect to requestHandler
 			if(	pathInfo.contains(".")) {
 				handleToTheRessource(request, response, pathInfo);
 				return;
 			}
-			if(pathInfo.startsWith("modify-event")||pathInfo.startsWith("delete-event")){
+			if(pathInfo.startsWith("modify-event")||pathInfo.startsWith("delete-event")
+					||pathInfo.startsWith("register-event")){
 				String setLocation = "/Webapp/"+pathInfo;
 				response.sendRedirect(setLocation);
 				return;
@@ -69,8 +80,8 @@ public class EventHandler extends RequestHandler {
 				response.setContentType("text/html");
 				response.setCharacterEncoding("utf-8");
 				response.setStatus(HttpServletResponse.SC_OK);
-				String eventID = pathInfo;
 
+				String eventID = pathInfo;
 
 				//TODO:Get the user event info from the database
 				DataBase myDb = Main.getDatabase();//new DataBase(restore);
@@ -94,26 +105,32 @@ public class EventHandler extends RequestHandler {
 
 						//to display success message
 						sources.put("id", pathInfo);
-						sources.put("addSuccess", "false");
-						String isOwner = "false";
-						System.out.println("before checking isOwner"+request.getHeader("isOwner"));
+						sources.put("addSuccess", false);
+						boolean isOwner = false;
+						
+//						System.out.println("before checking isOwner"+request.getHeader("isOwner"));
+						
 						if(response.getHeader("isOwner")!=null) {
 							System.out.println("\nisOwner=true");
-							isOwner = "true";
+							isOwner = true;
+							if(isOwner)sources.put("isOwner", isOwner);
 						}
-						sources.put("isOwner", isOwner);
-						//				sources.put("registerSuccess", "true");
-						//				sources.put("unregisterSuccess", "false");
 
+						boolean registerSuccess = response.getHeader("registerSuccess")==null ? false:Boolean.parseBoolean(response.getHeader("registerSuccess"));
+						if(registerSuccess)sources.put("registerSuccess", registerSuccess);
+						boolean isRegistered = response.getHeader("isRegistered")==null ? false:Boolean.parseBoolean(response.getHeader("isRegistered"));
+						if(isRegistered)sources.put("isRegistered", isRegistered);
+						//				sources.put("unregisterSuccess", "false");
+System.out.println("registerSuccess:"+registerSuccess+"\tisRegistered:"+isRegistered+" "+response.getHeader("isRegistered"));
 						HttpSession session = request.getSession(true);
 						boolean isLoggedIn=session.getAttribute("auth")==null? false:true;
 
-						System.out.println("isLoggedIn:"+isLoggedIn+"\t"+request.getRequestedSessionId());//.request.getRequestedSessionId()==null? false:true;
+						System.out.println("Event isLoggedIn:"+isLoggedIn+"\t"+request.getRequestedSessionId());//.request.getRequestedSessionId()==null? false:true;
 						
-						sources.put("user", isLoggedIn);
+						if (isLoggedIn)sources.put("user", isLoggedIn);
 						sources.put("notifications_number", "0");
 
-						processTemplate(request, response, "header.html");
+						processTemplate(request, response, "header.html",sources);
 						processTemplate(request, response, filename,sources);
 						processTemplate(request, response, "footer.html");
 					}else{
@@ -125,10 +142,9 @@ public class EventHandler extends RequestHandler {
 			}
 		}
 		catch (Exception e){
-			System.out.println("In eventHanler catch exception");
+			System.out.println("In eventHanler GET catch exception");
 			catchHelper(request, response, e);
 		}
-
 	}
 
 	
@@ -148,13 +164,13 @@ public class EventHandler extends RequestHandler {
 		// permissions or handling.
 		try
 		{
-			//redirects via post the form
+			//redirects, via post, the form
 //			System.out.println("before checking isOwner"+request.getHeader("isOwner"));
 //			if(response.getHeader("isOwner")!=null) {
 //				System.out.println("\nisOwner=true");
 //			}
 			
-			String pathInfo = request.getPathInfo().substring(1);
+			String pathInfo = request.getPathInfo().startsWith("/")?request.getPathInfo().substring(1):request.getPathInfo();
 			System.out.println("in Event, context Post - pathInfo:"+pathInfo+"\tcontextPath:"+request.getContextPath());
 			System.out.println("in Event, context Post - pathInfo:"+pathInfo+"\tcontextPath:"+("/Webapp/"+pathInfo));
 
@@ -163,20 +179,32 @@ public class EventHandler extends RequestHandler {
 				handleToTheRessource(request, response, pathInfo);
 				return;
 			}
-			if(pathInfo.startsWith("modify-event")||pathInfo.startsWith("delete-event")){
-				String setLocation = "/"+pathInfo;
+			if(pathInfo.startsWith("modify-event")||pathInfo.startsWith("delete-event")
+//					){
+				||pathInfo.startsWith("register-event")){
+				String setLocation = 
+//						request.getServletPath();
+				"/"+pathInfo;
 				System.out.println("\nredirecting to:"+setLocation+"\tid:"+request.getParameter("id"));
+//				if(request.getMethod().equals("POST")){
 				RequestDispatcher dispatcher = request.getRequestDispatcher(setLocation);
 				dispatcher.forward(request, response);
+//				}else
+//				{
+//					setLocation = "/"+pathInfo;
 //				response.sendRedirect(setLocation);
+//				}
 				return;
 			}else if(isAnotherContext(pathInfo)&&!pathInfo.equals("")){ 	        
 				String setLocation = "/Webapp/"+pathInfo;//"/";
 				response.sendRedirect(setLocation);
 				return;
 			}
+
+			processRequestHelper(request, response);
+		
 		}catch (Exception e){
-			System.out.println("In eventHanler catch exception");
+			System.out.println("In eventHanler Post catch exception");
 			catchHelper(request, response, e);
 		}
 

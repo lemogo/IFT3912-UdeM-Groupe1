@@ -43,7 +43,7 @@ public class ConnectUserHandler extends RequestHandler {
 			String JSONRequest = "{ userName : " + username + ", password : " +
 					password + " }";
 			System.out.println(JSONRequest);
-			OpenSession openCommand = new OpenSession(JSONRequest);
+			OpenSession openCommand = new OpenSession(password, username);
 
 			//			System.out.println("before database execution");
 

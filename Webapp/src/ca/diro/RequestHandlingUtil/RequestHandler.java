@@ -78,7 +78,7 @@ public class RequestHandler extends HttpServlet {
 			if(pathInfo.startsWith("/"))pathInfo = pathInfo.substring(1);
 
 			if(pathInfo.length()<=1){
-System.out.println("returns because it's a null pathInfo");
+//System.out.println("returns because it's a null pathInfo");
 				//				baseRequest.setHandled(true);
 				return;
 			}
@@ -95,7 +95,7 @@ System.out.println("returns because it's a null pathInfo");
 	protected void handleToTheRessource(HttpServletRequest request,
 			HttpServletResponse response, String pathInfo) throws IOException,
 			UnsupportedEncodingException, FileNotFoundException {
-System.out.println("In handleToTheRessource\t"+request.getMethod()+"\tpathInfo:"+pathInfo+"\t"+request.getPathInfo()+"\tContext:"+request.getContextPath());
+//System.out.println("In handleToTheRessource\t"+request.getMethod()+"\tpathInfo:"+pathInfo+"\t"+request.getPathInfo()+"\tContext:"+request.getContextPath());
 
 		if ( pathInfo.equals("accueil")) pathInfo = "accueil.html";
 		else if ( pathInfo.equals("ajouter-un-evenement") 
@@ -123,11 +123,11 @@ System.out.println("In handleToTheRessource\t"+request.getMethod()+"\tpathInfo:"
 		response.setCharacterEncoding("utf-8");
 
 		String filename = pathInfo;
-System.out.println("static ressource:"+staticResource.getAbsolutePath()+"\tdynamicResource"+dynamicResource.getAbsolutePath());
+//System.out.println("static ressource:"+staticResource.getAbsolutePath()+"\tdynamicResource"+dynamicResource.getAbsolutePath());
 
 		// Ressource existe
 		if(pathInfo.startsWith("https://")){
-			System.out.println("http request");
+//			System.out.println("http request");
 			response.setStatus(HttpServletResponse.SC_OK);
 //			copy(staticResource, response.getOutputStream());
 			//TODO:find out how to deal with this case
@@ -138,12 +138,12 @@ System.out.println("static ressource:"+staticResource.getAbsolutePath()+"\tdynam
 			processTemplate(request, response, "404.html");
 	}
 		else if (staticResource.exists()){
-			System.out.println("Exist static ressource:"+staticResource);
+//			System.out.println("Exist static ressource:"+staticResource);
 			response.setStatus(HttpServletResponse.SC_OK);
 			copy(staticResource, response.getOutputStream());
 		}
 		else{
-			System.out.println("Thinks it a dynamic ressource:\t"+dynamicResource);
+//			System.out.println("Thinks it a dynamic ressource:\t"+dynamicResource);
 			response.setStatus(HttpServletResponse.SC_OK);
 			HttpSession session = request.getSession(true);
 			boolean isLoggedIn=session.getAttribute("auth")==null? false:true;

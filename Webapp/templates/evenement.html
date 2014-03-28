@@ -8,13 +8,11 @@
 		    	<strong>Félicitation!</strong> Vous êtes maintenant inscrit à l'événement.
 		    </div>
 			{{/registerSuccess}}
-		    {{^registerSuccess}}
 		    {{#unregisterSuccess}}
 			<div class="alert alert-danger">
 		    	Vous ne faite plus parti de l'événement.
 		    </div>
 		    {{/unregisterSuccess}}
-			{{/registerSuccess}}
 		    {{^unregisterSuccess}}
 			<p class="descpage">Trouvez les informations sur Bacon ipsum dolor sit amet meatball beef ribs jowl bresaola sirloin pork loin tail shank pork chop short ribs pork. Rump brisket tongue, shankle tri-tip pork chop capicola doner corned beef swine leberkas bresaola andouille bacon.</p>
 		    {{/unregisterSuccess}}
@@ -45,14 +43,14 @@
 					{{/isOwner}}
 					{{^isOwner}}
 						{{^isRegistered}}
-						<a class="btn btn-primary" href="javascript:$('formRegisterEvent').submit();" role="button">S'inscrire!</a>
+						<a class="btn btn-primary" onclick="document.getElementById('formRegisterEvent').submit();" role="button">S'inscrire!</a>
 						<form id="formRegisterEvent" role="form" action="register-event" method="POST">
 							<input type="hidden" name="id" value="{{id}}" />
 						</form>
 						{{/isRegistered}}
 						{{#isRegistered}}
-						<a class="btn btn-danger" href="javascript:$('formRegisterEvent').submit();" role="button">Annuler l'inscription</a>
-						<form id="formRegisterEvent" role="form" action="unregister-event" method="POST">
+						<a class="btn btn-danger" href="javascript:$('formUnregisterEvent').submit();" role="button">Annuler l'inscription</a>
+						<form id="formUnregisterEvent" role="form" action="unregister-event" method="POST">
 							<input type="hidden" name="id" value="{{id}}" />
 						</form>
 						{{/isRegistered}}
