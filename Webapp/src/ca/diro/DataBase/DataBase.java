@@ -1,17 +1,7 @@
 package ca.diro.DataBase;
-
-//import MustacheHandler;
-
 import java.sql.*;
 import java.util.*;
-
-import org.eclipse.jetty.server.Server;
 import org.h2.tools.DeleteDbFiles;
-import org.json.JSONObject;
-
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
-
 import ca.diro.DataBase.Command.*;
 
 /**
@@ -86,19 +76,18 @@ public class DataBase {
 	}
 
 	/**
-	 * Method to delete database
+	 * Method to delete database dangerous protected with a password 
 	 * 
 	 * @throws SQLException
 	 */
 	public void dbDelete(String password) throws SQLException {
-		if (password.equals("group1")) {
+		if (password.equals("DataBaseManagerGroup1")) {
 			DeleteDbFiles.execute("data/database", dbName, true);
 		}
 	}
 
 	/**
 	 * Method to get Statement for query
-	 * 
 	 * @return stat a <code>Statement</code> Object in order to run query
 	 * @throws SQLException
 	 */
@@ -134,9 +123,9 @@ public class DataBase {
 	 */
 
 	public void createTables() throws SQLException {
-
+		
 		this.statement().setQueryTimeout(60);
-
+		this.statement().executeUpdate("drop table if exists generaluser");
 		this.statement().executeUpdate("drop table if exists signeduser");
 		this.statement().executeUpdate(
 				"create table signeduser ("
@@ -174,7 +163,7 @@ public class DataBase {
 								// + "datecreation  datetime  , "
 								+ "numberplaces   int NOT NULL ,"
 								+ "heure  TIME  ,"
-								+ "status  varchar(50) default 'running' check(status in('cancelled', 'deleted', 'running'))   ,"
+								+ "status  varchar(50) default 'running' check(status in('cancelled', 'deleted', 'running'))  ,"
 								+ "type  varchar(50) , "
 								+ "foreign key (suserId) references signeduser(suserId) on update cascade ON DELETE CASCADE)");
 		// comment table
@@ -207,6 +196,7 @@ public class DataBase {
 						"create table subsEventSigned("
 								+ "eventId   int NOT NULL ,"
 								+ "suserId   int NOT NULL ,"
+								+ "notification  varchar(50) default 'notyet' check(notification in('already', 'notyet')) ,"
 								+ "primary key (eventId, suserId), "
 								+ "foreign key (eventId) references event(eventId) ON DELETE CASCADE, "
 								+ "foreign key (suserId) references signeduser(suserId) on update cascade  ON DELETE CASCADE, )");
@@ -221,15 +211,13 @@ public class DataBase {
 	public boolean emptyDataBase() {
 		boolean returnValue = false;
 		try {
-			Statement gre = this.statement();
+			
 			this.statement().executeUpdate("drop table if exists signeduser");
 			this.statement().executeUpdate("drop table if exists sessionuser");
 			this.statement().executeUpdate("drop table if exists event");
 			this.statement().executeUpdate("drop table if exists commentEvent");
-			this.statement().executeUpdate(
-					"drop table if exists  subsEventGeneral");
-			this.statement().executeUpdate(
-					"drop table if exists  subsEventSigned");
+			this.statement().executeUpdate("drop table if exists  subsEventGeneral");
+			this.statement().executeUpdate("drop table if exists  subsEventSigned");
 
 			returnValue = true;
 		} catch (SQLException e) {
@@ -302,7 +290,8 @@ public class DataBase {
 							+ "(2)," + "(1)");
 
 			this.statement().executeUpdate(
-					"insert into subsEventSigned values(1,1)," + "(2,2),"
+					"insert into subsEventSigned (eventid, suserid)" +
+					"values(1,1)," + "(2,2),"
 							+ "(1,2)");
 
 			returnValue = true;
@@ -363,24 +352,32 @@ public class DataBase {
 		return tableSet;
 	}
 
-/*	
-	 public static void main(String[] args) throws Exception { 
-		 DataBase myDb =
-		 new DataBase(); // String restore = "DataBaseRestore.sql" ; // DataBase
-		 myDb = new DataBase(restore); // myDb.dbConnect() ; // myDb.dbDelete();
-		 
-		  // myDb.createTables(); // myDb.populateTable(); String info =
-		 //"{eventId:1}"; Command cmd = new PageInfoEvent(info, myDb); boolean boo =
-		 myDb.executeDb(cmd);
-		 
-		 ResultSet rs = cmd.getResultSet();
-		 
-		 while (rs.next()) { System.out.println(rs.getString(2)); }
-		 
-	}
+	
+//	 public static void main(String[] args) throws Exception { 
+//		 DataBase myDb = 
+//		 new DataBase(); //
+//		// String restore = "DataBaseRestore.sql" ; // DataBase
+//		// myDb = new DataBase(restore); // myDb.dbConnect() ; // myDb.dbDelete();
+//		 
+//		   myDb.createTables(); 
+//		   myDb.populateTable(); //String info =
+//		 //"{eventId:1}"; Command cmd = new PageInfoEvent(info, myDb); boolean boo =
+//		    String userId = "1"; String title = "bataille de chocolat" ; 
+//			String   datetime = "2014-12-07 23:21:45" ; String  location = "plateau mont royal" ;
+//			String numberplaces = "42" ; String description = "jeu de tir  tres evmouvant ";
+//
+//			AddEvent cmd = new AddEvent(userId,title, datetime, location, numberplaces, description, myDb);
+//			boolean boo = myDb.executeDb(cmd); 
+//			ResultSet rs = cmd.getCurrentEventId();
+//			//ResultSet rs = ((AddEvent) cmd).getCurentId();
+//			while (rs.next()) {
+//				System.out.println(rs.getString(1));
+//			}
+//		 myDb.dbClose() ;
+//	}
 	
 
-	
+	/**
 	  connection to database
 	 */
 	private Connection con = null;
@@ -405,24 +402,12 @@ public class DataBase {
 	 * data base user name
 	 */
 	private String dbUserName = "group1";
-	/**
-	 * state of successful transaction
-	 */
-	// public static final int SUCCESSFUL = 0;
-	/**
-	 * state of failed transaction
-	 */
-	// public static final int FAILED = -1;
-	/**
-	 * constant for recovering database for security
-	 */
-	// public static final String SCRIPT_RESTORE = "DataBaseRestore.sql";
+	
 	/**
 	 * default constant for recovering database for security
 	 */
 	private static final String RESTORE_SCRIPT = "restoreDataBase.sql";
 
-	// private String restoreScript = null;
 	/**
 	 * same database
 	 */

@@ -3,9 +3,8 @@
  */
 package ca.diro.DataBase.Command;
 
+import java.sql.ResultSet;
 import java.sql.SQLException;
-
-import org.json.JSONException;
 
 import ca.diro.DataBase.DataBase;
 
@@ -15,80 +14,80 @@ import ca.diro.DataBase.DataBase;
  * @author william
  * 
  */
-/**
- * @author pc-user
- *
- */
-public class CreateUserAccount extends Command {
+
+public class CreateUserAccount extends CommandUpdate {
 
 	/**
 	 * Constructor
-	 * @param info string 
-	 * @throws JSONException 
+	 * @param db TODO
 	 * @throws ClassNotFoundException 
 	 * @throws SQLException 
 	 */
-	public CreateUserAccount(String info , DataBase db)  {
-		myDb  = db;
-		try {
-			jsonInfo = parseToJson(info);
-		} catch (JSONException e) {
-			
-			e.printStackTrace();
-		}
+	public CreateUserAccount(String userName, String password, String fullName, String email, String age, String description, DataBase db )  {
+		myDb = db ;
+		query_ = createNewAccount( userName,  password, fullName, email,  age,  description) ;
 
-	}
-
-	public CreateUserAccount(DataBase db)  {
-		myDb  = db;
-		
 	}
 	
 	/**
 	 * Method to handle creation of account from anonymous user 
-	 * @param info <code>String</code> Object to retrieve anonymous user subscription information
+	 * @param userName <code>String</code> Object to retrieve anonymous user subscription information
+	 * @param password String
+	 * @param fullName String
+	 * @param email String
+	 * @param age String
+	 * @param description String
 	 * @return true if successful execution else false
 	 */
-	public boolean createNewAccount(String info){
+	public String createNewAccount(String userName, String password, String fullName, String email, String age, String description){
 	
-		boolean returnValue = false ;
-		try {
-				
-			String fullName = jsonInfo.getString("fullname");
-			String userName = jsonInfo.getString("username");
-			String password = jsonInfo.getString("password");
-			String age = jsonInfo.getString("age");
-			String email = jsonInfo.getString("email");
-			String desc = jsonInfo.getString("description") ;
+		String str = "";
 		
-			returnValue = createNewAccount(fullName, userName, password, age, email, desc);
-				
-		 } catch (SQLException e) {
-			 System.err.println(e.getMessage());
-		}
-		catch (JSONException e1) {
-		 	System.err.println(e1.getMessage());
-			e1.printStackTrace();
-		}
-		 return returnValue ;
-		
-		//TODO create user account  	
-	}
-
-
-	public boolean createNewAccount(String fullName, String userName,
-			String password, String age, String email, String desc)
-			throws SQLException {
-		int returnValue = myDb.statement().executeUpdate("insert into signeduser  (username, password,fullname,email,age,description)"  +
-				"values('" + userName +"', '" + password +"', '" + fullName +"', '"+ email  +"', " + Integer.parseInt(age) + " , '"+ desc + "')");
-		myDb.statement().executeUpdate("insert into sessionuser (datecreation, email ) " +
-					"values(CURRENT_DATE(),'" + email +"')");
-		return true;
+			str = "insert into signeduser  (username, password,fullname,email,age,description)"  +
+					"values('" + userName +"', '" + password +"', '" + fullName +"', '"+ email  +"', " + Integer.parseInt(age) + " , '"+ description + "')";
+			//myDb.statement().executeUpdate("insert into sessionuser (datecreation, email ) " +
+				//		"values(CURRENT_DATE(),'" + email +"')");
+		 return str;
+			
 	}
 	
 	/**
-	 * Object DataBase to execute update subscription in an event 
+	 * to get the new userId after created a new account 
+	 * @return curentId  <code>ResultSet</code> Object 
 	 */
-	private DataBase myDb ;
-
+	public ResultSet getCurrentUserId(){
+	
+		String str = "select max(suserid) from signeduser " ;
+					
+		try {
+			curentId   = myDb.statement().executeQuery(str);
+			
+		} catch (SQLException e) {
+			
+			e.printStackTrace();
+		}
+		return curentId ;
+	}
+	
+	
+	/**
+	 * @return curentId <code>ResultSet</code> Object the new current eventId
+	 */
+	public ResultSet getCurentId() {
+		return curentId;
+	}
+	
+	/**
+	 * 
+	 * Database Object
+	 */
+	DataBase myDb ; 
+	/**
+	 * ResultSet
+	 */
+	ResultSet curentId  ;
+	
+	
+	
+	
 }

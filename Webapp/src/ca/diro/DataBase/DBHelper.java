@@ -62,7 +62,6 @@ public class DBHelper {
 	 * @return true if good connection else false.
 	 */
 	public boolean checkEventStatus(String eventId){
-		boolean returnValue = false ;
 		//TODO check event status
 		ResultSet rs = null ;
 		String status = "";

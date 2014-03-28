@@ -3,85 +3,37 @@
  */
 package ca.diro.DataBase.Command;
 
-import java.sql.SQLException;
-
-import org.json.JSONException;
-
-import ca.diro.DataBase.*;
-
 /**
- * this class permit to set query in order to allow a signed user to delete event 
+  * this class permit to set query in order to allow a signed user to delete event 
  * @author william
  */
-public class DeleteEvent extends Command{
-
+public class DeleteEvent extends CommandUpdate{
 
 	/**
 	 * Constructor
-	 * @param info string for query
+	 * @param eventId string for query
 	 * @throws ClassNotFoundException 
 	 * @throws SQLException 
 	 */
-	public DeleteEvent(String info , DataBase db) throws ClassNotFoundException, SQLException {
-		myDb  = db;
-		try {
-			jsonInfo = parseToJson(info);
-		} catch (JSONException e) {
+	public DeleteEvent(String eventId)  {
+		//myDb  = db;
+		query_ = removeEvent(eventId)  ;
 
-			e.printStackTrace();
-		}
 	}
-
-	public DeleteEvent( DataBase db) {
-		myDb  = db;
-	}
-
+	
 	/**
 	 * Method to delete  event 
-	 * @param info give the eventId
-	 * @return true if event removed well else false 
+	 * @param eventId give the eventId
+	 * @return str <code>String</code> a String object which is the query 
 	 */
-	public boolean removeEvent(String info) {
+	private String removeEvent(String eventId) {
 		//TODO perform remove query
-
-		boolean returnValue = false ;
-		//if(myHelper.checkEventStatus(eventId)){
-		//can.nofifySignedUser(eventId) ;
-		//}
-		try {
-			String  eventId = jsonInfo.getString("eventId") ;
-			returnValue = removeEvent(Integer.parseInt(eventId));
-		} catch (SQLException e) {
-			System.err.println(e.getMessage());
-		}
-		catch (JSONException e1) {
-			System.err.println(e1.getMessage());
-			e1.printStackTrace();
-		}
-
-		return returnValue ;
+		
+		String str = "";
+		str = "delete from event where eventid = "+ eventId ;
+		return str ;
 	}
 
 
-	public boolean removeEvent(int eventId) throws SQLException {
-		boolean returnValue;
-		myDb.statement().executeUpdate("delete from event where eventid = "+ eventId );
-		returnValue = true;
-		return returnValue;
-	}
-
-	/**
-	 * Object DataBase
-	 */
-	DataBase  myDb ; 
-
-	/**
-	 * Objet DBHelper 
-	 */
-	DBHelper myHelper ;
-	/**
-	 * CancelEvent Object to notify users registered in that event 
-	 */
-	CancelEvent  can ; 
-
+	
 }

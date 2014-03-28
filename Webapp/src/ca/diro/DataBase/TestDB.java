@@ -68,7 +68,7 @@ public class TestDB {
 		ResultSet rs = cmd.getResultSet();
 		
 		while (rs.next()) {
-			System.out.println(rs.getString(4));
+			//System.out.println(rs.getString(4));
 		}
 		assertTrue(boo);
 			
@@ -155,8 +155,8 @@ public class TestDB {
 	@Test
 	public void testListRegisterEvent() throws ClassNotFoundException, SQLException {
 		// test to command giving   list of events where a registered user attend 
-		String info = "{userId:1}" ;
-		Command cmd = new ListRegisterEvent(info);
+		String userId = "1" ;
+		Command cmd = new ListRegisterEvent(userId);
 		boolean boo = myDb.executeDb(cmd); 
 		
 		ResultSet rs = cmd.getResultSet();
@@ -170,8 +170,8 @@ public class TestDB {
 	@Test
 	public void testListEventByUser() throws SQLException  {
 		// test to command giving the list of all event creted buy a user 
-		String info = "{userId:1}" ;
-		Command cmd = new ListEventByUser(info);
+		String userId = "1" ;
+		Command cmd = new ListEventByUser(userId);
 		boolean boo = myDb.executeDb(cmd); 
 		
 		ResultSet rs = cmd.getResultSet();
@@ -187,8 +187,8 @@ public class TestDB {
 	@Test
 	public void testPageInfoUser() throws JSONException, SQLException  {
 		// test to command giving   all informations of a user  
-		String info = "{userId:1}" ;
-		Command cmd = new PageInfoUser(info);
+		String userId = "1" ;
+		Command cmd = new PageInfoUser(userId);
 		boolean boo = myDb.executeDb(cmd); 
 		
 		ResultSet rs = cmd.getResultSet();
@@ -199,13 +199,13 @@ public class TestDB {
 		assertTrue(boo);
 	}
 	
-	@Test
 	
 	//**************Command PageInfoEvent ********************//
+	@Test
 	public void testPageInfoEvent() throws JSONException, SQLException  {
 		// test to command giving   all informations of a user  
-		String info = "{eventId:1}" ;
-		Command cmd = new PageInfoEvent(info,myDb);
+		String eventId = "1" ;
+		PageInfoEvent cmd = new PageInfoEvent(eventId,myDb);
 		boolean boo = myDb.executeDb(cmd); 
 		
 		ResultSet rs = cmd.getResultSet();
@@ -213,14 +213,17 @@ public class TestDB {
 		while (rs.next()) {
 			//System.out.println(rs.getString(2));
 		}
+		//System.out.println(cmd.getAvailablePlaces()) ;
+		
 		assertTrue(boo);
 	}
 	
 	//******************Command CommentEvent  ********************//
+	@Test
 	public void testCommentEvent() throws ClassNotFoundException, SQLException {
 		// test to command st a comment done by a user 
-		String info = "{eventId:1, userId:1, description: trop bien}" ;
-		Command cmd = new CommentEvent(info,myDb);
+		String eventId = "1" ; String  userId = "1" ; String description = "trop bien" ;
+		Command cmd = new CommentEvent(eventId,userId,description,myDb);
 		boolean boo = myDb.executeDb(cmd); 
 		
 		ResultSet rs = cmd.getResultSet();
@@ -231,13 +234,13 @@ public class TestDB {
 		assertTrue(boo);
 	}
 
-	//************* CancelEvent Command   ********************************
+	//************* Command  CancelEvent   ********************************
 	@Test
 	public void testCancelEvent() throws ClassNotFoundException, SQLException {
 		// test verify cancelled event 
-		String info = "{eventId:1}" ;
-		Command cmd = new CancelEvent(info, myDb);
-		boolean boo = ((CancelEvent) cmd).cancelQuery(); 
+		String eventId = "1" ;
+		Command cmd = new CancelEvent(eventId , myDb);
+		boolean boo = myDb.executeDb(cmd); 
 		assertTrue(boo);	
 	}
 	
@@ -245,19 +248,21 @@ public class TestDB {
 	@Ignore
 	public void testremoveSubcriteEvent() throws ClassNotFoundException, SQLException {
 		// test for removing cancelled events from list of subscripted events
-		String info = "{eventId:1}" ;
-		Command cmd = new CancelEvent(info, myDb);
-		boolean boo = ((CancelEvent) cmd).removeSubcriteEvent() ; 
+		String eventId = "1" ;
+		Command cmd = new CancelEvent(eventId , myDb);
+		boolean boo = ((CancelEvent) cmd).removeSubcriteEvent(eventId) ; 
 		assertTrue(boo);
 		
 	}
 	
+	//****************** Command NotifyCancelEvent ****************************//
 	@Test
 	public void testNofifySignedUser() throws ClassNotFoundException, SQLException {
 		// test verify if notify list for signed user is well done event 
-		String info = "{eventId:1}" ;
-		Command cmd = new CancelEvent(info, myDb);
-		ResultSet rs = ((CancelEvent) cmd).getResultSet(); 
+		String eventId = "1" ;
+		Command cmd = new NotifyCancelledEvent(eventId , myDb);
+		myDb.executeDb(cmd);
+		ResultSet rs = cmd.getResultSet(); 
 		List<String> result = new ArrayList<String>();
 		
 		while (rs.next()) {
@@ -270,32 +275,32 @@ public class TestDB {
 	
 	//***************** Command SubscriteToEvent **************************//
 		
-	@Ignore
-	public void testAnonymSubsEvent() throws ClassNotFoundException, SQLException {
+	@Test
+	public void testSubsEvent() throws ClassNotFoundException, SQLException {
 		// test verify the subscription of an anonymous user at on event 
-		String info = "{eventId:1}";
-		SubscriteToEvent cmd = new SubscriteToEvent(info,myDb);
-		boolean boo = cmd.anonymSubsEvent(info); 
+		String eventId = "2";  String userId = "3" ; 
+		boolean select = true ;
+		SubscriteToEvent cmd = new SubscriteToEvent(userId, eventId, select);
+		boolean boo = myDb.executeDb(cmd); 
+		//System.out.println(boo);
 		assertTrue(boo);
 	}
 	
-	@Ignore
-	public void testSignedUserSubs() throws ClassNotFoundException, SQLException {
-		// test verify the subscription of a signed  user at on event 
-		String info = "{eventId:1,userId:2}" ;
-		SubscriteToEvent cmd = new SubscriteToEvent(info,myDb);
-		boolean boo = cmd.signedUserSubs(info); 
-		assertTrue(boo);	
-	}
 	
-	@Ignore
-	public void testCreateUserAcount()  {
+	
+//************************ command CreateUserAccount ********************************//
+	@Test
+	public void testCreateUserAcount() throws SQLException  {
 		// test verify creation of user account 
 		 
-		String info =  "{ fullname:billy joe ,userName:bil, password:bilson," +
-							"email:bily@crabler.bi, age:456, description:jouer de tenis }";
-		Command cmd = new CreateUserAccount(info,myDb);
-		boolean boo = ((CreateUserAccount) cmd).createNewAccount(info); 
+		String  fullname = "lion joe" ; String userName = "lion"  ; String password = "lionson" ;
+							String email = "bily@crabler.bi" ; String  age = "456"; String  description = "jouer de tenis ";
+		Command cmd = new CreateUserAccount(userName, password ,fullname , email, age, description, myDb);
+		boolean boo = myDb.executeDb(cmd); 
+		ResultSet rs = ((CreateUserAccount) cmd).getCurrentUserId();
+		if (rs.next()){ 
+			//System.out.println(rs.getString(1));
+		}
 		assertTrue(boo);
 	}
 	
@@ -304,142 +309,73 @@ public class TestDB {
 	public void testOpenSession() throws SQLException, JSONException  {
 		//test opening session by signed user  
 		
-		String info = "{userName:gil,password:gilson}" ;
-		Command cmd = new OpenSession(info);
+		String userName = "gil" ; String password = "gilson" ;
+		Command cmd = new OpenSession(userName, password);
 		boolean boo = myDb.executeDb(cmd); 
-		
 		ResultSet rs = cmd.getResultSet();
 		
-		while (rs.next()) {
-			System.out.println(rs.getString(1));
+		rs.next() ;
+		//System.out.println(rs.getString(1));
 			//System.out.println(rs);
-		}
+		
 		assertTrue(boo);
 	}
 	
 	//**************  Class Command AddEvent *************************
-	@Ignore
-	public void testAddNewEvent()  {
+	@Test
+	public void testAddNewEvent() throws SQLException  {
 		// test verify creation of user account 
 		
-		String info = "{userId:1 ,title:bataille de chocolat, datetime:2014-12-07 23:21:45, location:plateau mont royal," +
-				"numberplaces:42,  description:jeu de tir  tres evmouvant }";
+		String userId = "1"; String title = "bataille de chocolat" ; 
+		String   datetime = "2014-12-07 23:21:45" ; String  location = "plateau mont royal" ;
+		String numberplaces = "42" ; String description = "jeu de tir  tres evmouvant ";
 
-		Command cmd = new AddEvent(info,myDb);
-		boolean boo = ((AddEvent) cmd).addNewEvent(); 
+		Command cmd = new AddEvent(userId,title, datetime, location, numberplaces, description, myDb);
+		boolean boo = myDb.executeDb(cmd); 
+		ResultSet rs = ((AddEvent) cmd).getCurrentEventId();
+		if (rs.next()){ 
+			System.out.println(rs.getString(1));
+		}
 		assertTrue(boo);
 	}
 	
 	//**************  Class Command DeleteEvent *************************
 	
-	@Ignore
+	@Test
 	public void testDeleteEvent() throws ClassNotFoundException, SQLException {
 		// test verify delete of event by a user
-		String info = "{eventId:1}";
-		Command cmd = new DeleteEvent(info,myDb);
-		boolean boo = ((DeleteEvent) cmd).removeEvent(info); 
+		String eventId = "1";
+		DeleteEvent cmd = new DeleteEvent(eventId);
+		boolean boo =  myDb.executeDb(cmd); 
 		assertTrue(boo);
 	}
 	
 	//**************  Class Command EditEvent *************************
 	@Test
-	public void testChangeEventTitle() throws JSONException {
+	public void testEditEvent() throws SQLException {
 		// test verify delete of event by a user
-		String str = "{eventId:1, title: parade }";
-		Command cmd = new EditEvent(str , myDb);
-		boolean boo = ((EditEvent) cmd).changeEventTitle(); 
+		String eventId = "1" ; String  title = "parade "; String dateTime = "2017-05-24 14:30:30" ; String location = "place des arts " ;
+		String nbrPlaces = "23"; String description = "nouveau jeu amusant " ;
+		Command cmd = new EditEvent(eventId ,title, dateTime, location, nbrPlaces, description);
+		boolean boo = myDb.executeDb(cmd);
 		assertTrue(boo);
 	}
 	
-	@Test
-	public void testchangeEventDatetime() throws JSONException  {
-		// test verify changin  of date in an event 
-		String str = "{eventId:1, datetime: '2017-05-15 12:00:00' }";
-		Command cmd = new EditEvent(str , myDb);
-		boolean boo = ((EditEvent) cmd).changeEventDatetime(); 
-		assertTrue(boo);
-	}
-	@Test 
-	public void testchangeEventLocation() throws JSONException  {
-		// test verify changing  of date in an event 
-		String str = "{eventId:1, location: gatineau prairie }";
-		Command cmd = new EditEvent(str , myDb);
-		boolean boo = ((EditEvent) cmd).changeEventLocation(); 
-		assertTrue(boo);
-	}
 	
-	@Test 
-	public void testChangeEventPlaces() throws JSONException  {
-		// test verify changing  of the maximum number of places  
-		String str = "{eventId:1, place:20 }";
-		Command cmd = new EditEvent(str, myDb);
-		boolean boo = ((EditEvent) cmd).changeEventPlaces(); 
-		assertTrue(boo);
-	}
-	
-	@Test 
-	public void testChangeEventDesc() throws JSONException  {
-		// test verify changing  of description 
-		String str = "{eventId:1, description: Vraiment la classe venez et vous verrez }";
-		Command cmd = new EditEvent(str , myDb);
-		boolean boo = ((EditEvent) cmd).changeEventDescription(); 
-		assertTrue(boo);
-	}
 	
 	//**************  Class Command ModifYAccount *************************
 	@Test
-	public void testChangeUserFullName() throws JSONException  {
+	public void testModifyUserAccount() throws SQLException  {
 		// test verify change of user's full name 
-		String str = "{userId:1, fullName: blanchard }";
-		Command cmd = new ModifyAccount(str , myDb);
-		boolean boo = ((ModifyAccount) cmd).changeUserFullName(); 
+		String userId =  "1" ; String fullName = "blanchard"; String email = "blanchard@legrand.tc"; String username = "blanco";
+		String password = "blankison" ; String age = "563"; String description = "jaime la nage les raquette le soccer";
+		Command cmd = new ModifyAccount(userId ,fullName, email, username, password, age, description);
+		boolean boo = myDb.executeDb(cmd) ; 
+		
 		assertTrue(boo);
 	}
 	
-	@Test
-	public void testchangeUserEmail() throws JSONException {
-		// test verify changing  email of user
-		String str = "{userId:1, email: blanchard@beau.gt }";
-		Command cmd = new ModifyAccount(str , myDb);
-		boolean boo = ((ModifyAccount) cmd).changeUserEmail(); 
-		assertTrue(boo);
-	}
-	@Test 
-	public void testchangeUserName() throws JSONException  {
-		// test verify changing  of user name
-		String str = "{userId:1, userName: blanchard@beau.gt }";
-		Command cmd = new ModifyAccount(str , myDb);
-		boolean boo = ((ModifyAccount) cmd).changeUserName(); 
-		assertTrue(boo);
-	}
-	
-	@Test 
-	public void testChangeUserPassword() throws JSONException {
-		// test verify changing  of password 
-		String str = "{userId:1, password: blanchard@beau.gt }";
-		Command cmd = new ModifyAccount(str , myDb);
-		boolean boo = ((ModifyAccount) cmd).changeUserPassword(); 
-		assertTrue(boo);
-	}
-	
-	@Test 
-	public void testChangeUserDesc() throws JSONException  {
-		// test verify changing  of description 
-		String str = "{userId:1, description: blanchard aime bien sauter à la corde }";
-		Command cmd = new ModifyAccount(str , myDb);
-		boolean boo = ((ModifyAccount) cmd).changeUserDescription(); 
-		assertTrue(boo);
-	}
-	
-	@Test 
-	public void testChangeUserAge() throws ClassNotFoundException, SQLException, JSONException {
-		// test verify changing  of age
-		String str = "{userId:1, age: 897 }";
-		Command cmd = new ModifyAccount(str , myDb);
-		boolean boo = ((ModifyAccount) cmd).changeUserAge(); 
-		assertTrue(boo);
-	}
-	
+	//*************** Reseach Event *****************//
 	@Test
 	public void testResearchEvent() throws ClassNotFoundException, SQLException {
 		
@@ -455,7 +391,7 @@ public class TestDB {
 		ResultSet rs = cmd.getResultSet();
 		
 		while (rs.next()) {
-			System.out.println(rs.getString(2));
+			//System.out.println(rs.getString(2));
 		}
 		assertTrue(boo);
 			

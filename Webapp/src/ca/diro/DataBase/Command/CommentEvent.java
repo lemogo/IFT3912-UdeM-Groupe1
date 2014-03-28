@@ -2,86 +2,69 @@
  * 
  */
 package ca.diro.DataBase.Command;
-
-import java.sql.ResultSet;
 import java.sql.SQLException;
-
-import org.json.JSONException;
-
 import ca.diro.DataBase.DataBase;
 
 /**
 * this class permit to set query in order to allow an signed user to comment event 
- * @author william
+ * @author William
  */
 public class CommentEvent extends Command{
+	
 	/**
-	 * @param info string 
-	 * @throws SQLException 
-	 * @throws ClassNotFoundException 
+	 * Constructor 
+	 * @param eventId : String 
+	 * @param userId : String
+	 * @param description : String
+	 * @param db : DataBase Object 
+	 * @throws ClassNotFoundException
+	 * @throws SQLException
 	 */
-	public CommentEvent(String info, DataBase db) throws ClassNotFoundException, SQLException {
+	public CommentEvent(String  eventId,String userId,String description, DataBase db) throws ClassNotFoundException, SQLException {
 		
 		myDb = db ;
-		try {
-			jsonInfo = parseToJson(info);
-		} catch (JSONException e) {
-			
-			e.printStackTrace();
-		}
-		keepComment(info) ;
-		query_ = buildQuery(info);	
+		stroreComment(eventId,userId,description) ;
+		query_ = buildQuery(userId);	
 	}
 	
 	/**
-	 * Method to parse String from JSON format in order to retrieve parameters
-	 * and build the right query
+	 * Method to build the right query
 	 * @param info String Object
 	 * @return str <code>String</code> Object which is the query
 	 */
-	private String buildQuery(String info) {
+	private String buildQuery(String userId) {
 		
-		//String description = "blablabla" ;
-		int  S_userId = Integer.parseInt(info);
-		
-		String str = "select username, datecreation from  signeduser, commentevent " +
-						"where 	signeduser.suserid = "+ S_userId +" and " +
+		String str = "select username, commentevent.description, datecreation from  signeduser, commentevent " +
+						"where 	signeduser.suserid = "+ userId +" and " +
 								"signeduser.suserid = commentevent.suserid" ;
-		// TODO parse query
+
 		return str;
 	}
 	/**
 	 * This method execute the insertion of comment in the database 
-	 * @param info String the description of comment 
-	 * @throws SQLException
-	 * @throws ClassNotFoundException
+	 * @param eventId
+	 * @param userId
+	 * @param description
+	 * @return true if execution done well else false 
 	 */
-	private void keepComment(String info) {
-		
+	private boolean stroreComment(String  eventId,String userId,String description ) {
+		boolean returnValue = false;
 
 		 try {
 			 
-			String  eventId = jsonInfo.getString("eventId") ;
-			String userId = jsonInfo.getString("userId") ;
-			String description = jsonInfo.getString("description") ;
 			myDb.statement().executeUpdate("insert into commentevent (description, datecreation, eventid, suserid) " +
 					"values("+"'" + description +"', CURRENT_TIMESTAMP(), "+ eventId + " , "+ userId + ")");
+			returnValue = true ;
 		 } catch (SQLException e) {
 			 System.err.println(e.getMessage());
 		}
-		 catch (JSONException e1) {
-			 	System.err.println(e1.getMessage());
-				e1.printStackTrace();
-			}
-		// TODO parse queryinsert
+		 
+		 return returnValue ;
 	}
 	
 	/**
 	 * object DataBase 
 	 */
 	DataBase myDb ; 
-	/**
-	 * result giving list of users who have to be notify after a cancelled event 
-	 */
-	ResultSet result = null ;
+	
 }

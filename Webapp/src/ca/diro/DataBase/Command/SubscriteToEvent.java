@@ -1,113 +1,42 @@
-/**
- * 
- */
+
 package ca.diro.DataBase.Command;
-
-import java.sql.SQLException;
-
-import org.json.JSONException;
-
-import ca.diro.DataBase.DataBase;
 
 /**
  * This class implement a command  allowing anonymous user to subscribe in one  event 
  * @author william
  *
  */
-public class SubscriteToEvent extends Command{
+public class SubscriteToEvent extends CommandUpdate {
 
 	/**
 	 * Constructor 
-	 * @param info String to build query
-	 * @throws ClassNotFoundException 
-	 * @throws SQLException 
+	 * @param userId String 
+	 * @param select flag to select whether signed user or anonymous
 	 */
-	public SubscriteToEvent(String info , DataBase db)  {
-		myDb  = db;
-		try {
-			jsonInfo = parseToJson(info);
-		} catch (JSONException e) {
-			
-			e.printStackTrace();
-		}
-
-		
+	public SubscriteToEvent(String userId , String eventId, boolean select)  {
+		query_ = buildQuery(userId, eventId, select);	
 	}
 	
-	public SubscriteToEvent(DataBase database) {
-		myDb=database;
-	}
-
 	/**
 	 * Method to handle subscription in event by anonymous user 
-	 * @param info <code>String</code> Object to retrieve anonymous user subscription information
-	 * @return true if successful execution else false
+	 * @param userId 
+	 * @param eventId
+	 * @param select 
+	 * @return <code>String</code> Object to give the query required
 	 */
-	public boolean anonymSubsEvent(String info){
+	public String buildQuery(String userId, String eventId, boolean select){
 		
-		
-		
-		boolean returnValue = false ;
-		try {
-				int eventId = jsonInfo.getInt("eventId");
-				returnValue = anonymSubsEvent(eventId);
+			String str1 = " insert into subsEventGeneral (eventid) values("+ eventId +")" ; 
 				
-		 } catch (SQLException e) {
-			 System.err.println(e.getMessage());
-		}
-		 catch (JSONException e1) {
-			 	System.err.println(e1.getMessage());
-				e1.printStackTrace();
-		}
-		 return returnValue ;
+			String str2 = "insert into subsEventSigned (eventid, suserid) values("+ eventId + ", "+ userId +")" ;
+			if(select){
+				return str2 ;
+			}
+			else{
+				return str1 ;
+			}
 		
-		//TODO anonym user subscription event 
-		
-	}
-
-	public boolean anonymSubsEvent(int eventId) throws SQLException {
-		boolean returnValue;
-		myDb.statement().executeUpdate("insert into generaluser" );
- 
-		myDb.statement().executeUpdate("insert into subsEventGeneral values("+ eventId +")");
-		returnValue = true ;
-		return returnValue;
-	}
-
-	/**
-	 * Method to handle subscription in event by signed user 
-	 * @param info <code>String</code> Object to retrieve anonymous user subscription information
-	 * @return true if successful execution else false
-	 */
-	public boolean signedUserSubs(String info){
-		//TODO signed user subscription event
-		
-		boolean returnValue = false ;
-		try {
-			int eventId = jsonInfo.getInt("eventId");
-			int userId = jsonInfo.getInt("userId");
-			returnValue = signedUserSubs(eventId, userId);
-		 } catch (SQLException e) {
-			 System.err.println(e.getMessage());
-		}
-		 catch (JSONException e1) {
-			 	System.err.println(e1.getMessage());
-				e1.printStackTrace();
-		}
-		 return returnValue ;
-	}
-
-	public boolean signedUserSubs(int eventId, int userId) throws SQLException {
-		boolean returnValue;
-		myDb.statement().executeUpdate("insert into subsEventSigned values("+ eventId + ", "+ userId +")");
-		returnValue = true ;
-		return returnValue;
 	}
 	
-	
-	/**
-	 * Object DataBase to execute update subscription in an event 
-	 */
-	private DataBase myDb ;
 	
 }

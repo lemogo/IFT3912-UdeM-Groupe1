@@ -2,14 +2,10 @@
  * 
  */
 package ca.diro.DataBase.Command;
-
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
-import java.util.Map;
 
-import org.json.JSONException;
-import org.json.JSONObject;
 
 /**
  * This Abstract class allowing to create and encapsulate  query that has to be executed 
@@ -43,16 +39,6 @@ public abstract class Command {
 		}
 		return returnValue;
 	}
-	/**
-	 * This method has to be more generic in order to parse Json string in Map type
-	 * @return a <code>JSONObject</code> Object with string key and string value 
-	 * @throws JSONException 
-	 */
-	protected JSONObject  parseToJson(String info) throws JSONException{
-		//TODO implement generic parsing
-	
-		return new JSONObject(info);
-	}
 		
 	/**
 	 * getter 
@@ -81,8 +67,6 @@ public abstract class Command {
 	 */
 	protected  ResultSet result_;
 	
-	protected JSONObject jsonInfo ; 
-	//= new JSONObject(str);
-	//String n = obj.getString("name");
-	//int a = obj.getInt("age");
+
+
 }

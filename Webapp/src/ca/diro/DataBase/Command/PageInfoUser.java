@@ -3,8 +3,6 @@
  */
 package ca.diro.DataBase.Command;
 
-import org.json.JSONException;
-
 /**
  * this command class give information on a user that can be use to generate user's own page
  * @author william
@@ -13,44 +11,20 @@ import org.json.JSONException;
 public class PageInfoUser extends Command{
 	/**
 	 * Constructor
-	 * @param info String to build query
-	 * @throws JSONException 
+	 * @param userId String 
 	 */
-	public PageInfoUser(String info) throws JSONException {
-		if (info!= null){
-			jsonInfo = parseToJson(info);
-			query_ = buildQuery();
-		}
-		else{
-			query_ = null ;
-		}
+	public PageInfoUser(String userId)  {
+			query_ = buildQuery(null);
 	}
-
-	public PageInfoUser(int userId) throws JSONException {
-//		if (userId != -1){
-			query_ = buildQuery(userId);
-//		}
-//		else{
-//			query_ = null ;
-//		}
-	}
-
+	
 	/**
-	 * Method to parse String from JSON format in order to retrieve parameters
-	 * and build the right query
-	 * @param info String Object
+	 * Method to  build the right query
+	 * @param userId 
 	 * @return str <code>String</code> Object which is the query
-	 * @throws JSONException 
 	 */
-	private String buildQuery() throws JSONException {
+	private String buildQuery(String userId)  {
 		
-		int userId = jsonInfo.getInt("userId");
-		String str = buildQuery(userId);
-		// TODO parse query
-		return str;
-	}
-
-	private String buildQuery(int userId) {
+		//int userId = jsonInfo.getInt("userId");
 		String str = "select fullname, username, email, age, description from  signeduser " +
 					"where 	suserid = "+ userId ;
 		return str;
