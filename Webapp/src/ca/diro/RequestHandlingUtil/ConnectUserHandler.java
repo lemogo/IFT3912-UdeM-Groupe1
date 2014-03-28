@@ -40,10 +40,10 @@ public class ConnectUserHandler extends RequestHandler {
 			String password = request.getParameter("password");
 
 			//TODO:Authenticate the user here
-			String JSONRequest = "{ userName : " + username + ", password : " +
-					password + " }";
-			System.out.println(JSONRequest);
-			OpenSession openCommand = new OpenSession(password, username);
+//			String JSONRequest = "{ userName : " + username + ", password : " +
+//					password + " }";
+//			System.out.println(JSONRequest);
+			OpenSession openCommand = new OpenSession(username, password);
 
 			//			System.out.println("before database execution");
 

@@ -41,8 +41,7 @@ public class EventHandler extends RequestHandler {
 	public void processRequestHelper(HttpServletRequest request,
 			HttpServletResponse response) throws IOException,
 			UnsupportedEncodingException, FileNotFoundException {
-		try
-		{
+		try{
 			String pathInfo = request.getPathInfo().substring(1);
 //			System.out.println("in Event GET - pathInfo:"+pathInfo+"\tcontextPath:"+request.getContextPath());
 //			System.out.println("in Event GET - pathInfo:"+pathInfo+"\tcontextPath:"+("/Webapp/"+pathInfo));
@@ -85,8 +84,8 @@ public class EventHandler extends RequestHandler {
 
 				//TODO:Get the user event info from the database
 				DataBase myDb = Main.getDatabase();//new DataBase(restore);
-				String info = "{eventId:"+eventID+"}" ;//"1}" ;
-				PageInfoEvent cmd = new PageInfoEvent(info,myDb);
+//				String info = "{eventId:"+eventID+"}" ;//"1}" ;
+				PageInfoEvent cmd = new PageInfoEvent(eventID,myDb);
 
 				if( myDb.executeDb(cmd)){ 
 					ResultSet rs = cmd.getResultSet();
