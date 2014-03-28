@@ -125,7 +125,7 @@ public class DataBase {
 	public void createTables() throws SQLException {
 		
 		this.statement().setQueryTimeout(60);
-		this.statement().executeUpdate("drop table if exists generaluser");
+		
 		this.statement().executeUpdate("drop table if exists signeduser");
 		this.statement().executeUpdate(
 				"create table signeduser ("
@@ -362,16 +362,14 @@ public class DataBase {
 //		   myDb.createTables(); 
 //		   myDb.populateTable(); //String info =
 //		 //"{eventId:1}"; Command cmd = new PageInfoEvent(info, myDb); boolean boo =
-//		    String userId = "1"; String title = "bataille de chocolat" ; 
-//			String   datetime = "2014-12-07 23:21:45" ; String  location = "plateau mont royal" ;
-//			String numberplaces = "42" ; String description = "jeu de tir  tres evmouvant ";
-//
-//			AddEvent cmd = new AddEvent(userId,title, datetime, location, numberplaces, description, myDb);
+//		   String userId = "2" ;
+//			Command cmd = new ListRegisterEvent(userId);
 //			boolean boo = myDb.executeDb(cmd); 
-//			ResultSet rs = cmd.getCurrentEventId();
-//			//ResultSet rs = ((AddEvent) cmd).getCurentId();
+//			
+//			ResultSet rs = cmd.getResultSet();
+//			
 //			while (rs.next()) {
-//				System.out.println(rs.getString(1));
+//				System.out.println(rs.getString(2));
 //			}
 //		 myDb.dbClose() ;
 //	}

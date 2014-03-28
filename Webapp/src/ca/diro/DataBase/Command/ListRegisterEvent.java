@@ -16,7 +16,7 @@ public class ListRegisterEvent extends Command{
 	 */
 	public ListRegisterEvent(String userId) {
 		
-			query_ = buildQuery(null);
+			query_ = buildQuery(userId);
 		
 	}
 	
@@ -28,13 +28,12 @@ public class ListRegisterEvent extends Command{
 	 */
 	public String buildQuery(String userId)  {
 			
-		String str = "select event.eventid, title, location, dateevent, event.description from  event, subsEventSigned " +
-				"where 	event.suserid = subsEventSigned.suserid and " +
-						"subsEventSigned.suserid = "+ userId +" and "+
-						" dateevent >= CURRENT_DATE() and " +
-						"UPPER(event.status) != 'CANCELLED' ";
-		
-		// TODO parse query
+		String str = "select event.eventid, title, location, dateevent, event.description from  event, subsEventSigned  "+
+					"where event.eventid = subsEventSigned.eventid and " +
+					" CURRENT_DATE() <= dateevent and " +
+					"UPPER(event.status) not = 'CANCELLED' and "+
+					"subsEventSigned.suserid = "+ userId ;
+ 
 		return str;
 	}
 }
