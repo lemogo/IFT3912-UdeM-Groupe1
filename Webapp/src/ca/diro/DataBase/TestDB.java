@@ -155,14 +155,14 @@ public class TestDB {
 	@Test
 	public void testListRegisterEvent() throws ClassNotFoundException, SQLException {
 		// test to command giving   list of events where a registered user attend 
-		String userId = "1" ;
+		String userId = "2" ;
 		Command cmd = new ListRegisterEvent(userId);
 		boolean boo = myDb.executeDb(cmd); 
 		
 		ResultSet rs = cmd.getResultSet();
 		
 		while (rs.next()) {
-			//System.out.println(rs.getString(2));
+			System.out.println(rs.getString(2));
 		}
 		assertTrue(boo);
 	}
