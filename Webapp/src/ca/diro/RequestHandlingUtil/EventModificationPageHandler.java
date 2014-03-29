@@ -48,8 +48,10 @@ public class EventModificationPageHandler extends RequestHandler {
 				return;
 			}
 			if(isAnotherContext(pathInfo)&&!pathInfo.equals("")){ 	        
-				String setLocation = "/Webapp/"+pathInfo;//"/";
-				response.sendRedirect(setLocation);
+				String setLocation = "/"+pathInfo;//"/";
+				request.getRequestDispatcher(setLocation).forward(request, response);
+//				String setLocation = "/Webapp/"+pathInfo;//"/";
+//				response.sendRedirect(setLocation);
 				return;
 			}
 
@@ -142,13 +144,22 @@ public class EventModificationPageHandler extends RequestHandler {
 		// validation) and forwarding for requests that require specific
 		// permissions or handling.
 		try{
-			String pathInfo = request.getPathInfo().substring(1);
+			String pathInfo = request.getPathInfo();
+		if(pathInfo.startsWith("/")) pathInfo = pathInfo.substring(1);
 //			System.out.println("in EventModification - pathInfo:"+pathInfo+"\tcontextPath:"+request.getContextPath());
 //			System.out.println("in EventModification - pathInfo:"+pathInfo+"\tcontextPath:"+("/Webapp/"+pathInfo));
 
 			//The current request must be a file -> redirect to requestHandler
 			if(	pathInfo.contains(".")) {
 				handleToTheRessource(request, response, pathInfo);
+				return;
+			}else 
+			
+			if(isAnotherContext(pathInfo)&&!pathInfo.equals("")){ 	        
+				String setLocation = "/"+pathInfo;//"/";
+				request.getRequestDispatcher(setLocation).forward(request, response);
+//				String setLocation = "/Webapp/"+pathInfo;//"/";
+//				response.sendRedirect(setLocation);
 				return;
 			}
 
@@ -170,8 +181,8 @@ public class EventModificationPageHandler extends RequestHandler {
 				String eventID = pathInfo;
 //System.out.println("in event modification - eventID:"+eventID);
 				DataBase myDb = Main.getDatabase();//new DataBase(restore);
-				String info = "{eventId:"+eventID+"}" ;//"1}" ;
-				Command cmd = new PageInfoEvent(info,myDb);
+//				String info = "{eventId:"+eventID+"}" ;//"1}" ;
+				Command cmd = new PageInfoEvent(eventID,myDb);
 				HashMap<String, Object> sources = new HashMap<String, Object>();
 
 				if( myDb.executeDb(cmd)){ 

@@ -17,6 +17,7 @@ import ca.diro.Main;
 import ca.diro.DataBase.DataBase;
 import ca.diro.DataBase.Command.Command;
 import ca.diro.DataBase.Command.PageInfoEvent;
+import ca.diro.DataBase.Command.VerifyUserRegisterToEvent;
 
 public class EventHandler extends RequestHandler {
 	/*
@@ -94,39 +95,55 @@ public class EventHandler extends RequestHandler {
 						//title,dateevent,location, numberplaces, description
 						//					System.out.println("Database value:"+rs.getString("title")+"\t"+rs.getString("dateevent"));
 
+						String username =rs.getString("username");
 						//TODO:Add event info here!!
 						HashMap<String, Object> sources = new HashMap<String, Object>();
 						sources.put("event",
-								new Event("Event_username1", rs.getString("title"), rs.getString("dateevent"),
+								new Event(username, rs.getString("title"), rs.getString("dateevent"),
 										rs.getString("location"), rs.getString("description"), eventID,
 										rs.getString("numberplaces"))
 								);
 
+						String userId = "null";
 						//to display success message
-						sources.put("id", pathInfo);
-						sources.put("addSuccess", false);
-						boolean isOwner = false;
-						
-//						System.out.println("before checking isOwner"+request.getHeader("isOwner"));
-						
-						if(response.getHeader("isOwner")!=null) {
-							System.out.println("\nisOwner=true");
-							isOwner = true;
-							if(isOwner)sources.put("isOwner", isOwner);
-						}
+						sources.put("id", eventID);
 
-						boolean registerSuccess = response.getHeader("registerSuccess")==null ? false:Boolean.parseBoolean(response.getHeader("registerSuccess"));
-						if(registerSuccess)sources.put("registerSuccess", registerSuccess);
-						boolean isRegistered = response.getHeader("isRegistered")==null ? false:Boolean.parseBoolean(response.getHeader("isRegistered"));
-						if(isRegistered)sources.put("isRegistered", isRegistered);
-						//				sources.put("unregisterSuccess", "false");
-System.out.println("registerSuccess:"+registerSuccess+"\tisRegistered:"+isRegistered+" "+response.getHeader("isRegistered"));
 						HttpSession session = request.getSession(true);
 						boolean isLoggedIn=session.getAttribute("auth")==null? false:true;
 
 						System.out.println("Event isLoggedIn:"+isLoggedIn+"\t"+request.getRequestedSessionId());//.request.getRequestedSessionId()==null? false:true;
 						
-						if (isLoggedIn)sources.put("user", isLoggedIn);
+						if (isLoggedIn){
+							sources.put("user", isLoggedIn);
+							userId = (String) session.getAttribute(USER_ID_ATTRIBUTE);
+						}
+
+						boolean addSuccess = response.getHeader("addSuccess")==null ? false:Boolean.parseBoolean(response.getHeader("addSuccess"));
+						if(addSuccess)sources.put("addSuccess", addSuccess);
+						sources.put("addSuccess", addSuccess);
+						
+						boolean isOwner = response.getHeader("isOwner")!=null?true:false;
+//							System.out.println("\nisOwner=true");
+						if(username.equals(session.getAttribute(USERNAME_ATTRIBUTE))) isOwner = true;
+						if(isOwner)sources.put("isOwner", isOwner);
+
+						boolean registerSuccess = response.getHeader("registerSuccess")==null ? false:Boolean.parseBoolean(response.getHeader("registerSuccess"));
+						if(registerSuccess)sources.put("registerSuccess", registerSuccess);
+						
+						boolean isRegistered = response.getHeader("isRegistered")==null ? false:Boolean.parseBoolean(response.getHeader("isRegistered"));
+						if(!isRegistered){
+							VerifyUserRegisterToEvent cmd2 = new VerifyUserRegisterToEvent(userId, eventID);
+							if( myDb.executeDb(cmd2)){ 
+								rs = cmd2.getResultSet();
+								if (rs.next()) isRegistered = true;
+							}
+						}
+						if(isRegistered)sources.put("isRegistered", isRegistered);
+						
+						boolean unregisterSuccess = response.getHeader("unregisterSuccess")==null ? false:Boolean.parseBoolean(response.getHeader("unregisterSuccess"));
+						sources.put("unregisterSuccess", unregisterSuccess);
+System.out.println("unregisterSuccess:"+unregisterSuccess+"registerSuccess:"+registerSuccess+"\tisRegistered:"+isRegistered+" "+response.getHeader("isRegistered"));
+						
 						sources.put("notifications_number", "0");
 
 						processTemplate(request, response, "header.html",sources);
@@ -195,8 +212,9 @@ System.out.println("registerSuccess:"+registerSuccess+"\tisRegistered:"+isRegist
 //				}
 				return;
 			}else if(isAnotherContext(pathInfo)&&!pathInfo.equals("")){ 	        
-				String setLocation = "/Webapp/"+pathInfo;//"/";
-				response.sendRedirect(setLocation);
+				String setLocation = "/"+pathInfo;//"/";
+				RequestDispatcher dispatcher = request.getRequestDispatcher(setLocation);
+				dispatcher.forward(request, response);
 				return;
 			}
 

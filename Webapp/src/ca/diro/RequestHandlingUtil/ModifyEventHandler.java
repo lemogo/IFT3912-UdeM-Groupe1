@@ -6,11 +6,19 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import ca.diro.Main;
+import ca.diro.DataBase.Command.EditEvent;
+
 /**
  * @author Lionnel
  *
  */
 public class ModifyEventHandler extends RequestHandler {
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = -8035200049284620904L;
+
 	/*
 	 * (non-Javadoc)
 	 * 
@@ -31,24 +39,26 @@ public class ModifyEventHandler extends RequestHandler {
 
 			//TODO:modify the event in the database
 			String id = request.getParameter("id");
-			String userId = "";//request.getParameter("id");
+//			String userId = "";//request.getParameter("id");
 			String title = request.getParameter("eventName");
 			String date = request.getParameter("eventDate");
 			String location = request.getParameter("eventLocation");
 			String nbplace = request.getParameter("eventNumPeople");
 			String description = request.getParameter("eventDescription");
 
-			System.out.println("\nIn modify Parameters"
-//					+target
-//					+ request.getParameterNames()					//);
-							+"\t"+userId
-							+"\t"+title
-							+"\t"+date
-							+"\t"+location
-							+"\t"+nbplace
-							+"\t"+description);
+			EditEvent cmd = new EditEvent(id, title, date, location, nbplace, description);
+			modifiedSuccessfully = Main.getDatabase().executeDb(cmd);
+//			System.out.println("\nIn modify Parameters"
+////					+target
+////					+ request.getParameterNames()					//);
+//							+"\t"+userId
+//							+"\t"+title
+//							+"\t"+date
+//							+"\t"+location
+//							+"\t"+nbplace
+//							+"\t"+description);
 						
-			String eventID="2";
+//			String eventID="2";
 			if(modifiedSuccessfully){
 				//redirects the current request to the newly created event
 				String setLocation = "/Webapp/evenement/"+id;//eventID;

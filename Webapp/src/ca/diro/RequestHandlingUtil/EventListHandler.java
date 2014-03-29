@@ -23,6 +23,11 @@ import ca.diro.DataBase.Command.ListComingEvent;
 import ca.diro.DataBase.Command.ListPassedEvent;
 
 public class EventListHandler extends RequestHandler {
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 5818151764848416043L;
+
 	/*
 	 * (non-Javadoc)
 	 * 

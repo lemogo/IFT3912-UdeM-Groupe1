@@ -27,7 +27,7 @@ import ca.diro.RequestHandlingUtil.UnregisterToEventHandler;
 /**
  * The main class. It serves to initialize the server and its security measures.
  * 
- * @author lavoiedn
+ * @author lavoiedn, lionnel
  * 
  */
 public class Main {
@@ -53,10 +53,7 @@ public class Main {
 	 * @throws Exception
 	 */
 	public static void main(String[] args) throws Exception {
-		//restoreDatabase();
 		database = new DataBase();
-//		database.createTables(); // 
-//		database.populateTable(); 
 
 		initSecureServer();
 		server.start();
@@ -91,10 +88,8 @@ public class Main {
 						e.printStackTrace();
 					}
 					database = null;
-					
 					//TODO:remove all logged users
 				}
-
 			});
 		}
 	}
@@ -110,7 +105,6 @@ public class Main {
 		
 		HashSessionIdManager sessionIdManager = new HashSessionIdManager();
 		
-//		ServletContextHandler servelet = new ServletContextHandler(handlerCollection, "/Webapp", new SessionHandler(), new SecurityHandler)
 		server.setHandler(handlerCollection);
 		server.setSessionIdManager(sessionIdManager);
 	}
@@ -118,25 +112,25 @@ public class Main {
 	private static ContextHandlerCollection createHandlerCollection() {
 		ContextHandlerCollection handlerCollection = new ContextHandlerCollection();
 
-		ServletContextHandler handler = new ServletContextHandler(ServletContextHandler.SESSIONS);//new ServletContextHandler() ;
+		ServletContextHandler handler = new ServletContextHandler(ServletContextHandler.SESSIONS);
 		handler.setContextPath("/Webapp");
 		handlerCollection.addHandler(  handler );
 		
 		handler.addServlet(new ServletHolder( new RequestHandler()), "/*");
 		handler.addServlet(new ServletHolder( new EventListHandler()), "/liste-des-evenements/*");
 		handler.addServlet(new ServletHolder( new EventHandler()), "/evenement/*");
-		handler.addServlet(new ServletHolder( new CreateUserHandler()), "/create-user");
-		handler.addServlet(new ServletHolder( new MemberHandler()), "/membre/*");
-		handler.addServlet(new ServletHolder( new ConnectUserHandler()), "/connect-user");
 		handler.addServlet(new ServletHolder( new CreateEventHandler()), "/create-event");
-
-		handler.addServlet(new ServletHolder( new DisconnectUserHandler()), "/deconnexion");
 		handler.addServlet(new ServletHolder( new DeleteEventHandler()), "/delete-event");
 		handler.addServlet(new ServletHolder( new RegisterToEventHandler()), "/register-event");
 		handler.addServlet(new ServletHolder( new UnregisterToEventHandler()), "/unregister-event");
-		handler.addServlet(new ServletHolder( new ModifyUserInfoHandler()), "/modify-user");
 		handler.addServlet(new ServletHolder( new EventModificationPageHandler()), "/evenement-modification/*");
 		handler.addServlet(new ServletHolder( new ModifyEventHandler()), "/modify-event");
+		
+		handler.addServlet(new ServletHolder( new MemberHandler()), "/membre/*");
+		handler.addServlet(new ServletHolder( new CreateUserHandler()), "/create-user");
+		handler.addServlet(new ServletHolder( new ModifyUserInfoHandler()), "/modify-user");
+		handler.addServlet(new ServletHolder( new ConnectUserHandler()), "/connect-user");
+		handler.addServlet(new ServletHolder( new DisconnectUserHandler()), "/deconnexion");
 
 		return handlerCollection;
 	}

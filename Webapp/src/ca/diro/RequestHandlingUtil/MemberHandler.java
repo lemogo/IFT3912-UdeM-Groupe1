@@ -77,7 +77,6 @@ public class MemberHandler extends RequestHandler {
 
 			//The current request must be a file -> redirect to requestHandler
 			if(	pathInfo.contains(".")) {
-				//				super.doGet(request, response);
 				handleToTheRessource(request, response, pathInfo);
 				return;
 			}

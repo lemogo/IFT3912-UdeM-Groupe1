@@ -59,6 +59,7 @@ public class RequestHandler extends HttpServlet {
 	protected static File	dynamicDir	= new File(rootDir, "templates");
 
 	public static final String USER_ID_ATTRIBUTE="UserID";
+	public static final String USERNAME_ATTRIBUTE="username";
 	/*
 	 * (non-Javadoc)
 	 * 
@@ -92,6 +93,37 @@ public class RequestHandler extends HttpServlet {
 
 	}
 
+
+	
+	public void doPost(HttpServletRequest request, HttpServletResponse response)
+			throws IOException, ServletException {
+// TODO Implement handling logic for simple requests (and command
+// validation) and forwarding for requests that require specific
+// permissions or handling.
+try{
+	//			System.out.println("In requestHandler\t"+baseRequest.getMethod()+"\ttarget:"+target+"\t"+baseRequest.getPathInfo()+"\tContext:"+request.getContextPath());
+	String pathInfo = request.getPathInfo();
+	if(pathInfo.startsWith("/"))pathInfo = pathInfo.substring(1);
+
+	if(pathInfo.length()<=1){
+//System.out.println("returns because it's a null pathInfo");
+		//				baseRequest.setHandled(true);
+		return;
+	}
+	if ( pathInfo.equals("accueil")||pathInfo.equals("")) pathInfo = "accueil.html";
+	handleToTheRessource(request, response, pathInfo);
+}
+catch (Exception e){
+//	System.out.println("In catch exception");
+				catchHelper(request, response, e);
+}
+
+}
+
+	
+	
+	
+	
 	protected void handleToTheRessource(HttpServletRequest request,
 			HttpServletResponse response, String pathInfo) throws IOException,
 			UnsupportedEncodingException, FileNotFoundException {
@@ -103,13 +135,16 @@ public class RequestHandler extends HttpServlet {
 			//if user is not logged in redirect him to sign up page (or maybe sign in) 
 			pathInfo = pathInfo+".html";
 			HttpSession session = request.getSession(true);
-			if (session.getAttribute("auth")==null) response.sendRedirect("/Webapp/connexion");
+			if (session.getAttribute("auth")==null) 
+				response.sendRedirect("/Webapp/connexion");
 		}
 		else if ( pathInfo.equals("enregistrement") || pathInfo.equals("ajouter-un-evenement") 
 				||pathInfo.equals("notifications")||pathInfo.equals("connexion")) pathInfo = pathInfo+".html";
 		else if(isAnotherContext(pathInfo)&&!pathInfo.equals("")){ 	        
-			String setLocation = "/Webapp/"+pathInfo;//"/";
-			response.sendRedirect(setLocation);
+//			String setLocation = "/Webapp/"+pathInfo;//"/";
+			String setLocation = "/"+pathInfo;//"/";
+			request.getRequestDispatcher(setLocation);
+//			response.sendRedirect(setLocation);
 			return;
 		}
 

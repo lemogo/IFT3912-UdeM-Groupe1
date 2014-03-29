@@ -38,8 +38,8 @@ public class PageInfoEvent extends Command{
 	private String buildQuery(String eventId)  {
 		
 		
-		String str = "select title, dateevent, location, numberplaces, description from  event " +
-					"where 	eventid = "+ eventId ;
+		String str = "select event.title, event.dateevent, event.location, event.numberplaces, event.description, username, event.suserid from  event " +
+					"join signeduser on event.suserid = signeduser.suserid "+"where event.eventid = "+ eventId ;
 		return str;
 	}
 	

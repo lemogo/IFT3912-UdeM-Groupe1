@@ -36,7 +36,8 @@
 				{{/event}}
 					{{#isOwner}}
 					<a class="btn btn-primary" href="evenement-modification/{{id}}" role="button">Modifier l'événement</a>
-					<a class="btn btn-danger" href="javascript:if(confirm('Supprimer?'))$('#formDeleteEvent').submit();" role="button">Supprimer l'événement</a>
+<!-- 					<a class="btn btn-danger" href="javascript:if(confirm('Supprimer?'))$('#formDeleteEvent').submit();" role="button">Supprimer l'événement</a> -->
+					<a class="btn btn-danger" onclick="document.getElementById('formDeleteEvent').submit()" role="button">Supprimer l'événement</a>
 					<form id="formDeleteEvent" role="form" action="delete-event" method="POST">
 						<input type="hidden" name="id" value="{{id}}" />
 					</form>
@@ -49,7 +50,8 @@
 						</form>
 						{{/isRegistered}}
 						{{#isRegistered}}
-						<a class="btn btn-danger" href="javascript:$('formUnregisterEvent').submit();" role="button">Annuler l'inscription</a>
+<!--						<a class="btn btn-danger" href="javascript:$('formUnregisterEvent').submit();" role="button">Annuler l'inscription</a>-->
+						<a class="btn btn-danger" onclick="document.getElementById('formUnregisterEvent').submit();" role="button">Annuler l'inscription</a>
 						<form id="formUnregisterEvent" role="form" action="unregister-event" method="POST">
 							<input type="hidden" name="id" value="{{id}}" />
 						</form>

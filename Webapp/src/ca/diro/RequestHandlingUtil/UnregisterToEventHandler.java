@@ -5,8 +5,17 @@ import java.io.IOException;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
+
+import ca.diro.Main;
+import ca.diro.DataBase.Command.UnsubscriteToEvent;
 
 public class UnregisterToEventHandler extends RequestHandler {
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = -3281510009778298040L;
+
 	/*
 	 * (non-Javadoc)
 	 * 
@@ -22,30 +31,37 @@ public class UnregisterToEventHandler extends RequestHandler {
 		// validation) and forwarding for requests that require specific
 		// permissions or handling.
 		try{
-			Boolean unregisteredSuccessfully = true;
+			Boolean unregisteredSuccessfully;
+			System.out.println("in unsubscribe");
+			HttpSession session = request.getSession(true);
+			boolean isLoggedIn=session.getAttribute("auth")==null? false:true;
+			if(isLoggedIn){
+				String userId = (String) session.getAttribute(USER_ID_ATTRIBUTE);
+				String eventId = request.getParameter("id");
+				System.out.println("userId:"+userId+"\teventId:"+eventId);
+				
+				//TODO:Unregister the User to the event in the database
+				UnsubscriteToEvent cmd = new UnsubscriteToEvent(userId, eventId);
+				unregisteredSuccessfully = 
+						Main.getDatabase().executeDb(cmd);
+				//			ResultSet rs = cmd.getResultSet();
+				//			if(rs.next())
 
-			//TODO:Unregister the User to the event in the database
-			request.getParameter("id");
-			//			request.getParameter("eventName");
-			//			request.getParameter("eventDate");
-			//			request.getParameter("eventLocation");
-			//			request.getParameter("eventNumPeople");
-			//			request.getParameter("eventDescription");
-
-			String eventID = "2"; request.getParameter("id");
-
-			if(unregisteredSuccessfully){
 				//redirects the current request to the newly created event
-				String setLocation = "/Webapp/evenement/"+eventID;
-				response.sendRedirect(setLocation);
+				if(unregisteredSuccessfully){
+					String setLocation = "/evenement/"+eventId;
+					response.setHeader("unregisterSuccess", "true");
+					request.getRequestDispatcher(setLocation).forward(request, response);
+					//				response.sendRedirect(setLocation);
+				}
+				else{
+					//TODO:show unregister error message
+				}
 			}else{
-				//TODO:show logout error message
+				//TODO:show unregister error message
 			}
-
-		}
-		catch (Exception e){
+		}catch (Exception e){
 			catchHelper(request, response, e);		
 		}
-
 	}
 }

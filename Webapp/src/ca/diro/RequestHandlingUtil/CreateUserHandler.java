@@ -1,22 +1,22 @@
 package ca.diro.RequestHandlingUtil;
 
 import java.io.IOException;
-import java.sql.ResultSet;
 import java.sql.SQLException;
 
-import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import org.eclipse.jetty.server.Request;
-
 import ca.diro.Main;
 import ca.diro.DataBase.DataBase;
-import ca.diro.DataBase.Command.Command;
 import ca.diro.DataBase.Command.CreateUserAccount;
 
 public class CreateUserHandler extends RequestHandler {
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = -4706259148042715250L;
+
 	/*
 	 * (non-Javadoc)
 	 * 
@@ -32,7 +32,18 @@ public class CreateUserHandler extends RequestHandler {
 		// validation) and forwarding for requests that require specific
 		// permissions or handling.
 		try{
-			boolean isLoggedIn=request.getRequestedSessionId()==null? false:true;
+			
+			boolean isLoggedIn=request.getParameter(USER_ID_ATTRIBUTE)==null? false:true;
+			
+			if(isLoggedIn){
+				//TODO:show popup, user is already logged in as username, 
+				//ask user if they would like to logout and log in as ____ 
+				//and redirect to user's page
+				String username = request.getParameter(USERNAME_ATTRIBUTE);
+				String setLocation = "/Webapp/membre/"+username;
+				response.sendRedirect(setLocation);
+			}
+			
 
 			String fullname = request.getParameter("fullname");
 			String email = request.getParameter("email");
@@ -40,57 +51,44 @@ public class CreateUserHandler extends RequestHandler {
 			String password = (String)request.getParameter("password");
 			String age = request.getParameter("age");
 			String description = request.getParameter("description");
-//			System.out.println("In creae User parameters:"
-//					+fullname+"\t"
-//					+username+"\t"
-//					+password+"\t"
-//					+age+"\t"
-//					+description+"\t"
-//					+email+"\t"
-//					);
 			
 			//TODO:Add the User in the database
-			String info =  "{ fullname:"+fullname+" ,username:"+userName+" ,password:"+password+", " +
-					"email:"+email+",age:"+age+", description:"+description+"}";
-			System.out.println(info);
+//			String info =  "{ fullname:"+fullname+" ,username:"+userName+" ,password:"+password+", " +
+//					"email:"+email+",age:"+age+", description:"+description+"}";
+//			System.out.println(info);
+
 			DataBase db = Main.getDatabase();
-			CreateUserAccount cmd = new CreateUserAccount(userName, password, fullname, email, age, description, db);// (Main.getDatabase());
+			CreateUserAccount cmd = new CreateUserAccount(userName, password, fullname, email, age, description, db);
 			boolean userAddedSuccessfully=false; 
 			try{
-				userAddedSuccessfully =db.executeDb(cmd);//. cmd.createNewAccount(fullname, userName, password, age, email, description); 
+				userAddedSuccessfully =db.executeDb(cmd);
+				cmd.getCurrentUserId();
 			}catch(SQLException e){
 				e.printStackTrace();
 			}
-			System.out.println("userAddedSuccessfully:"+userAddedSuccessfully);
+//			System.out.println("userAddedSuccessfully:"+userAddedSuccessfully);
 			
 			//TODO:get user id from database
-			String userID = "";
-//			ResultSet rs = cmd.getResultSet();
-//			if(rs.next()){
-//				System.out.println("New user Id:"+rs.getString(1));
-//				userID = rs.getString(1);
-//			}
-			
+//			String userID = "";
 			
 			if (userAddedSuccessfully){
-				//redirects the current request to the newly created event
-				String setLocation = "/Webapp/membre/"+userID;
-				response.sendRedirect(setLocation);
+				//redirects the current request to the login handler who then redirects to newly created event
+				String setLocation = "/connect-user";
+				request.getRequestDispatcher(setLocation).forward(request, response);
+//				String setLocation = "/membre/"+userName;
+//				response.sendRedirect(setLocation);
+				return;
 			}else{
 				//return to the account creation page 
 				//and try to indicate to the user the source of the account creation failure 
 				System.out.println("failled to create new user account");
 				String setLocation = "/Webapp/enregistrement";
 				response.sendRedirect(setLocation);
-				RequestDispatcher dispatcher = request.getRequestDispatcher(setLocation);
-				dispatcher.forward(request, response);
 			}
-
 		}
-		catch (Exception e)
-		{
+		catch (Exception e){
 			System.out.println("In CreateUserHandler catch exception");
-//			catchHelper(baseRequest, request, response, e);		
+			catchHelper(request, response, e);		
 		}
 
 	}

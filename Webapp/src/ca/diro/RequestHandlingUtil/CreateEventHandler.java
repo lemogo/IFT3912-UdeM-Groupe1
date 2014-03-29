@@ -13,6 +13,11 @@ import ca.diro.DataBase.DataBase;
 import ca.diro.DataBase.Command.AddEvent;
 
 public class CreateEventHandler extends RequestHandler {
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 5115305762641395708L;
+
 	/*
 	 * (non-Javadoc)
 	 * 

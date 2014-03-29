@@ -12,6 +12,11 @@ import ca.diro.Main;
 import ca.diro.DataBase.Command.OpenSession;
 
 public class ConnectUserHandler extends RequestHandler {
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = -1650415398532080100L;
+
 	/*
 	 * (non-Javadoc)
 	 * 
@@ -50,7 +55,7 @@ public class ConnectUserHandler extends RequestHandler {
 			Boolean authenticatedSuccessfully  = Main.getDatabase().executeDb(openCommand);
 			ResultSet results = openCommand.getResultSet();
 			Integer accessCount = new Integer(0);
-
+			
 			String userID =""+-1;
 			if (results.next())	userID = results.getString(1);
 			else authenticatedSuccessfully = false;
@@ -58,25 +63,26 @@ public class ConnectUserHandler extends RequestHandler {
 			if (authenticatedSuccessfully){
 							System.out.println("before requesting session");
 				newUserSession.setAttribute(USER_ID_ATTRIBUTE, userID);
+				newUserSession.setAttribute("auth", Boolean.TRUE);
+				newUserSession.setAttribute(USERNAME_ATTRIBUTE, username);
 				if (newUserSession.isNew()){
-					newUserSession.setAttribute("auth", Boolean.TRUE);
-					System.out.println("new user session");
+//					System.out.println("new user session");
 				}else{
-					newUserSession.setAttribute("auth", Boolean.FALSE);
 					Integer oldAccessCount = (Integer)newUserSession.getAttribute("accessCount"); 
 					if (oldAccessCount != null) {
 						accessCount = new Integer(oldAccessCount.intValue() + 1);
 					}
-					System.out.println("old user session");
+//					System.out.println("old user session");
 				}
 				newUserSession.setAttribute("accessCount", accessCount);
 
-				//Redirects the current request to the newly created event
+				//Redirects the current request to the user info page
 				String setLocation = "/Webapp/membre/"+username;
 				response.sendRedirect(setLocation);
 			}else{
 				//TODO:send error message to user and return to login page
 				String setLocation = "/Webapp/connexion";
+					newUserSession.setAttribute("auth", Boolean.FALSE);
 				response.sendRedirect(setLocation);
 			}
 		}

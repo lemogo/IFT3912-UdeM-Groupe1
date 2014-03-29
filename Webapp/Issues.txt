@@ -13,3 +13,11 @@ insert into signeduser  (username, password,fullname,email,age,description)value
 -Verify that a user can only register to an event once, I had to modify the SQL statement and had distinct
 
 -we need to be able to get the userID with just the username (ex. when a user wants to see another user's info page, i.e. to know who's the Owner
+
+-The implementation of the method  getCurrentUserId() from createUserAccount is not safe for concurrency 
+(theoretically there could be a delay between the creation of the userAccount and the call to get the user id, in that case the method would return the wrong userID)
+
+-figure out what to do in the eventInfoPage when an the event displayed had been cancelled or is already passed;
+ maybe only subscriptions options only when an event is active.
+ 
+ -Do we implement deleting an user account 
