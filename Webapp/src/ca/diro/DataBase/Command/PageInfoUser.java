@@ -14,7 +14,7 @@ public class PageInfoUser extends Command{
 	 * @param userId String 
 	 */
 	public PageInfoUser(String userId)  {
-			query_ = buildQuery(null);
+			query_ = buildQuery(userId);
 	}
 	
 	/**
@@ -25,7 +25,7 @@ public class PageInfoUser extends Command{
 	private String buildQuery(String userId)  {
 		
 		//int userId = jsonInfo.getInt("userId");
-		String str = "select fullname, username, email, age, description from  signeduser " +
+		String str = "select fullname, username, password, email, age, description from  signeduser " +
 					"where 	suserid = "+ userId ;
 		return str;
 	}

@@ -120,25 +120,20 @@ catch (Exception e){
 
 }
 
-	
-	
-	
-	
 	protected void handleToTheRessource(HttpServletRequest request,
 			HttpServletResponse response, String pathInfo) throws IOException,
 			UnsupportedEncodingException, FileNotFoundException {
 //System.out.println("In handleToTheRessource\t"+request.getMethod()+"\tpathInfo:"+pathInfo+"\t"+request.getPathInfo()+"\tContext:"+request.getContextPath());
 
 		if ( pathInfo.equals("accueil")) pathInfo = "accueil.html";
-		else if ( pathInfo.equals("ajouter-un-evenement") 
-				) {
+		else if ( pathInfo.equals("ajouter-un-evenement") ) {
 			//if user is not logged in redirect him to sign up page (or maybe sign in) 
 			pathInfo = pathInfo+".html";
 			HttpSession session = request.getSession(true);
 			if (session.getAttribute("auth")==null) 
 				response.sendRedirect("/Webapp/connexion");
 		}
-		else if ( pathInfo.equals("enregistrement") || pathInfo.equals("ajouter-un-evenement") 
+		else if ( pathInfo.equals("enregistrement") || pathInfo.equals("ajouter-un-evenement") ||pathInfo.equals("modifier-mes-informations")
 				||pathInfo.equals("notifications")||pathInfo.equals("connexion")) pathInfo = pathInfo+".html";
 		else if(isAnotherContext(pathInfo)&&!pathInfo.equals("")){ 	        
 //			String setLocation = "/Webapp/"+pathInfo;//"/";
@@ -342,7 +337,7 @@ catch (Exception e){
 		return pathInfo.equals("accueil")||pathInfo.startsWith("liste-des-evenements")||pathInfo.startsWith("modifier-un-evenement")
 				||pathInfo.startsWith("membre")||pathInfo.startsWith("notifications")||pathInfo.startsWith("connexion")||pathInfo.equals("deconnexion")
 				||pathInfo.startsWith("enregistrement")||pathInfo.startsWith("ajouter-un-evenement")
-				||pathInfo.startsWith("evenement")||pathInfo.startsWith("evenement/")
+				||pathInfo.startsWith("evenement")||pathInfo.startsWith("evenement/")||pathInfo.startsWith("modifier-mes-informations")
 				||pathInfo.startsWith("deconnexion")||pathInfo.startsWith("evenement-modification/")||pathInfo.startsWith("modify-event")||pathInfo.startsWith("delete-event")
 				||pathInfo.equals("register-event")||pathInfo.startsWith("unregister-event")||pathInfo.startsWith("connect-user")||pathInfo.equals("create-user")
 				||pathInfo.startsWith("create-event")

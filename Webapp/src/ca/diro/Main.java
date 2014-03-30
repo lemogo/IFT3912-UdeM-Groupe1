@@ -17,12 +17,13 @@ import ca.diro.RequestHandlingUtil.DisconnectUserHandler;
 import ca.diro.RequestHandlingUtil.EventHandler;
 import ca.diro.RequestHandlingUtil.EventListHandler;
 import ca.diro.RequestHandlingUtil.EventModificationPageHandler;
-import ca.diro.RequestHandlingUtil.MemberHandler;
+import ca.diro.RequestHandlingUtil.UserHandler;
 import ca.diro.RequestHandlingUtil.ModifyEventHandler;
 import ca.diro.RequestHandlingUtil.ModifyUserInfoHandler;
 import ca.diro.RequestHandlingUtil.RegisterToEventHandler;
 import ca.diro.RequestHandlingUtil.RequestHandler;
 import ca.diro.RequestHandlingUtil.UnregisterToEventHandler;
+import ca.diro.RequestHandlingUtil.UserModificationPageHandler;
 
 /**
  * The main class. It serves to initialize the server and its security measures.
@@ -126,7 +127,8 @@ public class Main {
 		handler.addServlet(new ServletHolder( new EventModificationPageHandler()), "/evenement-modification/*");
 		handler.addServlet(new ServletHolder( new ModifyEventHandler()), "/modify-event");
 		
-		handler.addServlet(new ServletHolder( new MemberHandler()), "/membre/*");
+		handler.addServlet(new ServletHolder( new UserModificationPageHandler()), "/modifier-mes-informations/*");
+		handler.addServlet(new ServletHolder( new UserHandler()), "/membre/*");
 		handler.addServlet(new ServletHolder( new CreateUserHandler()), "/create-user");
 		handler.addServlet(new ServletHolder( new ModifyUserInfoHandler()), "/modify-user");
 		handler.addServlet(new ServletHolder( new ConnectUserHandler()), "/connect-user");
