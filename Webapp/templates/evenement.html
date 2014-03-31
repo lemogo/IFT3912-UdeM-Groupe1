@@ -64,10 +64,23 @@
 					<h2 class="panel-title">Exprimez-vous sur cet événement</h2>
 				</div>
 				<div id="comments" class="panel-collapse collapse in">
-					<form id="formAddEvent" role="form" action="#" method="POST">
-						<textarea class="form-control" placeholder="Écrivez un commentaire" required></textarea>
+					<form id="formAddEvent" role="form" action="add-comment" method="POST">
+						<textarea class="form-control" placeholder="Écrivez un commentaire" name="commentDescription" required></textarea>
+						<input type="hidden" name="id" value="{{id}}" />
 						<button class="btn btn-primary" type="submit">Envoyer</button>
+						<!-- <input type="hidden" name="userid" value="{{userid}}" /> -->
 					</form>
+					<!-- Comment box -->
+					{{#comment}}
+					<div class="panel panel-info">
+			            <div class="panel-heading">
+			              <h3 class="panel-title"><a class="username" href="voir-membre.html">{{username}}</a> <span class="date">{{date}}</span></h3>
+			            </div>
+			            <div class="panel-body">
+			              {{description}}
+			            </div>
+			    	</div>
+					{{/comment}}
 					<!-- Comment box -->
 					<div class="panel panel-info">
 			            <div class="panel-heading">

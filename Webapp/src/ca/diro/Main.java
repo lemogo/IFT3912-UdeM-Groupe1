@@ -9,10 +9,11 @@ import org.eclipse.jetty.servlet.ServletContextHandler;
 import org.eclipse.jetty.servlet.ServletHolder;
 
 import ca.diro.DataBase.DataBase;
+import ca.diro.RequestHandlingUtil.CommentEventHandler;
 import ca.diro.RequestHandlingUtil.ConnectUserHandler;
 import ca.diro.RequestHandlingUtil.CreateEventHandler;
 import ca.diro.RequestHandlingUtil.CreateUserHandler;
-import ca.diro.RequestHandlingUtil.DeleteEventHandler;
+import ca.diro.RequestHandlingUtil.CancelEventHandler;
 import ca.diro.RequestHandlingUtil.DisconnectUserHandler;
 import ca.diro.RequestHandlingUtil.EventHandler;
 import ca.diro.RequestHandlingUtil.EventListHandler;
@@ -121,11 +122,12 @@ public class Main {
 		handler.addServlet(new ServletHolder( new EventListHandler()), "/liste-des-evenements/*");
 		handler.addServlet(new ServletHolder( new EventHandler()), "/evenement/*");
 		handler.addServlet(new ServletHolder( new CreateEventHandler()), "/create-event");
-		handler.addServlet(new ServletHolder( new DeleteEventHandler()), "/delete-event");
+		handler.addServlet(new ServletHolder( new CancelEventHandler()), "/delete-event");
 		handler.addServlet(new ServletHolder( new RegisterToEventHandler()), "/register-event");
 		handler.addServlet(new ServletHolder( new UnregisterToEventHandler()), "/unregister-event");
 		handler.addServlet(new ServletHolder( new EventModificationPageHandler()), "/evenement-modification/*");
 		handler.addServlet(new ServletHolder( new ModifyEventHandler()), "/modify-event");
+		handler.addServlet(new ServletHolder( new CommentEventHandler()), "/add-comment");
 		
 		handler.addServlet(new ServletHolder( new UserModificationPageHandler()), "/modifier-mes-informations/*");
 		handler.addServlet(new ServletHolder( new UserHandler()), "/membre/*");

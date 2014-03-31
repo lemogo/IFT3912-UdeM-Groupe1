@@ -33,42 +33,26 @@ public class CreateEventHandler extends RequestHandler {
 		// validation) and forwarding for requests that require specific
 		// permissions or handling.
 		try{
-			System.out.println("In create event ");//- pathInfo:"+pathInfo);
 			String userId = "2";
 			HttpSession session = request.getSession(true);
 			boolean isLoggedIn=session.getAttribute("auth")==null? false:true;
-System.out.println("isLoggedIn: "+isLoggedIn);			
+//System.out.println("isLoggedIn: "+isLoggedIn);			
 			if(isLoggedIn){
 				
 				userId = (String)session.getAttribute(USER_ID_ATTRIBUTE);
-				System.out.println("UserID: "+userId);			
 				//TODO:Add the event from the database				
-//				String userId = "2";//request.getParameter("id");
 				String title = request.getParameter("eventName");
 				String date = request.getParameter("eventDate");
 				String location = request.getParameter("eventLocation");
 				String nbplace = request.getParameter("eventNumPeople");
 				String description = request.getParameter("eventDescription");
 
-//				System.out.println("\nIn create event - Parameters:"+pathInfo+"\t"+userId+"\t"+title+"\t"+date+"\t"+location+"\t"+nbplace+"\t"+description);
 				System.out.println("before database call");
-				DataBase db = Main.getDatabase();//new DataBase(restore);
-				//			String info = "{eventId:"+eventID+"}" ;//"1}" ;
+				DataBase db = Main.getDatabase();
 
-				AddEvent cmd = new AddEvent(
-//						userId, title, date, location, nbplace, description, db
-//						)
-//						(db);
-//				boolean addedSuccessfully = cmd.addNewEvent
-//						(						
-						userId, 
-						title, 
-						date,
-						location,
+				AddEvent cmd = new AddEvent(userId, title, date,location,
 						nbplace.equals("Illimité") ? ""+Integer.MAX_VALUE : nbplace, 
-								description,
-								db
-						);
+								description,db);
 				boolean addedSuccessfully = db.executeDb(cmd);
 				cmd.getCurentId();
 				System.out.println("database addedSuccessfully:"+addedSuccessfully);

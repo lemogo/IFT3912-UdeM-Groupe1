@@ -11,10 +11,11 @@ import javax.servlet.http.HttpSession;
 
 import ca.diro.Main;
 import ca.diro.DataBase.DataBase;
+import ca.diro.DataBase.Command.CancelEvent;
 import ca.diro.DataBase.Command.DeleteEvent;
 import ca.diro.DataBase.Command.PageInfoEvent;
 
-public class DeleteEventHandler extends RequestHandler {
+public class CancelEventHandler extends RequestHandler {
 	/**
 	 * 
 	 */
@@ -35,43 +36,45 @@ public class DeleteEventHandler extends RequestHandler {
 		// validation) and forwarding for requests that require specific
 		// permissions or handling.
 		try{
-			System.out.println("In delete event");
 			HttpSession session = request.getSession(true);
 			boolean isLoggedIn=session.getAttribute("auth")==null? false:true;
 
 			String userID = (String) session.getAttribute(USER_ID_ATTRIBUTE);
-			String username = (String) session.getAttribute(USERNAME_ATTRIBUTE);//"65";
-			String eventID = (String) request.getParameter("id");//"65";
+			String username = (String) session.getAttribute(USERNAME_ATTRIBUTE);
+			String eventID = (String) request.getParameter("id");
 			Boolean deletedSuccessfully = false;
-//			System.out.println("eventID:"+eventID);
-			
+
 			//TODO:Get the user event info from the database
 			DataBase myDb = Main.getDatabase();//new DataBase(restore);
 			PageInfoEvent cmd = new PageInfoEvent(eventID,myDb);
 
+			CancelEvent cmd2 = null;
 			if( myDb.executeDb(cmd)){ 
 				ResultSet rs = cmd.getResultSet();
 
 				if (rs.next()) {
 					//check if the logged user is really the owner of the event
 					if(rs.getString("username").equals(username)){
-					
+
 						//TODO:Remove the event from the database
-						DeleteEvent cmd2 = new DeleteEvent(eventID);// (myDb);
+//						DeleteEvent cmd2 = new DeleteEvent(eventID);// (myDb);
+						cmd2 = new CancelEvent(eventID, myDb);// (myDb);
 						if(myDb.executeDb(cmd2)){//cmd.removeEvent(Integer.parseInt(eventID))){
-							System.out.println("Deleted event: "+eventID);
+//							System.out.println("Deleted event: "+eventID);
 							deletedSuccessfully=true;
 						}
 					}
 				}
-
-				}
-				System.out.println("deletedSuccessfully:"+deletedSuccessfully);
+			}
 
 			if(deletedSuccessfully){
 				//redirects the current request to the list of events
-//				String setLocation = "/Webapp/liste-des-evenements/";
-//				response.sendRedirect(setLocation);
+				//				String setLocation = "/Webapp/liste-des-evenements/";
+				//				response.sendRedirect(setLocation);
+				
+//				CancelEvent cmd3 = new CancelEvent(eventID, myDb);
+				cmd2.nofifySignedUser(eventID);
+				
 				String setLocation = "/liste-des-evenements/";
 				response.addHeader("deleteSuccess", "true");
 				RequestDispatcher dispacher = request.getRequestDispatcher(setLocation);

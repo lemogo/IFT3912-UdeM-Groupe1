@@ -18,15 +18,18 @@ import javax.servlet.http.HttpSession;
 import org.json.JSONException;
 
 import ca.diro.Main;
+import ca.diro.DataBase.Command.CancelEvent;
 import ca.diro.DataBase.Command.ListEventByUser;
 import ca.diro.DataBase.Command.ListRegisterEvent;
+import ca.diro.DataBase.Command.ListUserNotification;
 import ca.diro.DataBase.Command.PageInfoUser;
 
-public class UserHandler extends RequestHandler {
+public class NotificationHandler extends RequestHandler {
 	/**
 	 * 
 	 */
-	private static final long serialVersionUID = 6612271874747826901L;
+	private static final long serialVersionUID = 705551389229047945L;
+	private ResultSet rs;
 
 	/*
 	 * (non-Javadoc)
@@ -97,7 +100,6 @@ public class UserHandler extends RequestHandler {
 	private void processRequestHelper(HttpServletRequest request,
 			HttpServletResponse response) throws UnsupportedEncodingException,
 			FileNotFoundException, IOException, JSONException, SQLException {
-		System.out.println("In member handler");
 		// create a handle to the resource
 
 		String pathInfo = request.getPathInfo();
@@ -115,7 +117,7 @@ public class UserHandler extends RequestHandler {
 			//TODO:if user is not logged in redirect user to login page to view is page
 		}
 
-		String filename = "membre.html"; 
+		String filename = "notifications.html"; 
 		File staticResource = new File(staticDir, filename);
 		File dynamicResource = new File(dynamicDir, filename);
 
@@ -150,11 +152,20 @@ public class UserHandler extends RequestHandler {
 		boolean isOwner = userId>0;
 		sources.put("isOwner", isOwner);
 
-		String username = addUserInfoToMustacheSources(sources, userId);
+		ListUserNotification cmd = new ListUserNotification(""+userId);
+		Main.getDatabase().executeDb(cmd);
+		
+		rs = cmd.getResultSet();
+		List<Notification> notificationList = new LinkedList<Notification>();
+		if (rs.next()){
+			
+		}
+//		CancelEvent cmd = new CancelEvent(eventId, Main.getDatabase());
+//		String username = addUserInfoToMustacheSources(sources, userId);
 
-		addUserEventListToMustacheSources(sources, userId, username);
-		addUserRegisteredEventToMustacheSources(sources, userId, username);
-		addSuccessMessagesToMustacheSources(response, sources, isLoggedIn);
+//		addUserEventListToMustacheSources(sources, userId, username);
+//		addUserRegisteredEventToMustacheSources(sources, userId, username);
+//		addSuccessMessagesToMustacheSources(response, sources, isLoggedIn);
 		
 		//TODO:notification
 		sources.put("notifications_number", "0");

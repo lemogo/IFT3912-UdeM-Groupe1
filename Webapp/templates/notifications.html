@@ -12,7 +12,10 @@
 					{{#notificationsList}}
 					<div class="alert alert-danger">
 				    	L'événement <i>{{title}}</i> créé par <a href="voir-membre.html">{{username}}</a> a été annulé.
-				    	<a type="button" class="btn btn-xs btn-danger deleteNotification">X</a>
+				    	<a type="button" class="btn btn-xs btn-danger deleteNotification" action="remove-notification" onclick="document.getElementById('formDeleteEvent').submit()">X</a>
+					<form id="formDeleteEvent" role="form" action="remove-notification" method="POST">
+						<input type="hidden" name="eventid" value="{{eventid}}" />
+					</form>
 				    </div>
 				    {{/notificationsList}}
 				</div>

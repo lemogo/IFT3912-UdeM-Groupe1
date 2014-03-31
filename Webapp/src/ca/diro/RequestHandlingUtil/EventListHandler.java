@@ -16,7 +16,6 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import ca.diro.Main;
-import ca.diro.DataBase.DataBase;
 import ca.diro.DataBase.Command.Command;
 import ca.diro.DataBase.Command.ListCancelledEvent;
 import ca.diro.DataBase.Command.ListComingEvent;
@@ -42,15 +41,12 @@ public class EventListHandler extends RequestHandler {
 		// TODO Implement handling logic for simple requests (and command
 		// validation) and forwarding for requests that require specific
 		// permissions or handling.
-		try
-		{
-
+		try{
 			processRequest(request, response);
 		}
 		catch (Exception e){
 			catchHelper( request, response, e);		
 		}
-
 	}
 
 	private void processRequest(HttpServletRequest request,
@@ -83,76 +79,72 @@ public class EventListHandler extends RequestHandler {
 			processTemplate(request, response, "404.html");
 		}
 		else{
-			response.setContentType("text/html");
-			response.setCharacterEncoding("utf-8");
-			response.setStatus(HttpServletResponse.SC_OK);
+			processRequestHelper(request, response, pathInfo, filename);
+		}
+	}
 
-//System.out.println("before database command");
-			Command cmd;
-			if(pathInfo.equals("passes"))
-				cmd = new ListPassedEvent();
-			else if(pathInfo.equals("annules"))
-				cmd = new ListCancelledEvent();
-			else cmd= new ListComingEvent();
+	private void processRequestHelper(HttpServletRequest request,
+			HttpServletResponse response, String pathInfo, String filename)
+			throws SQLException, UnsupportedEncodingException,
+			FileNotFoundException, IOException {
+		response.setContentType("text/html");
+		response.setCharacterEncoding("utf-8");
+		response.setStatus(HttpServletResponse.SC_OK);
 
-			DataBase myDb = Main.getDatabase();
-			if( myDb.executeDb(cmd)){ 
-				ResultSet rs = cmd.getResultSet();
-				List<Event> eventList = new LinkedList<Event>();  
-				while(rs.next()) 
-					eventList.add(
-							new Event("Event_Bidon_username", rs.getString("title"), rs.getString("dateevent"),
-							rs.getString("location"), rs.getString("description"), rs.getString("eventId"),
-							"Event_badgeClass1"));
+		Command cmd;
+		if(pathInfo.equals("passes"))
+			cmd = new ListPassedEvent();
+		else if(pathInfo.equals("annules"))
+			cmd = new ListCancelledEvent();
+		else cmd= new ListComingEvent();
 
-				//add event info here!!
-				HashMap<String, Object> sources = new HashMap<String, Object>();
-				sources.put("events",eventList);
+		if( Main.getDatabase().executeDb(cmd)){ 
+			ResultSet rs = cmd.getResultSet();
+			List<Event> eventList = new LinkedList<Event>();  
+			while(rs.next()) 
+				eventList.add(
+						new Event("Event_Bidon_username", rs.getString("title"), rs.getString("dateevent"),
+						rs.getString("location"), rs.getString("description"), rs.getString("eventId"),
+						"Event_badgeClass1"));
 
-				//to display success message
-				//				sources.put("addSuccess", "true");
-				HttpSession session = request.getSession(true);
-				boolean isLoggedIn=session.getAttribute("auth")==null? false:true;
-				boolean addSuccess = showAddSucessMessage(request, response);
-				boolean deleteSuccess = showDeleteSucessMessage(request,
-						response);
-				
-				System.out.println("\nUser is login is:"+request.getRequestedSessionId()+"\n");
+			//add event info here!!
+			HashMap<String, Object> sources = new HashMap<String, Object>();
+			sources.put("events",eventList);
 
-				//to display user navbar
-				sources.put("deleteSuccess", deleteSuccess);
-				sources.put("addSuccess", addSuccess);
-				sources.put("user", isLoggedIn);
-				sources.put("notifications_number", "0");
+			//to display success message
+			HttpSession session = request.getSession(true);
+			boolean isLoggedIn=session.getAttribute("auth")==null? false:true;
+			boolean addSuccess = showAddSucessMessage(request, response);
+			boolean deleteSuccess = showDeleteSucessMessage(request,
+					response);
+			
+			//to display user navbar
+			sources.put("deleteSuccess", deleteSuccess);
+			sources.put("addSuccess", addSuccess);
+			sources.put("user", isLoggedIn);
+			sources.put("notifications_number", "0");
 
-				processTemplate(request, response, "header.html", sources);
-				processTemplate(request, response, filename, sources);
-				processTemplate(request, response, "footer.html");
-			}
-			//			baseRequest.setHandled(true);
+			processTemplate(request, response, "header.html", sources);
+			processTemplate(request, response, filename, sources);
+			processTemplate(request, response, "footer.html");
 		}
 	}
 
 	private boolean showAddSucessMessage(HttpServletRequest request,
 			HttpServletResponse response) {
-		boolean addSuccess = false;
 		System.out.println("before checking addSuccess"+request.getHeader("addSuccess"));
 		if(response.getHeader("addSuccess")!=null) {
-			System.out.println("\naddSuccess=true");
-			addSuccess = Boolean.parseBoolean(response.getHeader("addSuccess"));
+			return Boolean.parseBoolean(response.getHeader("addSuccess"));
 		}
-		return addSuccess;
+		return false;
 	}
 
 	private boolean showDeleteSucessMessage(HttpServletRequest request,
 			HttpServletResponse response) {
-		boolean deleteSuccess = false;
-		System.out.println("before checking deleteSuccess"+request.getHeader("deleteSuccess"));
 		if(response.getHeader("deleteSuccess")!=null) {
-			System.out.println("\ndeleteSuccess=true");
-			deleteSuccess = Boolean.parseBoolean(response.getHeader("deleteSuccess"));
+			return Boolean.parseBoolean(response.getHeader("deleteSuccess"));
 		}
-		return deleteSuccess;
+		return false;
 	}
 
 	@Override
@@ -162,15 +154,12 @@ public class EventListHandler extends RequestHandler {
 		// TODO Implement handling logic for simple requests (and command
 		// validation) and forwarding for requests that require specific
 		// permissions or handling.
-		try
-		{
-
+		try{
 			processRequest(request, response);
 		}
 		catch (Exception e){
 			catchHelper( request, response, e);		
 		}
-
 	}
 	
 }

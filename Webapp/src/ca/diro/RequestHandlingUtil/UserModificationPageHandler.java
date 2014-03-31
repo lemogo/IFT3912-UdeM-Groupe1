@@ -7,8 +7,6 @@ import java.io.UnsupportedEncodingException;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.HashMap;
-import java.util.LinkedList;
-import java.util.List;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
@@ -18,11 +16,6 @@ import javax.servlet.http.HttpSession;
 import org.json.JSONException;
 
 import ca.diro.Main;
-import ca.diro.DataBase.DataBase;
-import ca.diro.DataBase.Command.Command;
-import ca.diro.DataBase.Command.ListEventByUser;
-import ca.diro.DataBase.Command.ListRegisterEvent;
-import ca.diro.DataBase.Command.PageInfoEvent;
 import ca.diro.DataBase.Command.PageInfoUser;
 
 public class UserModificationPageHandler extends RequestHandler {
@@ -54,10 +47,10 @@ public class UserModificationPageHandler extends RequestHandler {
 				super.doGet(request, response);
 				handleToTheRessource(request, response, pathInfo);
 				return;
-//			}else if(isAnotherContext(pathInfo)&&!pathInfo.equals("")){ 	        
-//				String setLocation = "/Webapp/"+pathInfo;//"/";
-//				response.sendRedirect(setLocation);
-//				return;
+			}else if(isAnotherContext(pathInfo)&&!pathInfo.equals("")){ 	        
+				String setLocation = "/Webapp/"+pathInfo;//"/";
+				response.sendRedirect(setLocation);
+				return;
 			}
 			}
 			processRequestHelper(request, response);
@@ -66,39 +59,6 @@ public class UserModificationPageHandler extends RequestHandler {
 			catchHelper( request, response, e);		
 		}
 	}
-
-//	/*
-//	 * (non-Javadoc)
-//	 * 
-//	 * @see org.eclipse.jetty.server.Handler#handle(java.lang.String,
-//	 * org.eclipse.jetty.server.Request, javax.servlet.http.HttpServletRequest,
-//	 * javax.servlet.http.HttpServletResponse)
-//	 */
-//	@Override
-//	public void doPost(
-//			HttpServletRequest request, HttpServletResponse response)
-//					throws IOException, ServletException {
-//		// TODO Implement handling logic for simple requests (and command
-//		// validation) and forwarding for requests that require specific
-//		// permissions or handling.
-//		try{
-//			String pathInfo = request.getPathInfo().startsWith("/")?request.getPathInfo().substring(1):request.getPathInfo();
-//
-//			//The current request must be a file -> redirect to requestHandler
-//			if(	pathInfo.contains(".")) {
-//				handleToTheRessource(request, response, pathInfo);
-//				return;
-//			}else if(isAnotherContext(pathInfo)&&!pathInfo.equals("")){ 	        
-//				String setLocation = "/Webapp/"+pathInfo;//"/";
-//				response.sendRedirect(setLocation);
-//				return;
-//			}
-//			processRequestHelper(request, response);
-//		}
-//		catch (Exception e){
-//			catchHelper( request, response, e);		
-//		}
-//	}
 
 	private void processRequestHelper(HttpServletRequest request,
 			HttpServletResponse response) throws UnsupportedEncodingException,
@@ -141,8 +101,6 @@ public class UserModificationPageHandler extends RequestHandler {
 			processTemplate(request, response, filename,sources);
 			processTemplate(request, response, "footer.html");
 		}
-
-		//			baseRequest.setHandled(true);
 	}
 
 	private HashMap<String, Object> addAllInfoToMustacheSources(
@@ -156,28 +114,11 @@ public class UserModificationPageHandler extends RequestHandler {
 		boolean isLoggedIn=session.getAttribute("auth")==null? false:true;
 		
 		int userId = Integer.parseInt((String) (session.getAttribute(USER_ID_ATTRIBUTE)==null?-1:session.getAttribute(USER_ID_ATTRIBUTE)));
-
 		
 		boolean isOwner = userId>0;
 		sources.put("isOwner", isOwner);
-
 		
-//		String username = (String) (session.getAttribute(USERNAME_ATTRIBUTE));//gives the username of the logged user and not the requested member page
 		addUserInfoToMustacheSources(sources, userId);
-
-//		addUserEventListToMustacheSources(sources, userId, username);
-
-//		addUserRegisteredEventToMustacheSources(sources, userId, username);
-
-		//to display success message
-		Boolean addSuccess = response.getHeader("addSuccess") == null? false:true;
-		sources.put("addSuccess", addSuccess);
-		Boolean registerSuccess = response.getHeader("registerSuccess") == null? false:true;
-		sources.put("registerSuccess", registerSuccess);
-		Boolean unregisterSuccess = response.getHeader("unregisterSuccess") == null? false:true;
-		sources.put("unregisterSuccess", unregisterSuccess);
-		Boolean modifySuccess = response.getHeader("modifySuccess") == null? false:true;
-		sources.put("modifySuccess", modifySuccess);
 
 		if(isLoggedIn)sources.put("user", isLoggedIn);
 		//TODO:notification
@@ -213,15 +154,14 @@ public class UserModificationPageHandler extends RequestHandler {
 		}else{
 			//TODO:send error message to user and return to login page
 		}
-//							System.out.println("username="+username+"\tfullname="+fullname+"\temail="+email+"age="+age+"\tdescription="+description);
 		sources.put("username",username);
 		sources.put("fullname",fullname);
 		sources.put("age",age);
 		sources.put("passwordOld",password);
 		sources.put("email",email);
 		sources.put("description",description);
-		
-		//TODO:
+
+		//TODO:calculate register since
 		sources.put("registeredSince","ownerRegisteredSince");
 		
 		sources.put("age",age);

@@ -71,9 +71,7 @@ public class EventModificationPageHandler extends RequestHandler {
 				response.setStatus(HttpServletResponse.SC_OK);
 
 				String eventID = pathInfo;
-//System.out.println("in event modification - eventID:"+eventID);
-				DataBase myDb = Main.getDatabase();//new DataBase(restore);
-//				String info = "{eventId:"+eventID+"}" ;//"1}" ;
+				DataBase myDb = Main.getDatabase();
 				Command cmd = new PageInfoEvent(eventID,myDb);
 				HashMap<String, Object> sources = new HashMap<String, Object>();
 
@@ -88,14 +86,10 @@ public class EventModificationPageHandler extends RequestHandler {
 										rs.getString("numberplaces"))
 								);
 
-					processTemplate(request, response, "header.html");
-
 					//				String eventID = pathInfo;
 					//TODO:Get the user event info from the database
 
-
 					//TODO:Add event info here!!
-					//				HashMap<String, Object> sources = new HashMap<String, Object>();
 
 					//to display success message
 					sources.put("id", pathInfo);
@@ -107,11 +101,11 @@ public class EventModificationPageHandler extends RequestHandler {
 					sources.put("user", "true");
 					sources.put("notifications_number", "0");
 
-					processTemplate(request, response, filename,sources);
+					processTemplate(request, response, "header.html", sources);
+					processTemplate(request, response, filename, sources);
 					processTemplate(request, response, "footer.html");
 				}
 			}
-			//			baseRequest.setHandled(true);
 		}
 		catch (Exception e){
 			catchHelper( request, response, e);

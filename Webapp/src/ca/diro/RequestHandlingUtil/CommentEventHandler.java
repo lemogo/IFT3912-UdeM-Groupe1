@@ -5,19 +5,22 @@ import java.io.IOException;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 import ca.diro.Main;
+import ca.diro.DataBase.Command.CommentEvent;
 import ca.diro.DataBase.Command.EditEvent;
 
 /**
  * @author Lionnel
  *
  */
-public class ModifyEventHandler extends RequestHandler {
+public class CommentEventHandler extends RequestHandler {
+
 	/**
 	 * 
 	 */
-	private static final long serialVersionUID = -8035200049284620904L;
+	private static final long serialVersionUID = 4027027713427613019L;
 
 	/*
 	 * (non-Javadoc)
@@ -35,23 +38,21 @@ public class ModifyEventHandler extends RequestHandler {
 		// permissions or handling.
 		try
 		{
-			Boolean modifiedSuccessfully = true;
+			Boolean addedSuccessfully = true;
+
+			HttpSession session = request.getSession(true);
+			boolean isLoggedIn=session.getAttribute("auth")==null? false:true;
+			int userId = Integer.parseInt((String) (session.getAttribute(USER_ID_ATTRIBUTE)==null?-1:session.getAttribute(USER_ID_ATTRIBUTE)));
 
 			//TODO:modify the event in the database
-			String id = request.getParameter("id");
-//			String userId = "";//request.getParameter("id");
-			String title = request.getParameter("eventName");
-			String date = request.getParameter("eventDate");
-			String location = request.getParameter("eventLocation");
-			String nbplace = request.getParameter("eventNumPeople");
-			String description = request.getParameter("eventDescription");
+			String eventId = request.getParameter("id");
+			String description = request.getParameter("commentDescription");
 
-			EditEvent cmd = new EditEvent(id, title, date, location, nbplace, description);
-			modifiedSuccessfully = Main.getDatabase().executeDb(cmd);
-
-			if(modifiedSuccessfully){
+			CommentEvent cmd = new CommentEvent(eventId, ""+userId, description, Main.getDatabase());  
+						
+			if(addedSuccessfully){
 				//redirects the current request to the newly created event
-				String setLocation = "/Webapp/evenement/"+id;//eventID;
+				String setLocation = "/Webapp/evenement/"+eventId;//eventID;
 //				String setLocation = "/Webapp/liste-des-evenements/";
 				response.sendRedirect(setLocation);
 			}else{

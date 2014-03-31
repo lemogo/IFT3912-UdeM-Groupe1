@@ -10,6 +10,7 @@ import java.io.OutputStream;
 import java.io.PrintStream;
 import java.io.UnsupportedEncodingException;
 import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -23,6 +24,9 @@ import javax.servlet.http.HttpSession;
 
 import org.json.JSONArray;
 
+import ca.diro.DataBase.DataBase;
+import ca.diro.DataBase.Command.VerifyUserRegisterToEvent;
+
 import com.github.mustachejava.DefaultMustacheFactory;
 import com.github.mustachejava.Mustache;
 import com.github.mustachejava.MustacheFactory;
@@ -34,6 +38,10 @@ import com.github.mustachejava.MustacheFactory;
  * @version 1.0
  */
 public class RequestHandler extends HttpServlet {
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 7170338465207325789L;
 	/**
 	 * The list of supported commands in requests.
 	 */
@@ -51,11 +59,11 @@ public class RequestHandler extends HttpServlet {
 	private static File	rootDir		= new File(".");
 
 	// Ressources statiques -> ne seront pas interpretees par Mustache
-//	protected static File	staticDir	= new File("static");
+	//	protected static File	staticDir	= new File("static");
 	protected static File	staticDir	= new File(rootDir, "./static");
 
 	// Ressources dynamiques -> seront interpretees par Mustache
-//	protected static File	dynamicDir	= new File( "templates");
+	//	protected static File	dynamicDir	= new File( "templates");
 	protected static File	dynamicDir	= new File(rootDir, "templates");
 
 	public static final String USER_ID_ATTRIBUTE="UserID";
@@ -69,61 +77,54 @@ public class RequestHandler extends HttpServlet {
 	 */
 	@Override
 	public void doGet(HttpServletRequest request, HttpServletResponse response)
-					throws IOException, ServletException {
+			throws IOException, ServletException {
 		// TODO Implement handling logic for simple requests (and command
 		// validation) and forwarding for requests that require specific
 		// permissions or handling.
 		try{
-			//			System.out.println("In requestHandler\t"+baseRequest.getMethod()+"\ttarget:"+target+"\t"+baseRequest.getPathInfo()+"\tContext:"+request.getContextPath());
 			String pathInfo = request.getPathInfo();
 			if(pathInfo.startsWith("/"))pathInfo = pathInfo.substring(1);
 
 			if(pathInfo.length()<=1){
-//System.out.println("returns because it's a null pathInfo");
-				//				baseRequest.setHandled(true);
 				return;
 			}
 			if ( pathInfo.equals("accueil")||pathInfo.equals("")) pathInfo = "accueil.html";
 			handleToTheRessource(request, response, pathInfo);
 		}
 		catch (Exception e){
-//			System.out.println("In catch exception");
-						catchHelper(request, response, e);
+						System.out.println("In Get request handler catch exception");
+			catchHelper(request, response, e);
 		}
 
 	}
 
 
-	
+
 	public void doPost(HttpServletRequest request, HttpServletResponse response)
 			throws IOException, ServletException {
-// TODO Implement handling logic for simple requests (and command
-// validation) and forwarding for requests that require specific
-// permissions or handling.
-try{
-	//			System.out.println("In requestHandler\t"+baseRequest.getMethod()+"\ttarget:"+target+"\t"+baseRequest.getPathInfo()+"\tContext:"+request.getContextPath());
-	String pathInfo = request.getPathInfo();
-	if(pathInfo.startsWith("/"))pathInfo = pathInfo.substring(1);
+		// TODO Implement handling logic for simple requests (and command
+		// validation) and forwarding for requests that require specific
+		// permissions or handling.
+		try{
+			String pathInfo = request.getPathInfo();
+			if(pathInfo.startsWith("/"))pathInfo = pathInfo.substring(1);
 
-	if(pathInfo.length()<=1){
-//System.out.println("returns because it's a null pathInfo");
-		//				baseRequest.setHandled(true);
-		return;
+			if(pathInfo.length()<=1){
+				return;
+			}
+			if ( pathInfo.equals("accueil")||pathInfo.equals("")) pathInfo = "accueil.html";
+			handleToTheRessource(request, response, pathInfo);
+		}
+		catch (Exception e){
+				System.out.println("In request helper catch exception");
+			catchHelper(request, response, e);
+		}
+
 	}
-	if ( pathInfo.equals("accueil")||pathInfo.equals("")) pathInfo = "accueil.html";
-	handleToTheRessource(request, response, pathInfo);
-}
-catch (Exception e){
-//	System.out.println("In catch exception");
-				catchHelper(request, response, e);
-}
-
-}
 
 	protected void handleToTheRessource(HttpServletRequest request,
 			HttpServletResponse response, String pathInfo) throws IOException,
 			UnsupportedEncodingException, FileNotFoundException {
-//System.out.println("In handleToTheRessource\t"+request.getMethod()+"\tpathInfo:"+pathInfo+"\t"+request.getPathInfo()+"\tContext:"+request.getContextPath());
 
 		if ( pathInfo.equals("accueil")) pathInfo = "accueil.html";
 		else if ( pathInfo.equals("ajouter-un-evenement") ) {
@@ -136,49 +137,41 @@ catch (Exception e){
 		else if ( pathInfo.equals("enregistrement") || pathInfo.equals("ajouter-un-evenement") ||pathInfo.equals("modifier-mes-informations")
 				||pathInfo.equals("notifications")||pathInfo.equals("connexion")) pathInfo = pathInfo+".html";
 		else if(isAnotherContext(pathInfo)&&!pathInfo.equals("")){ 	        
-//			String setLocation = "/Webapp/"+pathInfo;//"/";
+			//			String setLocation = "/Webapp/"+pathInfo;//"/";
 			String setLocation = "/"+pathInfo;//"/";
 			request.getRequestDispatcher(setLocation);
-//			response.sendRedirect(setLocation);
+			//			response.sendRedirect(setLocation);
 			return;
 		}
-
 
 		// create a handle to the resource
 		File staticResource = new File(staticDir, pathInfo);
 		File dynamicResource = new File(dynamicDir, pathInfo);
 
-		//			setResponseContentType(target, response);
 		setResponseContentType(pathInfo, response);
 		response.setCharacterEncoding("utf-8");
 
 		String filename = pathInfo;
-//System.out.println("static ressource:"+staticResource.getAbsolutePath()+"\tdynamicResource"+dynamicResource.getAbsolutePath());
 
 		// Ressource existe
 		if(pathInfo.startsWith("https://")){
-//			System.out.println("http request");
 			response.setStatus(HttpServletResponse.SC_OK);
-//			copy(staticResource, response.getOutputStream());
+			//			copy(staticResource, response.getOutputStream());
 			//TODO:find out how to deal with this case
 		}
 		else if (!staticResource.exists() && !dynamicResource.exists()){
 			System.out.println("NOT FOUND :: \tstatic ressource:\t"+staticResource+"\tdynamicResource:\t"+dynamicResource);
 			response.setStatus(HttpServletResponse.SC_NOT_FOUND);
 			processTemplate(request, response, "404.html");
-	}
+		}
 		else if (staticResource.exists()){
-//			System.out.println("Exist static ressource:"+staticResource);
 			response.setStatus(HttpServletResponse.SC_OK);
 			copy(staticResource, response.getOutputStream());
 		}
 		else{
-//			System.out.println("Thinks it a dynamic ressource:\t"+dynamicResource);
 			response.setStatus(HttpServletResponse.SC_OK);
 			HttpSession session = request.getSession(true);
 			boolean isLoggedIn=session.getAttribute("auth")==null? false:true;
-//			boolean isLoggedIn=request.getRequestedSessionId()==null? false:true;
-					System.out.println(request.getRequestedSessionId());//.request.getRequestedSessionId()==null? false:true;
 			//to display user navbar
 			HashMap<String, Object> sources = new HashMap<String, Object>();
 			sources.put("user", isLoggedIn);
@@ -187,7 +180,6 @@ catch (Exception e){
 			processTemplate(request, response, filename,sources);
 			processTemplate(request, response, "footer.html");
 		}
-		//			baseRequest.setHandled(true);
 	}
 
 	protected void setResponseContentType(String target, HttpServletResponse response) {
@@ -234,21 +226,6 @@ catch (Exception e){
 		response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
 		processTemplate(request, response, "500.html", params);
 	}
-
-
-	/**
-	 * Utility method. Returns the ResultSet as a JSONArray, to be converted
-	 * into a String for the response.
-	 * 
-	 * @return The ResultSet as a JSONArray.
-	 */
-	private JSONArray resultSetToJSON() {
-		// TODO Convert ResulSet to workable JSONArray.
-		// The result could also be stored in the class attribute "JSONResult"
-		// instead of being returned.
-		return JSONResult;
-	}
-
 
 	/**
 	 * 
@@ -320,13 +297,13 @@ catch (Exception e){
 				}
 				return result;
 			}
-				};
-				List<Object> scs = new ArrayList<Object>();
-				scs.add(parameters);
-				for (Object o : scopes){
-					scs.add(o);
-				}
-				mustache.execute(res.getWriter(), scs.toArray());
+		};
+		List<Object> scs = new ArrayList<Object>();
+		scs.add(parameters);
+		for (Object o : scopes){
+			scs.add(o);
+		}
+		mustache.execute(res.getWriter(), scs.toArray());
 	}
 
 	private String simpleEscape(String string){
@@ -340,7 +317,7 @@ catch (Exception e){
 				||pathInfo.startsWith("evenement")||pathInfo.startsWith("evenement/")||pathInfo.startsWith("modifier-mes-informations")
 				||pathInfo.startsWith("deconnexion")||pathInfo.startsWith("evenement-modification/")||pathInfo.startsWith("modify-event")||pathInfo.startsWith("delete-event")
 				||pathInfo.equals("register-event")||pathInfo.startsWith("unregister-event")||pathInfo.startsWith("connect-user")||pathInfo.equals("create-user")
-				||pathInfo.startsWith("create-event")
+				||pathInfo.startsWith("create-event")||pathInfo.startsWith("add-comment")
 				;
 	}
 

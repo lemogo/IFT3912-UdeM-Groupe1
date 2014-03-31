@@ -36,7 +36,6 @@ public class ConnectUserHandler extends RequestHandler {
 			HttpSession newUserSession = request.getSession(true);
 			if(newUserSession.getAttribute("auth")!=null){
 				//If so,ask the user if he wants to logout from account X and proceed with login 
-				
 				return;
 			}
 
@@ -45,12 +44,7 @@ public class ConnectUserHandler extends RequestHandler {
 			String password = request.getParameter("password");
 
 			//TODO:Authenticate the user here
-//			String JSONRequest = "{ userName : " + username + ", password : " +
-//					password + " }";
-//			System.out.println(JSONRequest);
 			OpenSession openCommand = new OpenSession(username, password);
-
-			//			System.out.println("before database execution");
 
 			Boolean authenticatedSuccessfully  = Main.getDatabase().executeDb(openCommand);
 			ResultSet results = openCommand.getResultSet();
@@ -66,13 +60,11 @@ public class ConnectUserHandler extends RequestHandler {
 				newUserSession.setAttribute("auth", Boolean.TRUE);
 				newUserSession.setAttribute(USERNAME_ATTRIBUTE, username);
 				if (newUserSession.isNew()){
-//					System.out.println("new user session");
 				}else{
 					Integer oldAccessCount = (Integer)newUserSession.getAttribute("accessCount"); 
 					if (oldAccessCount != null) {
 						accessCount = new Integer(oldAccessCount.intValue() + 1);
 					}
-//					System.out.println("old user session");
 				}
 				newUserSession.setAttribute("accessCount", accessCount);
 

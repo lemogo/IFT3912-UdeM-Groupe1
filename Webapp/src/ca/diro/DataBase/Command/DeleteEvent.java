@@ -16,7 +16,6 @@ public class DeleteEvent extends CommandUpdate{
 	 * @throws SQLException 
 	 */
 	public DeleteEvent(String eventId)  {
-		//myDb  = db;
 		query_ = removeEvent(eventId)  ;
 
 	}
@@ -28,10 +27,7 @@ public class DeleteEvent extends CommandUpdate{
 	 */
 	private String removeEvent(String eventId) {
 		//TODO perform remove query
-		
-		String str = "";
-		str = "delete from event where eventid = "+ eventId ;
-		return str ;
+		return "delete from event where eventid = "+ eventId ;
 	}
 
 
