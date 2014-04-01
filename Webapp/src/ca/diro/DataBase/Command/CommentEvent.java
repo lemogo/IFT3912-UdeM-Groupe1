@@ -2,6 +2,7 @@
  * 
  */
 package ca.diro.DataBase.Command;
+import java.sql.ResultSet;
 import java.sql.SQLException;
 import ca.diro.DataBase.DataBase;
 
@@ -24,19 +25,21 @@ public class CommentEvent extends Command{
 		
 		myDb = db ;
 		stroreComment(eventId,userId,description) ;
-		query_ = buildQuery(userId);	
+		query_ = buildQuery(userId, eventId);	
 	}
 	
 	/**
 	 * Method to build the right query
+	 * @param eventId TODO
 	 * @param info String Object
 	 * @return str <code>String</code> Object which is the query
 	 */
-	private String buildQuery(String userId) {
+	private String buildQuery(String userId, String eventId) {
 		
 		String str = "select username, commentevent.description, datecreation from  signeduser, commentevent " +
 						"where 	signeduser.suserid = "+ userId +" and " +
-								"signeduser.suserid = commentevent.suserid" ;
+								"signeduser.suserid = commentevent.suserid and " +
+								"commentevent.eventid = "+ eventId + "" ;
 
 		return str;
 	}
@@ -61,10 +64,37 @@ public class CommentEvent extends Command{
 		 
 		 return returnValue ;
 	}
+	public boolean ListComment(String  eventId) {
+		boolean returnValue = false;
+		
+		 try {
+			 
+			 String str =" select username, commentevent.description, datecreation from  signeduser, commentevent " +
+						"where signeduser.suserid = commentevent.suserid and " +
+						"commentevent.eventid = "+ eventId + ""  ;
+			 listComment = myDb.statement().executeQuery(str);
+			returnValue = true ;
+		 } catch (SQLException e) {
+			 System.err.println(e.getMessage());
+		}
+		 
+		 return returnValue ;
+	}
+	
+	/**
+	 * @return listComment <code>ResultSet</code>
+	 */
+	public ResultSet getListComment() {
+		return listComment;
+	}
 	
 	/**
 	 * object DataBase 
 	 */
 	DataBase myDb ; 
+	
+	ResultSet listComment = null ;
+
+	
 	
 }
