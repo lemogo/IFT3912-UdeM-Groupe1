@@ -129,9 +129,10 @@ public class Main {
 		handler.addServlet(new ServletHolder( new EventModificationPageHandler()), "/evenement-modification/*");
 		handler.addServlet(new ServletHolder( new ModifyEventHandler()), "/modify-event");
 		handler.addServlet(new ServletHolder( new CommentEventHandler()), "/add-comment");
-		//TODOL:remove-notification
+		//TODO:remove-notification
 //		handler.addServlet(new ServletHolder( new CommentEventHandler()), "/remove-notification");
 		handler.addServlet(new ServletHolder( new NotificationHandler()), "/notifications");
+		handler.addServlet(new ServletHolder( new EventListHandler()), "/search-all");
 		
 		handler.addServlet(new ServletHolder( new UserModificationPageHandler()), "/modifier-mes-informations/*");
 		handler.addServlet(new ServletHolder( new UserHandler()), "/membre/*");

@@ -75,7 +75,7 @@ public class RegisterToEventHandler extends RequestHandler {
 //			response.addHeader("isRegistered", "true");
 //			String setLocation = "/Webapp/evenement/"+eventID;
 			String setLocation = "/evenement/"+eventID;
-			System.out.println("\n\nIn registerEvent, redirecting to :"+setLocation+"\tuserId:"+userId+""+"\n\n");
+//			System.out.println("\n\nIn registerEvent, redirecting to :"+setLocation+"\tuserId:"+userId+""+"\n\n");
 //			response.sendRedirect(setLocation);
 			RequestDispatcher dispacher = request.getRequestDispatcher(setLocation);
 			dispacher.forward(request, response);
