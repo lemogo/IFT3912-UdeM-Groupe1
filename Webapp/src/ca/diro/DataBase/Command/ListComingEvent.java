@@ -23,7 +23,7 @@ public class ListComingEvent extends Command{
 	 */
 	private String buildQuery(){
 		String str="select eventid, title, location, dateevent, description from event " +
-				"where dateevent > CURRENT_DATE()"  ;
+				"where dateevent > CURRENT_DATE() and UPPER(status) not = 'CANCELLED'"  ;
 		return str ;
 	}
 	
