@@ -29,7 +29,7 @@ public class NotificationHandler extends RequestHandler {
 	 * 
 	 */
 	private static final long serialVersionUID = 705551389229047945L;
-	private ResultSet rs;
+//	private ResultSet rs;
 
 	/*
 	 * (non-Javadoc)
@@ -45,7 +45,9 @@ public class NotificationHandler extends RequestHandler {
 		// validation) and forwarding for requests that require specific
 		// permissions or handling.
 		try{
-			String pathInfo = request.getPathInfo().startsWith("/")?request.getPathInfo().substring(1):request.getPathInfo();
+			String pathInfo = request.getPathInfo();
+			if(pathInfo!=null)pathInfo=request.getPathInfo().startsWith("/")?request.getPathInfo().substring(1):request.getPathInfo();
+			else pathInfo = "";
 
 			//The current request must be a file -> redirect to requestHandler
 			if(	pathInfo.contains(".")) {
@@ -64,46 +66,49 @@ public class NotificationHandler extends RequestHandler {
 		}
 	}
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see org.eclipse.jetty.server.Handler#handle(java.lang.String,
-	 * org.eclipse.jetty.server.Request, javax.servlet.http.HttpServletRequest,
-	 * javax.servlet.http.HttpServletResponse)
-	 */
-	@Override
-	public void doPost(
-			HttpServletRequest request, HttpServletResponse response)
-					throws IOException, ServletException {
-		// TODO Implement handling logic for simple requests (and command
-		// validation) and forwarding for requests that require specific
-		// permissions or handling.
-		try{
-			String pathInfo = request.getPathInfo().startsWith("/")?request.getPathInfo().substring(1):request.getPathInfo();
-
-			//The current request must be a file -> redirect to requestHandler
-			if(	pathInfo.contains(".")) {
-				handleToTheRessource(request, response, pathInfo);
-				return;
-			}else if(isAnotherContext(pathInfo)&&!pathInfo.equals("")){ 	        
-				String setLocation = "/Webapp/"+pathInfo;
-				response.sendRedirect(setLocation);
-				return;
-			}
-			processRequestHelper(request, response);
-		}
-		catch (Exception e){
-			catchHelper( request, response, e);		
-		}
-	}
+//	/*
+//	 * (non-Javadoc)
+//	 * 
+//	 * @see org.eclipse.jetty.server.Handler#handle(java.lang.String,
+//	 * org.eclipse.jetty.server.Request, javax.servlet.http.HttpServletRequest,
+//	 * javax.servlet.http.HttpServletResponse)
+//	 */
+//	@Override
+//	public void doPost(
+//			HttpServletRequest request, HttpServletResponse response)
+//					throws IOException, ServletException {
+//		// TODO Implement handling logic for simple requests (and command
+//		// validation) and forwarding for requests that require specific
+//		// permissions or handling.
+//		try{
+//			String pathInfo = request.getPathInfo().startsWith("/")?request.getPathInfo().substring(1):request.getPathInfo();
+//
+//			//The current request must be a file -> redirect to requestHandler
+//			if(	pathInfo.contains(".")) {
+//				handleToTheRessource(request, response, pathInfo);
+//				return;
+//			}else if(isAnotherContext(pathInfo)&&!pathInfo.equals("")){ 	        
+//				String setLocation = "/Webapp/"+pathInfo;
+//				response.sendRedirect(setLocation);
+//				return;
+//			}
+//			processRequestHelper(request, response);
+//		}
+//		catch (Exception e){
+//			catchHelper( request, response, e);		
+//		}
+//	}
 
 	private void processRequestHelper(HttpServletRequest request,
 			HttpServletResponse response) throws UnsupportedEncodingException,
 			FileNotFoundException, IOException, JSONException, SQLException {
 		// create a handle to the resource
-
 		String pathInfo = request.getPathInfo();
-		if(pathInfo.startsWith("/")) pathInfo = pathInfo.substring(1);
+		if(pathInfo!=null)pathInfo=request.getPathInfo().startsWith("/")?request.getPathInfo().substring(1):request.getPathInfo();
+		else pathInfo = "";
+
+//		String pathInfo = request.getPathInfo();
+//		if(pathInfo.startsWith("/")) pathInfo = pathInfo.substring(1);
 		
 		if(isAnotherContext(pathInfo)&&!pathInfo.equals("")){ 	        
 			String setLocation = "/Webapp/"+pathInfo;
@@ -149,23 +154,30 @@ public class NotificationHandler extends RequestHandler {
 		boolean isLoggedIn=session.getAttribute("auth")==null? false:true;
 		
 		int userId = Integer.parseInt((String) (session.getAttribute(USER_ID_ATTRIBUTE)==null?-1:session.getAttribute(USER_ID_ATTRIBUTE)));
-		boolean isOwner = userId>0;
-		sources.put("isOwner", isOwner);
+//		boolean isOwner = userId>0;
+//		sources.put("isOwner", isOwner);
 
+		List<Notification> notificationList = new LinkedList<Notification>();
 		ListUserNotification cmd = new ListUserNotification(""+userId);
 		Main.getDatabase().executeDb(cmd);
 		
-		rs = cmd.getResultSet();
-		List<Notification> notificationList = new LinkedList<Notification>();
-		if (rs.next()){
-			
+		ResultSet rs = cmd.getResultSet();
+		while (rs.next()){
+			//eventid, title, location, dateevent, description
+			//TODO: get username and tittle;
+			notificationList.add(
+					new Notification(rs.getString("eventid"), 
+							"Bidon_Username",//rs.getString("username"), 
+							rs.getString("title")));
 		}
-//		CancelEvent cmd = new CancelEvent(eventId, Main.getDatabase());
+		sources.put("notificationsList", notificationList);
+
+		//		CancelEvent cmd = new CancelEvent(eventId, Main.getDatabase());
 //		String username = addUserInfoToMustacheSources(sources, userId);
 
 //		addUserEventListToMustacheSources(sources, userId, username);
 //		addUserRegisteredEventToMustacheSources(sources, userId, username);
-//		addSuccessMessagesToMustacheSources(response, sources, isLoggedIn);
+		addSuccessMessagesToMustacheSources(response, sources, isLoggedIn);
 		
 		//TODO:notification
 		sources.put("notifications_number", "0");

@@ -53,11 +53,11 @@ public class EventListHandler extends RequestHandler {
 			HttpServletResponse response) throws IOException,
 			UnsupportedEncodingException, FileNotFoundException, SQLException {
 		String pathInfo = request.getPathInfo().substring(1);
-		System.out.println("In event list - pathInfo="+pathInfo+"\tcontext="+request.getContextPath());
+//		System.out.println("In event list - pathInfo="+pathInfo+"\tcontext="+request.getContextPath());
 
 		//The current request must be a file -> redirect to requestHandler
 		if(	pathInfo.contains(".")) {
-			System.out.println("In event list - pathInfo="+pathInfo+"\tcontext="+request.getContextPath());
+//			System.out.println("In event list - pathInfo="+pathInfo+"\tcontext="+request.getContextPath());
 			handleToTheRessource(request, response, pathInfo);
 			return;
 		}
@@ -132,7 +132,7 @@ public class EventListHandler extends RequestHandler {
 
 	private boolean showAddSucessMessage(HttpServletRequest request,
 			HttpServletResponse response) {
-		System.out.println("before checking addSuccess"+request.getHeader("addSuccess"));
+//		System.out.println("before checking addSuccess"+request.getHeader("addSuccess"));
 		if(response.getHeader("addSuccess")!=null) {
 			return Boolean.parseBoolean(response.getHeader("addSuccess"));
 		}

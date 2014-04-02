@@ -47,7 +47,7 @@ public class CreateEventHandler extends RequestHandler {
 				String nbplace = request.getParameter("eventNumPeople");
 				String description = request.getParameter("eventDescription");
 
-				System.out.println("before database call");
+//				System.out.println("before database call");
 				DataBase db = Main.getDatabase();
 
 				AddEvent cmd = new AddEvent(userId, title, date,location,
@@ -55,7 +55,7 @@ public class CreateEventHandler extends RequestHandler {
 								description,db);
 				boolean addedSuccessfully = db.executeDb(cmd);
 				cmd.getCurentId();
-				System.out.println("database addedSuccessfully:"+addedSuccessfully);
+//				System.out.println("database addedSuccessfully:"+addedSuccessfully);
 				//TODO: Add the event to the database
 				if (addedSuccessfully){
 					//TODO:get the event id

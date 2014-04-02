@@ -97,7 +97,7 @@ public class UserHandler extends RequestHandler {
 	private void processRequestHelper(HttpServletRequest request,
 			HttpServletResponse response) throws UnsupportedEncodingException,
 			FileNotFoundException, IOException, JSONException, SQLException {
-		System.out.println("In member handler");
+//		System.out.println("In member handler");
 		// create a handle to the resource
 
 		String pathInfo = request.getPathInfo();
