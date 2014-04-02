@@ -2,7 +2,10 @@ package ca.diro.RequestHandlingUtil;
 
 import java.io.IOException;
 import java.sql.ResultSet;
+import java.util.Date;
+import java.util.Properties;
 
+import javax.naming.InitialContext;
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
@@ -15,6 +18,11 @@ import ca.diro.DataBase.Command.CancelEvent;
 import ca.diro.DataBase.Command.DeleteEvent;
 import ca.diro.DataBase.Command.PageInfoEvent;
 
+//import javax.mail.*;
+//import javax.mail.internet.InternetAddress;
+//import javax.mail.internet.MimeBodyPart;
+//import javax.mail.internet.MimeMessage;
+//import javax.mail.internet.MimeMultipart;
 public class CancelEventHandler extends RequestHandler {
 	/**
 	 * 
@@ -74,6 +82,30 @@ public class CancelEventHandler extends RequestHandler {
 				
 //				CancelEvent cmd3 = new CancelEvent(eventID, myDb);
 				cmd2.nofifySignedUser(eventID);
+				ResultSet rs = cmd2.getListToNotify();
+				if(rs.next()){
+					
+				}
+				
+				//send mail to all registered users
+//				InitialContext ic = new InitialContext();
+//				String snName = "java:comp/env/mail/MyMailSession";
+//				Session mailSession = (Session)ic.lookup(snName);
+//				
+//				Properties props = mailSession.getProperties();
+//				props.put("mail.from", "user2@mailserver.com");
+//				
+//				Message msg = new MimeMessage(mailSession);
+//				msg.setSubject("msgSubject");
+//				msg.setSentDate(new Date());
+//				msg.setFrom();
+//				msg.setRecipients(Message.RecipientType.TO, InternetAddress.parse("bounce_sound@hotmail.com", false));
+//				MimeBodyPart mbp = new MimeBodyPart();
+//				mbp.setText("msgTxt");
+//				Multipart mp = new MimeMultipart();
+//				mp.addBodyPart(mbp);
+//				msg.setContent(mp);
+//				Transport.send(msg);
 				
 				String setLocation = "/liste-des-evenements/";
 				response.addHeader("deleteSuccess", "true");

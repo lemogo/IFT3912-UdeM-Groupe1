@@ -55,7 +55,7 @@ public class ConnectUserHandler extends RequestHandler {
 			else authenticatedSuccessfully = false;
 
 			if (authenticatedSuccessfully){
-							System.out.println("before requesting session");
+//							System.out.println("before requesting session");
 				newUserSession.setAttribute(USER_ID_ATTRIBUTE, userID);
 				newUserSession.setAttribute("auth", Boolean.TRUE);
 				newUserSession.setAttribute(USERNAME_ATTRIBUTE, username);

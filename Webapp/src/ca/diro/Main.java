@@ -18,6 +18,7 @@ import ca.diro.RequestHandlingUtil.DisconnectUserHandler;
 import ca.diro.RequestHandlingUtil.EventHandler;
 import ca.diro.RequestHandlingUtil.EventListHandler;
 import ca.diro.RequestHandlingUtil.EventModificationPageHandler;
+import ca.diro.RequestHandlingUtil.NotificationHandler;
 import ca.diro.RequestHandlingUtil.UserHandler;
 import ca.diro.RequestHandlingUtil.ModifyEventHandler;
 import ca.diro.RequestHandlingUtil.ModifyUserInfoHandler;
@@ -128,6 +129,9 @@ public class Main {
 		handler.addServlet(new ServletHolder( new EventModificationPageHandler()), "/evenement-modification/*");
 		handler.addServlet(new ServletHolder( new ModifyEventHandler()), "/modify-event");
 		handler.addServlet(new ServletHolder( new CommentEventHandler()), "/add-comment");
+		//TODOL:remove-notification
+//		handler.addServlet(new ServletHolder( new CommentEventHandler()), "/remove-notification");
+		handler.addServlet(new ServletHolder( new NotificationHandler()), "/notifications");
 		
 		handler.addServlet(new ServletHolder( new UserModificationPageHandler()), "/modifier-mes-informations/*");
 		handler.addServlet(new ServletHolder( new UserHandler()), "/membre/*");

@@ -6,10 +6,21 @@ import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Properties;
 
+//import javax.mail.Message;
+//import javax.mail.Multipart;
+//import javax.mail.Session;
+//import javax.mail.Transport;
+//import javax.mail.internet.InternetAddress;
+//import javax.mail.internet.MimeBodyPart;
+//import javax.mail.internet.MimeMessage;
+//import javax.mail.internet.MimeMultipart;
+import javax.naming.InitialContext;
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
@@ -79,6 +90,29 @@ public class EventHandler extends RequestHandler {
 			}
 			else{
 				processRequestHelper(request, response, pathInfo, filename);
+				
+//				cmd2.nofifySignedUser(eventID);
+				
+				//send mail to all registered users
+//				InitialContext ic = new InitialContext();
+//				String snName = "java:comp/env/mail/MyMailSession";
+//				Session mailSession = (Session)ic.lookup(snName);
+//				
+//				Properties props = mailSession.getProperties();
+//				props.put("mail.from", "noreply@udmenforme.com");
+//				
+//				Message msg = new MimeMessage(mailSession);
+//				msg.setSubject("msgSubject");
+//				msg.setSentDate(new Date());
+//				msg.setFrom();
+//				msg.setRecipients(Message.RecipientType.TO, InternetAddress.parse("bounce_sound@hotmail.com", false));
+//				MimeBodyPart mbp = new MimeBodyPart();
+//				mbp.setText("msgTxt");
+//				Multipart mp = new MimeMultipart();
+//				mp.addBodyPart(mbp);
+//				msg.setContent(mp);
+//				Transport.send(msg);
+
 			}
 		}
 		catch (Exception e){

@@ -23,8 +23,8 @@ public class ListUserNotification extends  Command{
 	 * @return str <code>String</code> Object the query
 	 */
 	private String buildQuery(String userId){
-		String str="select eventid, title, location, dateevent, description from event " +
-				"where dateevent >= CURRENT_DATE() AND UPPER(status) = 'CANCELLED' AND"+" suserid = " +userId  ;
+		String str="select event.eventid, event.title, location, dateevent, description from event join subsEventSigned on event.eventid=subsEventSigned.eventid " +
+				"where dateevent >= CURRENT_DATE() AND UPPER(status) = 'CANCELLED' AND"+" subsEventSigned.suserid = " +userId  ;
 		//TODO parse query
 		return str ;
 	}

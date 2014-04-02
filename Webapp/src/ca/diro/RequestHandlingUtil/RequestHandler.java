@@ -135,7 +135,8 @@ public class RequestHandler extends HttpServlet {
 				response.sendRedirect("/Webapp/connexion");
 		}
 		else if ( pathInfo.equals("enregistrement") || pathInfo.equals("ajouter-un-evenement") ||pathInfo.equals("modifier-mes-informations")
-				||pathInfo.equals("notifications")||pathInfo.equals("connexion")) pathInfo = pathInfo+".html";
+//				||pathInfo.equals("notifications")
+				||pathInfo.equals("connexion")) pathInfo = pathInfo+".html";
 		else if(isAnotherContext(pathInfo)&&!pathInfo.equals("")){ 	        
 			//			String setLocation = "/Webapp/"+pathInfo;//"/";
 			String setLocation = "/"+pathInfo;//"/";
@@ -160,7 +161,7 @@ public class RequestHandler extends HttpServlet {
 			//TODO:find out how to deal with this case
 		}
 		else if (!staticResource.exists() && !dynamicResource.exists()){
-			System.out.println("NOT FOUND :: \tstatic ressource:\t"+staticResource+"\tdynamicResource:\t"+dynamicResource);
+//			System.out.println("NOT FOUND :: \tstatic ressource:\t"+staticResource+"\tdynamicResource:\t"+dynamicResource);
 			response.setStatus(HttpServletResponse.SC_NOT_FOUND);
 			processTemplate(request, response, "404.html");
 		}
@@ -318,6 +319,7 @@ public class RequestHandler extends HttpServlet {
 				||pathInfo.startsWith("deconnexion")||pathInfo.startsWith("evenement-modification/")||pathInfo.startsWith("modify-event")||pathInfo.startsWith("delete-event")
 				||pathInfo.equals("register-event")||pathInfo.startsWith("unregister-event")||pathInfo.startsWith("connect-user")||pathInfo.equals("create-user")
 				||pathInfo.startsWith("create-event")||pathInfo.startsWith("add-comment")
+				||pathInfo.startsWith("remove-notification")
 				;
 	}
 
