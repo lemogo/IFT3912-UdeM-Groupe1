@@ -24,7 +24,9 @@ public class ListCommentEvent extends Command{
 	 * @return str <code>String</code> Object which is the query
 	 */
 	private String buildQuery(String eventId) {
-		return "select description, datecreation, suserid from  commentevent " +
-						"where 	eventid = "+ eventId  ;
+		return "select commentevent.description, commentevent.datecreation, commentevent.suserid, username "
+				+ "from  commentevent " 
+				+ "join signeduser on commentevent.suserid=signeduser.suserid " 
+				+		"where 	eventid = "+ eventId  ;
 	}
 }

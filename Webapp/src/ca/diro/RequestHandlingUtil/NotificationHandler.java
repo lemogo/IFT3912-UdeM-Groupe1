@@ -167,7 +167,8 @@ public class NotificationHandler extends RequestHandler {
 			//TODO: get username and tittle;
 			notificationList.add(
 					new Notification(rs.getString("eventid"), 
-							"Bidon_Username",//rs.getString("username"), 
+//							"Bidon_Username",//
+							rs.getString("username"), 
 							rs.getString("title")));
 		}
 		sources.put("notificationsList", notificationList);

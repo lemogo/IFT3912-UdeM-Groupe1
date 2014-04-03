@@ -20,4 +20,8 @@ insert into signeduser  (username, password,fullname,email,age,description)value
 -figure out what to do in the eventInfoPage when an the event displayed had been cancelled or is already passed;
  maybe only subscriptions options only when an event is active.
  
- -Do we implement deleting an user account 
+ -Do we implement deleting an user account
+ 
+ ----------------------------------------
+ TODO:
+ in user handler to set the variable isOwner check if the userId is the same as the userId of the username  
