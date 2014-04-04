@@ -135,7 +135,7 @@ public class RemoveNotificationHandler extends RequestHandler {
 
 	private String addUserInfoToMustacheSources(HashMap<String, Object> sources, int userId)
 			throws JSONException, SQLException {
-		PageInfoUser cmd = new PageInfoUser(""+userId) ; //add cast if necessary
+		PageInfoUser cmd = new PageInfoUser(userId) ; //add cast if necessary
 		Boolean asExecuted = Main.getDatabase().executeDb(cmd); //true check si la requete est bien exécuté 
 		ResultSet rs = cmd.getResultSet(); //retourne (username,password,fullname,email,age,description)
 

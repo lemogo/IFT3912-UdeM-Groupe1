@@ -15,8 +15,6 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
-import org.json.JSONException;
-
 import ca.diro.Main;
 import ca.diro.DataBase.Command.ListEventByUser;
 import ca.diro.DataBase.Command.ListRegisterEvent;
@@ -96,7 +94,7 @@ public class UserHandler extends RequestHandler {
 
 	private void processRequestHelper(HttpServletRequest request,
 			HttpServletResponse response) throws UnsupportedEncodingException,
-			FileNotFoundException, IOException, JSONException, SQLException {
+			FileNotFoundException, IOException,  SQLException {
 //		System.out.println("In member handler");
 		// create a handle to the resource
 
@@ -138,7 +136,7 @@ public class UserHandler extends RequestHandler {
 
 	private HashMap<String, Object> addAllInfoToMustacheSources(
 			HttpServletRequest request, HttpServletResponse response)
-			throws JSONException, SQLException {
+			throws  SQLException {
 		//Add User info here!!
 		HashMap<String, Object> sources = new HashMap<String, Object>();
 
@@ -146,24 +144,31 @@ public class UserHandler extends RequestHandler {
 		HttpSession session = request.getSession(true);
 		boolean isLoggedIn=session.getAttribute("auth")==null? false:true;
 		
-		int userId = Integer.parseInt((String) (session.getAttribute(USER_ID_ATTRIBUTE)==null?-1:session.getAttribute(USER_ID_ATTRIBUTE)));
-		boolean isOwner = userId>0;
+		int loggedUserId = Integer.parseInt((String) (session.getAttribute(USER_ID_ATTRIBUTE)==null?-1:session.getAttribute(USER_ID_ATTRIBUTE)));
+		String loggedUserUsername = (String) (session.getAttribute(USERNAME_ATTRIBUTE)==null?-1:session.getAttribute(USERNAME_ATTRIBUTE));
+		String displayedUserUsername = request.getPathInfo().startsWith("/")?request.getPathInfo().substring(1).trim():request.getPathInfo().trim();
+		
+		if(displayedUserUsername.equals("")||displayedUserUsername==null) displayedUserUsername = loggedUserUsername;
+		boolean isOwner = loggedUserUsername.equals( displayedUserUsername);
 		sources.put("isOwner", isOwner);
 
-		String username = addUserInfoToMustacheSources(sources, userId);
+		sources.putAll(addUserInfoToMustacheSources( displayedUserUsername));
+		int displayedUserUserId = getUserId(displayedUserUsername)>0?getUserId(displayedUserUsername):loggedUserId;
 
-		addUserEventListToMustacheSources(sources, userId, username);
-		addUserRegisteredEventToMustacheSources(sources, userId, username);
-		addSuccessMessagesToMustacheSources(response, sources, isLoggedIn);
+		if(isLoggedIn){
+		sources.putAll(addUserEventListToMustacheSources(displayedUserUserId, displayedUserUsername));
+		sources.putAll(addUserRegisteredEventToMustacheSources(displayedUserUserId, displayedUserUsername));
+		}
 		
-		//TODO:notification
-		sources.put("notifications_number", "0");
+		sources.putAll(addSuccessMessagesToMustacheSources(response, isLoggedIn));
+		
+		sources.put("notifications_number", countUserNotification(""+loggedUserId));
 		return sources;
 	}
 
-	private void addSuccessMessagesToMustacheSources(
-			HttpServletResponse response, HashMap<String, Object> sources,
-			boolean isLoggedIn) {
+	private HashMap<String, Object> addSuccessMessagesToMustacheSources(
+			HttpServletResponse response, boolean isLoggedIn) {
+		HashMap<String, Object> sources = new HashMap<String, Object>();
 		//to display success message
 		Boolean addSuccess = response.getHeader("addSuccess") == null? false:true;
 		sources.put("addSuccess", addSuccess);
@@ -174,6 +179,7 @@ public class UserHandler extends RequestHandler {
 		Boolean modifySuccess = response.getHeader("modifySuccess") == null? false:true;
 		sources.put("modifySuccess", modifySuccess);
 		if(isLoggedIn)sources.put("user", isLoggedIn);
+		return sources;
 	}
 
 	private void setResponseContentCharacterAndStatus(
@@ -183,13 +189,14 @@ public class UserHandler extends RequestHandler {
 		response.setStatus(HttpServletResponse.SC_OK);
 	}
 
-	private void addUserRegisteredEventToMustacheSources(
-			HashMap<String, Object> sources, int userId, String username)
+	private HashMap<String, Object> addUserRegisteredEventToMustacheSources(
+			 int userId, String username)
 			throws SQLException {
 		//TODO: Get the user's registeredEventsList from the database
+		HashMap<String, Object> sources = new HashMap<String, Object>();
 		ListRegisterEvent userRegisterEvent= new ListRegisterEvent(""+userId);
 		Boolean asExecuted3 = Main.getDatabase().executeDb(userRegisterEvent);
-		if (!asExecuted3) return;
+		if (!asExecuted3) return sources;
 		
 		ResultSet rs2 = userRegisterEvent.getResultSet();
 		List<Event> registeredEventList = new LinkedList<Event>();  
@@ -202,15 +209,17 @@ public class UserHandler extends RequestHandler {
 							"Event_badgeClass1"));
 		}
 		sources.put("registeredEventsList",registeredEventList);
+		return sources;
 	}
 
-	private void addUserEventListToMustacheSources(
-			HashMap<String, Object> sources, int userId, String username)
+	private HashMap<String, Object> addUserEventListToMustacheSources(
+			int userId, String username)
 			throws SQLException {
-		//Get Users Event list 
+		//Get Users Event list
+		HashMap<String, Object> sources = new HashMap<String, Object>();
 		ListEventByUser userEventList = new ListEventByUser(""+userId);
 		Boolean asExecuted2 = Main.getDatabase().executeDb(userEventList);
-		if(!asExecuted2) return;
+		if(!asExecuted2) return sources;
 		
 		ResultSet rs1 = userEventList.getResultSet();
 		List<Event> eventList = new LinkedList<Event>();  
@@ -222,11 +231,13 @@ public class UserHandler extends RequestHandler {
 							"Event_badgeClass1"));
 		}
 		sources.put("ownerEventsList",eventList);
+		return sources;
 	}
 
-	private String addUserInfoToMustacheSources(HashMap<String, Object> sources, int userId)
-			throws JSONException, SQLException {
-		PageInfoUser cmd = new PageInfoUser(""+userId) ; //add cast if necessary
+	private HashMap<String, Object> addUserInfoToMustacheSources(String displayedUserUsername)
+			throws  SQLException {
+		HashMap<String, Object> sources = new HashMap<String, Object>();
+		PageInfoUser cmd = new PageInfoUser(displayedUserUsername) ; //add cast if necessary
 		Boolean asExecuted = Main.getDatabase().executeDb(cmd); //true check si la requete est bien exécuté 
 		ResultSet rs = cmd.getResultSet(); //retourne (username,password,fullname,email,age,description)
 
@@ -246,12 +257,28 @@ public class UserHandler extends RequestHandler {
 		sources.put("username",username);
 		sources.put("fullname",fullname);
 		
-		//TODO:
+		//TODO:ownerRegisteredSince
 		sources.put("registeredSince","ownerRegisteredSince");
 		
 		sources.put("age",age);
 		sources.put("description",description);
-		return username;
+		return sources;
+	}
+	private int getUserId(String displayedUserUsername)
+			throws SQLException {
+		PageInfoUser cmd = new PageInfoUser(displayedUserUsername) ; //add cast if necessary
+		Boolean asExecuted = Main.getDatabase().executeDb(cmd); //true check si la requete est bien exécuté 
+		ResultSet rs = cmd.getResultSet(); //retourne (username,password,fullname,email,age,description)
+
+		int userId=-1;
+		if (asExecuted){
+			if(rs.next()){
+				userId= rs.getInt("suserid");
+			}
+		}else{
+			//TODO:send error message to user and return to login page
+		}
+		return userId;
 	}
 
 }

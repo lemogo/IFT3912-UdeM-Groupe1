@@ -18,18 +18,13 @@ import javax.servlet.http.HttpSession;
 import org.json.JSONException;
 
 import ca.diro.Main;
-import ca.diro.DataBase.Command.CancelEvent;
-import ca.diro.DataBase.Command.ListEventByUser;
-import ca.diro.DataBase.Command.ListRegisterEvent;
 import ca.diro.DataBase.Command.ListUserNotification;
-import ca.diro.DataBase.Command.PageInfoUser;
 
 public class NotificationHandler extends RequestHandler {
 	/**
 	 * 
 	 */
 	private static final long serialVersionUID = 705551389229047945L;
-//	private ResultSet rs;
 
 	/*
 	 * (non-Javadoc)
@@ -173,15 +168,10 @@ public class NotificationHandler extends RequestHandler {
 		}
 		sources.put("notificationsList", notificationList);
 
-		//		CancelEvent cmd = new CancelEvent(eventId, Main.getDatabase());
-//		String username = addUserInfoToMustacheSources(sources, userId);
-
-//		addUserEventListToMustacheSources(sources, userId, username);
-//		addUserRegisteredEventToMustacheSources(sources, userId, username);
 		addSuccessMessagesToMustacheSources(response, sources, isLoggedIn);
 		
-		//TODO:notification
-		sources.put("notifications_number", "0");
+		String loggedUserId = session.getAttribute(USER_ID_ATTRIBUTE)==null?"-1":(String) session.getAttribute(USER_ID_ATTRIBUTE);
+		sources.put("notifications_number", countUserNotification(loggedUserId));
 		return sources;
 	}
 
@@ -205,77 +195,6 @@ public class NotificationHandler extends RequestHandler {
 		response.setContentType("text/html");
 		response.setCharacterEncoding("utf-8");
 		response.setStatus(HttpServletResponse.SC_OK);
-	}
-
-	private void addUserRegisteredEventToMustacheSources(
-			HashMap<String, Object> sources, int userId, String username)
-			throws SQLException {
-		//TODO: Get the user's registeredEventsList from the database
-		ListRegisterEvent userRegisterEvent= new ListRegisterEvent(""+userId);
-		Boolean asExecuted3 = Main.getDatabase().executeDb(userRegisterEvent);
-		if (!asExecuted3) return;
-		
-		ResultSet rs2 = userRegisterEvent.getResultSet();
-		List<Event> registeredEventList = new LinkedList<Event>();  
-		if(rs2!=null)
-		while(rs2.next()){
-			registeredEventList.add(							
-					new Event(username, rs2.getString("title"), rs2.getString("dateevent"),
-							rs2.getString("location"), 
-							rs2.getString("description"), rs2.getString("eventid"),
-							"Event_badgeClass1"));
-		}
-		sources.put("registeredEventsList",registeredEventList);
-	}
-
-	private void addUserEventListToMustacheSources(
-			HashMap<String, Object> sources, int userId, String username)
-			throws SQLException {
-		//Get Users Event list 
-		ListEventByUser userEventList = new ListEventByUser(""+userId);
-		Boolean asExecuted2 = Main.getDatabase().executeDb(userEventList);
-		if(!asExecuted2) return;
-		
-		ResultSet rs1 = userEventList.getResultSet();
-		List<Event> eventList = new LinkedList<Event>();  
-
-		while(rs1.next()){
-			eventList.add(							
-					new Event(username, rs1.getString("title"), rs1.getString("dateevent"),
-							rs1.getString("location"), rs1.getString("description"), rs1.getString("eventid"),
-							"Event_badgeClass1"));
-		}
-		sources.put("ownerEventsList",eventList);
-	}
-
-	private String addUserInfoToMustacheSources(HashMap<String, Object> sources, int userId)
-			throws JSONException, SQLException {
-		PageInfoUser cmd = new PageInfoUser(""+userId) ; //add cast if necessary
-		Boolean asExecuted = Main.getDatabase().executeDb(cmd); //true check si la requete est bien exécuté 
-		ResultSet rs = cmd.getResultSet(); //retourne (username,password,fullname,email,age,description)
-
-		String username="",fullname="",//email="",
-				age="",description="";
-		if (asExecuted){
-			if(rs.next()){
-				username = rs.getString("username");
-				fullname = rs.getString("fullname");
-//				email = rs.getString("email");
-				age  = rs.getString("age"); 
-				description = rs.getString("description");
-			}
-		}else{
-			//TODO:send error message to user and return to login page
-		}
-		sources.put("username",username);
-		sources.put("fullname",fullname);
-		
-		//TODO:
-		sources.put("registeredSince","ownerRegisteredSince");
-		
-		sources.put("age",age);
-		sources.put("description",description);
-		return username;
 	}
 
 }

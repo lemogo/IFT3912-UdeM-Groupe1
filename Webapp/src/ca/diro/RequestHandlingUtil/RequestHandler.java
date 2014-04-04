@@ -24,7 +24,9 @@ import javax.servlet.http.HttpSession;
 
 import org.json.JSONArray;
 
+import ca.diro.Main;
 import ca.diro.DataBase.DataBase;
+import ca.diro.DataBase.Command.CountUserNotification;
 import ca.diro.DataBase.Command.VerifyUserRegisterToEvent;
 
 import com.github.mustachejava.DefaultMustacheFactory;
@@ -322,5 +324,17 @@ public class RequestHandler extends HttpServlet {
 				||pathInfo.startsWith("remove-notification")
 				;
 	}
+
+
+
+	protected String countUserNotification(String loggedUserId)
+			throws SQLException {
+				String notificationNumber = "0";
+				CountUserNotification cmdCount = new CountUserNotification(loggedUserId);
+				Main.getDatabase().executeDb(cmdCount);
+				ResultSet rs2 = cmdCount.getResultSet();
+				if(rs2.next()) notificationNumber = rs2.getNString(1);
+				return notificationNumber;
+			}
 
 }

@@ -9,6 +9,7 @@ import javax.servlet.http.HttpSession;
 
 import ca.diro.Main;
 import ca.diro.DataBase.Command.ModifyAccount;
+import ca.diro.DataBase.Command.ModifyAccountPassword;
 
 public class ModifyUserInfoHandler extends RequestHandler {
 	/**
@@ -52,8 +53,14 @@ public class ModifyUserInfoHandler extends RequestHandler {
 			
 			//TODO:Check if the user new info is legal(no illegal characters or malicious scripts)
 			
-			ModifyAccount cmd = new ModifyAccount(id, fullname, email, username, password, age, description);
+			ModifyAccount cmd = new ModifyAccount(id, fullname, email, username, age, description);
 			modifiedSuccessfully = Main.getDatabase().executeDb(cmd);
+
+			if(!password.equals("")&&modifiedSuccessfully){
+				ModifyAccountPassword cmdPassword = new ModifyAccountPassword(password,""+userId);
+				modifiedSuccessfully = Main.getDatabase().executeDb(cmdPassword);
+				
+			}
 			
 			if(modifiedSuccessfully){
 				//TODO:add a header to the response to show a modification success message to the user

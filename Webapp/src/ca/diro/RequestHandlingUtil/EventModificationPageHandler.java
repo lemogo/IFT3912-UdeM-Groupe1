@@ -8,6 +8,7 @@ import java.util.HashMap;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 import ca.diro.Main;
 import ca.diro.DataBase.DataBase;
@@ -94,12 +95,19 @@ public class EventModificationPageHandler extends RequestHandler {
 					//to display success message
 					sources.put("id", pathInfo);
 					//to display success message
-//					sources.put("addSuccess", "true");
-//					sources.put("isOwner", "true");
-					//				sources.put("registerSuccess", "true");
+//					sources.put("addSuccess", "false");
+					sources.put("isOwner", "true");
+					//				sources.put("registerSuccess", "false");
 					//				sources.put("unregisterSuccess", "false");
-					sources.put("user", "true");
-					sources.put("notifications_number", "0");
+					
+					HttpSession session = request.getSession(true);
+//					String loggedUsername = session.getAttribute(USERNAME_ATTRIBUTE)==null?"Anonymous":(String) session.getAttribute(USERNAME_ATTRIBUTE);
+//					if (isLoggedIn) userId = (String) session.getAttribute(USER_ID_ATTRIBUTE);
+					
+					boolean isLoggedIn=session.getAttribute("auth")==null? false:true;
+					sources.put("user", isLoggedIn);
+					String loggedUserId = session.getAttribute(USER_ID_ATTRIBUTE)==null?"-1":(String) session.getAttribute(USER_ID_ATTRIBUTE);
+					sources.put("notifications_number", countUserNotification(loggedUserId));
 
 					processTemplate(request, response, "header.html", sources);
 					processTemplate(request, response, filename, sources);

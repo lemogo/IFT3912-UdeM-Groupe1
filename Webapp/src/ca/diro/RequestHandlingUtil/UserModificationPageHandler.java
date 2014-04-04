@@ -121,8 +121,8 @@ public class UserModificationPageHandler extends RequestHandler {
 		addUserInfoToMustacheSources(sources, userId);
 
 		if(isLoggedIn)sources.put("user", isLoggedIn);
-		//TODO:notification
-		sources.put("notifications_number", "0");
+		String loggedUserId = session.getAttribute(USER_ID_ATTRIBUTE)==null?"-1":(String) session.getAttribute(USER_ID_ATTRIBUTE);
+		sources.put("notifications_number", countUserNotification(loggedUserId));
 		return sources;
 	}
 
@@ -135,7 +135,7 @@ public class UserModificationPageHandler extends RequestHandler {
 
 	private String addUserInfoToMustacheSources(HashMap<String, Object> sources, int userId)
 			throws JSONException, SQLException {
-		PageInfoUser cmd = new PageInfoUser(""+userId) ; //add cast if necessary
+		PageInfoUser cmd = new PageInfoUser(userId) ; //add cast if necessary
 		Boolean asExecuted = Main.getDatabase().executeDb(cmd); //true check si la requete est bien exécuté 
 		ResultSet rs = cmd.getResultSet(); //retourne (username,password,fullname,email,age,description)
 
@@ -148,7 +148,7 @@ public class UserModificationPageHandler extends RequestHandler {
 				fullname = rs.getString("fullname");
 				email = rs.getString("email");
 				age  = rs.getString("age"); 
-				password  = rs.getString("password"); 
+//				password  = rs.getString("password"); 
 				description = rs.getString("description");
 			}
 		}else{
@@ -157,7 +157,7 @@ public class UserModificationPageHandler extends RequestHandler {
 		sources.put("username",username);
 		sources.put("fullname",fullname);
 		sources.put("age",age);
-		sources.put("passwordOld",password);
+//		sources.put("passwordOld",password);
 		sources.put("email",email);
 		sources.put("description",description);
 

@@ -13,6 +13,7 @@ import java.util.List;
 import java.util.Properties;
 
 
+
 //import javax.mail.Message;
 //import javax.mail.Multipart;
 //import javax.mail.Session;
@@ -30,7 +31,6 @@ import javax.servlet.http.HttpSession;
 
 import ca.diro.Main;
 import ca.diro.DataBase.DataBase;
-import ca.diro.DataBase.Command.CountUserNotification;
 import ca.diro.DataBase.Command.ListCommentEvent;
 import ca.diro.DataBase.Command.PageInfoEvent;
 import ca.diro.DataBase.Command.VerifyUserRegisterToEvent;
@@ -194,10 +194,7 @@ public class EventHandler extends RequestHandler {
 			}
 			sources.put("comment", commentList);
 
-			CountUserNotification cmdCount = new CountUserNotification(loggedUserId);
-			Main.getDatabase().executeDb(cmdCount);
-			rs = cmdCount.getResultSet();
-			if(rs.next()) notificationNumber = rs.getNString(1);
+			notificationNumber = countUserNotification(loggedUserId);
 		}
 		sources.put("notifications_number", notificationNumber);
 
@@ -208,6 +205,7 @@ public class EventHandler extends RequestHandler {
 
 		addSuccessInfoToMustacheSources(response, session, sources, username);
 	}
+
 
 	private void addSuccessInfoToMustacheSources(HttpServletResponse response,
 			HttpSession session, HashMap<String, Object> sources,

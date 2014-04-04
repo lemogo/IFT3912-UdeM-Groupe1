@@ -122,7 +122,9 @@ public class EventListHandler extends RequestHandler {
 			sources.put("deleteSuccess", deleteSuccess);
 			sources.put("addSuccess", addSuccess);
 			sources.put("user", isLoggedIn);
-			sources.put("notifications_number", "0");
+
+			String loggedUserId = session.getAttribute(USER_ID_ATTRIBUTE)==null?"-1":(String) session.getAttribute(USER_ID_ATTRIBUTE);
+			sources.put("notifications_number", countUserNotification(loggedUserId));
 
 			processTemplate(request, response, "header.html", sources);
 			processTemplate(request, response, filename, sources);

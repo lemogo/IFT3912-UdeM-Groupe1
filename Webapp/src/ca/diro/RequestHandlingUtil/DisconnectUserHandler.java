@@ -8,6 +8,11 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 public class DisconnectUserHandler extends RequestHandler {
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = -5083848477776213162L;
+
 	/*
 	 * (non-Javadoc)
 	 * 
@@ -22,8 +27,7 @@ public class DisconnectUserHandler extends RequestHandler {
 		// TODO Implement handling logic for simple requests (and command
 		// validation) and forwarding for requests that require specific
 		// permissions or handling.
-		try
-		{
+		try{
 			disconnectHelper(request, response);
 		}
 		catch (Exception e){
@@ -38,8 +42,7 @@ public class DisconnectUserHandler extends RequestHandler {
 		// TODO Implement handling logic for simple requests (and command
 		// validation) and forwarding for requests that require specific
 		// permissions or handling.
-		try
-		{
+		try{
 			disconnectHelper(request, response);
 		}
 		catch (Exception e){
