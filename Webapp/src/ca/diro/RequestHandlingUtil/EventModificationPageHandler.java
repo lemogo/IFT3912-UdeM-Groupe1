@@ -109,6 +109,7 @@ public class EventModificationPageHandler extends RequestHandler {
 					String loggedUserId = session.getAttribute(USER_ID_ATTRIBUTE)==null?"-1":(String) session.getAttribute(USER_ID_ATTRIBUTE);
 					sources.put("notifications_number", countUserNotification(loggedUserId));
 
+					sources.put("options", buildSelectTagOptions());
 					processTemplate(request, response, "header.html", sources);
 					processTemplate(request, response, filename, sources);
 					processTemplate(request, response, "footer.html");

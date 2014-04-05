@@ -8,8 +8,9 @@ class Event{
 	private String description;
 	private String id;
 	private String badgeClass;
+	private String numPlacesLeft;
 	
-	private int numPeople=0;
+//	private int numPeople=0;
 	
 	public Event(String username, String title, String date,
 			String location, String description, String id,
@@ -23,9 +24,22 @@ class Event{
 		this.badgeClass = badgeClass;
 	}
 
-	public int getNumPeople(){
-		return numPeople;
+	public Event(String username, String title, String date,
+			String location, String description, String id,
+			String badgeClass, String numPlacesLeft) {
+		this.username = username;
+		this.title = title;
+		this.date = date;
+		this.location = location;
+		this.description = description;
+		this.id = id;
+		this.badgeClass = badgeClass;
+		this.numPlacesLeft = numPlacesLeft;
 	}
+
+//	public int getNumPeople(){
+//		return numPeople;
+//	}
 	
 	public String getUsername() {
 		return username;
@@ -55,4 +69,7 @@ class Event{
 		return badgeClass;
 	}
 
+	public String getNumPlacesLeft() {
+		return numPlacesLeft;
+	}
 }

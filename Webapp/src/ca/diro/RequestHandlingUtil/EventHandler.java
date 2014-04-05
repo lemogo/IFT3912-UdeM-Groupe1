@@ -6,11 +6,14 @@ import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.Collections;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Properties;
+
+
 
 
 
@@ -148,10 +151,10 @@ public class EventHandler extends RequestHandler {
 			ResultSet rs = cmd.getResultSet();
 
 			if (rs.next()) {
-				String username =rs.getString("username");
 
-				addAllInfoToMustacheSources(response, eventID, session,
-						isLoggedIn, sources, rs, username);
+				sources.putAll(addAllInfoToMustacheSources(response, eventID, session, rs, cmd.getAvailablePlaces()));
+				sources.put("user", isLoggedIn);
+				sources.putAll(addSuccessInfoToMustacheSources(response, session, rs.getString("username")));
 
 				processTemplate(request, response, "header.html",sources);
 				processTemplate(request, response, filename,sources);
@@ -163,53 +166,61 @@ public class EventHandler extends RequestHandler {
 	}
 
 
-	private void addAllInfoToMustacheSources(HttpServletResponse response,
-			String eventID, HttpSession session, boolean isLoggedIn,
-			HashMap<String, Object> sources, ResultSet rs, String username)
+	private HashMap<String, Object> addAllInfoToMustacheSources(HttpServletResponse response,
+			String eventID, HttpSession session, ResultSet rs, int numPlacesLeft)
 					throws SQLException {
+		HashMap<String, Object> sources = new HashMap<String, Object>();
+//		String username =rs.getString("username");
+
+		String badgeClasse = computeBadgeColor(numPlacesLeft);
 		sources.put("event",
-				new Event(username, rs.getString("title"), rs.getString("dateevent"),
+				new Event(rs.getString("username"), rs.getString("title"), rs.getString("dateevent"),
 						rs.getString("location"), rs.getString("description"), eventID,
-						rs.getString("numberplaces"))
+						badgeClasse,""+numPlacesLeft)
 				);
+//		String numberplaces = rs.getString("numberplaces");
+		int numPlacesUsed = Integer.parseInt(rs.getString("numberplaces"))-numPlacesLeft;
+		sources.put("numPeople",""+numPlacesUsed);
 
 		sources.put("title",rs.getString("title"));
 		sources.put("creatorUsername",rs.getString("username"));
 		//username, description, datecreation, suserid
-		ListCommentEvent cmd = new ListCommentEvent(eventID);
-		boolean asExecuted=Main.getDatabase().executeDb(cmd);
-		List<Comment> commentList = new LinkedList<Comment>();
-		String notificationNumber = "0";
+		sources.put("comment", getCommentList(eventID));
+//		sources.put("numPeople",rs.getString("numberplaces"));
 		
-		if (asExecuted) {
-			rs=cmd.getResultSet();
-			String loggedUsername = session.getAttribute(USERNAME_ATTRIBUTE)==null?"Anonymous":(String) session.getAttribute(USERNAME_ATTRIBUTE);
-			String loggedUserId = session.getAttribute(USER_ID_ATTRIBUTE)==null?"-1":(String) session.getAttribute(USER_ID_ATTRIBUTE);
-
-			while(rs.next()){
-				commentList.add(new Comment(
-//						loggedUsername, 
-						rs.getString("username"),rs.getString("description"), 
-						rs.getString("datecreation"), rs.getString("suserid")));
-			}
-			sources.put("comment", commentList);
-
-			notificationNumber = countUserNotification(loggedUserId);
-		}
-		sources.put("notifications_number", notificationNumber);
-
+//		String loggedUsername = session.getAttribute(USERNAME_ATTRIBUTE)==null?"Anonymous":(String) session.getAttribute(USERNAME_ATTRIBUTE);
+//		String loggedUserId = session.getAttribute(USER_ID_ATTRIBUTE)==null?"-1":(String) session.getAttribute(USER_ID_ATTRIBUTE);
+//		String notificationNumber = countUserNotification(loggedUserId);
+		
+		sources.put("notifications_number", countUserNotification(session));
 		//to display success message
 		sources.put("id", eventID);
-		sources.put("user", isLoggedIn);
 		
-
-		addSuccessInfoToMustacheSources(response, session, sources, username);
+		return sources;
 	}
 
 
-	private void addSuccessInfoToMustacheSources(HttpServletResponse response,
-			HttpSession session, HashMap<String, Object> sources,
+	private List<Comment> getCommentList(String eventID) throws SQLException {
+		ListCommentEvent cmd = new ListCommentEvent(eventID);
+		boolean asExecuted=Main.getDatabase().executeDb(cmd);
+		List<Comment> commentList = new LinkedList<Comment>();
+		if (asExecuted) {
+			ResultSet rs=cmd.getResultSet();
+			while(rs.next()){
+				commentList.add(new Comment(
+						rs.getString("username"),rs.getString("description"), 
+						rs.getString("datecreation"), rs.getString("suserid")));
+			}
+		}
+		Collections.sort(commentList,Collections.reverseOrder());
+		return commentList;
+	}
+
+
+	private HashMap<String, Object> addSuccessInfoToMustacheSources(HttpServletResponse response,
+			HttpSession session,
 			String username) {
+		HashMap<String, Object> sources = new HashMap<String, Object>();
 		boolean addSuccess = response.getHeader("addSuccess")==null ? false:Boolean.parseBoolean(response.getHeader("addSuccess"));
 		if(addSuccess) sources.put("addSuccess", addSuccess);
 
@@ -228,6 +239,8 @@ public class EventHandler extends RequestHandler {
 
 		boolean modifySuccess = response.getHeader("modifySuccess") == null? false:true;
 		sources.put("modifySuccess", modifySuccess);
+		
+		return sources;
 	}
 
 

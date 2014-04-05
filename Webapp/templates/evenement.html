@@ -2,6 +2,7 @@
 <link href="css/events.css" rel="stylesheet">
 
 		<div class="container theme-showcase">
+		{{^isCancelled}}
 			<h1 class="pageTitle">Détails de l'événement</h1>
 			{{#registerSuccess}}
 			<div class="alert alert-success">
@@ -16,7 +17,9 @@
 		    {{^unregisterSuccess}}
 			<p class="descpage">Trouvez les informations sur Bacon ipsum dolor sit amet meatball beef ribs jowl bresaola sirloin pork loin tail shank pork chop short ribs pork. Rump brisket tongue, shankle tri-tip pork chop capicola doner corned beef swine leberkas bresaola andouille bacon.</p>
 		    {{/unregisterSuccess}}
+		{{/isCancelled}}
 			<div class="panel panel-primary">
+				{{#event}}
 				<div class="panel-heading">
 					<div class="smallInfos">
 						<p><span class="title">Par: </span><a href="membre/{{creatorUsername}}">{{creatorUsername}}</a></p>
@@ -26,7 +29,6 @@
 					<h2 class="panel-title">{{title}}</h2>
 				</div>
 				<div class="panel-collapse collapse in">
-				{{#event}}
 					<h3>Quand?</h3>
 					<p class="descpage">{{date}}</p>
 					<h3>À quel endroit?</h3>
@@ -34,6 +36,7 @@
 					<h3>Détails sur l'événement</h3>
 					<p class="descpage">{{description}}</p>
 				{{/event}}
+		{{^isCancelled}}
 					{{#isOwner}}
 					<a class="btn btn-primary" href="evenement-modification/{{id}}" role="button">Modifier l'événement</a>
 <!-- 					<a class="btn btn-danger" href="javascript:if(confirm('Supprimer?'))$('#formDeleteEvent').submit();" role="button">Supprimer l'événement</a> -->
@@ -57,6 +60,7 @@
 						</form>
 						{{/isRegistered}}
 					{{/isOwner}}
+		{{/isCancelled}}
 				</div>
 			</div>
 			<div class="panel panel-primary">
@@ -74,42 +78,39 @@
 					{{#comment}}
 					<div class="panel panel-info">
 			            <div class="panel-heading">
-			              <h3 class="panel-title"><a class="username" href="voir-membre.html">{{username}}</a> <span class="date">{{date}}</span></h3>
+			              <h3 class="panel-title"><a class="username" href="membre/{{username}}">{{username}}</a> <span class="date">{{commentdate}}</span></h3>
 			            </div>
 			            <div class="panel-body">
 			              {{description}}
 			            </div>
 			    	</div>
 					{{/comment}}
-					<!-- Comment box -->
+					<!-- Comment box 
 					<div class="panel panel-info">
 			            <div class="panel-heading">
-			              <h3 class="panel-title"><a class="username" href="voir-membre.html">Barfuhok</a> <span class="date">08h31, 03 Février 2014</span></h3>
+			              <h3 class="panel-title"><a class="username" href="membre/{{username}}">Barfuhok</a> <span class="date">08h31, 03 Février 2014</span></h3>
 			            </div>
 			            <div class="panel-body">
 			              Vraiment cool!
 			            </div>
 			    	</div>
-			    	
-			    	<!-- Comment box -->
 					<div class="panel panel-info">
 			            <div class="panel-heading">
-			              <h3 class="panel-title"><a class="username" href="voir-membre.html">Valérie</a> <span class="date">08h31, 02 Février 2014</span></h3>
+			              <h3 class="panel-title"><a class="username" href="membre/{{username}}">Valérie</a> <span class="date">08h31, 02 Février 2014</span></h3>
 			            </div>
 			            <div class="panel-body">
 			              Je suis inscrite
 			            </div>
 			    	</div>
 			    	
-			    	<!-- Comment box -->
 					<div class="panel panel-info">
 			            <div class="panel-heading">
-			              <h3 class="panel-title"><a class="username" href="voir-membre.html">Barfuhok</a> <span class="date">08h31, 01 Février 2014</span></h3>
+			              <h3 class="panel-title"><a class="username" href="membre/{{username}}">Barfuhok</a> <span class="date">08h31, 01 Février 2014</span></h3>
 			            </div>
 			            <div class="panel-body">
 			              Vraiment cool!
 			            </div>
-			    	</div>
+			    	</div>-->
 				</div>
 			</div>
 		</div>

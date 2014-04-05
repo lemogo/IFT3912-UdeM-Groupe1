@@ -1,7 +1,7 @@
 package ca.diro.RequestHandlingUtil;
 
-public class Comment {
-	String username, description, datecreation, suserid;
+public class Comment implements Comparable<Comment>{
+	String username, description, commentdate, suserid;
 
 	/**
 	 * @param username
@@ -13,7 +13,7 @@ public class Comment {
 			String suserid) {
 		this.username = username;
 		this.description = description;
-		this.datecreation = datecreation;
+		this.commentdate = datecreation;
 		this.suserid = suserid;
 	}
 
@@ -25,12 +25,22 @@ public class Comment {
 		return description;
 	}
 
-	public String getDatecreation() {
-		return datecreation;
+	public String getCommentdate() {
+		return commentdate;
 	}
 
 	public String getSuserid() {
 		return suserid;
 	}
+
+	@Override
+	public int compareTo(Comment arg0) {
+		// TODO Auto-generated method stub
+//		if(commentdate.equals(arg0.getCommentdate()))return 0;
+//		if(commentdate.equals(arg0.getCommentdate()))return 0;
+		return commentdate.compareTo(arg0.getCommentdate());
+	}
+	
+//	public int equals()
 	
 }

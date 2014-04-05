@@ -20,6 +20,8 @@ import ca.diro.DataBase.Command.Command;
 import ca.diro.DataBase.Command.ListCancelledEvent;
 import ca.diro.DataBase.Command.ListComingEvent;
 import ca.diro.DataBase.Command.ListPassedEvent;
+import ca.diro.DataBase.Command.PageInfoEvent;
+import ca.diro.DataBase.Command.PageInfoUser;
 
 public class EventListHandler extends RequestHandler {
 	/**
@@ -101,11 +103,17 @@ public class EventListHandler extends RequestHandler {
 		if( Main.getDatabase().executeDb(cmd)){ 
 			ResultSet rs = cmd.getResultSet();
 			List<Event> eventList = new LinkedList<Event>();  
-			while(rs.next()) 
+			while(rs.next()) {
+				PageInfoEvent cmd2 = new PageInfoEvent(rs.getString("eventId"), Main.getDatabase());
+				int numPlacesLeft = cmd2.getAvailablePlaces();
+				
+				String badgeClasse = computeBadgeColor(numPlacesLeft);
+
 				eventList.add(
 						new Event("Event_Bidon_username", rs.getString("title"), rs.getString("dateevent"),
 						rs.getString("location"), rs.getString("description"), rs.getString("eventId"),
-						"Event_badgeClass1"));
+						badgeClasse, ""+numPlacesLeft));
+			}
 
 			//add event info here!!
 			HashMap<String, Object> sources = new HashMap<String, Object>();

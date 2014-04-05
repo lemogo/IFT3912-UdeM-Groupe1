@@ -178,6 +178,7 @@ public class RequestHandler extends HttpServlet {
 			//to display user navbar
 			HashMap<String, Object> sources = new HashMap<String, Object>();
 			sources.put("user", isLoggedIn);
+			sources.put("options", buildSelectTagOptions());
 
 			processTemplate(request, response, "header.html", sources);
 			processTemplate(request, response, filename,sources);
@@ -327,6 +328,12 @@ public class RequestHandler extends HttpServlet {
 
 
 
+	protected String countUserNotification(HttpSession session)
+			throws SQLException {
+		String loggedUserId = session.getAttribute(USER_ID_ATTRIBUTE)==null?"-1":(String) session.getAttribute(USER_ID_ATTRIBUTE);
+		return countUserNotification(loggedUserId);
+		}
+	
 	protected String countUserNotification(String loggedUserId)
 			throws SQLException {
 				String notificationNumber = "0";
@@ -336,5 +343,25 @@ public class RequestHandler extends HttpServlet {
 				if(rs2.next()) notificationNumber = rs2.getNString(1);
 				return notificationNumber;
 			}
+
+
+
+	protected String computeBadgeColor(int numPlacesLeft) {
+		//!badgeGreen si + que 3, badgeYellow si - que 3 et badgeRed si 0
+		String badgeClasse = "badgeGreen";
+		if (numPlacesLeft<=0) badgeClasse = "badgeRed";
+		else if (numPlacesLeft<3) badgeClasse = "badgeYellow";
+		return badgeClasse;
+	}
+
+
+
+	protected String buildSelectTagOptions() {
+		String options = "";
+		for(int i = 0; i<99;i++){
+			options+="<option value=\""+i+"\">"+i+"</option>\n";
+		}
+		return options;
+	}
 
 }
