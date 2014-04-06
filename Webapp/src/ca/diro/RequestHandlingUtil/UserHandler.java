@@ -125,7 +125,7 @@ public class UserHandler extends RequestHandler {
 		else{
 			setResponseContentCharacterAndStatus(response);
 
-			HashMap<String, Object> sources = addAllInfoToMustacheSources(
+			HashMap<String, Object> sources = buildMustacheSourcesInfo(
 					request, response);
 
 			processTemplate(request, response, "header.html",sources);
@@ -134,7 +134,7 @@ public class UserHandler extends RequestHandler {
 		}
 	}
 
-	private HashMap<String, Object> addAllInfoToMustacheSources(
+	private HashMap<String, Object> buildMustacheSourcesInfo(
 			HttpServletRequest request, HttpServletResponse response)
 			throws  SQLException {
 		//Add User info here!!
@@ -152,21 +152,21 @@ public class UserHandler extends RequestHandler {
 		boolean isOwner = loggedUserUsername.equals( displayedUserUsername);
 		sources.put("isOwner", isOwner);
 
-		sources.putAll(addUserInfoToMustacheSources( displayedUserUsername));
+		sources.putAll(buildMustacheSourcesUserInfo( displayedUserUsername));
 		int displayedUserUserId = getUserId(displayedUserUsername)>0?getUserId(displayedUserUsername):loggedUserId;
 
 		if(isLoggedIn){
-		sources.putAll(addUserEventListToMustacheSources(displayedUserUserId, displayedUserUsername));
-		sources.putAll(addUserRegisteredEventToMustacheSources(displayedUserUserId, displayedUserUsername));
+		sources.putAll(buildMustacheSourcesUserEventList(displayedUserUserId, displayedUserUsername));
+		sources.putAll(buildMustacheSourcesUserRegisteredEventList(displayedUserUserId, displayedUserUsername));
 		}
 		
-		sources.putAll(addSuccessMessagesToMustacheSources(response, isLoggedIn));
+		sources.putAll(buildMustacheSourcesSuccessMessages(response, isLoggedIn));
 		
 		sources.put("notifications_number", countUserNotification(""+loggedUserId));
 		return sources;
 	}
 
-	private HashMap<String, Object> addSuccessMessagesToMustacheSources(
+	private HashMap<String, Object> buildMustacheSourcesSuccessMessages(
 			HttpServletResponse response, boolean isLoggedIn) {
 		HashMap<String, Object> sources = new HashMap<String, Object>();
 		//to display success message
@@ -189,7 +189,7 @@ public class UserHandler extends RequestHandler {
 		response.setStatus(HttpServletResponse.SC_OK);
 	}
 
-	private HashMap<String, Object> addUserRegisteredEventToMustacheSources(
+	private HashMap<String, Object> buildMustacheSourcesUserRegisteredEventList(
 			 int userId, String username)
 			throws SQLException {
 		//TODO: Get the user's registeredEventsList from the database
@@ -212,7 +212,7 @@ public class UserHandler extends RequestHandler {
 		return sources;
 	}
 
-	private HashMap<String, Object> addUserEventListToMustacheSources(
+	private HashMap<String, Object> buildMustacheSourcesUserEventList(
 			int userId, String username)
 			throws SQLException {
 		//Get Users Event list
@@ -234,7 +234,7 @@ public class UserHandler extends RequestHandler {
 		return sources;
 	}
 
-	private HashMap<String, Object> addUserInfoToMustacheSources(String displayedUserUsername)
+	private HashMap<String, Object> buildMustacheSourcesUserInfo(String displayedUserUsername)
 			throws  SQLException {
 		HashMap<String, Object> sources = new HashMap<String, Object>();
 		PageInfoUser cmd = new PageInfoUser(displayedUserUsername) ; //add cast if necessary
