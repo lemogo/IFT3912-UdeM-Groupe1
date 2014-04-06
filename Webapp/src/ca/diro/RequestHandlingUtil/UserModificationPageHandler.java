@@ -13,8 +13,6 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
-import org.json.JSONException;
-
 import ca.diro.Main;
 import ca.diro.DataBase.Command.PageInfoUser;
 
@@ -40,18 +38,17 @@ public class UserModificationPageHandler extends RequestHandler {
 		// permissions or handling.
 		try{
 			if(request.getPathInfo()!=null){
-			String pathInfo = request.getPathInfo().startsWith("/")?request.getPathInfo().substring(1):request.getPathInfo();
+				String pathInfo = request.getPathInfo().startsWith("/")?request.getPathInfo().substring(1):request.getPathInfo();
 
-			//The current request must be a file -> redirect to requestHandler
-			if(	pathInfo.contains(".")) {
-				super.doGet(request, response);
-				handleToTheRessource(request, response, pathInfo);
-				return;
-			}else if(isAnotherContext(pathInfo)&&!pathInfo.equals("")){ 	        
-				String setLocation = "/Webapp/"+pathInfo;//"/";
-				response.sendRedirect(setLocation);
-				return;
-			}
+				//The current request must be a file -> redirect to requestHandler
+				if(	pathInfo.contains(".")) {
+					handleSimpleRequest(request, response, pathInfo);
+					return;
+				}else if(isAnotherContext(pathInfo)&&!pathInfo.equals("")){ 	        
+					String setLocation = "/Webapp/"+pathInfo;//"/";
+					response.sendRedirect(setLocation);
+					return;
+				}
 			}
 			processRequestHelper(request, response);
 		}
@@ -62,25 +59,16 @@ public class UserModificationPageHandler extends RequestHandler {
 
 	private void processRequestHelper(HttpServletRequest request,
 			HttpServletResponse response) throws UnsupportedEncodingException,
-			FileNotFoundException, IOException, JSONException, SQLException {
-		System.out.println("In user modification pageInfo handler");
-		// create a handle to the resource
+			FileNotFoundException, IOException, SQLException {
 
 		String pathInfo = request.getPathInfo() == null? "":request.getPathInfo();
 		if(pathInfo.startsWith("/")) pathInfo = pathInfo.substring(1);
-		
-//		if(isAnotherContext(pathInfo)&&!pathInfo.equals("")){ 	        
-//			String setLocation = "/Webapp/"+pathInfo;//"/";
-//			response.sendRedirect(setLocation);
-//			return;
-//		}
 
 		if(pathInfo.equals("")){
 			//check if user is logged in
 
 			//TODO:if user is not logged in redirect user to login page to view is page
 		}
-
 		String filename = "modifier-mes-informations.html"; 
 
 		File staticResource = new File(staticDir, filename);
@@ -92,8 +80,7 @@ public class UserModificationPageHandler extends RequestHandler {
 			processTemplate(request, response, "404.html");
 		}
 		else{
-			setResponseContentCharacterAndStatus(response);
-
+			setDefaultResponseContentCharacterAndStatus(response);
 			HashMap<String, Object> sources = addAllInfoToMustacheSources(
 					request, response);
 
@@ -105,19 +92,18 @@ public class UserModificationPageHandler extends RequestHandler {
 
 	private HashMap<String, Object> addAllInfoToMustacheSources(
 			HttpServletRequest request, HttpServletResponse response)
-			throws JSONException, SQLException {
+					throws SQLException {
 		//Add User info here!!
 		HashMap<String, Object> sources = new HashMap<String, Object>();
 
 		//TODO:Get the user id using the database and/or if there's no path info the id from the session variable 
 		HttpSession session = request.getSession(true);
 		boolean isLoggedIn=session.getAttribute("auth")==null? false:true;
-		
+
 		int userId = Integer.parseInt((String) (session.getAttribute(USER_ID_ATTRIBUTE)==null?-1:session.getAttribute(USER_ID_ATTRIBUTE)));
-		
-		boolean isOwner = userId>0;
-		sources.put("isOwner", isOwner);
-		
+
+		sources.put("options", buildSelectTagOptions());
+
 		addUserInfoToMustacheSources(sources, userId);
 
 		if(isLoggedIn)sources.put("user", isLoggedIn);
@@ -126,29 +112,22 @@ public class UserModificationPageHandler extends RequestHandler {
 		return sources;
 	}
 
-	private void setResponseContentCharacterAndStatus(
-			HttpServletResponse response) {
-		response.setContentType("text/html");
-		response.setCharacterEncoding("utf-8");
-		response.setStatus(HttpServletResponse.SC_OK);
-	}
-
 	private String addUserInfoToMustacheSources(HashMap<String, Object> sources, int userId)
-			throws JSONException, SQLException {
+			throws SQLException {
 		PageInfoUser cmd = new PageInfoUser(userId) ; //add cast if necessary
 		Boolean asExecuted = Main.getDatabase().executeDb(cmd); //true check si la requete est bien exécuté 
 		ResultSet rs = cmd.getResultSet(); //retourne (username,password,fullname,email,age,description)
 
 		//fullname, username, email, age, description
 		String username="bidon_age",fullname="bidon_fullname",email="bidon_email",
-				age="-1",description="bidon_description", password="bidon_password";
+				age="-1",description="bidon_description";//, password="bidon_password";
 		if (asExecuted){
 			if(rs.next()){
 				username = rs.getString("username");
 				fullname = rs.getString("fullname");
 				email = rs.getString("email");
 				age  = rs.getString("age"); 
-//				password  = rs.getString("password"); 
+				//				password  = rs.getString("password"); 
 				description = rs.getString("description");
 			}
 		}else{
@@ -157,16 +136,14 @@ public class UserModificationPageHandler extends RequestHandler {
 		sources.put("username",username);
 		sources.put("fullname",fullname);
 		sources.put("age",age);
-//		sources.put("passwordOld",password);
+		//		sources.put("passwordOld",password);
 		sources.put("email",email);
 		sources.put("description",description);
 
 		//TODO:calculate register since
 		sources.put("registeredSince","ownerRegisteredSince");
-		
 		sources.put("age",age);
 		sources.put("description",description);
 		return username;
 	}
-
 }

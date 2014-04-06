@@ -44,7 +44,7 @@ public class EventModificationPageHandler extends RequestHandler {
 
 			//The current request must be a file -> redirect to requestHandler
 			if(	pathInfo.contains(".")) {
-				handleToTheRessource(request, response, pathInfo);
+				handleSimpleRequest(request, response, pathInfo);
 				return;
 			}else 
 			

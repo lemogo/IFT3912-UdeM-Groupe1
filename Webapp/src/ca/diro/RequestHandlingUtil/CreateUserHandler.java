@@ -1,7 +1,6 @@
 package ca.diro.RequestHandlingUtil;
 
 import java.io.IOException;
-import java.sql.SQLException;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
@@ -32,9 +31,7 @@ public class CreateUserHandler extends RequestHandler {
 		// validation) and forwarding for requests that require specific
 		// permissions or handling.
 		try{
-			
 			boolean isLoggedIn=request.getParameter(USER_ID_ATTRIBUTE)==null? false:true;
-			
 			if(isLoggedIn){
 				//TODO:show popup, user is already logged in as username, 
 				//ask user if they would like to logout and log in as ____ 
@@ -43,42 +40,22 @@ public class CreateUserHandler extends RequestHandler {
 				String setLocation = "/Webapp/membre/"+username;
 				response.sendRedirect(setLocation);
 			}
-			
-
 			String fullname = request.getParameter("fullname");
 			String email = request.getParameter("email");
 			String userName = request.getParameter("username");
 			String password = (String)request.getParameter("password");
 			String age = request.getParameter("age");
 			String description = request.getParameter("description");
-			
-			//TODO:Add the User in the database
-//			String info =  "{ fullname:"+fullname+" ,username:"+userName+" ,password:"+password+", " +
-//					"email:"+email+",age:"+age+", description:"+description+"}";
-//			System.out.println(info);
 
+			//Add the User in the database
 			DataBase db = Main.getDatabase();
 			CreateUserAccount cmd = new CreateUserAccount(userName, password, fullname, email, age, description, db);
-			boolean userAddedSuccessfully=false; 
-			try{
-				userAddedSuccessfully =db.executeDb(cmd);
-				cmd.getCurrentUserId();
-			}catch(SQLException e){
-				e.printStackTrace();
-			}
-//			System.out.println("userAddedSuccessfully:"+userAddedSuccessfully);
-			
-			//TODO:get user id from database
-//			String userID = "";
-			
-			if (userAddedSuccessfully){
+			if(db.executeDb(cmd)){
 				//redirects the current request to the login handler who then redirects to newly created event
 				String setLocation = "/connect-user";
 				request.getRequestDispatcher(setLocation).forward(request, response);
-//				String setLocation = "/membre/"+userName;
-//				response.sendRedirect(setLocation);
-				return;
-			}else{
+			}
+			else{
 				//return to the account creation page 
 				//and try to indicate to the user the source of the account creation failure 
 				System.out.println("failled to create new user account");

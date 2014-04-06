@@ -46,8 +46,8 @@ public class NotificationHandler extends RequestHandler {
 
 			//The current request must be a file -> redirect to requestHandler
 			if(	pathInfo.contains(".")) {
-				super.doGet(request, response);
-				handleToTheRessource(request, response, pathInfo);
+//				super.doGet(request, response);
+				handleSimpleRequest(request, response, pathInfo);
 				return;
 			}else if(isAnotherContext(pathInfo)&&!pathInfo.equals("")){ 	        
 				String setLocation = "/Webapp/"+pathInfo;//"/";

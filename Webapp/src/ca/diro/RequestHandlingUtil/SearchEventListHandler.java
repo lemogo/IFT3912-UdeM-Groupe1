@@ -6,6 +6,7 @@ import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
@@ -21,8 +22,9 @@ import ca.diro.DataBase.Command.ListCancelledEvent;
 import ca.diro.DataBase.Command.ListComingEvent;
 import ca.diro.DataBase.Command.ListPassedEvent;
 import ca.diro.DataBase.Command.PageInfoEvent;
+import ca.diro.DataBase.Command.ResearchEvent;
 
-public class EventListHandler extends RequestHandler {
+public class SearchEventListHandler extends RequestHandler {
 	/**
 	 * 
 	 */
@@ -35,25 +37,27 @@ public class EventListHandler extends RequestHandler {
 	 * org.eclipse.jetty.server.Request, javax.servlet.http.HttpServletRequest,
 	 * javax.servlet.http.HttpServletResponse)
 	 */
-	@Override
-	public void doGet(
-			HttpServletRequest request, HttpServletResponse response)
-					throws IOException, ServletException {
-		// TODO Implement handling logic for simple requests (and command
-		// validation) and forwarding for requests that require specific
-		// permissions or handling.
-		try{
-			processRequest(request, response);
-		}
-		catch (Exception e){
-			catchHelper( request, response, e);		
-		}
-	}
+//	@Override
+//	public void doGet(
+//			HttpServletRequest request, HttpServletResponse response)
+//					throws IOException, ServletException {
+//		// TODO Implement handling logic for simple requests (and command
+//		// validation) and forwarding for requests that require specific
+//		// permissions or handling.
+//		try{
+//			processRequest(request, response);
+//		}
+//		catch (Exception e){
+//			catchHelper( request, response, e);		
+//		}
+//	}
 
 	private void processRequest(HttpServletRequest request,
 			HttpServletResponse response) throws IOException,
 			UnsupportedEncodingException, FileNotFoundException, SQLException, ServletException {
-		String pathInfo = request.getPathInfo().substring(1);
+		String pathInfo = request.getPathInfo();
+		if (pathInfo == null) pathInfo="";
+		else pathInfo = pathInfo.substring(1);
 
 		//The current request must be a file -> redirect to requestHandler
 		if(	pathInfo.contains(".")) {
@@ -63,8 +67,7 @@ public class EventListHandler extends RequestHandler {
 		if(!pathInfo.equals("passes")&&!pathInfo.equals("annules")&&!pathInfo.equals("futur")&&!pathInfo.equals(""))
 			if(isAnotherContext(pathInfo)){ 	        
 				String setLocation = "/Webapp/"+pathInfo;//"/";
-				request.getRequestDispatcher("/"+pathInfo).forward(request, response);
-//				response.sendRedirect(setLocation);
+				response.sendRedirect(setLocation);
 				return;
 			}
 
@@ -88,16 +91,22 @@ public class EventListHandler extends RequestHandler {
 			throws SQLException, UnsupportedEncodingException,
 			FileNotFoundException, IOException {
 		setDefaultResponseContentCharacterAndStatus(response);
-
-		Command getListCommand;
-		if(pathInfo.equals("passes"))
-			getListCommand = new ListPassedEvent();
-		else if(pathInfo.equals("annules"))
-			getListCommand = new ListCancelledEvent();
-		else getListCommand= new ListComingEvent();
-
-		if( Main.getDatabase().executeDb(getListCommand)){ 
-			ResultSet listResultSet = getListCommand.getResultSet();
+		
+		LinkedList<String> searchInput = new LinkedList<String>(Arrays.asList(request.getParameter("searchInput").split(" ")));
+		ResearchEvent researchComand = new ResearchEvent(searchInput);
+		if(Main.getDatabase().executeDb(researchComand)){
+		
+		
+//		Command getListCommand;
+//		if(pathInfo.equals("passes"))
+//			getListCommand = new ListPassedEvent();
+//		else if(pathInfo.equals("annules"))
+//			getListCommand = new ListCancelledEvent();
+//		else getListCommand= new ListComingEvent();
+//
+//		if( Main.getDatabase().executeDb(getListCommand)){ 
+//			ResultSet listResultSet = getListCommand.getResultSet();
+			ResultSet listResultSet = researchComand.getResultSet();
 			List<Event> eventList = new LinkedList<Event>();  
 			while(listResultSet.next()) {
 				PageInfoEvent getEventCommand = new PageInfoEvent(listResultSet.getString("eventId"), Main.getDatabase());

@@ -32,27 +32,22 @@ public class UnregisterToEventHandler extends RequestHandler {
 		// permissions or handling.
 		try{
 			Boolean unregisteredSuccessfully;
-			System.out.println("in unsubscribe");
 			HttpSession session = request.getSession(true);
 			boolean isLoggedIn=session.getAttribute("auth")==null? false:true;
 			if(isLoggedIn){
 				String userId = (String) session.getAttribute(USER_ID_ATTRIBUTE);
 				String eventId = request.getParameter("id");
-				System.out.println("userId:"+userId+"\teventId:"+eventId);
 				
 				//TODO:Unregister the User to the event in the database
 				UnsubscriteToEvent cmd = new UnsubscriteToEvent(userId, eventId);
 				unregisteredSuccessfully = 
 						Main.getDatabase().executeDb(cmd);
-				//			ResultSet rs = cmd.getResultSet();
-				//			if(rs.next())
 
 				//redirects the current request to the newly created event
 				if(unregisteredSuccessfully){
 					String setLocation = "/evenement/"+eventId;
 					response.setHeader("unregisterSuccess", "true");
 					request.getRequestDispatcher(setLocation).forward(request, response);
-					//				response.sendRedirect(setLocation);
 				}
 				else{
 					//TODO:show unregister error message

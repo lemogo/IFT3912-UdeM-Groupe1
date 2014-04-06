@@ -25,9 +25,7 @@ import javax.servlet.http.HttpSession;
 import org.json.JSONArray;
 
 import ca.diro.Main;
-import ca.diro.DataBase.DataBase;
 import ca.diro.DataBase.Command.CountUserNotification;
-import ca.diro.DataBase.Command.VerifyUserRegisterToEvent;
 
 import com.github.mustachejava.DefaultMustacheFactory;
 import com.github.mustachejava.Mustache;
@@ -86,12 +84,9 @@ public class RequestHandler extends HttpServlet {
 		try{
 			String pathInfo = request.getPathInfo();
 			if(pathInfo.startsWith("/"))pathInfo = pathInfo.substring(1);
-
-			if(pathInfo.length()<=1){
-				return;
-			}
+//			if(pathInfo.length()==0)return;
 			if ( pathInfo.equals("accueil")||pathInfo.equals("")) pathInfo = "accueil.html";
-			handleToTheRessource(request, response, pathInfo);
+			handleSimpleRequest(request, response, pathInfo);
 		}
 		catch (Exception e){
 						System.out.println("In Get request handler catch exception");
@@ -99,9 +94,7 @@ public class RequestHandler extends HttpServlet {
 		}
 
 	}
-
-
-
+	
 	public void doPost(HttpServletRequest request, HttpServletResponse response)
 			throws IOException, ServletException {
 		// TODO Implement handling logic for simple requests (and command
@@ -110,51 +103,41 @@ public class RequestHandler extends HttpServlet {
 		try{
 			String pathInfo = request.getPathInfo();
 			if(pathInfo.startsWith("/"))pathInfo = pathInfo.substring(1);
-
-			if(pathInfo.length()<=1){
-				return;
-			}
+//			if(pathInfo.length()==0)return;
 			if ( pathInfo.equals("accueil")||pathInfo.equals("")) pathInfo = "accueil.html";
-			handleToTheRessource(request, response, pathInfo);
+			handleSimpleRequest(request, response, pathInfo);
 		}
 		catch (Exception e){
 				System.out.println("In request helper catch exception");
 			catchHelper(request, response, e);
 		}
-
 	}
 
-	protected void handleToTheRessource(HttpServletRequest request,
+	protected void handleSimpleRequest(HttpServletRequest request,
 			HttpServletResponse response, String pathInfo) throws IOException,
-			UnsupportedEncodingException, FileNotFoundException {
-
+			UnsupportedEncodingException, FileNotFoundException, ServletException {
 		if ( pathInfo.equals("accueil")) pathInfo = "accueil.html";
 		else if ( pathInfo.equals("ajouter-un-evenement") ) {
 			//if user is not logged in redirect him to sign up page (or maybe sign in) 
-			pathInfo = pathInfo+".html";
-			HttpSession session = request.getSession(true);
-			if (session.getAttribute("auth")==null) 
+			if (request.getSession(true).getAttribute("auth")==null){ 
 				response.sendRedirect("/Webapp/connexion");
+				return;
+			}
+			pathInfo = pathInfo+".html";
 		}
 		else if ( pathInfo.equals("enregistrement") || pathInfo.equals("ajouter-un-evenement") ||pathInfo.equals("modifier-mes-informations")
-//				||pathInfo.equals("notifications")
 				||pathInfo.equals("connexion")) pathInfo = pathInfo+".html";
 		else if(isAnotherContext(pathInfo)&&!pathInfo.equals("")){ 	        
-			//			String setLocation = "/Webapp/"+pathInfo;//"/";
 			String setLocation = "/"+pathInfo;//"/";
-			request.getRequestDispatcher(setLocation);
-			//			response.sendRedirect(setLocation);
+//			request.getRequestDispatcher(setLocation);
+			request.getRequestDispatcher("/"+pathInfo).forward(request, response);
 			return;
 		}
-
-		// create a handle to the resource
-		File staticResource = new File(staticDir, pathInfo);
-		File dynamicResource = new File(dynamicDir, pathInfo);
-
+		String filename = pathInfo;
+		File staticResource = new File(staticDir, filename);
+		File dynamicResource = new File(dynamicDir, filename);
 		setResponseContentType(pathInfo, response);
 		response.setCharacterEncoding("utf-8");
-
-		String filename = pathInfo;
 
 		// Ressource existe
 		if(pathInfo.startsWith("https://")){
@@ -163,7 +146,7 @@ public class RequestHandler extends HttpServlet {
 			//TODO:find out how to deal with this case
 		}
 		else if (!staticResource.exists() && !dynamicResource.exists()){
-//			System.out.println("NOT FOUND :: \tstatic ressource:\t"+staticResource+"\tdynamicResource:\t"+dynamicResource);
+			System.out.println("NOT FOUND :: \tstatic ressource:\t"+staticResource+"\tdynamicResource:\t"+dynamicResource);
 			response.setStatus(HttpServletResponse.SC_NOT_FOUND);
 			processTemplate(request, response, "404.html");
 		}
@@ -175,7 +158,7 @@ public class RequestHandler extends HttpServlet {
 			response.setStatus(HttpServletResponse.SC_OK);
 			HttpSession session = request.getSession(true);
 			boolean isLoggedIn=session.getAttribute("auth")==null? false:true;
-			//to display user navbar
+
 			HashMap<String, Object> sources = new HashMap<String, Object>();
 			sources.put("user", isLoggedIn);
 			sources.put("options", buildSelectTagOptions());
@@ -286,7 +269,7 @@ public class RequestHandler extends HttpServlet {
 	@SuppressWarnings("serial")
 	protected void processTemplate(HttpServletRequest req, HttpServletResponse res, String filename, Object... scopes) throws UnsupportedEncodingException, FileNotFoundException, IOException{
 		MustacheFactory mc = new DefaultMustacheFactory(dynamicDir);
-		mc = new DefaultMustacheFactory(dynamicDir);
+//		mc = new DefaultMustacheFactory(dynamicDir);
 		Mustache mustache = mc.compile(filename);
 
 		Map<Object, Object> parameters = new HashMap<Object, Object>(req.getParameterMap()){
@@ -316,17 +299,19 @@ public class RequestHandler extends HttpServlet {
 
 	protected boolean isAnotherContext(String pathInfo) {
 		return pathInfo.equals("accueil")||pathInfo.startsWith("liste-des-evenements")||pathInfo.startsWith("modifier-un-evenement")
-				||pathInfo.startsWith("membre")||pathInfo.startsWith("notifications")||pathInfo.startsWith("connexion")||pathInfo.equals("deconnexion")
+				||pathInfo.startsWith("membre")||pathInfo.startsWith("notifications")
+				||pathInfo.startsWith("connexion")||pathInfo.equals("deconnexion")
 				||pathInfo.startsWith("enregistrement")||pathInfo.startsWith("ajouter-un-evenement")
 				||pathInfo.startsWith("evenement")||pathInfo.startsWith("evenement/")||pathInfo.startsWith("modifier-mes-informations")
-				||pathInfo.startsWith("deconnexion")||pathInfo.startsWith("evenement-modification/")||pathInfo.startsWith("modify-event")||pathInfo.startsWith("delete-event")
-				||pathInfo.equals("register-event")||pathInfo.startsWith("unregister-event")||pathInfo.startsWith("connect-user")||pathInfo.equals("create-user")
+				||pathInfo.startsWith("deconnexion")||pathInfo.startsWith("evenement-modification/")
+				||pathInfo.startsWith("modify-event")||pathInfo.startsWith("delete-event")
+				||pathInfo.equals("register-event")||pathInfo.startsWith("unregister-event")
+				||pathInfo.startsWith("connect-user")||pathInfo.equals("create-user")
 				||pathInfo.startsWith("create-event")||pathInfo.startsWith("add-comment")
 				||pathInfo.startsWith("remove-notification")
+				||pathInfo.startsWith("search-all")
 				;
 	}
-
-
 
 	protected String countUserNotification(HttpSession session)
 			throws SQLException {
@@ -344,8 +329,6 @@ public class RequestHandler extends HttpServlet {
 				return notificationNumber;
 			}
 
-
-
 	protected String computeBadgeColor(int numPlacesLeft) {
 		//!badgeGreen si + que 3, badgeYellow si - que 3 et badgeRed si 0
 		String badgeClasse = "badgeGreen";
@@ -354,14 +337,18 @@ public class RequestHandler extends HttpServlet {
 		return badgeClasse;
 	}
 
-
-
 	protected String buildSelectTagOptions() {
 		String options = "";
 		for(int i = 0; i<99;i++){
 			options+="<option value=\""+i+"\">"+i+"</option>\n";
 		}
 		return options;
+	}
+
+	protected void setDefaultResponseContentCharacterAndStatus(HttpServletResponse response) {
+		response.setContentType("text/html");
+		response.setCharacterEncoding("utf-8");
+		response.setStatus(HttpServletResponse.SC_OK);
 	}
 
 }

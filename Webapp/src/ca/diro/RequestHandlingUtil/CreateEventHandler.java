@@ -33,12 +33,10 @@ public class CreateEventHandler extends RequestHandler {
 		// validation) and forwarding for requests that require specific
 		// permissions or handling.
 		try{
-			String userId = "2";
+			String userId = "-1";
 			HttpSession session = request.getSession(true);
 			boolean isLoggedIn=session.getAttribute("auth")==null? false:true;
-//System.out.println("isLoggedIn: "+isLoggedIn);			
 			if(isLoggedIn){
-				
 				userId = (String)session.getAttribute(USER_ID_ATTRIBUTE);
 				//TODO:Add the event from the database				
 				String title = request.getParameter("eventName");
@@ -47,7 +45,6 @@ public class CreateEventHandler extends RequestHandler {
 				String nbplace = request.getParameter("eventNumPeople");
 				String description = request.getParameter("eventDescription");
 
-//				System.out.println("before database call");
 				DataBase db = Main.getDatabase();
 
 				AddEvent cmd = new AddEvent(userId, title, date,location,
@@ -55,14 +52,13 @@ public class CreateEventHandler extends RequestHandler {
 								description,db);
 				boolean addedSuccessfully = db.executeDb(cmd);
 				cmd.getCurentId();
-//				System.out.println("database addedSuccessfully:"+addedSuccessfully);
 				//TODO: Add the event to the database
 				if (addedSuccessfully){
 					//TODO:get the event id
 //					ResultSet rs = cmd.getResultSet();
-					String id = "2";
+//					String id = "2";
 //					if(rs.next()) id = rs.getString(1);
-					System.out.println("resultset id:"+id);
+//					System.out.println("resultset id:"+id);
 					//redirects the current request to the newly created event
 					String setLocation = "/liste-des-evenements/";
 					response.addHeader("addSuccess", "true");
@@ -84,8 +80,5 @@ public class CreateEventHandler extends RequestHandler {
 			System.out.println("In create event catch exception");
 			catchHelper( request, response, e);
 		}
-
 	}
-
-
 }

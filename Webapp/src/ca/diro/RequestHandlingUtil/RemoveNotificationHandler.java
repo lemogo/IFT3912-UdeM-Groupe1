@@ -40,18 +40,17 @@ public class RemoveNotificationHandler extends RequestHandler {
 		// permissions or handling.
 		try{
 			if(request.getPathInfo()!=null){
-			String pathInfo = request.getPathInfo().startsWith("/")?request.getPathInfo().substring(1):request.getPathInfo();
+				String pathInfo = request.getPathInfo().startsWith("/")?request.getPathInfo().substring(1):request.getPathInfo();
 
-			//The current request must be a file -> redirect to requestHandler
-			if(	pathInfo.contains(".")) {
-				super.doGet(request, response);
-				handleToTheRessource(request, response, pathInfo);
-				return;
-			}else if(isAnotherContext(pathInfo)&&!pathInfo.equals("")){ 	        
-				String setLocation = "/Webapp/"+pathInfo;//"/";
-				response.sendRedirect(setLocation);
-				return;
-			}
+				//The current request must be a file -> redirect to requestHandler
+				if(	pathInfo.contains(".")) {
+					handleSimpleRequest(request, response, pathInfo);
+					return;
+				}else if(isAnotherContext(pathInfo)&&!pathInfo.equals("")){ 	        
+					String setLocation = "/Webapp/"+pathInfo;//"/";
+					response.sendRedirect(setLocation);
+					return;
+				}
 			}
 			processRequestHelper(request, response);
 		}
@@ -63,17 +62,8 @@ public class RemoveNotificationHandler extends RequestHandler {
 	private void processRequestHelper(HttpServletRequest request,
 			HttpServletResponse response) throws UnsupportedEncodingException,
 			FileNotFoundException, IOException, JSONException, SQLException {
-		System.out.println("In user modification pageInfo handler");
-		// create a handle to the resource
-
 		String pathInfo = request.getPathInfo() == null? "":request.getPathInfo();
 		if(pathInfo.startsWith("/")) pathInfo = pathInfo.substring(1);
-		
-//		if(isAnotherContext(pathInfo)&&!pathInfo.equals("")){ 	        
-//			String setLocation = "/Webapp/"+pathInfo;//"/";
-//			response.sendRedirect(setLocation);
-//			return;
-//		}
 
 		if(pathInfo.equals("")){
 			//check if user is logged in
@@ -82,7 +72,6 @@ public class RemoveNotificationHandler extends RequestHandler {
 		}
 
 		String filename = "modifier-mes-informations.html"; 
-
 		File staticResource = new File(staticDir, filename);
 		File dynamicResource = new File(dynamicDir, filename);
 
@@ -93,7 +82,6 @@ public class RemoveNotificationHandler extends RequestHandler {
 		}
 		else{
 			setResponseContentCharacterAndStatus(response);
-
 			HashMap<String, Object> sources = addAllInfoToMustacheSources(
 					request, response);
 
@@ -105,24 +93,23 @@ public class RemoveNotificationHandler extends RequestHandler {
 
 	private HashMap<String, Object> addAllInfoToMustacheSources(
 			HttpServletRequest request, HttpServletResponse response)
-			throws JSONException, SQLException {
+					throws JSONException, SQLException {
 		//Add User info here!!
 		HashMap<String, Object> sources = new HashMap<String, Object>();
 
 		//TODO:Get the user id using the database and/or if there's no path info the id from the session variable 
 		HttpSession session = request.getSession(true);
 		boolean isLoggedIn=session.getAttribute("auth")==null? false:true;
-		
+
 		int userId = Integer.parseInt((String) (session.getAttribute(USER_ID_ATTRIBUTE)==null?-1:session.getAttribute(USER_ID_ATTRIBUTE)));
-		
-		boolean isOwner = userId>0;
-		sources.put("isOwner", isOwner);
-		
+
+//		boolean isOwner = userId>0;
+//		sources.put("isOwner", isOwner);
+
 		addUserInfoToMustacheSources(sources, userId);
 
 		if(isLoggedIn)sources.put("user", isLoggedIn);
-		//TODO:notification
-		sources.put("notifications_number", "0");
+		sources.put("notifications_number", countUserNotification(""+userId));
 		return sources;
 	}
 
@@ -163,7 +150,6 @@ public class RemoveNotificationHandler extends RequestHandler {
 
 		//TODO:calculate register since
 		sources.put("registeredSince","ownerRegisteredSince");
-		
 		sources.put("age",age);
 		sources.put("description",description);
 		return username;

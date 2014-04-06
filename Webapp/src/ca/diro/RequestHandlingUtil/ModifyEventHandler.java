@@ -38,20 +38,19 @@ public class ModifyEventHandler extends RequestHandler {
 			Boolean modifiedSuccessfully = true;
 
 			//TODO:modify the event in the database
-			String id = request.getParameter("id");
-//			String userId = "";//request.getParameter("id");
+			String userId = request.getParameter("id");
 			String title = request.getParameter("eventName");
 			String date = request.getParameter("eventDate");
 			String location = request.getParameter("eventLocation");
 			String nbplace = request.getParameter("eventNumPeople");
 			String description = request.getParameter("eventDescription");
 
-			EditEvent cmd = new EditEvent(id, title, date, location, nbplace, description);
+			EditEvent cmd = new EditEvent(userId, title, date, location, nbplace, description);
 			modifiedSuccessfully = Main.getDatabase().executeDb(cmd);
 
 			if(modifiedSuccessfully){
 				//redirects the current request to the newly created event
-				String setLocation = "/Webapp/evenement/"+id;//eventID;
+				String setLocation = "/Webapp/evenement/"+userId;//eventID;
 //				String setLocation = "/Webapp/liste-des-evenements/";
 				response.sendRedirect(setLocation);
 			}else{

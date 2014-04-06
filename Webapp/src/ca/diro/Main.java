@@ -20,6 +20,7 @@ import ca.diro.RequestHandlingUtil.EventHandler;
 import ca.diro.RequestHandlingUtil.EventListHandler;
 import ca.diro.RequestHandlingUtil.EventModificationPageHandler;
 import ca.diro.RequestHandlingUtil.NotificationHandler;
+import ca.diro.RequestHandlingUtil.SearchEventListHandler;
 import ca.diro.RequestHandlingUtil.UserHandler;
 import ca.diro.RequestHandlingUtil.ModifyEventHandler;
 import ca.diro.RequestHandlingUtil.ModifyUserInfoHandler;
@@ -121,7 +122,7 @@ public class Main {
 		handlerCollection.addHandler(  handler );
 		
 		//TODO:Implement search bar handler
-		handler.addServlet(new ServletHolder( new EventListHandler()), "/search-all");
+		handler.addServlet(new ServletHolder( new SearchEventListHandler()), "/search-all");
 		handler.addServlet(new ServletHolder( new RequestHandler()), "/*");
 
 		handler.addServlet(new ServletHolder( new EventListHandler()), "/liste-des-evenements/*");

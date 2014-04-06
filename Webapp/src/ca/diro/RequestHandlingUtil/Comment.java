@@ -40,7 +40,4 @@ public class Comment implements Comparable<Comment>{
 //		if(commentdate.equals(arg0.getCommentdate()))return 0;
 		return commentdate.compareTo(arg0.getCommentdate());
 	}
-	
-//	public int equals()
-	
 }

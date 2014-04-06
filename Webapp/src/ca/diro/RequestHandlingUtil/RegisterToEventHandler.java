@@ -63,7 +63,6 @@ public class RegisterToEventHandler extends RequestHandler {
 				if(isRegisteredSucessfully) response.addHeader("registerSuccess", "true");
 				response.addHeader("isRegistered", "true");
 			}
-//			System.out.println("isRegisteredSucessfully:"+isRegisteredSucessfully);
 //			if(isRegisteredSucessfully){
 //				//redirects the current request to the newly created event
 //				response.addHeader("registerSuccess", "true");
@@ -79,8 +78,7 @@ public class RegisterToEventHandler extends RequestHandler {
 			String setLocation = "/evenement/"+eventID;
 //			System.out.println("\n\nIn registerEvent, redirecting to :"+setLocation+"\tuserId:"+userId+""+"\n\n");
 //			response.sendRedirect(setLocation);
-			RequestDispatcher dispacher = request.getRequestDispatcher(setLocation);
-			dispacher.forward(request, response);
+			request.getRequestDispatcher(setLocation).forward(request, response);
 		}
 	}
 }

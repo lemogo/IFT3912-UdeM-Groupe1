@@ -34,28 +34,26 @@ public class ConnectUserHandler extends RequestHandler {
 		try{
 			//TODO:verify if the user is currently login another account. 
 			HttpSession newUserSession = request.getSession(true);
-			if(newUserSession.getAttribute("auth")!=null){
+			if(newUserSession.getAttribute("auth")!=null)
+			if(newUserSession.getAttribute("auth").equals("true")){
 				//If so,ask the user if he wants to logout from account X and proceed with login 
 				return;
 			}
-
-			//TODO:Verify User's credential and retrieve User id from the database
+			
+			//Verify User's credential and retrieve User id from the database
 			String username = request.getParameter("username");
 			String password = request.getParameter("password");
 
-			//TODO:Authenticate the user here
 			OpenSession openCommand = new OpenSession(username, password);
-
 			Boolean authenticatedSuccessfully  = Main.getDatabase().executeDb(openCommand);
 			ResultSet results = openCommand.getResultSet();
 			Integer accessCount = new Integer(0);
-			
+
 			String userID =""+-1;
 			if (results.next())	userID = results.getString(1);
 			else authenticatedSuccessfully = false;
 
 			if (authenticatedSuccessfully){
-//							System.out.println("before requesting session");
 				newUserSession.setAttribute(USER_ID_ATTRIBUTE, userID);
 				newUserSession.setAttribute("auth", Boolean.TRUE);
 				newUserSession.setAttribute(USERNAME_ATTRIBUTE, username);
@@ -74,7 +72,7 @@ public class ConnectUserHandler extends RequestHandler {
 			}else{
 				//TODO:send error message to user and return to login page
 				String setLocation = "/Webapp/connexion";
-					newUserSession.setAttribute("auth", Boolean.FALSE);
+//				newUserSession.setAttribute("auth", Boolean.FALSE);
 				response.sendRedirect(setLocation);
 			}
 		}

@@ -59,7 +59,6 @@ public class EventHandler extends RequestHandler {
 		// validation) and forwarding for requests that require specific
 		// permissions or handling.
 		processRequest(request, response);
-
 	}
 
 
@@ -71,15 +70,12 @@ public class EventHandler extends RequestHandler {
 
 			//The current request must be a file -> redirect to requestHandler
 			if(	pathInfo.contains(".")) {
-				handleToTheRessource(request, response, pathInfo);
+				handleSimpleRequest(request, response, pathInfo);
 				return;
 			}
-			if(isAnotherContext(pathInfo)
-					//					||pathInfo.startsWith("modify-event")
-					//					||pathInfo.startsWith("delete-event")||pathInfo.startsWith("register-event")
-					){
+			if(isAnotherContext(pathInfo)){
 				String setLocation = "/Webapp/"+pathInfo;
-				response.sendRedirect(setLocation);
+				request.getRequestDispatcher("/"+pathInfo).forward(request, response);
 				return;
 			}
 
@@ -126,7 +122,6 @@ public class EventHandler extends RequestHandler {
 		}
 	}
 
-
 	private void processRequestHelper(HttpServletRequest request,
 			HttpServletResponse response, String eventID, String filename)
 					throws SQLException, UnsupportedEncodingException,
@@ -165,7 +160,6 @@ public class EventHandler extends RequestHandler {
 		}
 	}
 
-
 	private HashMap<String, Object> addAllInfoToMustacheSources(HttpServletResponse response,
 			String eventID, HttpSession session, ResultSet rs, int numPlacesLeft)
 					throws SQLException {
@@ -193,7 +187,6 @@ public class EventHandler extends RequestHandler {
 //		String notificationNumber = countUserNotification(loggedUserId);
 		
 		sources.put("notifications_number", countUserNotification(session));
-		//to display success message
 		sources.put("id", eventID);
 		
 		return sources;
@@ -274,7 +267,7 @@ public class EventHandler extends RequestHandler {
 
 			//The current request must be a file -> redirect to requestHandler
 			if(	pathInfo.contains(".")) {
-				handleToTheRessource(request, response, pathInfo);
+				handleSimpleRequest(request, response, pathInfo);
 				return;
 			}
 			if(isAnotherContext(pathInfo)||pathInfo.startsWith("modify-event")||pathInfo.startsWith("delete-event")
@@ -292,5 +285,4 @@ public class EventHandler extends RequestHandler {
 			catchHelper(request, response, e);
 		}
 	}
-
 }

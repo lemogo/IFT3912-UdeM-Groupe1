@@ -34,20 +34,19 @@ public class ModifyUserInfoHandler extends RequestHandler {
 		try
 		{
 			Boolean modifiedSuccessfully = true;
-			
 			HttpSession session = request.getSession(true);
 			boolean isLoggedIn=session.getAttribute("auth")==null? false:true;
 			
-			int userId = Integer.parseInt((String) (session.getAttribute(USER_ID_ATTRIBUTE)==null?-1:session.getAttribute(USER_ID_ATTRIBUTE)));
-
+			int userId = Integer.parseInt((String) (session.getAttribute(USER_ID_ATTRIBUTE)==null?
+					-1:session.getAttribute(USER_ID_ATTRIBUTE)));
 
 			//TODO:Modify User's Information in the database
 			String id = ""+userId;
 			String fullname = request.getParameter("fullname");
 			String email = request.getParameter("email");
 			String username = (String) session.getAttribute(USERNAME_ATTRIBUTE); 
-			String password = request.getParameter("passwordNew")==""?request.getParameter("passwordOld"):
-						request.getParameter("passwordOld");
+			String password = request.getParameter("passwordNew")==""?
+					request.getParameter("passwordOld"):request.getParameter("passwordOld");
 			String age = request.getParameter("age");
 			String description = request.getParameter("description");
 			
@@ -61,7 +60,6 @@ public class ModifyUserInfoHandler extends RequestHandler {
 				modifiedSuccessfully = Main.getDatabase().executeDb(cmdPassword);
 				
 			}
-			
 			if(modifiedSuccessfully){
 				//TODO:add a header to the response to show a modification success message to the user
 //				response.setHeader(arg0, arg1);
