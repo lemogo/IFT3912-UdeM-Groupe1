@@ -43,16 +43,16 @@ public class EventModificationPageHandler extends RequestHandler {
 //			System.out.println("in EventModification - pathInfo:"+pathInfo+"\tcontextPath:"+("/Webapp/"+pathInfo));
 
 			//The current request must be a file -> redirect to requestHandler
-			if(	pathInfo.contains(".")) {
+			if(	isKnownFileExtention(pathInfo)) {
 				handleSimpleRequest(request, response, pathInfo);
 				return;
 			}else 
 			
 			if(isAnotherContext(pathInfo)&&!pathInfo.equals("")){ 	        
-				String setLocation = "/"+pathInfo;//"/";
-				request.getRequestDispatcher(setLocation).forward(request, response);
-//				String setLocation = "/Webapp/"+pathInfo;//"/";
-//				response.sendRedirect(setLocation);
+//				String setLocation = "/"+pathInfo;//"/";
+//				request.getRequestDispatcher(setLocation).forward(request, response);
+				String setLocation = "/Webapp/"+pathInfo;//"/";
+				response.sendRedirect(setLocation);
 				return;
 			}
 
@@ -109,7 +109,7 @@ public class EventModificationPageHandler extends RequestHandler {
 					String loggedUserId = session.getAttribute(USER_ID_ATTRIBUTE)==null?"-1":(String) session.getAttribute(USER_ID_ATTRIBUTE);
 					sources.put("notifications_number", countUserNotification(loggedUserId));
 
-					sources.put("options", buildSelectTagOptions());
+					sources.put("options", buildSelectOptionsTag(1,1000,rs.getInt("numberplaces")));
 					processTemplate(request, response, "header.html", sources);
 					processTemplate(request, response, filename, sources);
 					processTemplate(request, response, "footer.html");

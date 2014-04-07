@@ -39,11 +39,21 @@ public class EventListHandler extends RequestHandler {
 	public void doGet(
 			HttpServletRequest request, HttpServletResponse response)
 					throws IOException, ServletException {
-		// TODO Implement handling logic for simple requests (and command
-		// validation) and forwarding for requests that require specific
-		// permissions or handling.
 		try{
-			processRequest(request, response);
+			String pathInfo = request.getPathInfo().substring(1);
+
+			//The current request must be a file -> redirect to requestHandler
+			if(	isKnownFileExtention(pathInfo)) {
+				handleSimpleRequest(request, response, pathInfo);
+				return;
+			}
+			if(!pathInfo.equals("passes")&&!pathInfo.equals("annules")&&!pathInfo.equals("futur")&&!pathInfo.equals(""))
+				if(isAnotherContext(pathInfo)){ 	        
+					response.sendRedirect("/Webapp/"+pathInfo);
+					return;
+				}
+
+			processRequest(request, response, pathInfo);
 		}
 		catch (Exception e){
 			catchHelper( request, response, e);		
@@ -51,22 +61,8 @@ public class EventListHandler extends RequestHandler {
 	}
 
 	private void processRequest(HttpServletRequest request,
-			HttpServletResponse response) throws IOException,
+			HttpServletResponse response, String pathInfo) throws IOException,
 			UnsupportedEncodingException, FileNotFoundException, SQLException, ServletException {
-		String pathInfo = request.getPathInfo().substring(1);
-
-		//The current request must be a file -> redirect to requestHandler
-		if(	pathInfo.contains(".")) {
-			handleSimpleRequest(request, response, pathInfo);
-			return;
-		}
-		if(!pathInfo.equals("passes")&&!pathInfo.equals("annules")&&!pathInfo.equals("futur")&&!pathInfo.equals(""))
-			if(isAnotherContext(pathInfo)){ 	        
-				String setLocation = "/Webapp/"+pathInfo;//"/";
-				request.getRequestDispatcher("/"+pathInfo).forward(request, response);
-//				response.sendRedirect(setLocation);
-				return;
-			}
 
 		// create a handle to the resource
 		String filename = "liste-des-evenements.html"; 
@@ -130,25 +126,25 @@ public class EventListHandler extends RequestHandler {
 		}
 	}
 
-	private boolean showAddSucessMessage( HttpServletResponse response) {
-		return (response.getHeader("addSuccess")==null) ? 
-				false:Boolean.parseBoolean(response.getHeader("addSuccess"));
-	}
-
-	private boolean showDeleteSucessMessage( HttpServletResponse response) {
-		return (response.getHeader("deleteSuccess")==null)?
-				false:Boolean.parseBoolean(response.getHeader("deleteSuccess"));
-	}
-
 	@Override
 	public void doPost(
 			HttpServletRequest request, HttpServletResponse response)
 					throws IOException, ServletException {
-		// TODO Implement handling logic for simple requests (and command
-		// validation) and forwarding for requests that require specific
-		// permissions or handling.
 		try{
-			processRequest(request, response);
+			String pathInfo = request.getPathInfo().substring(1);
+
+			//The current request must be a file -> redirect to requestHandler
+			if(	isKnownFileExtention(pathInfo)) {
+				handleSimpleRequest(request, response, pathInfo);
+				return;
+			}
+			if(!pathInfo.equals("passes")&&!pathInfo.equals("annules")&&!pathInfo.equals("futur")&&!pathInfo.equals(""))
+				if(isAnotherContext(pathInfo)){ 	        
+					request.getRequestDispatcher("/"+pathInfo).forward(request, response);
+					return;
+				}
+
+			processRequest(request, response, pathInfo);
 		}
 		catch (Exception e){
 			catchHelper( request, response, e);		

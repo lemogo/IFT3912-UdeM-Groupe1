@@ -35,20 +35,18 @@ public class RemoveNotificationHandler extends RequestHandler {
 	@Override
 	public void doGet(HttpServletRequest request, HttpServletResponse response)
 			throws IOException, ServletException {
-		// TODO Implement handling logic for simple requests (and command
-		// validation) and forwarding for requests that require specific
-		// permissions or handling.
 		try{
 			if(request.getPathInfo()!=null){
 				String pathInfo = request.getPathInfo().startsWith("/")?request.getPathInfo().substring(1):request.getPathInfo();
 
 				//The current request must be a file -> redirect to requestHandler
-				if(	pathInfo.contains(".")) {
+				if(	isKnownFileExtention(pathInfo)) {
 					handleSimpleRequest(request, response, pathInfo);
 					return;
 				}else if(isAnotherContext(pathInfo)&&!pathInfo.equals("")){ 	        
 					String setLocation = "/Webapp/"+pathInfo;//"/";
 					response.sendRedirect(setLocation);
+//					request.getRequestDispatcher("/"+pathInfo).forward(request, response);
 					return;
 				}
 			}
@@ -81,7 +79,7 @@ public class RemoveNotificationHandler extends RequestHandler {
 			processTemplate(request, response, "404.html");
 		}
 		else{
-			setResponseContentCharacterAndStatus(response);
+			setDefaultResponseContentCharacterAndStatus(response);
 			HashMap<String, Object> sources = addAllInfoToMustacheSources(
 					request, response);
 
@@ -111,13 +109,6 @@ public class RemoveNotificationHandler extends RequestHandler {
 		if(isLoggedIn)sources.put("user", isLoggedIn);
 		sources.put("notifications_number", countUserNotification(""+userId));
 		return sources;
-	}
-
-	private void setResponseContentCharacterAndStatus(
-			HttpServletResponse response) {
-		response.setContentType("text/html");
-		response.setCharacterEncoding("utf-8");
-		response.setStatus(HttpServletResponse.SC_OK);
 	}
 
 	private String addUserInfoToMustacheSources(HashMap<String, Object> sources, int userId)

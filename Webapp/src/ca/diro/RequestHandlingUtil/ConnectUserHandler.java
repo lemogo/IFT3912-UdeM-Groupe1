@@ -28,9 +28,6 @@ public class ConnectUserHandler extends RequestHandler {
 	public void doPost(
 			HttpServletRequest request, HttpServletResponse response)
 					throws IOException, ServletException {
-		// TODO Implement handling logic for simple requests (and command
-		// validation) and forwarding for requests that require specific
-		// permissions or handling.
 		try{
 			//TODO:verify if the user is currently login another account. 
 			HttpSession newUserSession = request.getSession(true);
@@ -67,13 +64,15 @@ public class ConnectUserHandler extends RequestHandler {
 				newUserSession.setAttribute("accessCount", accessCount);
 
 				//Redirects the current request to the user info page
-				String setLocation = "/Webapp/membre/"+username;
-				response.sendRedirect(setLocation);
+//				String setLocation = "/Webapp/membre/"+username;
+//				response.sendRedirect(setLocation);
+				request.getRequestDispatcher("/membre/"+username).forward(request, response);
 			}else{
 				//TODO:send error message to user and return to login page
-				String setLocation = "/Webapp/connexion";
+//				String setLocation = "/Webapp/connexion";
+//				response.sendRedirect(setLocation);
 //				newUserSession.setAttribute("auth", Boolean.FALSE);
-				response.sendRedirect(setLocation);
+				request.getRequestDispatcher("/connexion").forward(request, response);
 			}
 		}
 		catch (Exception e){

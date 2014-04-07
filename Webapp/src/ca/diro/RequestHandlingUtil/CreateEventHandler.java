@@ -2,7 +2,6 @@ package ca.diro.RequestHandlingUtil;
 
 import java.io.IOException;
 
-import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -29,9 +28,6 @@ public class CreateEventHandler extends RequestHandler {
 	public void doPost(
 			HttpServletRequest request, HttpServletResponse response)
 					throws IOException, ServletException {
-		// TODO Implement handling logic for simple requests (and command
-		// validation) and forwarding for requests that require specific
-		// permissions or handling.
 		try{
 			String userId = "-1";
 			HttpSession session = request.getSession(true);
@@ -54,17 +50,9 @@ public class CreateEventHandler extends RequestHandler {
 				cmd.getCurentId();
 				//TODO: Add the event to the database
 				if (addedSuccessfully){
-					//TODO:get the event id
-//					ResultSet rs = cmd.getResultSet();
-//					String id = "2";
-//					if(rs.next()) id = rs.getString(1);
-//					System.out.println("resultset id:"+id);
-					//redirects the current request to the newly created event
 					String setLocation = "/liste-des-evenements/";
 					response.addHeader("addSuccess", "true");
-//					response.sendRedirect(setLocation);
-					RequestDispatcher dispacher = request.getRequestDispatcher(setLocation);
-					dispacher.forward(request, response);
+					request.getRequestDispatcher(setLocation).forward(request, response);
 				}else{
 					//redirect the user to the create event page with the same info
 					//if possible indicate to the user the reason of the failure to create the event 
@@ -72,6 +60,7 @@ public class CreateEventHandler extends RequestHandler {
 			}
 			else{
 				//redirect user to login page
+//				request.getRequestDispatcher("/connexion").forward(request, response);
 				response.sendRedirect("/Webapp/connexion");
 				return;
 			}

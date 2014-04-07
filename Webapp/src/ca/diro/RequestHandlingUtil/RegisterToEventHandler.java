@@ -1,8 +1,10 @@
 package ca.diro.RequestHandlingUtil;
 
 import java.io.IOException;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.util.HashMap;
 
-import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -10,6 +12,7 @@ import javax.servlet.http.HttpSession;
 
 import ca.diro.Main;
 import ca.diro.DataBase.DataBase;
+import ca.diro.DataBase.Command.PageInfoEvent;
 import ca.diro.DataBase.Command.SubscriteToEvent;
 
 public class RegisterToEventHandler extends RequestHandler {
@@ -29,9 +32,6 @@ public class RegisterToEventHandler extends RequestHandler {
 	public void doPost(
 			HttpServletRequest request, HttpServletResponse response)
 					throws IOException, ServletException {
-		// TODO Implement handling logic for simple requests (and command
-		// validation) and forwarding for requests that require specific
-		// permissions or handling.
 		String eventID="";
 		String userId="";
 		try{
@@ -41,6 +41,11 @@ public class RegisterToEventHandler extends RequestHandler {
 			boolean isLoggedIn=session.getAttribute("auth")==null? false:true;
 			eventID = request.getParameter("id") == null ? "-1":request.getParameter("id");
 			DataBase db = Main.getDatabase();
+			
+			if(getAvailablePlaces(eventID)<1){
+				//TODO:check if there's still space left in the event if not show an error message (The event is full)
+				return;
+			}
 			
 			if(!isLoggedIn){
 				SubscriteToEvent cmd = new SubscriteToEvent(userId, eventID, false);
@@ -74,11 +79,16 @@ public class RegisterToEventHandler extends RequestHandler {
 			catchHelper( request, response, e);
 		}finally{
 //			response.addHeader("isRegistered", "true");
-//			String setLocation = "/Webapp/evenement/"+eventID;
-			String setLocation = "/evenement/"+eventID;
+			String setLocation = "/Webapp/evenement/"+eventID;
+			response.sendRedirect(setLocation);
+//			String setLocation = "/evenement/"+eventID;
+//			request.getRequestDispatcher(setLocation).forward(request, response);
 //			System.out.println("\n\nIn registerEvent, redirecting to :"+setLocation+"\tuserId:"+userId+""+"\n\n");
-//			response.sendRedirect(setLocation);
-			request.getRequestDispatcher(setLocation).forward(request, response);
 		}
 	}
+	
+	private int getAvailablePlaces(String eventID) throws SQLException {
+		return new PageInfoEvent(eventID,Main.getDatabase()).getAvailablePlaces();
+	}
+
 }

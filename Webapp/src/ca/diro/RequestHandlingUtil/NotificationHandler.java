@@ -36,24 +36,7 @@ public class NotificationHandler extends RequestHandler {
 	@Override
 	public void doGet(HttpServletRequest request, HttpServletResponse response)
 			throws IOException, ServletException {
-		// TODO Implement handling logic for simple requests (and command
-		// validation) and forwarding for requests that require specific
-		// permissions or handling.
 		try{
-			String pathInfo = request.getPathInfo();
-			if(pathInfo!=null)pathInfo=request.getPathInfo().startsWith("/")?request.getPathInfo().substring(1):request.getPathInfo();
-			else pathInfo = "";
-
-			//The current request must be a file -> redirect to requestHandler
-			if(	pathInfo.contains(".")) {
-//				super.doGet(request, response);
-				handleSimpleRequest(request, response, pathInfo);
-				return;
-			}else if(isAnotherContext(pathInfo)&&!pathInfo.equals("")){ 	        
-				String setLocation = "/Webapp/"+pathInfo;//"/";
-				response.sendRedirect(setLocation);
-				return;
-			}
 			processRequestHelper(request, response);
 		}
 		catch (Exception e){
@@ -61,62 +44,25 @@ public class NotificationHandler extends RequestHandler {
 		}
 	}
 
-//	/*
-//	 * (non-Javadoc)
-//	 * 
-//	 * @see org.eclipse.jetty.server.Handler#handle(java.lang.String,
-//	 * org.eclipse.jetty.server.Request, javax.servlet.http.HttpServletRequest,
-//	 * javax.servlet.http.HttpServletResponse)
-//	 */
-//	@Override
-//	public void doPost(
-//			HttpServletRequest request, HttpServletResponse response)
-//					throws IOException, ServletException {
-//		// TODO Implement handling logic for simple requests (and command
-//		// validation) and forwarding for requests that require specific
-//		// permissions or handling.
-//		try{
-//			String pathInfo = request.getPathInfo().startsWith("/")?request.getPathInfo().substring(1):request.getPathInfo();
-//
-//			//The current request must be a file -> redirect to requestHandler
-//			if(	pathInfo.contains(".")) {
-//				handleToTheRessource(request, response, pathInfo);
-//				return;
-//			}else if(isAnotherContext(pathInfo)&&!pathInfo.equals("")){ 	        
-//				String setLocation = "/Webapp/"+pathInfo;
-//				response.sendRedirect(setLocation);
-//				return;
-//			}
-//			processRequestHelper(request, response);
-//		}
-//		catch (Exception e){
-//			catchHelper( request, response, e);		
-//		}
-//	}
-
 	private void processRequestHelper(HttpServletRequest request,
 			HttpServletResponse response) throws UnsupportedEncodingException,
-			FileNotFoundException, IOException, JSONException, SQLException {
-		// create a handle to the resource
+			FileNotFoundException, IOException, JSONException, SQLException, ServletException {
+		//pathInfo should be null
 		String pathInfo = request.getPathInfo();
 		if(pathInfo!=null)pathInfo=request.getPathInfo().startsWith("/")?request.getPathInfo().substring(1):request.getPathInfo();
 		else pathInfo = "";
 
-//		String pathInfo = request.getPathInfo();
-//		if(pathInfo.startsWith("/")) pathInfo = pathInfo.substring(1);
-		
+		//The current request must be a file -> redirect to requestHandler
+//		if(	isKnownFileExtention(pathInfo)) {
+//			handleSimpleRequest(request, response, pathInfo);
+//			return;
+//		}
 		if(isAnotherContext(pathInfo)&&!pathInfo.equals("")){ 	        
 			String setLocation = "/Webapp/"+pathInfo;
 			response.sendRedirect(setLocation);
+//			request.getRequestDispatcher("/"+pathInfo).forward(request, response);
 			return;
 		}
-
-		if(pathInfo.equals("")){
-			//check if user is logged in
-
-			//TODO:if user is not logged in redirect user to login page to view is page
-		}
-
 		String filename = "notifications.html"; 
 		File staticResource = new File(staticDir, filename);
 		File dynamicResource = new File(dynamicDir, filename);
@@ -127,11 +73,9 @@ public class NotificationHandler extends RequestHandler {
 			processTemplate(request, response, "404.html");
 		}
 		else{
-			setResponseContentCharacterAndStatus(response);
-
+			setDefaultResponseContentCharacterAndStatus(response);
 			HashMap<String, Object> sources = addAllInfoToMustacheSources(
 					request, response);
-
 			processTemplate(request, response, "header.html",sources);
 			processTemplate(request, response, filename,sources);
 			processTemplate(request, response, "footer.html");
@@ -141,25 +85,23 @@ public class NotificationHandler extends RequestHandler {
 	private HashMap<String, Object> addAllInfoToMustacheSources(
 			HttpServletRequest request, HttpServletResponse response)
 			throws JSONException, SQLException {
-		//Add User info here!!
 		HashMap<String, Object> sources = new HashMap<String, Object>();
 
 		//TODO:Get the user id using the database and/or if there's no path info the id from the session variable 
 		HttpSession session = request.getSession(true);
 		boolean isLoggedIn=session.getAttribute("auth")==null? false:true;
+		if(!isLoggedIn){
+			//TODO:if user is not logged in redirect user to login page to view is page
+			return sources;
+		}
 		
-		int userId = Integer.parseInt((String) (session.getAttribute(USER_ID_ATTRIBUTE)==null?-1:session.getAttribute(USER_ID_ATTRIBUTE)));
-//		boolean isOwner = userId>0;
-//		sources.put("isOwner", isOwner);
-
 		List<Notification> notificationList = new LinkedList<Notification>();
-		ListUserNotification cmd = new ListUserNotification(""+userId);
-		Main.getDatabase().executeDb(cmd);
+		ListUserNotification listUserNotificationCommand = new ListUserNotification(""+getLoggedUserId(session));
+		Main.getDatabase().executeDb(listUserNotificationCommand);
 		
-		ResultSet rs = cmd.getResultSet();
+		ResultSet rs = listUserNotificationCommand.getResultSet();
 		while (rs.next()){
 			//eventid, title, location, dateevent, description
-			//TODO: get username and tittle;
 			notificationList.add(
 					new Notification(rs.getString("eventid"), 
 //							"Bidon_Username",//
@@ -167,17 +109,15 @@ public class NotificationHandler extends RequestHandler {
 							rs.getString("title")));
 		}
 		sources.put("notificationsList", notificationList);
-
-		addSuccessMessagesToMustacheSources(response, sources, isLoggedIn);
-		
-		String loggedUserId = session.getAttribute(USER_ID_ATTRIBUTE)==null?"-1":(String) session.getAttribute(USER_ID_ATTRIBUTE);
-		sources.put("notifications_number", countUserNotification(loggedUserId));
+		sources.putAll(addSuccessMessagesToMustacheSources(response, isLoggedIn));
+		sources.put("notifications_number", countUserNotification(getLoggedUserId(session)));
 		return sources;
 	}
 
-	private void addSuccessMessagesToMustacheSources(
-			HttpServletResponse response, HashMap<String, Object> sources,
+	private HashMap<String, Object> addSuccessMessagesToMustacheSources(
+			HttpServletResponse response,
 			boolean isLoggedIn) {
+		HashMap<String, Object> sources = new HashMap<String, Object>();
 		//to display success message
 		Boolean addSuccess = response.getHeader("addSuccess") == null? false:true;
 		sources.put("addSuccess", addSuccess);
@@ -188,13 +128,6 @@ public class NotificationHandler extends RequestHandler {
 		Boolean modifySuccess = response.getHeader("modifySuccess") == null? false:true;
 		sources.put("modifySuccess", modifySuccess);
 		if(isLoggedIn)sources.put("user", isLoggedIn);
+		return sources;
 	}
-
-	private void setResponseContentCharacterAndStatus(
-			HttpServletResponse response) {
-		response.setContentType("text/html");
-		response.setCharacterEncoding("utf-8");
-		response.setStatus(HttpServletResponse.SC_OK);
-	}
-
 }

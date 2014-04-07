@@ -27,9 +27,6 @@ public class UnregisterToEventHandler extends RequestHandler {
 	public void doPost(
 			HttpServletRequest request, HttpServletResponse response)
 					throws IOException, ServletException {
-		// TODO Implement handling logic for simple requests (and command
-		// validation) and forwarding for requests that require specific
-		// permissions or handling.
 		try{
 			Boolean unregisteredSuccessfully;
 			HttpSession session = request.getSession(true);

@@ -27,9 +27,6 @@ public class CreateUserHandler extends RequestHandler {
 	public void doPost(
 			HttpServletRequest request, HttpServletResponse response)
 					throws IOException, ServletException {
-		// TODO Implement handling logic for simple requests (and command
-		// validation) and forwarding for requests that require specific
-		// permissions or handling.
 		try{
 			boolean isLoggedIn=request.getParameter(USER_ID_ATTRIBUTE)==null? false:true;
 			if(isLoggedIn){
@@ -39,6 +36,7 @@ public class CreateUserHandler extends RequestHandler {
 				String username = request.getParameter(USERNAME_ATTRIBUTE);
 				String setLocation = "/Webapp/membre/"+username;
 				response.sendRedirect(setLocation);
+//				request.getRequestDispatcher("/membre/"+username).forward(request, response);
 			}
 			String fullname = request.getParameter("fullname");
 			String email = request.getParameter("email");
@@ -47,6 +45,11 @@ public class CreateUserHandler extends RequestHandler {
 			String age = request.getParameter("age");
 			String description = request.getParameter("description");
 
+			//TODO:check if the userName or the email already exist
+			
+			
+			//TODO:check if user info is legal
+			
 			//Add the User in the database
 			DataBase db = Main.getDatabase();
 			CreateUserAccount cmd = new CreateUserAccount(userName, password, fullname, email, age, description, db);
@@ -61,13 +64,12 @@ public class CreateUserHandler extends RequestHandler {
 				System.out.println("failled to create new user account");
 				String setLocation = "/Webapp/enregistrement";
 				response.sendRedirect(setLocation);
+				request.getRequestDispatcher("/enregistrement").forward(request, response);
 			}
 		}
 		catch (Exception e){
 			System.out.println("In CreateUserHandler catch exception");
 			catchHelper(request, response, e);		
 		}
-
 	}
-
 }

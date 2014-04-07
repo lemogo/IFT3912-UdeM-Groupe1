@@ -17,6 +17,7 @@ import java.util.Properties;
 
 
 
+
 //import javax.mail.Message;
 //import javax.mail.Multipart;
 //import javax.mail.Session;
@@ -55,30 +56,29 @@ public class EventHandler extends RequestHandler {
 	public void doGet(
 			HttpServletRequest request, HttpServletResponse response)
 					throws IOException, ServletException {
-		// TODO Implement handling logic for simple requests (and command
-		// validation) and forwarding for requests that require specific
-		// permissions or handling.
+		try{
 		processRequest(request, response);
+		}catch (Exception e){
+			System.out.println("In eventHanler GET catch exception");
+			catchHelper(request, response, e);
+		}
 	}
 
 
 	private void processRequest(HttpServletRequest request,
 			HttpServletResponse response) throws IOException,
-			UnsupportedEncodingException, FileNotFoundException {
-		try{
+			UnsupportedEncodingException, FileNotFoundException, ServletException, SQLException {
 			String pathInfo = request.getPathInfo().substring(1);
 
 			//The current request must be a file -> redirect to requestHandler
-			if(	pathInfo.contains(".")) {
+			if(	isKnownFileExtention(pathInfo)) {
 				handleSimpleRequest(request, response, pathInfo);
 				return;
 			}
 			if(isAnotherContext(pathInfo)){
-				String setLocation = "/Webapp/"+pathInfo;
 				request.getRequestDispatcher("/"+pathInfo).forward(request, response);
 				return;
 			}
-
 			// create a handle to the resource
 			String filename = "evenement.html"; 
 			File staticResource = new File(staticDir, filename);
@@ -113,87 +113,89 @@ public class EventHandler extends RequestHandler {
 				//				mp.addBodyPart(mbp);
 				//				msg.setContent(mp);
 				//				Transport.send(msg);
-
 			}
-		}
-		catch (Exception e){
-			System.out.println("In eventHanler GET catch exception");
-			catchHelper(request, response, e);
-		}
 	}
 
 	private void processRequestHelper(HttpServletRequest request,
 			HttpServletResponse response, String eventID, String filename)
 					throws SQLException, UnsupportedEncodingException,
 					FileNotFoundException, IOException {
-		response.setContentType("text/html");
-		response.setCharacterEncoding("utf-8");
-		response.setStatus(HttpServletResponse.SC_OK);
-
+		setDefaultResponseContentCharacterAndStatus(response);
 		//TODO:Get the user event info from the database
-		DataBase myDb = Main.getDatabase();
-		PageInfoEvent cmd = new PageInfoEvent(eventID,myDb);
-		String userId = "-1";
-
+		
 		HttpSession session = request.getSession(true);
 		boolean isLoggedIn=session.getAttribute("auth")==null? false:true;
 		HashMap<String, Object> sources = new HashMap<String, Object>();
-
+		
+		String userId = "-1";
 		if (isLoggedIn) userId = (String) session.getAttribute(USER_ID_ATTRIBUTE);
 		if( isRegisteredToEvent(eventID, userId)) response.setHeader("isRegistered", "true");
+		
+		sources.putAll(buildAllMustacheSourcesInfo(response, eventID, session, isLoggedIn));
 
-		if( myDb.executeDb(cmd)){ 
-			ResultSet rs = cmd.getResultSet();
-
-			if (rs.next()) {
-
-				sources.putAll(addAllInfoToMustacheSources(response, eventID, session, rs, cmd.getAvailablePlaces()));
-				sources.put("user", isLoggedIn);
-				sources.putAll(addSuccessInfoToMustacheSources(response, session, rs.getString("username")));
-
-				processTemplate(request, response, "header.html",sources);
-				processTemplate(request, response, filename,sources);
-				processTemplate(request, response, "footer.html");
-			}else{
-				//TODO:show error message -- The event ____ does not exist
-			}
-		}
+		processTemplate(request, response, "header.html",sources);
+		processTemplate(request, response, filename,sources);
+		processTemplate(request, response, "footer.html");
 	}
 
-	private HashMap<String, Object> addAllInfoToMustacheSources(HttpServletResponse response,
-			String eventID, HttpSession session, ResultSet rs, int numPlacesLeft)
-					throws SQLException {
+
+	private HashMap<String, Object> isOwnerMustacheSource(
+			String loggedUserUsername, String eventUsername)
+			throws SQLException {
 		HashMap<String, Object> sources = new HashMap<String, Object>();
-//		String username =rs.getString("username");
-
-		String badgeClasse = computeBadgeColor(numPlacesLeft);
-		sources.put("event",
-				new Event(rs.getString("username"), rs.getString("title"), rs.getString("dateevent"),
-						rs.getString("location"), rs.getString("description"), eventID,
-						badgeClasse,""+numPlacesLeft)
-				);
-//		String numberplaces = rs.getString("numberplaces");
-		int numPlacesUsed = Integer.parseInt(rs.getString("numberplaces"))-numPlacesLeft;
-		sources.put("numPeople",""+numPlacesUsed);
-
-		sources.put("title",rs.getString("title"));
-		sources.put("creatorUsername",rs.getString("username"));
-		//username, description, datecreation, suserid
-		sources.put("comment", getCommentList(eventID));
-//		sources.put("numPeople",rs.getString("numberplaces"));
-		
-//		String loggedUsername = session.getAttribute(USERNAME_ATTRIBUTE)==null?"Anonymous":(String) session.getAttribute(USERNAME_ATTRIBUTE);
-//		String loggedUserId = session.getAttribute(USER_ID_ATTRIBUTE)==null?"-1":(String) session.getAttribute(USER_ID_ATTRIBUTE);
-//		String notificationNumber = countUserNotification(loggedUserId);
-		
-		sources.put("notifications_number", countUserNotification(session));
-		sources.put("id", eventID);
-		
+		boolean isOwner = false;//response.getHeader("isOwner")!=null?true:false;
+		if(eventUsername.equals(loggedUserUsername)) isOwner = true;
+		if(isOwner)sources.put("isOwner", isOwner);
 		return sources;
 	}
 
 
-	private List<Comment> getCommentList(String eventID) throws SQLException {
+	private HashMap<String, Object> buildMustacheSourcesEventInfo(String eventID,
+			  HttpSession session) throws SQLException {
+		HashMap<String, Object> sources = new HashMap<String, Object>();
+		
+		DataBase myDb = Main.getDatabase();
+		PageInfoEvent pageInfoEventCommand = new PageInfoEvent(eventID,myDb);
+		if( myDb.executeDb(pageInfoEventCommand)){ 
+			ResultSet rs = pageInfoEventCommand.getResultSet();
+
+			if (rs.next()) {
+				int numPlacesLeft = pageInfoEventCommand.getAvailablePlaces();
+				int numPlacesUsed = rs.getInt("numberplaces")-numPlacesLeft;
+				sources.put("numPeople",""+numPlacesUsed);
+				sources.put("creatorUsername",rs.getString("username"));
+				
+				String badgeClasse = computeBadgeColor(numPlacesLeft);
+				sources.put("event",
+						new Event(rs.getString("username"), rs.getString("title"), rs.getString("dateevent"),
+								rs.getString("location"), rs.getString("description"), eventID,
+								badgeClasse,""+numPlacesLeft)
+						);
+				sources.putAll(isOwnerMustacheSource((String)session.getAttribute(USERNAME_ATTRIBUTE), rs.getString("username")));
+
+			}else{
+				//TODO:show error message -- The event ____ does not exist
+			}
+		}
+		return sources;
+	}
+
+	private HashMap<String, Object> buildAllMustacheSourcesInfo(HttpServletResponse response,
+			String eventID, HttpSession session, boolean isLoggedIn)
+					throws SQLException {
+		HashMap<String, Object> sources = new HashMap<String, Object>();
+		sources.put("comment", buildCommentList(eventID));
+		sources.put("notifications_number", countUserNotification(session));
+		sources.put("id", eventID);
+		sources.put("user", isLoggedIn);
+		sources.putAll(buildMustacheSourcesSuccessInfo(response, session));
+		sources.putAll(buildMustacheSourcesEventInfo(eventID,session));
+
+		return sources;
+	}
+
+
+	private List<Comment> buildCommentList(String eventID) throws SQLException {
 		ListCommentEvent cmd = new ListCommentEvent(eventID);
 		boolean asExecuted=Main.getDatabase().executeDb(cmd);
 		List<Comment> commentList = new LinkedList<Comment>();
@@ -210,16 +212,11 @@ public class EventHandler extends RequestHandler {
 	}
 
 
-	private HashMap<String, Object> addSuccessInfoToMustacheSources(HttpServletResponse response,
-			HttpSession session,
-			String username) {
+	private HashMap<String, Object> buildMustacheSourcesSuccessInfo(HttpServletResponse response,
+			HttpSession session) {
 		HashMap<String, Object> sources = new HashMap<String, Object>();
 		boolean addSuccess = response.getHeader("addSuccess")==null ? false:Boolean.parseBoolean(response.getHeader("addSuccess"));
 		if(addSuccess) sources.put("addSuccess", addSuccess);
-
-		boolean isOwner = response.getHeader("isOwner")!=null?true:false;
-		if(username.equals(session.getAttribute(USERNAME_ATTRIBUTE))) isOwner = true;
-		if(isOwner)sources.put("isOwner", isOwner);
 
 		boolean registerSuccess = response.getHeader("registerSuccess")==null ? false:Boolean.parseBoolean(response.getHeader("registerSuccess"));
 		if(registerSuccess)sources.put("registerSuccess", registerSuccess);
@@ -259,27 +256,8 @@ public class EventHandler extends RequestHandler {
 	public void doPost(
 			HttpServletRequest request, HttpServletResponse response)
 					throws IOException, ServletException {
-		// TODO Implement handling logic for simple requests (and command
-		// validation) and forwarding for requests that require specific
-		// permissions or handling.
 		try{
-			String pathInfo = request.getPathInfo().startsWith("/")?request.getPathInfo().substring(1):request.getPathInfo();
-
-			//The current request must be a file -> redirect to requestHandler
-			if(	pathInfo.contains(".")) {
-				handleSimpleRequest(request, response, pathInfo);
-				return;
-			}
-			if(isAnotherContext(pathInfo)||pathInfo.startsWith("modify-event")||pathInfo.startsWith("delete-event")
-					||pathInfo.startsWith("register-event")){
-				String setLocation = "/"+pathInfo;
-				RequestDispatcher dispatcher = request.getRequestDispatcher(setLocation);
-				dispatcher.forward(request, response);
-				return;
-			}
-
 			processRequest(request, response);
-
 		}catch (Exception e){
 			System.out.println("In eventHanler Post catch exception");
 			catchHelper(request, response, e);

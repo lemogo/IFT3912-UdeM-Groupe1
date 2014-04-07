@@ -33,15 +33,12 @@ public class UserModificationPageHandler extends RequestHandler {
 	@Override
 	public void doGet(HttpServletRequest request, HttpServletResponse response)
 			throws IOException, ServletException {
-		// TODO Implement handling logic for simple requests (and command
-		// validation) and forwarding for requests that require specific
-		// permissions or handling.
 		try{
 			if(request.getPathInfo()!=null){
 				String pathInfo = request.getPathInfo().startsWith("/")?request.getPathInfo().substring(1):request.getPathInfo();
 
 				//The current request must be a file -> redirect to requestHandler
-				if(	pathInfo.contains(".")) {
+				if(	isKnownFileExtention(pathInfo)) {
 					handleSimpleRequest(request, response, pathInfo);
 					return;
 				}else if(isAnotherContext(pathInfo)&&!pathInfo.equals("")){ 	        
@@ -102,8 +99,6 @@ public class UserModificationPageHandler extends RequestHandler {
 
 		int userId = Integer.parseInt((String) (session.getAttribute(USER_ID_ATTRIBUTE)==null?-1:session.getAttribute(USER_ID_ATTRIBUTE)));
 
-		sources.put("options", buildSelectTagOptions());
-
 		addUserInfoToMustacheSources(sources, userId);
 
 		if(isLoggedIn)sources.put("user", isLoggedIn);
@@ -130,6 +125,7 @@ public class UserModificationPageHandler extends RequestHandler {
 				//				password  = rs.getString("password"); 
 				description = rs.getString("description");
 			}
+			sources.put("options", buildSelectOptionsTag(1,121,rs.getInt("age")));
 		}else{
 			//TODO:send error message to user and return to login page
 		}

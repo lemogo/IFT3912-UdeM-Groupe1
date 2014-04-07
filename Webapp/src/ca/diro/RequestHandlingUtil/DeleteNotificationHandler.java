@@ -29,21 +29,16 @@ public class DeleteNotificationHandler extends RequestHandler {
 	public void doPost(
 			HttpServletRequest request, HttpServletResponse response)
 					throws IOException, ServletException {
-		// TODO Implement handling logic for simple requests (and command
-		// validation) and forwarding for requests that require specific
-		// permissions or handling.
 		try{
+			//TODO:verify if the user is the owner of the notification to delete
+			
 			HttpSession session = request.getSession(true);
-//			boolean isLoggedIn=session.getAttribute("auth")==null? false:true;
-
 			String userID = (String) session.getAttribute(USER_ID_ATTRIBUTE);
-//			String username = (String) session.getAttribute(USERNAME_ATTRIBUTE);
 			String eventID = (String) request.getParameter("eventid");
 
-			//TODO:Get the user event info from the database
+			//Delete the notification from the database
 			DataBase myDb = Main.getDatabase();
 			DeleteNotification cmd = new DeleteNotification(eventID, userID);
-
 			if( myDb.executeDb(cmd)){ 
 
 			}else{
@@ -53,6 +48,7 @@ public class DeleteNotificationHandler extends RequestHandler {
 			//refresh notification page
 			String setLocation = "/Webapp/notifications";
 			response.sendRedirect(setLocation);
+//			request.getRequestDispatcher("/notifications").forward(request, response);
 		}
 		catch (Exception e){
 			System.out.println("In deleteEventHanler catch exception");

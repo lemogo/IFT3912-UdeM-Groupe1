@@ -36,18 +36,14 @@ public class UserHandler extends RequestHandler {
 	@Override
 	public void doGet(HttpServletRequest request, HttpServletResponse response)
 			throws IOException, ServletException {
-		// TODO Implement handling logic for simple requests (and command
-		// validation) and forwarding for requests that require specific
-		// permissions or handling.
 		try{
 			String pathInfo = request.getPathInfo().startsWith("/")?request.getPathInfo().substring(1):request.getPathInfo();
-
 			//The current request must be a file -> redirect to requestHandler
-			if(	pathInfo.contains(".")) {
-//				super.doGet(request, response);
+			if(	isKnownFileExtention(pathInfo)) {
 				handleSimpleRequest(request, response, pathInfo);
 				return;
 			}else if(isAnotherContext(pathInfo)&&!pathInfo.equals("")){ 	        
+//				request.getRequestDispatcher("/"+pathInfo).forward(request, response);
 				String setLocation = "/Webapp/"+pathInfo;//"/";
 				response.sendRedirect(setLocation);
 				return;
@@ -70,19 +66,17 @@ public class UserHandler extends RequestHandler {
 	public void doPost(
 			HttpServletRequest request, HttpServletResponse response)
 					throws IOException, ServletException {
-		// TODO Implement handling logic for simple requests (and command
-		// validation) and forwarding for requests that require specific
-		// permissions or handling.
 		try{
 			String pathInfo = request.getPathInfo().startsWith("/")?request.getPathInfo().substring(1):request.getPathInfo();
 
 			//The current request must be a file -> redirect to requestHandler
-			if(	pathInfo.contains(".")) {
+			if(	isKnownFileExtention(pathInfo)) {
 				handleSimpleRequest(request, response, pathInfo);
 				return;
 			}else if(isAnotherContext(pathInfo)&&!pathInfo.equals("")){ 	        
-				String setLocation = "/Webapp/"+pathInfo;
-				response.sendRedirect(setLocation);
+				request.getRequestDispatcher("/"+pathInfo).forward(request, response);
+//				String setLocation = "/Webapp/"+pathInfo;
+//				response.sendRedirect(setLocation);
 				return;
 			}
 			processRequestHelper(request, response);
@@ -95,9 +89,6 @@ public class UserHandler extends RequestHandler {
 	private void processRequestHelper(HttpServletRequest request,
 			HttpServletResponse response) throws UnsupportedEncodingException,
 			FileNotFoundException, IOException,  SQLException {
-		//		System.out.println("In member handler");
-		// create a handle to the resource
-
 		String pathInfo = request.getPathInfo();
 		if(pathInfo.startsWith("/")) pathInfo = pathInfo.substring(1);
 
@@ -182,7 +173,7 @@ public class UserHandler extends RequestHandler {
 	private HashMap<String, Object> buildMustacheSourcesUserRegisteredEventList(
 			int userId, String username)
 					throws SQLException {
-		//TODO: Get the user's registeredEventsList from the database
+		//Get the user's registeredEventsList from the database
 		HashMap<String, Object> sources = new HashMap<String, Object>();
 		ListRegisterEvent userRegisterEvent= new ListRegisterEvent(""+userId);
 		Boolean asExecuted3 = Main.getDatabase().executeDb(userRegisterEvent);

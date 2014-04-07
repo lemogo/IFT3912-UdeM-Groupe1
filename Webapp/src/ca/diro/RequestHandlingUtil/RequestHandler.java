@@ -59,11 +59,9 @@ public class RequestHandler extends HttpServlet {
 	private static File	rootDir		= new File(".");
 
 	// Ressources statiques -> ne seront pas interpretees par Mustache
-	//	protected static File	staticDir	= new File("static");
 	protected static File	staticDir	= new File(rootDir, "./static");
 
 	// Ressources dynamiques -> seront interpretees par Mustache
-	//	protected static File	dynamicDir	= new File( "templates");
 	protected static File	dynamicDir	= new File(rootDir, "templates");
 
 	public static final String USER_ID_ATTRIBUTE="UserID";
@@ -78,9 +76,6 @@ public class RequestHandler extends HttpServlet {
 	@Override
 	public void doGet(HttpServletRequest request, HttpServletResponse response)
 			throws IOException, ServletException {
-		// TODO Implement handling logic for simple requests (and command
-		// validation) and forwarding for requests that require specific
-		// permissions or handling.
 		try{
 			String pathInfo = request.getPathInfo();
 			if(pathInfo.startsWith("/"))pathInfo = pathInfo.substring(1);
@@ -97,9 +92,6 @@ public class RequestHandler extends HttpServlet {
 	
 	public void doPost(HttpServletRequest request, HttpServletResponse response)
 			throws IOException, ServletException {
-		// TODO Implement handling logic for simple requests (and command
-		// validation) and forwarding for requests that require specific
-		// permissions or handling.
 		try{
 			String pathInfo = request.getPathInfo();
 			if(pathInfo.startsWith("/"))pathInfo = pathInfo.substring(1);
@@ -116,20 +108,19 @@ public class RequestHandler extends HttpServlet {
 	protected void handleSimpleRequest(HttpServletRequest request,
 			HttpServletResponse response, String pathInfo) throws IOException,
 			UnsupportedEncodingException, FileNotFoundException, ServletException {
-		if ( pathInfo.equals("accueil")) pathInfo = "accueil.html";
-		else if ( pathInfo.equals("ajouter-un-evenement") ) {
+		if ( pathInfo.equals("ajouter-un-evenement") ) {
 			//if user is not logged in redirect him to sign up page (or maybe sign in) 
 			if (request.getSession(true).getAttribute("auth")==null){ 
 				response.sendRedirect("/Webapp/connexion");
+//				request.getRequestDispatcher("/connexion").forward(request, response);
 				return;
 			}
 			pathInfo = pathInfo+".html";
 		}
-		else if ( pathInfo.equals("enregistrement") || pathInfo.equals("ajouter-un-evenement") ||pathInfo.equals("modifier-mes-informations")
+		else if ( pathInfo.equals("accueil")||pathInfo.equals("enregistrement") || pathInfo.equals("ajouter-un-evenement") 
+//				||pathInfo.equals("modifier-mes-informations")
 				||pathInfo.equals("connexion")) pathInfo = pathInfo+".html";
 		else if(isAnotherContext(pathInfo)&&!pathInfo.equals("")){ 	        
-			String setLocation = "/"+pathInfo;//"/";
-//			request.getRequestDispatcher(setLocation);
 			request.getRequestDispatcher("/"+pathInfo).forward(request, response);
 			return;
 		}
@@ -142,7 +133,6 @@ public class RequestHandler extends HttpServlet {
 		// Ressource existe
 		if(pathInfo.startsWith("https://")){
 			response.setStatus(HttpServletResponse.SC_OK);
-			//			copy(staticResource, response.getOutputStream());
 			//TODO:find out how to deal with this case
 		}
 		else if (!staticResource.exists() && !dynamicResource.exists()){
@@ -161,7 +151,7 @@ public class RequestHandler extends HttpServlet {
 
 			HashMap<String, Object> sources = new HashMap<String, Object>();
 			sources.put("user", isLoggedIn);
-			sources.put("options", buildSelectTagOptions());
+			sources.put("options", buildSelectOptionsTag(1,99,18));
 
 			processTemplate(request, response, "header.html", sources);
 			processTemplate(request, response, filename,sources);
@@ -196,6 +186,13 @@ public class RequestHandler extends HttpServlet {
 		else{
 			response.setContentType("text/html");
 		}
+	}
+	
+	protected boolean isKnownFileExtention(String extention){
+		return (		extention.endsWith(".css")||extention.endsWith(".js")
+				||extention.endsWith(".png")||extention.endsWith(".jpg")
+				||extention.endsWith(".ico")||extention.endsWith(".ttf")
+				||extention.endsWith(".woff"));
 	}
 
 	protected void catchHelper( HttpServletRequest request,
@@ -337,9 +334,22 @@ public class RequestHandler extends HttpServlet {
 		return badgeClasse;
 	}
 
-	protected String buildSelectTagOptions() {
+	protected String buildSelectOptionsTag() {
 		String options = "";
 		for(int i = 0; i<99;i++){
+			options+="<option value=\""+i+"\">"+i+"</option>\n";
+		}
+		return options;
+	}
+
+	protected String buildSelectOptionsTag(int smallestIndex, int biggestIndext, Integer selectedIndex) {
+		String options = "";
+		for(int i = smallestIndex; i<=selectedIndex;i++){
+			options+="<option value=\""+i+"\">"+i+"</option>\n";
+		}
+//		if(selectedIndex!=null) 
+			options+="<option selected=\"selected\" value=\""+selectedIndex+"\">"+selectedIndex+"</option>\n";
+		for(int i = selectedIndex; i<=biggestIndext;i++){
 			options+="<option value=\""+i+"\">"+i+"</option>\n";
 		}
 		return options;
@@ -349,6 +359,24 @@ public class RequestHandler extends HttpServlet {
 		response.setContentType("text/html");
 		response.setCharacterEncoding("utf-8");
 		response.setStatus(HttpServletResponse.SC_OK);
+	}
+
+	protected boolean showAddSucessMessage(HttpServletResponse response) {
+		return (response.getHeader("addSuccess")==null) ? 
+				false:Boolean.parseBoolean(response.getHeader("addSuccess"));
+	}
+
+	protected boolean showDeleteSucessMessage(HttpServletResponse response) {
+		return (response.getHeader("deleteSuccess")==null)?
+				false:Boolean.parseBoolean(response.getHeader("deleteSuccess"));
+	}
+
+	protected String getLoggedUserId(HttpSession session) {
+		return session.getAttribute(USER_ID_ATTRIBUTE)==null?"-1":(String) session.getAttribute(USER_ID_ATTRIBUTE);
+	}
+
+	protected boolean isLoggedIn(HttpSession session) {
+		return session.getAttribute("auth")==null? false:true;
 	}
 
 }

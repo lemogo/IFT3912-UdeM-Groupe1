@@ -30,31 +30,29 @@ public class ModifyEventHandler extends RequestHandler {
 	public void doPost(
 			HttpServletRequest request, HttpServletResponse response)
 					throws IOException, ServletException {
-		// TODO Implement handling logic for simple requests (and command
-		// validation) and forwarding for requests that require specific
-		// permissions or handling.
 		try
 		{
+			//TODO: check if the user is the owner of the modified event 
+			
 			Boolean modifiedSuccessfully = true;
-
-			//TODO:modify the event in the database
 			String userId = request.getParameter("id");
 			String title = request.getParameter("eventName");
 			String date = request.getParameter("eventDate");
 			String location = request.getParameter("eventLocation");
 			String nbplace = request.getParameter("eventNumPeople");
 			String description = request.getParameter("eventDescription");
-
+			//modify the event in the database
 			EditEvent cmd = new EditEvent(userId, title, date, location, nbplace, description);
 			modifiedSuccessfully = Main.getDatabase().executeDb(cmd);
 
 			if(modifiedSuccessfully){
 				//redirects the current request to the newly created event
-				String setLocation = "/Webapp/evenement/"+userId;//eventID;
-//				String setLocation = "/Webapp/liste-des-evenements/";
-				response.sendRedirect(setLocation);
+//				String setLocation = "/Webapp/evenement/"+userId;
+//				response.sendRedirect(setLocation);
+				request.getRequestDispatcher("/evenement/"+userId).forward(request, response);
 			}else{
 				//TODO:show modification error message
+				request.getRequestDispatcher("/modifier-mes-informations/").forward(request, response);
 			}
 		}
 		catch (Exception e){

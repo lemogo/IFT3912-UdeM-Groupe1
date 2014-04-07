@@ -17,10 +17,6 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import ca.diro.Main;
-import ca.diro.DataBase.Command.Command;
-import ca.diro.DataBase.Command.ListCancelledEvent;
-import ca.diro.DataBase.Command.ListComingEvent;
-import ca.diro.DataBase.Command.ListPassedEvent;
 import ca.diro.DataBase.Command.PageInfoEvent;
 import ca.diro.DataBase.Command.ResearchEvent;
 
@@ -30,27 +26,17 @@ public class SearchEventListHandler extends RequestHandler {
 	 */
 	private static final long serialVersionUID = 5818151764848416043L;
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see org.eclipse.jetty.server.Handler#handle(java.lang.String,
-	 * org.eclipse.jetty.server.Request, javax.servlet.http.HttpServletRequest,
-	 * javax.servlet.http.HttpServletResponse)
-	 */
-//	@Override
-//	public void doGet(
-//			HttpServletRequest request, HttpServletResponse response)
-//					throws IOException, ServletException {
-//		// TODO Implement handling logic for simple requests (and command
-//		// validation) and forwarding for requests that require specific
-//		// permissions or handling.
-//		try{
-//			processRequest(request, response);
-//		}
-//		catch (Exception e){
-//			catchHelper( request, response, e);		
-//		}
-//	}
+	@Override
+	public void doPost(
+			HttpServletRequest request, HttpServletResponse response)
+					throws IOException, ServletException {
+		try{
+			processRequest(request, response);
+		}
+		catch (Exception e){
+			catchHelper( request, response, e);		
+		}
+	}
 
 	private void processRequest(HttpServletRequest request,
 			HttpServletResponse response) throws IOException,
@@ -64,10 +50,13 @@ public class SearchEventListHandler extends RequestHandler {
 			handleSimpleRequest(request, response, pathInfo);
 			return;
 		}
-		if(!pathInfo.equals("passes")&&!pathInfo.equals("annules")&&!pathInfo.equals("futur")&&!pathInfo.equals(""))
+		
+		//the pathInfo should be null
+//		if(!pathInfo.equals("passes")&&!pathInfo.equals("annules")&&!pathInfo.equals("futur")&&!pathInfo.equals(""))
 			if(isAnotherContext(pathInfo)){ 	        
 				String setLocation = "/Webapp/"+pathInfo;//"/";
 				response.sendRedirect(setLocation);
+//				request.getRequestDispatcher("/"+pathInfo).forward(request, response);
 				return;
 			}
 
@@ -92,20 +81,25 @@ public class SearchEventListHandler extends RequestHandler {
 			FileNotFoundException, IOException {
 		setDefaultResponseContentCharacterAndStatus(response);
 		
+		HashMap<String, Object> sources = new HashMap<String, Object>();
+		sources.putAll(buildSearchEventListMustacheSources(request));
+		
+		HttpSession session = request.getSession(true);
+		sources.put("user", isLoggedIn(session));
+		sources.put("notifications_number", countUserNotification(getLoggedUserId(session)));
+
+		processTemplate(request, response, "header.html", sources);
+		processTemplate(request, response, filename, sources);
+		processTemplate(request, response, "footer.html");
+	}
+
+	private HashMap<String, Object> buildSearchEventListMustacheSources(
+			HttpServletRequest request )
+			throws SQLException {
+		HashMap<String, Object> sources = new HashMap<String, Object>();
 		LinkedList<String> searchInput = new LinkedList<String>(Arrays.asList(request.getParameter("searchInput").split(" ")));
 		ResearchEvent researchComand = new ResearchEvent(searchInput);
 		if(Main.getDatabase().executeDb(researchComand)){
-		
-		
-//		Command getListCommand;
-//		if(pathInfo.equals("passes"))
-//			getListCommand = new ListPassedEvent();
-//		else if(pathInfo.equals("annules"))
-//			getListCommand = new ListCancelledEvent();
-//		else getListCommand= new ListComingEvent();
-//
-//		if( Main.getDatabase().executeDb(getListCommand)){ 
-//			ResultSet listResultSet = getListCommand.getResultSet();
 			ResultSet listResultSet = researchComand.getResultSet();
 			List<Event> eventList = new LinkedList<Event>();  
 			while(listResultSet.next()) {
@@ -119,49 +113,8 @@ public class SearchEventListHandler extends RequestHandler {
 						badgeClasse, ""+numPlacesLeft));
 			}
 			//add event info here!!
-			HashMap<String, Object> sources = new HashMap<String, Object>();
 			sources.put("events",eventList);
-
-			//to display success message
-			HttpSession session = request.getSession(true);
-			boolean isLoggedIn=session.getAttribute("auth")==null? false:true;
-			
-			sources.put("deleteSuccess", showDeleteSucessMessage(response));
-			sources.put("addSuccess", showAddSucessMessage(response));
-			sources.put("user", isLoggedIn);
-
-			String loggedUserId = session.getAttribute(USER_ID_ATTRIBUTE)==null?"-1":(String) session.getAttribute(USER_ID_ATTRIBUTE);
-			sources.put("notifications_number", countUserNotification(loggedUserId));
-
-			processTemplate(request, response, "header.html", sources);
-			processTemplate(request, response, filename, sources);
-			processTemplate(request, response, "footer.html");
 		}
+		return sources;
 	}
-
-	private boolean showAddSucessMessage( HttpServletResponse response) {
-		return (response.getHeader("addSuccess")==null) ? 
-				false:Boolean.parseBoolean(response.getHeader("addSuccess"));
-	}
-
-	private boolean showDeleteSucessMessage( HttpServletResponse response) {
-		return (response.getHeader("deleteSuccess")==null)?
-				false:Boolean.parseBoolean(response.getHeader("deleteSuccess"));
-	}
-
-	@Override
-	public void doPost(
-			HttpServletRequest request, HttpServletResponse response)
-					throws IOException, ServletException {
-		// TODO Implement handling logic for simple requests (and command
-		// validation) and forwarding for requests that require specific
-		// permissions or handling.
-		try{
-			processRequest(request, response);
-		}
-		catch (Exception e){
-			catchHelper( request, response, e);		
-		}
-	}
-	
 }
