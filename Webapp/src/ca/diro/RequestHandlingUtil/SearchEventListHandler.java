@@ -86,18 +86,13 @@ public class SearchEventListHandler extends RequestHandler {
 		HashMap<String, Object> sources = new HashMap<String, Object>();
 		
 		try {
-			sources.put("events", buildSearchEventList(request).toString());
+			//TODO: Determine if this is the correct way to send this information.
+			response.setHeader("events", buildSearchEventList(request).toString());
 		} catch (JSONException e) {
 			e.printStackTrace();
 		}
 		
 		HttpSession session = request.getSession(true);
-		sources.put("user", isLoggedIn(session));
-		sources.put("notifications_number", countUserNotification(getLoggedUserId(session)));
-
-		processTemplate(request, response, "header.html", sources);
-		processTemplate(request, response, filename, sources);
-		processTemplate(request, response, "footer.html");
 	}
 
 	private JSONArray buildSearchEventList(
