@@ -27,6 +27,10 @@ public class EventListHandler extends RequestHandler {
 	 * 
 	 */
 	private static final long serialVersionUID = 5818151764848416043L;
+	
+	private static final String EVENT_FUTURE = "0";
+	private static final String EVENT_PAST = "1";
+	private static final String EVENT_CANCELLED = "2";
 
 	/*
 	 * (non-Javadoc)
@@ -131,14 +135,14 @@ public class EventListHandler extends RequestHandler {
 			HttpServletRequest request, HttpServletResponse response)
 					throws IOException, ServletException {
 		try{
-			String pathInfo = request.getPathInfo().substring(1);
-
+			String pathInfo = request.getParameter("filter");
+			
 			//The current request must be a file -> redirect to requestHandler
 			if(	isKnownFileExtention(pathInfo)) {
 				handleSimpleRequest(request, response, pathInfo);
 				return;
 			}
-			if(!pathInfo.equals("passes")&&!pathInfo.equals("annules")&&!pathInfo.equals("futur")&&!pathInfo.equals(""))
+			if(!pathInfo.equals(EVENT_PAST)&&!pathInfo.equals(EVENT_FUTURE)&&!pathInfo.equals(EVENT_CANCELLED)&&!pathInfo.equals(""))
 				if(isAnotherContext(pathInfo)){ 	        
 					request.getRequestDispatcher("/"+pathInfo).forward(request, response);
 					return;

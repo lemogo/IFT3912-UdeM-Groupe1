@@ -9,12 +9,14 @@ import java.sql.SQLException;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.LinkedList;
-import java.util.List;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
+
+import org.json.JSONArray;
+import org.json.JSONException;
 
 import ca.diro.Main;
 import ca.diro.DataBase.Command.PageInfoEvent;
@@ -82,7 +84,12 @@ public class SearchEventListHandler extends RequestHandler {
 		setDefaultResponseContentCharacterAndStatus(response);
 		
 		HashMap<String, Object> sources = new HashMap<String, Object>();
-		sources.putAll(buildSearchEventListMustacheSources(request));
+		
+		try {
+			sources.put("events", buildSearchEventList(request).toString());
+		} catch (JSONException e) {
+			e.printStackTrace();
+		}
 		
 		HttpSession session = request.getSession(true);
 		sources.put("user", isLoggedIn(session));
@@ -93,28 +100,32 @@ public class SearchEventListHandler extends RequestHandler {
 		processTemplate(request, response, "footer.html");
 	}
 
-	private HashMap<String, Object> buildSearchEventListMustacheSources(
+	private JSONArray buildSearchEventList(
 			HttpServletRequest request )
-			throws SQLException {
-		HashMap<String, Object> sources = new HashMap<String, Object>();
-		LinkedList<String> searchInput = new LinkedList<String>(Arrays.asList(request.getParameter("searchInput").split(" ")));
+			throws SQLException, JSONException {
+		HashMap<String, Event> sources = new HashMap<String, Event>();
+		LinkedList<String> searchInput = new LinkedList<String>(Arrays.asList(request.getParameter("searchStr").split("[\\s]+")));
 		ResearchEvent researchComand = new ResearchEvent(searchInput);
+		
 		if(Main.getDatabase().executeDb(researchComand)){
-			ResultSet listResultSet = researchComand.getResultSet();
-			List<Event> eventList = new LinkedList<Event>();  
+			ResultSet listResultSet = researchComand.getResultSet(); 
 			while(listResultSet.next()) {
-				PageInfoEvent getEventCommand = new PageInfoEvent(listResultSet.getString("eventId"), Main.getDatabase());
-				int numPlacesLeft = getEventCommand.getAvailablePlaces();
-				String badgeClasse = computeBadgeColor(numPlacesLeft);
-
-				eventList.add(
-						new Event("Event_Bidon_username", listResultSet.getString("title"), listResultSet.getString("dateevent"),
-						listResultSet.getString("location"), listResultSet.getString("description"), listResultSet.getString("eventId"),
-						badgeClasse, ""+numPlacesLeft));
+				//TODO: We're essentially searching the same info twice? Might have to look into this.
+				PageInfoEvent getEventCommand = new PageInfoEvent(listResultSet.getString("eventid"), Main.getDatabase());
+				String badgeClasse = computeBadgeColor(getEventCommand.getAvailablePlaces());
+				
+				Event currentEvent = new Event(getEventCommand.getResultSet(), badgeClasse);
+				sources.put(currentEvent.getTitle(), currentEvent);
 			}
-			//add event info here!!
-			sources.put("events",eventList);
 		}
-		return sources;
+		return buildJSONResponse(sources);
+	}
+	
+	private JSONArray buildJSONResponse(HashMap<String,Event> sources) throws JSONException {
+		JSONArray JSONResponse = new JSONArray();
+		for (Event currentEvent : sources.values()) {
+			JSONResponse.put(currentEvent.toMap());
+		}
+		return JSONResponse;
 	}
 }
