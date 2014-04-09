@@ -1,0 +1,42 @@
+Pour ceux qui feront le handler des requêtes :
+
+Liste des requêtes GET
+
+accueil
+liste-des-evenements			//Par défaut on affiche ceux à venir
+liste-des-evenements/passes		//On affiche la liste des événements passés
+liste-des-evenements/annules		//On affiche la liste des événements annulés
+ajouter-un-evenement
+modifier-un-evenement/{event_id}	//Modifier un événement en particulier
+membre  				//Vers le compte connecté en ce moment.
+membre/{member_username}   		//Vers un membre en particulier
+notifications
+connexion
+deconnexion				//Doit logout puis faire une redirection vers l'accueil
+enregistrement
+evenement/{event_id}			//Voir un événement en particulier
+notifications
+
+
+
+Liste des requêtes POST (pour les paramètres POST que je vous envoie, regarder les form dans les templates)
+
+create-event				//Doit rediriger vers "liste-des-evenements" avec une variable true nommée "addSuccess"
+delete-event				//Doit rediriger vers "liste-des-evenements" avec une variable true nommée "deleteSuccess"
+modify-event				//Doit rediriger vers "evenement/{id}"
+register-event				//Doit rediriger vers "evenement/{id}" avec une variable true nommée "registerSuccess"
+unregister-event			//Doit rediriger vers "evenement/{id}" avec une variable true nommée "unregisterSuccess"
+create-user				//Doit rediriger vers "membre" une fois le user créé
+modify-user				//Idem
+connect-user				//Idem
+
+
+
+Listes variables "globales" à générer
+
+J'utilise le terme variables globales, juste pour dire qu'elles doient être générées dans tous les render de templates.
+Les variables sont faciles à voir. Simplement ouvrir un fichier template en particulier pour une requête et regarder.
+Cependant, il y a quelques cas spéciaux :
+
+user					//Retourne vrai si le user est connecté, faux sinon.
+notifications_number 			//Nombre de notifications. Doit être accessible en tout temps lorsque le user est connecté.

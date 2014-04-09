@@ -1,0 +1,88 @@
+<link href="css/event.css" rel="stylesheet">
+<link href="css/events.css" rel="stylesheet">
+
+		<div class="container theme-showcase">
+			{{#isOwner}}
+			<h1 class="pageTitle">Mon compte</h1>
+			<p class="descpage">Détails des informations sur Bacon ipsum dolor sit amet meatball beef ribs jowl bresaola sirloin pork loin tail shank pork chop short ribs pork. Rump brisket tongue, shankle tri-tip pork chop capicola doner corned beef swine leberkas bresaola andouille bacon.</p>
+			{{/isOwner}}
+			{{^isOwner}}
+			<h1 class="pageTitle">Détails sur un membre</h1>
+			<p class="descpage">Détails des informations sur Bacon ipsum dolor sit amet meatball beef ribs jowl bresaola sirloin pork loin tail shank pork chop short ribs pork. Rump brisket tongue, shankle tri-tip pork chop capicola doner corned beef swine leberkas bresaola andouille bacon.</p>
+			{{/isOwner}}
+			<div class="panel panel-primary">
+				<div class="panel-heading">
+					<h2 class="panel-title">{{username}}</h2>
+				</div>
+				<div class="panel-collapse collapse in">
+					<h3>Nom complet</h3>
+					<p class="descpage">{{fullname}}</p>
+					<h3>Age</h3>
+					<p class="descpage">{{age}}</p>
+					<h3>Membre depuis</h3>
+					<p class="descpage">{{registeredSince}}</p>
+					<h3>En connaitre plus sur le membre...</h3>
+					<p class="descpage">{{description}}</p>
+				</div>
+			{{#isOwner}}
+				<div>
+					<a class="btn btn-primary" href="modifier-mes-informations" role="button">Modifier mes informations</a>
+				</div>
+			{{/isOwner}}
+			</div>
+			
+			<div class="panel panel-primary">
+				<div class="panel-heading">
+					<h2 class="panel-title">Événements créés</h2>
+				</div>
+				<div class="panel-collapse collapse in">
+					<div class="panel-body">
+						{{#ownerEventsList}}
+						<!-- Item -->
+						<div class="panel panel-info">
+							<div class="panel-heading">
+								<div class="detailsButtons">
+									<a class="btn btn-primary" href="evenement/{{id}}" role="button">Voir</a>
+								</div>
+								<h4 class="panel-title">
+									<a  href="evenement/{{id}}">{{title}}</a>
+									<span class="place-left">
+										{{date}}
+									</span>
+								</h4>
+							</div>
+						</div>
+						{{/ownerEventsList}}
+					</div>
+				</div>
+			</div>
+			
+			{{#isOwner}}
+			<!-- My events -->
+			<div class="panel panel-primary">
+				<div class="panel-heading">
+					<h2 class="panel-title">Événements auxquels je suis inscrit</h2>
+				</div>
+				<div class="panel-collapse collapse in">
+					<div class="panel-body">						
+						{{#registeredEventsList}}
+						<!-- Item -->
+						<div class="panel panel-info">
+							<div class="panel-heading">
+								<div class="detailsButtons">
+									<a class="btn btn-primary" href="evenement/{{id}}" role="button">Voir</a>
+								</div>
+								<h4 class="panel-title">
+									<a  href="evenement/{{id}}">{{title}}</a>
+									<span class="place-left">
+										{{date}}
+									</span>
+								</h4>
+							</div>
+						</div>
+						{{/registeredEventsList}}
+					</div>
+				</div>
+			</div>
+			{{/isOwner}}
+		</div>
