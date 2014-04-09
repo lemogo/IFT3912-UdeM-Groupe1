@@ -3,6 +3,7 @@ package ca.diro.RequestHandlingUtil;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.io.PrintWriter;
 import java.io.UnsupportedEncodingException;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -87,7 +88,8 @@ public class SearchEventListHandler extends RequestHandler {
 		
 		try {
 			//TODO: Determine if this is the correct way to send this information.
-			response.setHeader("events", buildSearchEventList(request).toString());
+			PrintWriter responseWriter = response.getWriter();
+			responseWriter.print(buildSearchEventList(request).toString());
 		} catch (JSONException e) {
 			e.printStackTrace();
 		}
