@@ -3,6 +3,7 @@ package ca.diro.RequestHandlingUtil;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.io.PrintWriter;
 import java.io.UnsupportedEncodingException;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -86,18 +87,14 @@ public class SearchEventListHandler extends RequestHandler {
 		HashMap<String, Object> sources = new HashMap<String, Object>();
 		
 		try {
-			sources.put("events", buildSearchEventList(request).toString());
+			//TODO: Determine if this is the correct way to send this information.
+			PrintWriter responseWriter = response.getWriter();
+			responseWriter.print(buildSearchEventList(request).toString());
 		} catch (JSONException e) {
 			e.printStackTrace();
 		}
 		
 		HttpSession session = request.getSession(true);
-		sources.put("user", isLoggedIn(session));
-		sources.put("notifications_number", countUserNotification(getLoggedUserId(session)));
-
-		processTemplate(request, response, "header.html", sources);
-		processTemplate(request, response, filename, sources);
-		processTemplate(request, response, "footer.html");
 	}
 
 	private JSONArray buildSearchEventList(
@@ -107,15 +104,25 @@ public class SearchEventListHandler extends RequestHandler {
 		LinkedList<String> searchInput = new LinkedList<String>(Arrays.asList(request.getParameter("searchStr").split("[\\s]+")));
 		ResearchEvent researchComand = new ResearchEvent(searchInput);
 		
+		int offset = Integer.parseInt(request.getParameter("offset")) + 10;
+		//Change to custom number if required.
+		int numEventDisplay = 10;
+		
 		if(Main.getDatabase().executeDb(researchComand)){
 			ResultSet listResultSet = researchComand.getResultSet(); 
-			while(listResultSet.next()) {
-				//TODO: We're essentially searching the same info twice? Might have to look into this.
-				PageInfoEvent getEventCommand = new PageInfoEvent(listResultSet.getString("eventid"), Main.getDatabase());
-				String badgeClasse = computeBadgeColor(getEventCommand.getAvailablePlaces());
-				
-				Event currentEvent = new Event(getEventCommand.getResultSet(), badgeClasse);
-				sources.put(currentEvent.getTitle(), currentEvent);
+			while(listResultSet.next() && sources.size() < numEventDisplay) {
+				if (offset == 0) {
+					//TODO: We're essentially searching the same info twice? Might have to look into this.
+					PageInfoEvent getEventCommand = new PageInfoEvent(listResultSet.getString("eventid"), Main.getDatabase());
+					String badgeClasse = computeBadgeColor(getEventCommand.getAvailablePlaces());
+					
+					Event currentEvent = new Event(getEventCommand.getResultSet(), badgeClasse);
+					sources.put(currentEvent.getTitle(), currentEvent);
+					offset--;
+				}
+				else {
+					offset--;
+				}
 			}
 		}
 		return buildJSONResponse(sources);
