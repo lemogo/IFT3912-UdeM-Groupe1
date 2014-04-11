@@ -138,10 +138,11 @@ public class SearchEventListHandler extends RequestHandler {
 	private JSONArray buildJSONResponse(HashMap<String, Event> sources)
 			throws JSONException {
 		JSONArray JSONResponse = new JSONArray();
+		
 		JSONResponse.put(new JSONObject().append("count", sources.size()));
+		
 		JSONArray events = new JSONArray();
-
-		events.put(sources);
+		events.put(new JSONObject().append("events", sources));
 
 		JSONResponse.put(events);
 		return JSONResponse;
