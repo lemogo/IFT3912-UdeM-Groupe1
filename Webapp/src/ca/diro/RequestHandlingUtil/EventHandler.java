@@ -117,7 +117,7 @@ public class EventHandler extends RequestHandler {
 
 
 	private boolean isRegisteredToEvent(HttpSession session, String eventID) throws SQLException {
-		String userId = (!isLoggedIn(session))? "-1" : (String) session.getAttribute(USER_ID_ATTRIBUTE);
+		String userId = ""+authentifyUser(session);
 		return isRegisteredToEvent(eventID, userId);
 	}
 
@@ -145,7 +145,7 @@ public class EventHandler extends RequestHandler {
 						);
 				sources.putAll(buildIsEventOwnerMustacheSource( session,rs.getString("username")));
 			}else{
-				//TODO:show error message -- The event ____ does not exist
+				sources.put("error","l'evenement: "+eventID+" n'existe pas");
 			}
 		}
 		return sources;

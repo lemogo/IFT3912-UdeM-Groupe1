@@ -5,8 +5,7 @@ import org.h2.tools.DeleteDbFiles;
 import ca.diro.DataBase.Command.*;
 
 /**
- * THis class is where the data base is managed in order to 
- * handle all queries in order to connect database by executing
+ * THis class handle all queries in order to connect database by executing
  * queries commands
  * 
  * @author william
@@ -23,7 +22,7 @@ public class DataBase {
 
 	public DataBase() throws ClassNotFoundException, SQLException {
 		this(DataBase.RESTORE_SCRIPT, false);
-		
+		// Class.forName("org.h2.Driver");
 	}
 
 	public DataBase(String restoreScript) throws SQLException,
@@ -346,6 +345,7 @@ public class DataBase {
 
 		while (rs.next()) {
 			String tablename = rs.getString(3);
+			// System.out.println(tablename);
 			tableSet.add(tablename);
 		}
 
