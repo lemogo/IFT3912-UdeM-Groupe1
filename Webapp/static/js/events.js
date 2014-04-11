@@ -8,7 +8,7 @@ $(document).ready(function(){
 		$(".loading").css("display", "block");
 		$("#viewMoreEvents").css("display", "none");
 		var searchStr = $("#search .searchInput").val();
-		$.post('./listEventsAjax', {
+		$.post('listEventsAjax', {
 			offset : offset,
 			searchStr : searchStr,
 			filter : filter
@@ -20,7 +20,7 @@ $(document).ready(function(){
 			}
 			$(".loading").css("display", "none");
 			$("#viewMoreEvents").css("display", "block");
-		}, 'html');
+		}, 'json');
 		offset += limit;
 	};
 	

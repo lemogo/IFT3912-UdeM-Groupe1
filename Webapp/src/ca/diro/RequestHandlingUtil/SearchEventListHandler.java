@@ -34,8 +34,21 @@ public class SearchEventListHandler extends RequestHandler {
 	public void doPost(HttpServletRequest request, HttpServletResponse response)
 			throws IOException, ServletException {
 		try {
+			System.out.println("In search do post");
 			processRequest(request, response);
 		} catch (Exception e) {
+			catchHelper(request, response, e);
+		}
+	}
+
+	@Override
+	public void doGet(HttpServletRequest request, HttpServletResponse response)
+			throws IOException, ServletException {
+		try {
+			System.out.println("In search do post");
+			processRequest(request, response);
+		} catch (Exception e) {
+			e.printStackTrace();
 			catchHelper(request, response, e);
 		}
 	}
@@ -47,21 +60,8 @@ public class SearchEventListHandler extends RequestHandler {
 		if (pathInfo == null) pathInfo="";
 		else pathInfo = pathInfo.substring(1);
 
-		
-		//the pathInfo should be null
-//		if(!pathInfo.equals("passes")&&!pathInfo.equals("annules")&&!pathInfo.equals("futur")&&!pathInfo.equals(""))
-			if(isAnotherContext(pathInfo)){ 	        
-				String setLocation = "/Webapp/"+pathInfo;//"/";
-				response.sendRedirect(setLocation);
-//				request.getRequestDispatcher("/"+pathInfo).forward(request, response);
-				return;
-			}
-
 		String filename = "liste-des-evenements.html";
 		processRequestHelper(request, response, pathInfo, filename);
-		
-		File staticResource = new File(staticDir, filename);
-		File dynamicResource = new File(dynamicDir, filename);
 
 	}
 
@@ -69,9 +69,6 @@ public class SearchEventListHandler extends RequestHandler {
 			HttpServletResponse response, String pathInfo, String filename)
 			throws SQLException, UnsupportedEncodingException,
 			FileNotFoundException, IOException {
-		setDefaultResponseContentCharacterAndStatus(response);
-
-		HashMap<String, Object> sources = new HashMap<String, Object>();
 
 		try {
 			// TODO: Determine if this is the correct way to send this
@@ -82,18 +79,22 @@ public class SearchEventListHandler extends RequestHandler {
 		} catch (JSONException e) {
 			e.printStackTrace();
 		}
-
-		HttpSession session = request.getSession(true);
 	}
 
 	private JSONArray buildSearchEventList(HttpServletRequest request)
 			throws SQLException, JSONException {
 		HashMap<String, Event> sources = new HashMap<String, Event>();
+		String searchParam = request.getParameter("searchStr");
+		searchParam = searchParam == null ? "" : searchParam;
+		
 		LinkedList<String> searchInput = new LinkedList<String>(
-				Arrays.asList(request.getParameter("searchStr").split("[\\s]+")));
+				Arrays.asList(searchParam.split("[\\s]+")));
 		ResearchEvent researchComand = new ResearchEvent(searchInput);
+		
+		String offsetParam = request.getParameter("offset");
+		offsetParam = offsetParam == null ? "0" : offsetParam;
 
-		int offset = Integer.parseInt(request.getParameter("offset")) + 10;
+		int offset = Integer.parseInt(offsetParam) + 10;
 		// Change to custom number if required.
 		int numEventDisplay = 10;
 
@@ -131,9 +132,7 @@ public class SearchEventListHandler extends RequestHandler {
 		events.put(new JSONObject().append("events", sources));
 
 		JSONResponse.put(events);
-
-		return new JSONArray()
-				.put(new JSONObject(
-						"{'month': '7', 'num': 614, 'link': '', 'year': '2009', 'news': '', 'safe_title': 'Woodpecker', 'transcript': '', 'alt': 'If you don't have an extension cord I can get that too.  Because we're friends!  Right?', 'img': 'http://imgs.xkcd.com/comics/woodpecker.png', 'title': 'Woodpecker', 'day': '24'}"));
+		return JSONResponse;
+						
 	}
 }
