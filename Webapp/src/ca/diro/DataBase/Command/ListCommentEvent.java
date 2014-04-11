@@ -2,12 +2,11 @@
  * 
  */
 package ca.diro.DataBase.Command;
-//import java.sql.SQLException;
-//import ca.diro.DataBase.DataBase;
+
 
 /**
 * this class permit to set query in order to allow an signed user retrieve the list of comments on an event 
- * @author Lionnel
+ * @author Lionnel , william 
  */
 public class ListCommentEvent extends Command{
 	/**
