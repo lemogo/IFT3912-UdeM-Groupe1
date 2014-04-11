@@ -18,6 +18,7 @@ import javax.servlet.http.HttpSession;
 
 import org.json.JSONArray;
 import org.json.JSONException;
+import org.json.JSONObject;
 
 import ca.diro.Main;
 import ca.diro.DataBase.Command.PageInfoEvent;
@@ -130,9 +131,13 @@ public class SearchEventListHandler extends RequestHandler {
 	
 	private JSONArray buildJSONResponse(HashMap<String,Event> sources) throws JSONException {
 		JSONArray JSONResponse = new JSONArray();
+		JSONResponse.put(sources.size());
+		JSONArray events = new JSONArray();
+		
 		for (Event currentEvent : sources.values()) {
-			JSONResponse.put(currentEvent.toMap());
+			events.put(currentEvent.toMap());
 		}
+		JSONResponse.put(events);
 		return JSONResponse;
 	}
 }
