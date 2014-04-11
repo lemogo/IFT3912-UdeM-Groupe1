@@ -23,7 +23,7 @@ public class ListCancelledEvent extends  Command{
 	private String buildQuery(){
 		String str="select eventid, title, location, dateevent, description from event " +
 				"where dateevent >= CURRENT_DATE() AND UPPER(status) = 'CANCELLED'"  ;
-		//TODO parse query
+		
 		return str ;
 	}
 	

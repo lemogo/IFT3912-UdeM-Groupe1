@@ -24,7 +24,7 @@ public class ListComingEvent extends Command{
 	private String buildQuery(){
 		String str="select event.eventid, event.title, event.location, event.dateevent, event.description, event.numberplaces"
 				+ ", event.suserid, username "
-				+ "from event " +
+				+ "from event "+
 				"join signeduser on event.suserid = signeduser.suserid "+
 				"where dateevent > CURRENT_DATE() and UPPER(status) not = 'CANCELLED'"  ;
 		return str ;

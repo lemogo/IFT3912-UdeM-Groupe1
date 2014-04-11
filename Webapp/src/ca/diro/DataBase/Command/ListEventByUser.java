@@ -31,7 +31,7 @@ public class ListEventByUser extends Command{
 		
 		String str = "select event.eventid, title, location, dateevent, event.description "
 				+ ", event.suserid, username "
-				+"from  event " +
+				+"from  event "+
 				"join signeduser on event.suserid = signeduser.suserid "+
 						"where 	event.suserid = "+ userId +" and "+
 						" dateevent >= CURRENT_DATE() and " +

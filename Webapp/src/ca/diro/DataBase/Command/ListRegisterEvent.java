@@ -30,7 +30,7 @@ public class ListRegisterEvent extends Command{
 			
 		String str = "select event.eventid, title, location, dateevent, event.description "
 				 +", event.suserid, username "
-				 + "from  event, subsEventSigned  "+
+				 +"from  event, subsEventSigned  "+
 				"join signeduser on event.suserid = signeduser.suserid "+
 					"where event.eventid = subsEventSigned.eventid and " +
 					" CURRENT_DATE() <= dateevent and " +
