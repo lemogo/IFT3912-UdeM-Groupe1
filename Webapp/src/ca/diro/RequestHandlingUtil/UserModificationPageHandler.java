@@ -115,14 +115,13 @@ public class UserModificationPageHandler extends RequestHandler {
 
 		//fullname, username, email, age, description
 		String username="bidon_age",fullname="bidon_fullname",email="bidon_email",
-				age="-1",description="bidon_description";//, password="bidon_password";
+				age="-1",description="bidon_description";
 		if (asExecuted){
 			if(rs.next()){
 				username = rs.getString("username");
 				fullname = rs.getString("fullname");
 				email = rs.getString("email");
 				age  = rs.getString("age"); 
-				//				password  = rs.getString("password"); 
 				description = rs.getString("description");
 			}
 			sources.put("options", buildSelectOptionsTag(1,121,rs.getInt("age")));
@@ -132,12 +131,10 @@ public class UserModificationPageHandler extends RequestHandler {
 		sources.put("username",username);
 		sources.put("fullname",fullname);
 		sources.put("age",age);
-		//		sources.put("passwordOld",password);
 		sources.put("email",email);
 		sources.put("description",description);
 
-		//TODO:calculate register since
-		sources.put("registeredSince","ownerRegisteredSince");
+		sources.put("registeredSince",computeOwnerRegisteredSince());
 		sources.put("age",age);
 		sources.put("description",description);
 		return username;

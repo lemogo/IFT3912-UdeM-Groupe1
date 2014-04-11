@@ -103,9 +103,16 @@ public class EventListHandler extends RequestHandler {
 				PageInfoEvent getEventCommand = new PageInfoEvent(listResultSet.getString("eventId"), Main.getDatabase());
 				int numPlacesLeft = getEventCommand.getAvailablePlaces();
 				String badgeClasse = computeBadgeColor(numPlacesLeft);
+				String username = "Error_retrieving_username";
+				if(Main.getDatabase().executeDb(getEventCommand)){
+				ResultSet currEventResultSet = getEventCommand.getResultSet();
+					
+					if(currEventResultSet.next())
+						username = getEventCommand.getResultSet().getString("username");
+				}
 
 				eventList.add(
-						new Event("Event_Bidon_username", listResultSet.getString("title"), listResultSet.getString("dateevent"),
+						new Event(username, listResultSet.getString("title"), listResultSet.getString("dateevent"),
 						listResultSet.getString("location"), listResultSet.getString("description"), listResultSet.getString("eventId"),
 						badgeClasse, ""+numPlacesLeft));
 			}

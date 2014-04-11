@@ -1,15 +1,11 @@
 package ca.diro.RequestHandlingUtil;
 
 import java.io.IOException;
-import java.sql.ResultSet;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
-
-import ca.diro.Main;
-import ca.diro.DataBase.Command.OpenSession;
 
 public class ConnectUserHandler extends RequestHandler {
 	/**
@@ -31,8 +27,7 @@ public class ConnectUserHandler extends RequestHandler {
 		try{
 			//TODO:verify if the user is currently login another account. 
 			HttpSession newUserSession = request.getSession(true);
-			if(newUserSession.getAttribute("auth")!=null)
-			if(newUserSession.getAttribute("auth").equals("true")){
+			if(newUserSession.getAttribute("auth")!=null && newUserSession.getAttribute("auth").equals("true")){
 				//If so,ask the user if he wants to logout from account X and proceed with login 
 				return;
 			}
@@ -40,20 +35,14 @@ public class ConnectUserHandler extends RequestHandler {
 			//Verify User's credential and retrieve User id from the database
 			String username = request.getParameter("username");
 			String password = request.getParameter("password");
+			Integer userID = authentifyUser(username, password);
 
-			OpenSession openCommand = new OpenSession(username, password);
-			Boolean authenticatedSuccessfully  = Main.getDatabase().executeDb(openCommand);
-			ResultSet results = openCommand.getResultSet();
-			Integer accessCount = new Integer(0);
-
-			String userID =""+-1;
-			if (results.next())	userID = results.getString(1);
-			else authenticatedSuccessfully = false;
-
-			if (authenticatedSuccessfully){
-				newUserSession.setAttribute(USER_ID_ATTRIBUTE, userID);
+			if (userID != null){
+				Integer accessCount = new Integer(0);
+				newUserSession.setAttribute(USER_ID_ATTRIBUTE, ""+userID);
 				newUserSession.setAttribute("auth", Boolean.TRUE);
 				newUserSession.setAttribute(USERNAME_ATTRIBUTE, username);
+				newUserSession.setAttribute(USER_PASSWORD_ATTRIBUTE, password);
 				if (newUserSession.isNew()){
 				}else{
 					Integer oldAccessCount = (Integer)newUserSession.getAttribute("accessCount"); 

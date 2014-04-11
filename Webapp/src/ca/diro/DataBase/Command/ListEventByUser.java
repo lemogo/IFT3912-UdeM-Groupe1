@@ -29,7 +29,10 @@ public class ListEventByUser extends Command{
 	 */
 	private String buildQuery(String userId)  {	
 		
-		String str = "select event.eventid, title, location, dateevent, event.description from  event " +
+		String str = "select event.eventid, title, location, dateevent, event.description "
+				+ ", event.suserid, username "
+				+"from  event "+
+				"join signeduser on event.suserid = signeduser.suserid "+
 						"where 	event.suserid = "+ userId +" and "+
 						" dateevent >= CURRENT_DATE() and " +
 						"UPPER(event.status) != 'CANCELLED' ";

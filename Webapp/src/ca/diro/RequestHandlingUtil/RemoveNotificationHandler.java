@@ -139,8 +139,7 @@ public class RemoveNotificationHandler extends RequestHandler {
 		sources.put("email",email);
 		sources.put("description",description);
 
-		//TODO:calculate register since
-		sources.put("registeredSince","ownerRegisteredSince");
+		sources.put("registeredSince",computeOwnerRegisteredSince());
 		sources.put("age",age);
 		sources.put("description",description);
 		return username;

@@ -5,7 +5,7 @@ import java.sql.SQLException;
 import java.util.Map;
 import java.util.TreeMap;
 
-class Event{
+class Event implements Comparable<Event>{
 	private String username;
 	private String title;
 	private String date;
@@ -60,10 +60,6 @@ class Event{
 		this.badgeClass = badgeClass;
 		this.numPlacesLeft = numPlacesLeft;
 	}
-
-//	public int getNumPeople(){
-//		return numPeople;
-//	}
 	
 	public String getUsername() {
 		return username;
@@ -108,5 +104,10 @@ class Event{
 		mapValues.put("badgeClass", badgeClass);
 		mapValues.put("numPlacesLeft", numPlacesLeft);
 		return mapValues;
+	}
+
+	@Override
+	public int compareTo(Event arg0) {
+		return date.compareTo(arg0.getDate());
 	}
 }

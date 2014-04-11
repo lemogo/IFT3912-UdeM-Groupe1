@@ -48,7 +48,7 @@ public class UserHandler extends RequestHandler {
 				response.sendRedirect(setLocation);
 				return;
 			}
-			processRequestHelper(request, response);
+			processRequest(request, response);
 		}
 		catch (Exception e){
 			catchHelper( request, response, e);		
@@ -79,29 +79,28 @@ public class UserHandler extends RequestHandler {
 //				response.sendRedirect(setLocation);
 				return;
 			}
-			processRequestHelper(request, response);
+			processRequest(request, response);
 		}
 		catch (Exception e){
 			catchHelper( request, response, e);		
 		}
 	}
 
-	private void processRequestHelper(HttpServletRequest request,
+	private void processRequest(HttpServletRequest request,
 			HttpServletResponse response) throws UnsupportedEncodingException,
 			FileNotFoundException, IOException,  SQLException {
 		String pathInfo = request.getPathInfo();
 		if(pathInfo.startsWith("/")) pathInfo = pathInfo.substring(1);
 
-		if(isAnotherContext(pathInfo)&&!pathInfo.equals("")){ 	        
+		if(isAnotherContext(pathInfo)){ 	        
 			String setLocation = "/Webapp/"+pathInfo;
 			response.sendRedirect(setLocation);
 			return;
 		}
 
-		if(pathInfo.equals("")){
-			//check if user is logged in
-
+		if(pathInfo.equals("")&& !isLoggedIn(request.getSession(true))){
 			//TODO:if user is not logged in redirect user to login page to view is page
+			return;
 		}
 
 		String filename = "membre.html"; 
@@ -127,15 +126,14 @@ public class UserHandler extends RequestHandler {
 	private HashMap<String, Object> buildMustacheSourcesInfo(
 			HttpServletRequest request, HttpServletResponse response)
 					throws  SQLException {
-		//Add User info here!!
 		HashMap<String, Object> sources = new HashMap<String, Object>();
 
 		//TODO:Get the user id using the database and/or if there's no path info the id from the session variable 
 		HttpSession session = request.getSession(true);
-		boolean isLoggedIn=session.getAttribute("auth")==null? false:true;
 
-		int loggedUserId = Integer.parseInt((String) (session.getAttribute(USER_ID_ATTRIBUTE)==null?-1:session.getAttribute(USER_ID_ATTRIBUTE)));
-		String loggedUserUsername = (String) (session.getAttribute(USERNAME_ATTRIBUTE)==null?-1:session.getAttribute(USERNAME_ATTRIBUTE));
+		int loggedUserId = Integer.parseInt((String) (session.getAttribute(USER_ID_ATTRIBUTE)==null?"-1":(String)session.getAttribute(USER_ID_ATTRIBUTE)));
+//		int loggedUserId = session.getAttribute(USER_ID_ATTRIBUTE)==null?-1:(int)session.getAttribute(USER_ID_ATTRIBUTE);
+		String loggedUserUsername = (String) (session.getAttribute(USERNAME_ATTRIBUTE)==null?"-1":session.getAttribute(USERNAME_ATTRIBUTE));
 		String displayedUserUsername = request.getPathInfo().startsWith("/")?request.getPathInfo().substring(1).trim():request.getPathInfo().trim();
 
 		if(displayedUserUsername.equals("")||displayedUserUsername==null) displayedUserUsername = loggedUserUsername;
@@ -145,11 +143,11 @@ public class UserHandler extends RequestHandler {
 		sources.putAll(buildMustacheSourcesUserInfo( displayedUserUsername));
 		int displayedUserUserId = getUserId(displayedUserUsername)>0?getUserId(displayedUserUsername):loggedUserId;
 
-		if(isLoggedIn){
+		if(isLoggedIn(session)){
 			sources.putAll(buildMustacheSourcesUserEventList(displayedUserUserId, displayedUserUsername));
 			sources.putAll(buildMustacheSourcesUserRegisteredEventList(displayedUserUserId, displayedUserUsername));
 		}
-		sources.putAll(buildMustacheSourcesSuccessMessages(response, isLoggedIn));
+		sources.putAll(buildMustacheSourcesSuccessMessages(response, isLoggedIn(session)));
 		sources.put("notifications_number", countUserNotification(""+loggedUserId));
 		return sources;
 	}
@@ -204,10 +202,9 @@ public class UserHandler extends RequestHandler {
 
 		ResultSet rs1 = userEventList.getResultSet();
 		List<Event> eventList = new LinkedList<Event>();  
-
 		while(rs1.next()){
 			eventList.add(							
-					new Event(username, rs1.getString("title"), rs1.getString("dateevent"),
+					new Event(rs1.getString("username"), rs1.getString("title"), rs1.getString("dateevent"),
 							rs1.getString("location"), rs1.getString("description"), rs1.getString("eventid"),
 							"Event_badgeClass1"));
 		}
@@ -218,9 +215,9 @@ public class UserHandler extends RequestHandler {
 	private HashMap<String, Object> buildMustacheSourcesUserInfo(String displayedUserUsername)
 			throws  SQLException {
 		HashMap<String, Object> sources = new HashMap<String, Object>();
-		PageInfoUser cmd = new PageInfoUser(displayedUserUsername) ; //add cast if necessary
-		Boolean asExecuted = Main.getDatabase().executeDb(cmd); //true check si la requete est bien exécuté 
-		ResultSet rs = cmd.getResultSet(); //retourne (username,password,fullname,email,age,description)
+		PageInfoUser pageInfoUserCommand = new PageInfoUser(displayedUserUsername) ; //add cast if necessary
+		Boolean asExecuted = Main.getDatabase().executeDb(pageInfoUserCommand); //true check si la requete est bien exécuté 
+		ResultSet rs = pageInfoUserCommand.getResultSet(); //retourne (username,password,fullname,email,age,description)
 
 		String username="",fullname="",//email="",
 				age="",description="";
@@ -235,8 +232,7 @@ public class UserHandler extends RequestHandler {
 		}else{
 			//TODO:send error message to user and return to login page
 		}
-		//TODO:ownerRegisteredSince
-		sources.put("registeredSince","ownerRegisteredSince");
+		sources.put("registeredSince",computeOwnerRegisteredSince());
 		sources.put("username",username);
 		sources.put("fullname",fullname);
 		sources.put("age",age);

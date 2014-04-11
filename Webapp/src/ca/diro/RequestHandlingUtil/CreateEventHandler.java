@@ -52,7 +52,8 @@ public class CreateEventHandler extends RequestHandler {
 				if (addedSuccessfully){
 					String setLocation = "/liste-des-evenements/";
 					response.addHeader("addSuccess", "true");
-					request.getRequestDispatcher(setLocation).forward(request, response);
+					response.sendRedirect("/Webapp"+setLocation);
+//					request.getRequestDispatcher(setLocation).forward(request, response);
 				}else{
 					//redirect the user to the create event page with the same info
 					//if possible indicate to the user the reason of the failure to create the event 

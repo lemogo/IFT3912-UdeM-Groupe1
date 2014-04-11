@@ -27,7 +27,7 @@ public class ListUserNotification extends  Command{
 				+ "join subsEventSigned on event.eventid=subsEventSigned.eventid"
 				+ " join signeduser on event.suserid=signeduser.suserid " +
 				" where dateevent >= CURRENT_DATE() AND UPPER(status) = 'CANCELLED' AND"+" subsEventSigned.suserid = " +userId  ;
-		//TODO parse query
+		
 		return str ;
 	}
 	
