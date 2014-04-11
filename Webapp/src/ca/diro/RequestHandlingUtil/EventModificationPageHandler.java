@@ -36,7 +36,7 @@ public class EventModificationPageHandler extends RequestHandler {
 			HttpServletRequest request, HttpServletResponse response)
 					throws IOException, ServletException {
 		try{
-			String pathInfo = request.getPathInfo();
+			String pathInfo = request.getPathInfo()== null? "":request.getPathInfo();
 			if(pathInfo.startsWith("/")) pathInfo = pathInfo.substring(1);
 			//The current request must be a file -> redirect to requestHandler
 			if(	isKnownFileExtention(pathInfo)) {
@@ -78,7 +78,8 @@ public class EventModificationPageHandler extends RequestHandler {
 		//TODO:find out if the logged user is the owner of the event, if not return to event page with message you are not the owner
 		String eventID = pathInfo;
 		HttpSession session = request.getSession(true);
-//		String loggedUsername = session.getAttribute(USERNAME_ATTRIBUTE)==null?"Anonymous":(String) session.getAttribute(USERNAME_ATTRIBUTE);
+		String loggedUsername = session.getAttribute(USERNAME_ATTRIBUTE)==null?"Anonymous":(String) session.getAttribute(USERNAME_ATTRIBUTE);
+//		isEventOwner(loggedUsername, eventUsername, loggedUserPassword)
 
 		DataBase myDb = Main.getDatabase();
 		PageInfoEvent pageInfoEventCommand = new PageInfoEvent(eventID,myDb);

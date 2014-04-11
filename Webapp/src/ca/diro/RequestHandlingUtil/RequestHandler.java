@@ -178,6 +178,9 @@ public class RequestHandler extends HttpServlet {
 		else if (target.endsWith(".png")){
 			response.setContentType("image/png");
 		}
+		else if (target.endsWith(".gif")){
+			response.setContentType("image/gif");
+		}
 		else if (target.endsWith(".jpg")){
 			response.setContentType("image/jpg");
 		}
@@ -199,7 +202,7 @@ public class RequestHandler extends HttpServlet {
 		return (		extention.endsWith(".css")||extention.endsWith(".js")
 				||extention.endsWith(".png")||extention.endsWith(".jpg")
 				||extention.endsWith(".ico")||extention.endsWith(".ttf")
-				||extention.endsWith(".woff"));
+				||extention.endsWith(".woff")||extention.endsWith(".gif"));
 	}
 
 	protected void catchHelper( HttpServletRequest request,
@@ -403,6 +406,13 @@ public class RequestHandler extends HttpServlet {
 			return (eventUsername.equals(loggedUserUsername)) ;
 		return false;
 	}
+	
+//	protected boolean isEventOwner( HttpSession session, 
+//			String eventUsername) throws SQLException{
+//		if(authentifyUser(session)!=null)
+//			return (eventUsername.equals(loggedUserUsername)) ;
+//		return false;
+//	}
 
 	protected boolean isAccountOwner(String loggedUserUsername, 
 			String requestedAccountUsername, String loggedUserPassword) throws SQLException{

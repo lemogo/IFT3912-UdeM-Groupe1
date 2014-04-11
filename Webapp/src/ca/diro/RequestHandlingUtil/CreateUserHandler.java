@@ -28,14 +28,14 @@ public class CreateUserHandler extends RequestHandler {
 			HttpServletRequest request, HttpServletResponse response)
 					throws IOException, ServletException {
 		try{
-			boolean isLoggedIn=request.getParameter(USER_ID_ATTRIBUTE)==null? false:true;
-			if(isLoggedIn){
-				//TODO:show popup, user is already logged in as username, 
+			if(isLoggedIn(request.getSession(true))){
+				//possibly:show popup, user is already logged in as username, 
 				//ask user if they would like to logout and log in as ____ 
 				//and redirect to user's page
 				String username = request.getParameter(USERNAME_ATTRIBUTE);
 				String setLocation = "/Webapp/membre/"+username;
 				response.sendRedirect(setLocation);
+				return;
 //				request.getRequestDispatcher("/membre/"+username).forward(request, response);
 			}
 			String fullname = request.getParameter("fullname");

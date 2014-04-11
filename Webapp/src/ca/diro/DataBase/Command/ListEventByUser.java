@@ -36,6 +36,7 @@ public class ListEventByUser extends Command{
 						"where 	event.suserid = "+ userId +" and "+
 						" dateevent >= CURRENT_DATE() and " +
 						"UPPER(event.status) != 'CANCELLED' ";
+		// TODO parse query
 		return str;
 	}
 }

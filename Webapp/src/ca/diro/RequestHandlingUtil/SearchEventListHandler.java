@@ -42,33 +42,37 @@ public class SearchEventListHandler extends RequestHandler {
 
 	private void processRequest(HttpServletRequest request,
 			HttpServletResponse response) throws IOException,
-			UnsupportedEncodingException, FileNotFoundException, SQLException,
-			ServletException {
+			UnsupportedEncodingException, FileNotFoundException, SQLException, ServletException {
 		String pathInfo = request.getPathInfo();
-		if (pathInfo == null)
-			pathInfo = "";
-		else
-			pathInfo = pathInfo.substring(1);
+		if (pathInfo == null) pathInfo="";
+		else pathInfo = pathInfo.substring(1);
 
-		// create a handle to the resource
+		
+		//the pathInfo should be null
+//		if(!pathInfo.equals("passes")&&!pathInfo.equals("annules")&&!pathInfo.equals("futur")&&!pathInfo.equals(""))
+			if(isAnotherContext(pathInfo)){ 	        
+				String setLocation = "/Webapp/"+pathInfo;//"/";
+				response.sendRedirect(setLocation);
+//				request.getRequestDispatcher("/"+pathInfo).forward(request, response);
+				return;
+			}
+
 		String filename = "liste-des-evenements.html";
 		processRequestHelper(request, response, pathInfo, filename);
 		
 		File staticResource = new File(staticDir, filename);
 		File dynamicResource = new File(dynamicDir, filename);
 
-		// Ressource existe
-		if (!staticResource.exists() && !dynamicResource.exists()) {
-			response.setStatus(HttpServletResponse.SC_NOT_FOUND);
-			processTemplate(request, response, "404.html");
-		}
 	}
 
 	private void processRequestHelper(HttpServletRequest request,
 			HttpServletResponse response, String pathInfo, String filename)
 			throws SQLException, UnsupportedEncodingException,
 			FileNotFoundException, IOException {
-		
+		setDefaultResponseContentCharacterAndStatus(response);
+
+		HashMap<String, Object> sources = new HashMap<String, Object>();
+
 		try {
 			// TODO: Determine if this is the correct way to send this
 			// information.
@@ -120,14 +124,16 @@ public class SearchEventListHandler extends RequestHandler {
 	private JSONArray buildJSONResponse(HashMap<String, Event> sources)
 			throws JSONException {
 		JSONArray JSONResponse = new JSONArray();
-		
+
 		JSONResponse.put(new JSONObject().append("count", sources.size()));
-		
+
 		JSONArray events = new JSONArray();
 		events.put(new JSONObject().append("events", sources));
 
 		JSONResponse.put(events);
-		
-		return new JSONArray().put(new JSONObject("{'month': '7', 'num': 614, 'link': '', 'year': '2009', 'news': '', 'safe_title': 'Woodpecker', 'transcript': '', 'alt': 'If you don't have an extension cord I can get that too.  Because we're friends!  Right?', 'img': 'http://imgs.xkcd.com/comics/woodpecker.png', 'title': 'Woodpecker', 'day': '24'}"));
+
+		return new JSONArray()
+				.put(new JSONObject(
+						"{'month': '7', 'num': 614, 'link': '', 'year': '2009', 'news': '', 'safe_title': 'Woodpecker', 'transcript': '', 'alt': 'If you don't have an extension cord I can get that too.  Because we're friends!  Right?', 'img': 'http://imgs.xkcd.com/comics/woodpecker.png', 'title': 'Woodpecker', 'day': '24'}"));
 	}
 }
