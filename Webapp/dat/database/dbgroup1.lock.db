@@ -1,4 +1,9 @@
 #FileLock
+<<<<<<< HEAD
 #Fri Apr 11 09:40:36 EDT 2014
 id=1455104b7a49595af381c2374b02d1dd519522d8fff
+=======
+#Fri Apr 11 10:24:43 EDT 2014
+id=145512d1ab3650993c27036307686563d6a8937ab43
+>>>>>>> refs/remotes/origin/noyau
 method=file
