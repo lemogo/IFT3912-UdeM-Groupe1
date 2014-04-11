@@ -8,19 +8,19 @@ $(document).ready(function(){
 		$(".loading").css("display", "block");
 		$("#viewMoreEvents").css("display", "none");
 		var searchStr = $("#search .searchInput").val();
-		$.post('listEventsAjax', {
+		$.post('./listEventsAjax', {
 			offset : offset,
 			searchStr : searchStr,
 			filter : filter
 		},
-		function(data) {
+		function(data) { alert(data)
 			for(var i = 0; i < data.count; i++) {
 				var eventDisplay = eventTemplate(data.events[i].id, data.events[i].title, data.events[i].badgeClass, data.events[i].numPlacesLeft, data.events[i].date, data.events[i].location, data.events[i].description);
 				$("#eventsHolder").append(eventDisplay);
 			}
 			$(".loading").css("display", "none");
 			$("#viewMoreEvents").css("display", "block");
-		}, 'json');
+		}, 'html');
 		offset += limit;
 	};
 	

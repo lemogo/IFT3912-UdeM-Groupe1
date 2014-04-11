@@ -120,6 +120,10 @@ public class RequestHandler extends HttpServlet {
 			}
 			pathInfo = pathInfo+".html";
 		}
+		else if (pathInfo.equals("listEventsAjax")) {
+			request.getRequestDispatcher("/"+pathInfo).forward(request, response);
+			return;
+		}
 		else if ( pathInfo.equals("accueil")||pathInfo.equals("enregistrement") || pathInfo.equals("ajouter-un-evenement") 
 				//				||pathInfo.equals("modifier-mes-informations")
 				||pathInfo.equals("connexion")) pathInfo = pathInfo+".html";
@@ -309,7 +313,7 @@ public class RequestHandler extends HttpServlet {
 				||pathInfo.startsWith("connect-user")||pathInfo.equals("create-user")
 				||pathInfo.startsWith("create-event")||pathInfo.startsWith("add-comment")
 				||pathInfo.startsWith("remove-notification")
-				||pathInfo.startsWith("search-all")
+				||pathInfo.startsWith("listEventsAjax")
 				;
 	}
 

@@ -122,7 +122,7 @@ public class Main {
 		handlerCollection.addHandler(  handler );
 		
 		//TODO:Implement search bar handler
-		handler.addServlet(new ServletHolder( new SearchEventListHandler()), "/search-all");
+		handler.addServlet(new ServletHolder( new SearchEventListHandler()), "/listEventsAjax");
 		handler.addServlet(new ServletHolder( new RequestHandler()), "/*");
 
 		handler.addServlet(new ServletHolder( new EventListHandler()), "/liste-des-evenements/*");

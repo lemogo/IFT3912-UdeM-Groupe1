@@ -50,24 +50,10 @@ public class SearchEventListHandler extends RequestHandler {
 		else
 			pathInfo = pathInfo.substring(1);
 
-		// The current request must be a file -> redirect to requestHandler
-		if (pathInfo.contains(".")) {
-			handleSimpleRequest(request, response, pathInfo);
-			return;
-		}
-
-		// the pathInfo should be null
-		// if(!pathInfo.equals("passes")&&!pathInfo.equals("annules")&&!pathInfo.equals("futur")&&!pathInfo.equals(""))
-		if (isAnotherContext(pathInfo)) {
-			String setLocation = "/Webapp/" + pathInfo;// "/";
-			response.sendRedirect(setLocation);
-			// request.getRequestDispatcher("/"+pathInfo).forward(request,
-			// response);
-			return;
-		}
-
 		// create a handle to the resource
 		String filename = "liste-des-evenements.html";
+		processRequestHelper(request, response, pathInfo, filename);
+		
 		File staticResource = new File(staticDir, filename);
 		File dynamicResource = new File(dynamicDir, filename);
 
@@ -75,8 +61,6 @@ public class SearchEventListHandler extends RequestHandler {
 		if (!staticResource.exists() && !dynamicResource.exists()) {
 			response.setStatus(HttpServletResponse.SC_NOT_FOUND);
 			processTemplate(request, response, "404.html");
-		} else {
-			processRequestHelper(request, response, pathInfo, filename);
 		}
 	}
 
@@ -84,15 +68,13 @@ public class SearchEventListHandler extends RequestHandler {
 			HttpServletResponse response, String pathInfo, String filename)
 			throws SQLException, UnsupportedEncodingException,
 			FileNotFoundException, IOException {
-		setDefaultResponseContentCharacterAndStatus(response);
-
-		HashMap<String, Object> sources = new HashMap<String, Object>();
-
+		
 		try {
 			// TODO: Determine if this is the correct way to send this
 			// information.
 			PrintWriter responseWriter = response.getWriter();
 			responseWriter.print(buildSearchEventList(request).toString());
+			responseWriter.flush();
 		} catch (JSONException e) {
 			e.printStackTrace();
 		}
@@ -145,6 +127,7 @@ public class SearchEventListHandler extends RequestHandler {
 		events.put(new JSONObject().append("events", sources));
 
 		JSONResponse.put(events);
-		return JSONResponse;
+		
+		return new JSONArray().put(new JSONObject("{'month': '7', 'num': 614, 'link': '', 'year': '2009', 'news': '', 'safe_title': 'Woodpecker', 'transcript': '', 'alt': 'If you don't have an extension cord I can get that too.  Because we're friends!  Right?', 'img': 'http://imgs.xkcd.com/comics/woodpecker.png', 'title': 'Woodpecker', 'day': '24'}"));
 	}
 }
