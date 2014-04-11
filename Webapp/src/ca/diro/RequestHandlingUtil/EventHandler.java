@@ -7,27 +7,10 @@ import java.io.UnsupportedEncodingException;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.Collections;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.Properties;
 
-
-
-
-
-
-//import javax.mail.Message;
-//import javax.mail.Multipart;
-//import javax.mail.Session;
-//import javax.mail.Transport;
-//import javax.mail.internet.InternetAddress;
-//import javax.mail.internet.MimeBodyPart;
-//import javax.mail.internet.MimeMessage;
-//import javax.mail.internet.MimeMultipart;
-import javax.naming.InitialContext;
-import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -65,6 +48,26 @@ public class EventHandler extends RequestHandler {
 	}
 
 
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see org.eclipse.jetty.server.Handler#handle(java.lang.String,
+	 * org.eclipse.jetty.server.Request, javax.servlet.http.HttpServletRequest,
+	 * javax.servlet.http.HttpServletResponse)
+	 */
+	@Override
+	public void doPost(
+			HttpServletRequest request, HttpServletResponse response)
+					throws IOException, ServletException {
+		try{
+			processRequest(request, response);
+		}catch (Exception e){
+			System.out.println("In eventHanler Post catch exception");
+			catchHelper(request, response, e);
+		}
+	}
+
+	
 	private void processRequest(HttpServletRequest request,
 			HttpServletResponse response) throws IOException,
 			UnsupportedEncodingException, FileNotFoundException, ServletException, SQLException {
@@ -79,40 +82,17 @@ public class EventHandler extends RequestHandler {
 				request.getRequestDispatcher("/"+pathInfo).forward(request, response);
 				return;
 			}
-			// create a handle to the resource
+
 			String filename = "evenement.html"; 
 			File staticResource = new File(staticDir, filename);
 			File dynamicResource = new File(dynamicDir, filename);
 
-			// Ressource existe
 			if (!staticResource.exists() && !dynamicResource.exists()){
 				response.setStatus(HttpServletResponse.SC_NOT_FOUND);
 				processTemplate(request, response, "404.html");
 			}
 			else{
 				processRequestHelper(request, response, pathInfo, filename);
-
-				//				cmd2.nofifySignedUser(eventID);
-
-				//send mail to all registered users
-				//				InitialContext ic = new InitialContext();
-				//				String snName = "java:comp/env/mail/MyMailSession";
-				//				Session mailSession = (Session)ic.lookup(snName);
-				//				
-				//				Properties props = mailSession.getProperties();
-				//				props.put("mail.from", "noreply@udmenforme.com");
-				//				
-				//				Message msg = new MimeMessage(mailSession);
-				//				msg.setSubject("msgSubject");
-				//				msg.setSentDate(new Date());
-				//				msg.setFrom();
-				//				msg.setRecipients(Message.RecipientType.TO, InternetAddress.parse("bounce_sound@hotmail.com", false));
-				//				MimeBodyPart mbp = new MimeBodyPart();
-				//				mbp.setText("msgTxt");
-				//				Multipart mp = new MimeMultipart();
-				//				mp.addBodyPart(mbp);
-				//				msg.setContent(mp);
-				//				Transport.send(msg);
 			}
 	}
 
@@ -121,17 +101,14 @@ public class EventHandler extends RequestHandler {
 					throws SQLException, UnsupportedEncodingException,
 					FileNotFoundException, IOException {
 		setDefaultResponseContentCharacterAndStatus(response);
-		//TODO:Get the user event info from the database
 		
 		HttpSession session = request.getSession(true);
-		boolean isLoggedIn=session.getAttribute("auth")==null? false:true;
 		HashMap<String, Object> sources = new HashMap<String, Object>();
 		
-		String userId = "-1";
-		if (isLoggedIn) userId = (String) session.getAttribute(USER_ID_ATTRIBUTE);
-		if( isRegisteredToEvent(eventID, userId)) response.setHeader("isRegistered", "true");
+		if( isRegisteredToEvent(session, eventID)) 
+			response.setHeader("isRegistered", "true");
 		
-		sources.putAll(buildAllMustacheSourcesInfo(response, eventID, session, isLoggedIn));
+		sources.putAll(buildAllMustacheSourcesInfo(response, eventID, session));
 
 		processTemplate(request, response, "header.html",sources);
 		processTemplate(request, response, filename,sources);
@@ -139,14 +116,9 @@ public class EventHandler extends RequestHandler {
 	}
 
 
-	private HashMap<String, Object> isOwnerMustacheSource(
-			String loggedUserUsername, String eventUsername)
-			throws SQLException {
-		HashMap<String, Object> sources = new HashMap<String, Object>();
-		boolean isOwner = false;//response.getHeader("isOwner")!=null?true:false;
-		if(eventUsername.equals(loggedUserUsername)) isOwner = true;
-		if(isOwner)sources.put("isOwner", isOwner);
-		return sources;
+	private boolean isRegisteredToEvent(HttpSession session, String eventID) throws SQLException {
+		String userId = (!isLoggedIn(session))? "-1" : (String) session.getAttribute(USER_ID_ATTRIBUTE);
+		return isRegisteredToEvent(eventID, userId);
 	}
 
 
@@ -171,8 +143,7 @@ public class EventHandler extends RequestHandler {
 								rs.getString("location"), rs.getString("description"), eventID,
 								badgeClasse,""+numPlacesLeft)
 						);
-				sources.putAll(isOwnerMustacheSource((String)session.getAttribute(USERNAME_ATTRIBUTE), rs.getString("username")));
-
+				sources.putAll(buildIsEventOwnerMustacheSource( session,rs.getString("username")));
 			}else{
 				//TODO:show error message -- The event ____ does not exist
 			}
@@ -181,13 +152,13 @@ public class EventHandler extends RequestHandler {
 	}
 
 	private HashMap<String, Object> buildAllMustacheSourcesInfo(HttpServletResponse response,
-			String eventID, HttpSession session, boolean isLoggedIn)
+			String eventID, HttpSession session)
 					throws SQLException {
 		HashMap<String, Object> sources = new HashMap<String, Object>();
 		sources.put("comment", buildCommentList(eventID));
 		sources.put("notifications_number", countUserNotification(session));
 		sources.put("id", eventID);
-		sources.put("user", isLoggedIn);
+		sources.put("user", isLoggedIn(session));
 		sources.putAll(buildMustacheSourcesSuccessInfo(response, session));
 		sources.putAll(buildMustacheSourcesEventInfo(eventID,session));
 
@@ -242,25 +213,5 @@ public class EventHandler extends RequestHandler {
 			if (rs.next()) return true;
 		}
 		return false;
-	}
-
-
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see org.eclipse.jetty.server.Handler#handle(java.lang.String,
-	 * org.eclipse.jetty.server.Request, javax.servlet.http.HttpServletRequest,
-	 * javax.servlet.http.HttpServletResponse)
-	 */
-	@Override
-	public void doPost(
-			HttpServletRequest request, HttpServletResponse response)
-					throws IOException, ServletException {
-		try{
-			processRequest(request, response);
-		}catch (Exception e){
-			System.out.println("In eventHanler Post catch exception");
-			catchHelper(request, response, e);
-		}
 	}
 }

@@ -53,14 +53,14 @@ public class NotificationHandler extends RequestHandler {
 		else pathInfo = "";
 
 		//The current request must be a file -> redirect to requestHandler
-//		if(	isKnownFileExtention(pathInfo)) {
-//			handleSimpleRequest(request, response, pathInfo);
-//			return;
-//		}
+		if(	isKnownFileExtention(pathInfo)) {
+			handleSimpleRequest(request, response, pathInfo);
+			return;
+		}
 		if(isAnotherContext(pathInfo)&&!pathInfo.equals("")){ 	        
 			String setLocation = "/Webapp/"+pathInfo;
 			response.sendRedirect(setLocation);
-//			request.getRequestDispatcher("/"+pathInfo).forward(request, response);
+			//			request.getRequestDispatcher("/"+pathInfo).forward(request, response);
 			return;
 		}
 		String filename = "notifications.html"; 
@@ -84,29 +84,31 @@ public class NotificationHandler extends RequestHandler {
 
 	private HashMap<String, Object> addAllInfoToMustacheSources(
 			HttpServletRequest request, HttpServletResponse response)
-			throws JSONException, SQLException {
+					throws JSONException, SQLException {
 		HashMap<String, Object> sources = new HashMap<String, Object>();
 
 		//TODO:Get the user id using the database and/or if there's no path info the id from the session variable 
 		HttpSession session = request.getSession(true);
-		boolean isLoggedIn=session.getAttribute("auth")==null? false:true;
+		boolean isLoggedIn=session.getAttribute("auth")==null? false:(boolean)session.getAttribute("auth");
 		if(!isLoggedIn){
 			//TODO:if user is not logged in redirect user to login page to view is page
 			return sources;
 		}
-		
+
 		List<Notification> notificationList = new LinkedList<Notification>();
-		ListUserNotification listUserNotificationCommand = new ListUserNotification(""+getLoggedUserId(session));
-		Main.getDatabase().executeDb(listUserNotificationCommand);
-		
-		ResultSet rs = listUserNotificationCommand.getResultSet();
-		while (rs.next()){
-			//eventid, title, location, dateevent, description
-			notificationList.add(
-					new Notification(rs.getString("eventid"), 
-//							"Bidon_Username",//
-							rs.getString("username"), 
-							rs.getString("title")));
+		String loggedUserId = getLoggedUserId(session);
+		if(!loggedUserId.equals("-1")){
+		ListUserNotification listUserNotificationCommand = new ListUserNotification(loggedUserId);
+		if(Main.getDatabase().executeDb(listUserNotificationCommand)){
+			ResultSet rs = listUserNotificationCommand.getResultSet();
+			while (rs.next()){
+				//eventid, title, location, dateevent, description
+				notificationList.add(
+						new Notification(rs.getString("eventid"), 
+								//							"Bidon_Username",//
+								rs.getString("username"), 
+								rs.getString("title")));
+			}}
 		}
 		sources.put("notificationsList", notificationList);
 		sources.putAll(addSuccessMessagesToMustacheSources(response, isLoggedIn));

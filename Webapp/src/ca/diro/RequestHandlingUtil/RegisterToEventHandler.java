@@ -1,9 +1,7 @@
 package ca.diro.RequestHandlingUtil;
 
 import java.io.IOException;
-import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.HashMap;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
@@ -11,7 +9,6 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import ca.diro.Main;
-import ca.diro.DataBase.DataBase;
 import ca.diro.DataBase.Command.PageInfoEvent;
 import ca.diro.DataBase.Command.SubscriteToEvent;
 
@@ -33,60 +30,40 @@ public class RegisterToEventHandler extends RequestHandler {
 			HttpServletRequest request, HttpServletResponse response)
 					throws IOException, ServletException {
 		String eventID="";
-		String userId="";
 		try{
-			Boolean isRegisteredSucessfully = false;
 			//TODO:check if the user is logged in and not already registered to the event
 			HttpSession session = request.getSession(true);
-			boolean isLoggedIn=session.getAttribute("auth")==null? false:true;
 			eventID = request.getParameter("id") == null ? "-1":request.getParameter("id");
-			DataBase db = Main.getDatabase();
 			
+			String userId = ""+authentifyUser(session);
+			
+
+			//check if there's still space left in the event if not show an error message (The event is full)
 			if(getAvailablePlaces(eventID)<1){
-				//TODO:check if there's still space left in the event if not show an error message (The event is full)
+				response.addHeader("error", "Désolé! Il ne reste plus de place dans l'événement.");
+				//				response.addHeader("registerSuccess", "false");
+//				response.addHeader("unsufficientPlace", "true");
 				return;
 			}
-			
-			if(!isLoggedIn){
-				SubscriteToEvent cmd = new SubscriteToEvent(userId, eventID, false);
-				isRegisteredSucessfully = db.executeDb(cmd);
-				if(isRegisteredSucessfully) {
-					response.addHeader("isRegistered", "true");
-					response.addHeader("registerSuccess", "true");
-				}
-				else{
-					//TODO:Error message
-				}
-			}else{
-				//TODO:Register the User to the event in the database
-				userId = (String) (session.getAttribute(USER_ID_ATTRIBUTE)==null?-1:session.getAttribute(USER_ID_ATTRIBUTE));
-				
-				SubscriteToEvent cmd;
-				if(userId.equals("-1")) cmd = new SubscriteToEvent(userId, eventID, false);
-				else cmd = new SubscriteToEvent(userId, eventID, true);
-				isRegisteredSucessfully = db.executeDb(cmd); 
-				if(isRegisteredSucessfully) response.addHeader("registerSuccess", "true");
+			//Register the User to the event in the database
+			SubscriteToEvent subscribeCommand = new SubscriteToEvent(userId, eventID, isLoggedIn(session));
+			if(Main.getDatabase().executeDb(subscribeCommand)) {
 				response.addHeader("isRegistered", "true");
+				response.addHeader("registerSuccess", "true");
 			}
-//			if(isRegisteredSucessfully){
-//				//redirects the current request to the newly created event
-//				response.addHeader("registerSuccess", "true");
-//			}else{
-//				//TODO:show error message
-//			}
+			else{
+				response.addHeader("error", "Il y a eu une erreur lors de l'inscription à l'événement.\nSi vous n'êtes pas déjà inscrit, veuillez réessayer.\nSi le problème persiste, communiquer avec le groupe1.");
+			}
 		}
 		catch (Exception e){
 			catchHelper( request, response, e);
 		}finally{
-//			response.addHeader("isRegistered", "true");
-			String setLocation = "/Webapp/evenement/"+eventID;
-			response.sendRedirect(setLocation);
-//			String setLocation = "/evenement/"+eventID;
-//			request.getRequestDispatcher(setLocation).forward(request, response);
-//			System.out.println("\n\nIn registerEvent, redirecting to :"+setLocation+"\tuserId:"+userId+""+"\n\n");
+			//has to be a forward to be able to carry on the new header information
+			String setLocation = "/evenement/"+eventID;
+			request.getRequestDispatcher(setLocation).forward(request, response);
 		}
 	}
-	
+
 	private int getAvailablePlaces(String eventID) throws SQLException {
 		return new PageInfoEvent(eventID,Main.getDatabase()).getAvailablePlaces();
 	}

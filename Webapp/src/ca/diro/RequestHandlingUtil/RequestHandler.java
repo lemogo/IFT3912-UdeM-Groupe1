@@ -17,6 +17,7 @@ import java.util.List;
 import java.util.Map;
 
 import javax.servlet.ServletException;
+import javax.servlet.ServletRequest;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -26,6 +27,7 @@ import org.json.JSONArray;
 
 import ca.diro.Main;
 import ca.diro.DataBase.Command.CountUserNotification;
+import ca.diro.DataBase.Command.OpenSession;
 
 import com.github.mustachejava.DefaultMustacheFactory;
 import com.github.mustachejava.Mustache;
@@ -66,6 +68,7 @@ public class RequestHandler extends HttpServlet {
 
 	public static final String USER_ID_ATTRIBUTE="UserID";
 	public static final String USERNAME_ATTRIBUTE="username";
+	public static final String USER_PASSWORD_ATTRIBUTE="password";
 	/*
 	 * (non-Javadoc)
 	 * 
@@ -79,28 +82,28 @@ public class RequestHandler extends HttpServlet {
 		try{
 			String pathInfo = request.getPathInfo();
 			if(pathInfo.startsWith("/"))pathInfo = pathInfo.substring(1);
-//			if(pathInfo.length()==0)return;
+			//			if(pathInfo.length()==0)return;
 			if ( pathInfo.equals("accueil")||pathInfo.equals("")) pathInfo = "accueil.html";
 			handleSimpleRequest(request, response, pathInfo);
 		}
 		catch (Exception e){
-						System.out.println("In Get request handler catch exception");
+			System.out.println("In Get request handler catch exception");
 			catchHelper(request, response, e);
 		}
 
 	}
-	
+
 	public void doPost(HttpServletRequest request, HttpServletResponse response)
 			throws IOException, ServletException {
 		try{
 			String pathInfo = request.getPathInfo();
 			if(pathInfo.startsWith("/"))pathInfo = pathInfo.substring(1);
-//			if(pathInfo.length()==0)return;
+			//			if(pathInfo.length()==0)return;
 			if ( pathInfo.equals("accueil")||pathInfo.equals("")) pathInfo = "accueil.html";
 			handleSimpleRequest(request, response, pathInfo);
 		}
 		catch (Exception e){
-				System.out.println("In request helper catch exception");
+			System.out.println("In request helper catch exception");
 			catchHelper(request, response, e);
 		}
 	}
@@ -112,13 +115,13 @@ public class RequestHandler extends HttpServlet {
 			//if user is not logged in redirect him to sign up page (or maybe sign in) 
 			if (request.getSession(true).getAttribute("auth")==null){ 
 				response.sendRedirect("/Webapp/connexion");
-//				request.getRequestDispatcher("/connexion").forward(request, response);
+				//				request.getRequestDispatcher("/connexion").forward(request, response);
 				return;
 			}
 			pathInfo = pathInfo+".html";
 		}
 		else if ( pathInfo.equals("accueil")||pathInfo.equals("enregistrement") || pathInfo.equals("ajouter-un-evenement") 
-//				||pathInfo.equals("modifier-mes-informations")
+				//				||pathInfo.equals("modifier-mes-informations")
 				||pathInfo.equals("connexion")) pathInfo = pathInfo+".html";
 		else if(isAnotherContext(pathInfo)&&!pathInfo.equals("")){ 	        
 			request.getRequestDispatcher("/"+pathInfo).forward(request, response);
@@ -187,7 +190,7 @@ public class RequestHandler extends HttpServlet {
 			response.setContentType("text/html");
 		}
 	}
-	
+
 	protected boolean isKnownFileExtention(String extention){
 		return (		extention.endsWith(".css")||extention.endsWith(".js")
 				||extention.endsWith(".png")||extention.endsWith(".jpg")
@@ -266,7 +269,7 @@ public class RequestHandler extends HttpServlet {
 	@SuppressWarnings("serial")
 	protected void processTemplate(HttpServletRequest req, HttpServletResponse res, String filename, Object... scopes) throws UnsupportedEncodingException, FileNotFoundException, IOException{
 		MustacheFactory mc = new DefaultMustacheFactory(dynamicDir);
-//		mc = new DefaultMustacheFactory(dynamicDir);
+		//		mc = new DefaultMustacheFactory(dynamicDir);
 		Mustache mustache = mc.compile(filename);
 
 		Map<Object, Object> parameters = new HashMap<Object, Object>(req.getParameterMap()){
@@ -314,17 +317,17 @@ public class RequestHandler extends HttpServlet {
 			throws SQLException {
 		String loggedUserId = session.getAttribute(USER_ID_ATTRIBUTE)==null?"-1":(String) session.getAttribute(USER_ID_ATTRIBUTE);
 		return countUserNotification(loggedUserId);
-		}
-	
+	}
+
 	protected String countUserNotification(String loggedUserId)
 			throws SQLException {
-				String notificationNumber = "0";
-				CountUserNotification cmdCount = new CountUserNotification(loggedUserId);
-				Main.getDatabase().executeDb(cmdCount);
-				ResultSet rs2 = cmdCount.getResultSet();
-				if(rs2.next()) notificationNumber = rs2.getNString(1);
-				return notificationNumber;
-			}
+		String notificationNumber = "0";
+		CountUserNotification cmdCount = new CountUserNotification(loggedUserId);
+		Main.getDatabase().executeDb(cmdCount);
+		ResultSet rs2 = cmdCount.getResultSet();
+		if(rs2.next()) notificationNumber = rs2.getNString(1);
+		return notificationNumber;
+	}
 
 	protected String computeBadgeColor(int numPlacesLeft) {
 		//!badgeGreen si + que 3, badgeYellow si - que 3 et badgeRed si 0
@@ -347,8 +350,8 @@ public class RequestHandler extends HttpServlet {
 		for(int i = smallestIndex; i<=selectedIndex;i++){
 			options+="<option value=\""+i+"\">"+i+"</option>\n";
 		}
-//		if(selectedIndex!=null) 
-			options+="<option selected=\"selected\" value=\""+selectedIndex+"\">"+selectedIndex+"</option>\n";
+		//		if(selectedIndex!=null) 
+		options+="<option selected=\"selected\" value=\""+selectedIndex+"\">"+selectedIndex+"</option>\n";
 		for(int i = selectedIndex; i<=biggestIndext;i++){
 			options+="<option value=\""+i+"\">"+i+"</option>\n";
 		}
@@ -376,7 +379,55 @@ public class RequestHandler extends HttpServlet {
 	}
 
 	protected boolean isLoggedIn(HttpSession session) {
-		return session.getAttribute("auth")==null? false:true;
+		return session.getAttribute("auth")==null? false:(boolean)session.getAttribute("auth");
+	}
+
+	protected HashMap<String, Object> buildIsEventOwnerMustacheSource(HttpSession session, String eventUsername) throws SQLException
+	{
+		String loggedUserUsername = (String)session.getAttribute(USERNAME_ATTRIBUTE);
+		String password = (String)session.getAttribute(USER_PASSWORD_ATTRIBUTE);
+
+		HashMap<String, Object> sources = new HashMap<String, Object>();
+		if(eventUsername.equals(loggedUserUsername) && isEventOwner(loggedUserUsername, eventUsername,password)) sources.put("isOwner", true);
+		//		sources.put("isOwner", false);
+		return sources;
+	}
+
+	protected boolean isEventOwner(String loggedUserUsername, 
+			String eventUsername, String loggedUserPassword) throws SQLException{
+		if(authentifyUser(loggedUserUsername, loggedUserPassword)!=null)
+			return (eventUsername.equals(loggedUserUsername)) ;
+		return false;
+	}
+
+	protected boolean isAccountOwner(String loggedUserUsername, 
+			String requestedAccountUsername, String loggedUserPassword) throws SQLException{
+		if(authentifyUser(loggedUserUsername, loggedUserPassword)!=null)
+			return (requestedAccountUsername.equals(loggedUserUsername)) ;
+		return false;
+	}
+
+	protected Integer authentifyUser(String username, String password)
+			throws SQLException {
+		OpenSession openCommand = new OpenSession(username, password);
+		if(Main.getDatabase().executeDb(openCommand)){
+			ResultSet results = openCommand.getResultSet();
+			if (results.next())	return results.getInt(1);
+		}
+		return null;
+	}
+	
+	protected Integer authentifyUser(HttpSession session)
+			throws SQLException {
+		String username = (String)session.getAttribute(USERNAME_ATTRIBUTE);
+		String password = (String)session.getAttribute(USER_PASSWORD_ATTRIBUTE);
+		if (username==null || password == null) return -1;
+		return authentifyUser(username, password);
+	}
+
+	protected String computeOwnerRegisteredSince() {
+		// TODO Auto-generated method stub
+		return "randomDate";
 	}
 
 }

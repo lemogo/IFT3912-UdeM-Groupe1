@@ -33,7 +33,7 @@ public class ModifyEventHandler extends RequestHandler {
 		try
 		{
 			//TODO: check if the user is the owner of the modified event 
-			
+//			if(!is)
 			Boolean modifiedSuccessfully = true;
 			String userId = request.getParameter("id");
 			String title = request.getParameter("eventName");

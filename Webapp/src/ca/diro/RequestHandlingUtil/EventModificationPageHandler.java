@@ -1,8 +1,11 @@
 package ca.diro.RequestHandlingUtil;
 
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.io.UnsupportedEncodingException;
 import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.HashMap;
 
 import javax.servlet.ServletException;
@@ -12,7 +15,6 @@ import javax.servlet.http.HttpSession;
 
 import ca.diro.Main;
 import ca.diro.DataBase.DataBase;
-import ca.diro.DataBase.Command.Command;
 import ca.diro.DataBase.Command.PageInfoEvent;
 
 public class EventModificationPageHandler extends RequestHandler {
@@ -33,32 +35,22 @@ public class EventModificationPageHandler extends RequestHandler {
 	public void doGet(
 			HttpServletRequest request, HttpServletResponse response)
 					throws IOException, ServletException {
-		// TODO Implement handling logic for simple requests (and command
-		// validation) and forwarding for requests that require specific
-		// permissions or handling.
 		try{
 			String pathInfo = request.getPathInfo();
-		if(pathInfo.startsWith("/")) pathInfo = pathInfo.substring(1);
-//			System.out.println("in EventModification - pathInfo:"+pathInfo+"\tcontextPath:"+request.getContextPath());
-//			System.out.println("in EventModification - pathInfo:"+pathInfo+"\tcontextPath:"+("/Webapp/"+pathInfo));
-
+			if(pathInfo.startsWith("/")) pathInfo = pathInfo.substring(1);
 			//The current request must be a file -> redirect to requestHandler
 			if(	isKnownFileExtention(pathInfo)) {
 				handleSimpleRequest(request, response, pathInfo);
 				return;
-			}else 
-			
-			if(isAnotherContext(pathInfo)&&!pathInfo.equals("")){ 	        
-//				String setLocation = "/"+pathInfo;//"/";
-//				request.getRequestDispatcher(setLocation).forward(request, response);
+			}else if(isAnotherContext(pathInfo)){ 	        
+				//				String setLocation = "/"+pathInfo;//"/";
+				//				request.getRequestDispatcher(setLocation).forward(request, response);
 				String setLocation = "/Webapp/"+pathInfo;//"/";
 				response.sendRedirect(setLocation);
 				return;
 			}
 
-			// create a handle to the resource
 			String filename = "modifier-un-evenement.html"; 
-
 			File staticResource = new File(staticDir, filename);
 			File dynamicResource = new File(dynamicDir, filename);
 
@@ -67,57 +59,50 @@ public class EventModificationPageHandler extends RequestHandler {
 				response.setStatus(HttpServletResponse.SC_NOT_FOUND);
 				processTemplate(request, response, "404.html");
 			}else{
-				response.setContentType("text/html");
-				response.setCharacterEncoding("utf-8");
-				response.setStatus(HttpServletResponse.SC_OK);
-
-				String eventID = pathInfo;
-				DataBase myDb = Main.getDatabase();
-				Command cmd = new PageInfoEvent(eventID,myDb);
-				HashMap<String, Object> sources = new HashMap<String, Object>();
-
-				if( myDb.executeDb(cmd)){ 
-					ResultSet rs = cmd.getResultSet();
-
-					if (rs.next())
-						//TODO:Add event info here!!
-						sources.put("event",
-								new Event("Event_username1", rs.getString("title"), rs.getString("dateevent"),
-										rs.getString("location"), rs.getString("description"), eventID,
-										rs.getString("numberplaces"))
-								);
-
-					//				String eventID = pathInfo;
-					//TODO:Get the user event info from the database
-
-					//TODO:Add event info here!!
-
-					//to display success message
-					sources.put("id", pathInfo);
-					//to display success message
-//					sources.put("addSuccess", "false");
-					sources.put("isOwner", "true");
-					//				sources.put("registerSuccess", "false");
-					//				sources.put("unregisterSuccess", "false");
-					
-					HttpSession session = request.getSession(true);
-//					String loggedUsername = session.getAttribute(USERNAME_ATTRIBUTE)==null?"Anonymous":(String) session.getAttribute(USERNAME_ATTRIBUTE);
-//					if (isLoggedIn) userId = (String) session.getAttribute(USER_ID_ATTRIBUTE);
-					
-					boolean isLoggedIn=session.getAttribute("auth")==null? false:true;
-					sources.put("user", isLoggedIn);
-					String loggedUserId = session.getAttribute(USER_ID_ATTRIBUTE)==null?"-1":(String) session.getAttribute(USER_ID_ATTRIBUTE);
-					sources.put("notifications_number", countUserNotification(loggedUserId));
-
-					sources.put("options", buildSelectOptionsTag(1,1000,rs.getInt("numberplaces")));
-					processTemplate(request, response, "header.html", sources);
-					processTemplate(request, response, filename, sources);
-					processTemplate(request, response, "footer.html");
-				}
+				processRequest(request, response, pathInfo, filename);
 			}
 		}
 		catch (Exception e){
 			catchHelper( request, response, e);
+		}
+	}
+
+	private void processRequest(HttpServletRequest request,
+			HttpServletResponse response, String pathInfo, String filename)
+			throws SQLException, UnsupportedEncodingException,
+			FileNotFoundException, IOException {
+		response.setContentType("text/html");
+		response.setCharacterEncoding("utf-8");
+		response.setStatus(HttpServletResponse.SC_OK);
+
+		//TODO:find out if the logged user is the owner of the event, if not return to event page with message you are not the owner
+		String eventID = pathInfo;
+		HttpSession session = request.getSession(true);
+//		String loggedUsername = session.getAttribute(USERNAME_ATTRIBUTE)==null?"Anonymous":(String) session.getAttribute(USERNAME_ATTRIBUTE);
+
+		DataBase myDb = Main.getDatabase();
+		PageInfoEvent pageInfoEventCommand = new PageInfoEvent(eventID,myDb);
+		HashMap<String, Object> sources = new HashMap<String, Object>();
+		if( myDb.executeDb(pageInfoEventCommand)){ 
+			ResultSet rs = pageInfoEventCommand.getResultSet();
+			if (rs.next())
+				sources.put("event",
+						new Event(rs.getString("username"), rs.getString("title"), rs.getString("dateevent"),
+								rs.getString("location"), rs.getString("description"), eventID,
+								rs.getString("numberplaces"))
+						);
+			sources.put("id", eventID);
+			sources.putAll(buildIsEventOwnerMustacheSource( session,rs.getString("username")));
+			sources.put("options", buildSelectOptionsTag(1,1000,rs.getInt("numberplaces")));
+			sources.put("user", isLoggedIn(session));
+			if(isLoggedIn(session)){
+				String loggedUserId = session.getAttribute(USER_ID_ATTRIBUTE)==null?"-1":(String) session.getAttribute(USER_ID_ATTRIBUTE);
+				sources.put("notifications_number", countUserNotification(loggedUserId));
+			}
+
+			processTemplate(request, response, "header.html", sources);
+			processTemplate(request, response, filename, sources);
+			processTemplate(request, response, "footer.html");
 		}
 	}
 }
