@@ -5,7 +5,8 @@ import org.h2.tools.DeleteDbFiles;
 import ca.diro.DataBase.Command.*;
 
 /**
- * THis class handle all queries in order to connect database by executing
+ * THis class is where the database is managed in order to 
+ * handle all queries in order to connect database by executing
  * queries commands
  * 
  * @author william
@@ -22,7 +23,7 @@ public class DataBase {
 
 	public DataBase() throws ClassNotFoundException, SQLException {
 		this(DataBase.RESTORE_SCRIPT, false);
-		// Class.forName("org.h2.Driver");
+		
 	}
 
 	public DataBase(String restoreScript) throws SQLException,
@@ -134,7 +135,7 @@ public class DataBase {
 						+ "password  varchar(50) NOT NULL ,"
 						+ "fullname  varchar(50) NOT NULL, "
 						+ "email    varchar(50) NOT NULL ,"
-						+ "age  int NOT NULL,"
+						+ "age  date NOT NULL,"
 						+ "description  char(500) NOT NULL, "
 						+ "primary key (suserId , email)) ");
 
@@ -150,6 +151,7 @@ public class DataBase {
 								+ "primary key (sessionId , email),"
 								+ "foreign key (email) references signeduser(email) on update cascade ON DELETE CASCADE )");
 		// Event table
+		// Event table
 		this.statement().executeUpdate("drop table if exists event");
 		this.statement()
 				.executeUpdate(
@@ -160,7 +162,7 @@ public class DataBase {
 								+ "dateEvent  datetime  NOT NULL , "
 								+ "location  varchar(255) NOT NULL, "
 								+ "description  char(500) NOT NULL, "
-								// + "datecreation  datetime  , "
+								+ "datecreation  datetime default CURRENT_TIMESTAMP() , "
 								+ "numberplaces   int NOT NULL ,"
 								+ "heure  TIME  ,"
 								+ "status  varchar(50) default 'running' check(status in('cancelled', 'deleted', 'running'))  ,"
@@ -240,15 +242,15 @@ public class DataBase {
 			this.statement()
 					.executeUpdate(
 							"insert into signeduser (username, password,fullname,email,age,description)"
-									+ "values('pat', 'patson','patrice méchant', 'patrice@mechant.fun', 42,'Je suis un passionné de jet extreme activité trop cool')");
+									+ "values('pat', 'patson','patrice méchant', 'patrice@mechant.fun', '2014-05-25','Je suis un passionné de jet extreme activité trop cool')");
 			this.statement()
 					.executeUpdate(
 							"insert into signeduser (username, password,fullname,email,age,description)"
-									+ "values('will', 'wilson','willy gentle', 'matresack@ndjeuptien.va', 145,'Jaime faire du patin et tomber mille fois')");
+									+ "values('will', 'wilson','willy gentle', 'matresack@ndjeuptien.va', '2001-04-15','Jaime faire du patin et tomber mille fois')");
 			this.statement()
 					.executeUpdate(
 							"insert into signeduser (username, password,fullname,email,age,description)"
-									+ "values('gil', 'gilson','beau goss', 'beau@ndjeuptien.va', 145,'la natation me passione')");
+									+ "values('gil', 'gilson','beau goss', 'beau@ndjeuptien.va', '1902-05-25','la natation me passione')");
 
 			this.statement().executeUpdate(
 					"insert into sessionuser (datecreation, email ) "
@@ -345,7 +347,6 @@ public class DataBase {
 
 		while (rs.next()) {
 			String tablename = rs.getString(3);
-			// System.out.println(tablename);
 			tableSet.add(tablename);
 		}
 

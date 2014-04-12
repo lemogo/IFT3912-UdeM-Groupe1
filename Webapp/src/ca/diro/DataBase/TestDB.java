@@ -162,7 +162,7 @@ public class TestDB {
 		ResultSet rs = cmd.getResultSet();
 		
 		while (rs.next()) {
-			System.out.println(rs.getString(2));
+			//System.out.println(rs.getString(2));
 		}
 		assertTrue(boo);
 	}
@@ -294,7 +294,7 @@ public class TestDB {
 		// test verify creation of user account 
 		 
 		String  fullname = "lion joe" ; String userName = "lion"  ; String password = "lionson" ;
-							String email = "bily@crabler.bi" ; String  age = "456"; String  description = "jouer de tenis ";
+							String email = "bily@crabler.bi" ; String  age = "2002-02-14"; String  description = "jouer de tenis ";
 		Command cmd = new CreateUserAccount(userName, password ,fullname , email, age, description, myDb);
 		boolean boo = myDb.executeDb(cmd); 
 		ResultSet rs = ((CreateUserAccount) cmd).getCurrentUserId();
@@ -334,7 +334,7 @@ public class TestDB {
 		boolean boo = myDb.executeDb(cmd); 
 		ResultSet rs = ((AddEvent) cmd).getCurrentEventId();
 		if (rs.next()){ 
-			System.out.println(rs.getString(1));
+			//System.out.println(rs.getString(1));
 		}
 		assertTrue(boo);
 	}
@@ -368,7 +368,7 @@ public class TestDB {
 	public void testModifyUserAccount() throws SQLException  {
 		// test verify change of user's full name 
 		String userId =  "1" ; String fullName = "blanchard"; String email = "blanchard@legrand.tc"; String username = "blanco";
-		String password = "blankison" ; String age = "563"; String description = "jaime la nage les raquette le soccer";
+		String password = "blankison" ; String age = "2005-07-12"; String description = "jaime la nage les raquette le soccer";
 		Command cmd = new ModifyAccount(userId ,fullName, email, username, password, age, description);
 		boolean boo = myDb.executeDb(cmd) ; 
 		
