@@ -58,7 +58,7 @@ public class Main {
 	 * @throws Exception
 	 */
 	public static void main(String[] args) throws Exception {
-		restoreDatabase();
+		
 		database = new DataBase();
 
 		initSecureServer();
@@ -70,16 +70,7 @@ public class Main {
 		System.exit(0);
 	}
 
-	private static void restoreDatabase() {
-		String restore = "DataBaseRestore.sql" ;
-		try {
-			database = new DataBase(restore);
-			database.createTables();
-		} catch (ClassNotFoundException | SQLException e1) {
-			e1.printStackTrace();
-		}
-		database.populateTable();
-	}
+
 
 	public static class AddShutdownHook {
 		public void attachShutDownHook(){
@@ -87,7 +78,7 @@ public class Main {
 
 				@Override
 				public void run() {
-					//database.emptyDataBase();
+					
 					try {
 						database.dbClose();
 					} catch (SQLException e) {

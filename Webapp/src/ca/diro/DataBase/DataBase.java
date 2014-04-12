@@ -81,7 +81,7 @@ public class DataBase {
 	 * 
 	 * @throws SQLException
 	 */
-	public void dbDelete(String password) throws SQLException {
+	protected void dbDelete(String password) throws SQLException {
 		if (password.equals("DataBaseManagerGroup1")) {
 			DeleteDbFiles.execute("data/database", dbName, true);
 		}
@@ -123,7 +123,7 @@ public class DataBase {
 	 * @throws SQLException
 	 */
 
-	public void createTables() throws SQLException {
+	protected void createTables() throws SQLException {
 		
 		this.statement().setQueryTimeout(60);
 		
@@ -210,7 +210,7 @@ public class DataBase {
 	 * 
 	 * @return true if good execute else false
 	 */
-	public boolean emptyDataBase() {
+	protected boolean emptyDataBase() {
 		boolean returnValue = false;
 		try {
 			
@@ -235,7 +235,7 @@ public class DataBase {
 	 * 
 	 * @throws SQLException
 	 */
-	public boolean populateTable() {
+	protected boolean populateTable() {
 		boolean returnValue = false;
 		try {
 
@@ -309,7 +309,7 @@ public class DataBase {
 	 * 
 	 * @throws SQLException
 	 */
-	public void backupDataBase() throws SQLException {
+	protected void backupDataBase() throws SQLException {
 
 		this.statement().setQueryTimeout(50);
 		this.statement().execute(
@@ -322,7 +322,7 @@ public class DataBase {
 	 * 
 	 * @throws SQLException
 	 */
-	public void restoreDataBase() throws SQLException {
+	protected void restoreDataBase() throws SQLException {
 
 		this.statement().setQueryTimeout(50);
 		this.statement().execute(
@@ -362,16 +362,8 @@ public class DataBase {
 //		 
 //		   myDb.createTables(); 
 //		   myDb.populateTable(); //String info =
-//		 //"{eventId:1}"; Command cmd = new PageInfoEvent(info, myDb); boolean boo =
-//		   String userId = "2" ;
-//			Command cmd = new ListRegisterEvent(userId);
-//			boolean boo = myDb.executeDb(cmd); 
-//			
-//			ResultSet rs = cmd.getResultSet();
-//			
-//			while (rs.next()) {
-//				System.out.println(rs.getString(2));
-//			}
+//		
+//		  
 //		 myDb.dbClose() ;
 //	}
 	

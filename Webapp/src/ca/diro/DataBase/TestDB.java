@@ -17,6 +17,8 @@ import ca.diro.DataBase.Command.*;
  */
 public class TestDB {
 
+	
+
 	DataBase myDb ;
 	
 	 @Before
@@ -327,7 +329,7 @@ public class TestDB {
 		// test verify creation of user account 
 		
 		String userId = "1"; String title = "bataille de chocolat" ; 
-		String   datetime = "2014-12-07 23:21:45" ; String  location = "plateau mont royal" ;
+		String   datetime = "2014-12-07 23:21:00" ; String  location = "plateau mont royal" ;
 		String numberplaces = "42" ; String description = "jeu de tir  tres evmouvant ";
 
 		Command cmd = new AddEvent(userId,title, datetime, location, numberplaces, description, myDb);
