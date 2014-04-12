@@ -137,6 +137,7 @@ public class DataBase {
 						+ "email    varchar(50) NOT NULL ,"
 						+ "age  date NOT NULL,"
 						+ "description  char(500) NOT NULL, "
+						+ "datecreation  datetime default CURRENT_TIMESTAMP() , "
 						+ "primary key (suserId , email)) ");
 
 		// Account table

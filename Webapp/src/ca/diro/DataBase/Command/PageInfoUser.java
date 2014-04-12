@@ -24,7 +24,7 @@ public class PageInfoUser extends Command{
 	 */
 	private String buildQuery(int userId)  {
 	
-		String str = "select fullname, username, password, email, age, description, suserid from  signeduser " +
+		String str = "select * from  signeduser " +
 					"where 	suserid = "+ userId ;
 		return str;
 	}

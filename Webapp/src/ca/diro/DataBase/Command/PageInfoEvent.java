@@ -33,7 +33,6 @@ public class PageInfoEvent extends Command{
 	 * and build the right query
 	 * @param eventId 
 	 * @return str <code>String</code> Object which is the query
-	 * @throws JSONException 
 	 */
 	private String buildQuery(String eventId)  {
 		
