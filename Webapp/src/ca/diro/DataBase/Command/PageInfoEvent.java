@@ -16,9 +16,11 @@ import ca.diro.DataBase.DataBase;
  */
 public class PageInfoEvent extends Command{
 
+	
 	/**
-	 * @throws JSONException 
-	 * 
+	 * Constructor
+	 * @param eventId
+	 * @param db
 	 */
 	public PageInfoEvent(String eventId, DataBase db)   {
 			myDb = db ;
@@ -69,7 +71,7 @@ public class PageInfoEvent extends Command{
 	/**
 	 * Method to get the number of person who remain to complete  the event 
 	 * @param place a <code>String</code> giving the Id of the event 
-	 * @return
+	 * @return place
 	 */
 	private  int getRemainingPlaces(String eventId){
 		//TODO total places 
