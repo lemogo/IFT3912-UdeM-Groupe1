@@ -43,8 +43,8 @@ public class ModifyAccount extends CommandUpdate{
 		
 		String str = "" ;	
 		str = "update signeduser set fullname = '" + fullname + "' , email = '" + email + "', username = '" + username + "'  ," +
-									"password = '" + password + "'  ,description = '" + description + "',  age = " + age   +
-									" where suserid = "+ userId ;
+									"password = '" + password + "'  ,description = '" + description + "',  age = '" + age   +
+									"' where suserid = "+ userId ;
 		 return str ;
 	}
 	

@@ -3,7 +3,7 @@ package ca.diro.DataBase.Command;
 
 /**
  * This class implement a command  allowing anonymous user to subscribe in one  event 
- * @author william
+ * @author william , lionnel
  *
  */
 public class UnsubscriteToEvent extends CommandUpdate {

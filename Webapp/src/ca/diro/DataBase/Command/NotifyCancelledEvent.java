@@ -48,7 +48,6 @@ public class NotifyCancelledEvent extends Command{
 		String value = "" ;
 		String str = "select notification from subsEventSigned " +
 				"where eventid = "+eventId + " AND  suserid = " +userId ;
-		//+ "and  UPPER(notification) = 'ALREADY'"  ;
 	
 		try {
 			 rs = myDb.statement().executeQuery(str);

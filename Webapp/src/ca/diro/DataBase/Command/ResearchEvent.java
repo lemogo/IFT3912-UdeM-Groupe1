@@ -33,14 +33,14 @@ public class ResearchEvent extends Command{
 	
 	public  String buildQuery(LinkedList<String> info ) {
 		if (info.size() < 1) {
-		    //OR ERROR
+		    
 		    return "";
 		}
 		String str =  "SELECT eventid, title, suserid, dateevent, location, description, numberplaces FROM Event where " ;
 		String st ="";
 		for (String mot : info) {
 			st += "or title LIKE '%" + mot+ "%' or description LIKE '%" + mot + "%'  " ;
-			//System.out.println(mot);
+			
 		}
 		st = st.replaceFirst("or", " ") ;
 		str += st  ;

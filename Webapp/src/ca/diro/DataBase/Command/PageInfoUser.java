@@ -23,8 +23,7 @@ public class PageInfoUser extends Command{
 	 * @return str <code>String</code> Object which is the query
 	 */
 	private String buildQuery(int userId)  {
-		
-		//int userId = jsonInfo.getInt("userId");
+	
 		String str = "select fullname, username, password, email, age, description, suserid from  signeduser " +
 					"where 	suserid = "+ userId ;
 		return str;
@@ -45,7 +44,6 @@ public class PageInfoUser extends Command{
 	 */
 	private String buildQuery(String username)  {
 		
-		//int userId = jsonInfo.getInt("userId");
 		String str = "select fullname, username, password, email, age, description, suserid from  signeduser " +
 					"where 	username = '"+ username +"'";
 		return str;

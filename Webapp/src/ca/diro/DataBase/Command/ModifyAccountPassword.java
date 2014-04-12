@@ -3,8 +3,6 @@
  */
 package ca.diro.DataBase.Command;
 
-
-
 /**
  * this class implement command to allow logged user to modified their account informations  parameter except the user's name   
  * @author william

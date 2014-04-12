@@ -44,9 +44,8 @@ public class CreateUserAccount extends CommandUpdate {
 		String str = "";
 		
 			str = "insert into signeduser  (username, password,fullname,email,age,description)"  +
-					"values('" + userName +"', '" + password +"', '" + fullName +"', '"+ email  +"', " + Integer.parseInt(age) + " , '"+ description + "')";
-			//myDb.statement().executeUpdate("insert into sessionuser (datecreation, email ) " +
-				//		"values(CURRENT_DATE(),'" + email +"')");
+					"values('" + userName +"', '" + password +"', '" + fullName +"', '"+ email  +"', '" + age + "' , '"+ description + "')";
+			
 		 return str;
 			
 	}

@@ -44,7 +44,7 @@ public class PageInfoEvent extends Command{
 	}
 	
 	private  int getAttendPlaces(String eventId) {
-		//TODO attended places
+		
 		int place = 0 ;
 		int place1 = 0 ;
 		ResultSet rs =  null ;
@@ -55,14 +55,11 @@ public class PageInfoEvent extends Command{
 													"where eventid = "+ eventId);
 			rs.next() ;
 			place1 = rs.getInt(1);
-				//System.out.println(rs.getInt(1));
 			
 			rs = myDb.statement().executeQuery( "select count(eventid) from subsEventgeneral " +
 					"where eventid = "+ eventId);
 			rs.next() ;
 			place = rs.getInt(1);
-			//System.out.println(rs.getInt(1));
-		
 			place = place + place1 ;
 		} catch (SQLException e) {
 			System.err.println(e.getMessage());
@@ -85,7 +82,6 @@ public class PageInfoEvent extends Command{
 															"where eventid = "+ eventId );
 			while (rs.next()) {
 				place = rs.getInt(1);
-				//System.out.println(rs.getInt(1));
 			}
 			place =   place - this.getAttendPlaces(eventId) ;
 		} catch (SQLException e) {
