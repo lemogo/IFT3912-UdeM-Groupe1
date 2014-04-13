@@ -104,7 +104,7 @@ public class RemoveNotificationHandler extends RequestHandler {
 //		boolean isOwner = userId>0;
 //		sources.put("isOwner", isOwner);
 
-		addUserInfoToMustacheSources(sources, userId);
+//		addUserInfoToMustacheSources(sources, userId);
 
 		if(isLoggedIn)sources.put("user", isLoggedIn);
 		sources.put("notifications_number", countUserNotification(""+userId));
@@ -139,7 +139,6 @@ public class RemoveNotificationHandler extends RequestHandler {
 		sources.put("email",email);
 		sources.put("description",description);
 
-		sources.put("registeredSince",computeOwnerRegisteredSince());
 		sources.put("age",age);
 		sources.put("description",description);
 		return username;

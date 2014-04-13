@@ -36,7 +36,7 @@ public class CreateEventHandler extends RequestHandler {
 				userId = (String)session.getAttribute(USER_ID_ATTRIBUTE);
 				//TODO:Add the event from the database				
 				String title = request.getParameter("eventName");
-				String date = request.getParameter("eventDate");
+				String date = request.getParameter("eventDate")+":00";
 				String location = request.getParameter("eventLocation");
 				String nbplace = request.getParameter("eventNumPeople");
 				String description = request.getParameter("eventDescription");

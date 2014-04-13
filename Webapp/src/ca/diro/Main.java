@@ -43,11 +43,11 @@ public class Main {
 	/**
 	 * Stores the constant name for the Realm used for login and auth.
 	 */
-	private static String realmName = "webRealm";
+//	private static String realmName = "webRealm";
 	/**
 	 * Stores the path of the Realm's properties.
 	 */
-	private static String realmProperties = "resources/realm.properties";
+//	private static String realmProperties = "resources/realm.properties";
 	private static DataBase database;
 
 	/**
@@ -113,7 +113,6 @@ public class Main {
 		handler.setContextPath("/Webapp");
 		handlerCollection.addHandler(  handler );
 		
-		//TODO:Implement search bar handler
 		handler.addServlet(new ServletHolder( new SearchEventListHandler()), "/listEventsAjax");
 		handler.addServlet(new ServletHolder( new RequestHandler()), "/*");
 

@@ -123,6 +123,7 @@ public class UserModificationPageHandler extends RequestHandler {
 				email = rs.getString("email");
 				age  = rs.getString("age"); 
 				description = rs.getString("description");
+				sources.put("registeredSince",rs.getTimestamp("datecreation"));
 			}
 			sources.put("options", buildSelectOptionsTag(1,121,rs.getInt("age")));
 		}else{
@@ -134,7 +135,7 @@ public class UserModificationPageHandler extends RequestHandler {
 		sources.put("email",email);
 		sources.put("description",description);
 
-		sources.put("registeredSince",computeOwnerRegisteredSince());
+//		sources.put("registeredSince",computeOwnerRegisteredSince());
 		sources.put("age",age);
 		sources.put("description",description);
 		return username;

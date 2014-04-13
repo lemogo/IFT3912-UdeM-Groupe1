@@ -2,10 +2,7 @@ package ca.diro.RequestHandlingUtil;
 
 import java.io.IOException;
 import java.sql.ResultSet;
-import java.util.Date;
-import java.util.Properties;
 
-import javax.naming.InitialContext;
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
@@ -15,7 +12,6 @@ import javax.servlet.http.HttpSession;
 import ca.diro.Main;
 import ca.diro.DataBase.DataBase;
 import ca.diro.DataBase.Command.CancelEvent;
-import ca.diro.DataBase.Command.DeleteEvent;
 import ca.diro.DataBase.Command.PageInfoEvent;
 
 public class CancelEventHandler extends RequestHandler {

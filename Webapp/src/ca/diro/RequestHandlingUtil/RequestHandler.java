@@ -9,9 +9,11 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.io.PrintStream;
 import java.io.UnsupportedEncodingException;
+//import java.sql.Date;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -33,6 +35,10 @@ import com.github.mustachejava.DefaultMustacheFactory;
 import com.github.mustachejava.Mustache;
 import com.github.mustachejava.MustacheFactory;
 
+import org.joda.time.DateTime;
+import org.joda.time.Days;
+import org.joda.time.Years;
+
 /**
  * Handler for the Jetty server.
  * 
@@ -47,15 +53,15 @@ public class RequestHandler extends HttpServlet {
 	/**
 	 * The list of supported commands in requests.
 	 */
-	private final static String[] SUPPORTED_COMMANDS = {};
+//	private final static String[] SUPPORTED_COMMANDS = {};
 	/**
 	 * The <code>ResultSet</code> of a database query.
 	 */
-	private ResultSet resultSet;
+//	private ResultSet resultSet;
 	/**
 	 * The <code>resultSet</code> as a <code>JSONArray</code>.
 	 */
-	private JSONArray JSONResult;
+//	private JSONArray JSONResult;
 
 	// La racine des ressources a presenter
 	private static File rootDir = new File(".");
@@ -131,7 +137,7 @@ public class RequestHandler extends HttpServlet {
 				// ||pathInfo.equals("modifier-mes-informations")
 				|| pathInfo.equals("connexion"))
 			pathInfo = pathInfo + ".html";
-		else if (isAnotherContext(pathInfo) && !pathInfo.equals("")) {
+		else if (isAnotherContext(pathInfo)) {
 			request.getRequestDispatcher("/" + pathInfo).forward(request,
 					response);
 			return;
@@ -174,8 +180,6 @@ public class RequestHandler extends HttpServlet {
 
 	protected void setResponseContentType(String target,
 			HttpServletResponse response) {
-		// A changer pour supporter des images, peut-etre par extension ou
-		// par repertoire
 		if (target.endsWith(".css")) {
 			response.setContentType("text/css");
 		} else if (target.endsWith(".js")) {
@@ -472,9 +476,16 @@ public class RequestHandler extends HttpServlet {
 		return authentifyUser(username, password);
 	}
 
-	protected String computeOwnerRegisteredSince() {
-		// TODO Auto-generated method stub
-		return "randomDate";
+	protected int computeAge(long initialDate) {
+		Date today = new java.util.Date();
+		Date past = new java.util.Date(initialDate);
+		return Years.yearsBetween(new DateTime(past), new DateTime(today)).getYears();
+		
 	}
+
+//	protected Date computeDateDiff(Date birthDate) {
+//		
+//		return new Date((new java.util.Date().getTime()-registrationDate.getTime())) ;
+//	}
 
 }

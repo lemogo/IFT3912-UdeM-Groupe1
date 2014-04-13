@@ -6,6 +6,8 @@ import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
@@ -43,7 +45,7 @@ public class UserHandler extends RequestHandler {
 				handleSimpleRequest(request, response, pathInfo);
 				return;
 			}else if(isAnotherContext(pathInfo)&&!pathInfo.equals("")){ 	        
-//				request.getRequestDispatcher("/"+pathInfo).forward(request, response);
+				//				request.getRequestDispatcher("/"+pathInfo).forward(request, response);
 				String setLocation = "/Webapp/"+pathInfo;//"/";
 				response.sendRedirect(setLocation);
 				return;
@@ -73,10 +75,10 @@ public class UserHandler extends RequestHandler {
 			if(	isKnownFileExtention(pathInfo)) {
 				handleSimpleRequest(request, response, pathInfo);
 				return;
-			}else if(isAnotherContext(pathInfo)&&!pathInfo.equals("")){ 	        
+			}else if(isAnotherContext(pathInfo)){ 	        
 				request.getRequestDispatcher("/"+pathInfo).forward(request, response);
-//				String setLocation = "/Webapp/"+pathInfo;
-//				response.sendRedirect(setLocation);
+				//				String setLocation = "/Webapp/"+pathInfo;
+				//				response.sendRedirect(setLocation);
 				return;
 			}
 			processRequest(request, response);
@@ -99,7 +101,8 @@ public class UserHandler extends RequestHandler {
 		}
 
 		if(pathInfo.equals("")&& !isLoggedIn(request.getSession(true))){
-			//TODO:if user is not logged in redirect user to login page to view is page
+			//if user is not logged in redirect user to login page to view is page
+			response.sendRedirect("/Webapp/connexion");
 			return;
 		}
 
@@ -132,7 +135,7 @@ public class UserHandler extends RequestHandler {
 		HttpSession session = request.getSession(true);
 
 		int loggedUserId = Integer.parseInt((String) (session.getAttribute(USER_ID_ATTRIBUTE)==null?"-1":(String)session.getAttribute(USER_ID_ATTRIBUTE)));
-//		int loggedUserId = session.getAttribute(USER_ID_ATTRIBUTE)==null?-1:(int)session.getAttribute(USER_ID_ATTRIBUTE);
+		//		int loggedUserId = session.getAttribute(USER_ID_ATTRIBUTE)==null?-1:(int)session.getAttribute(USER_ID_ATTRIBUTE);
 		String loggedUserUsername = (String) (session.getAttribute(USERNAME_ATTRIBUTE)==null?"-1":session.getAttribute(USERNAME_ATTRIBUTE));
 		String displayedUserUsername = request.getPathInfo().startsWith("/")?request.getPathInfo().substring(1).trim():request.getPathInfo().trim();
 
@@ -215,24 +218,23 @@ public class UserHandler extends RequestHandler {
 	private HashMap<String, Object> buildMustacheSourcesUserInfo(String displayedUserUsername)
 			throws  SQLException {
 		HashMap<String, Object> sources = new HashMap<String, Object>();
-		PageInfoUser pageInfoUserCommand = new PageInfoUser(displayedUserUsername) ; //add cast if necessary
-		Boolean asExecuted = Main.getDatabase().executeDb(pageInfoUserCommand); //true check si la requete est bien exécuté 
-		ResultSet rs = pageInfoUserCommand.getResultSet(); //retourne (username,password,fullname,email,age,description)
+		PageInfoUser pageInfoUserCommand = new PageInfoUser(displayedUserUsername) ; 
 
 		String username="",fullname="",//email="",
 				age="",description="";
-		if (asExecuted){
+		if(Main.getDatabase().executeDb(pageInfoUserCommand)){  
+			ResultSet rs = pageInfoUserCommand.getResultSet(); 
 			if(rs.next()){
 				username = rs.getString("username");
 				fullname = rs.getString("fullname");
 				//				email = rs.getString("email");
-				age  = rs.getString("age"); 
+				age = ""+computeAge(rs.getDate("age").getTime());
 				description = rs.getString("description");
+				sources.put("registeredSince",rs.getTimestamp("datecreation"));
 			}
 		}else{
 			//TODO:send error message to user and return to login page
 		}
-		sources.put("registeredSince",computeOwnerRegisteredSince());
 		sources.put("username",username);
 		sources.put("fullname",fullname);
 		sources.put("age",age);
@@ -242,15 +244,12 @@ public class UserHandler extends RequestHandler {
 
 	private int getUserId(String displayedUserUsername)
 			throws SQLException {
-		PageInfoUser cmd = new PageInfoUser(displayedUserUsername) ; //add cast if necessary
-		Boolean asExecuted = Main.getDatabase().executeDb(cmd); //true check si la requete est bien exécuté 
-		ResultSet rs = cmd.getResultSet(); //retourne (username,password,fullname,email,age,description)
-
+		PageInfoUser cmd = new PageInfoUser(displayedUserUsername) ; 
 		int userId=-1;
-		if (asExecuted){
-			if(rs.next()){
+		if( Main.getDatabase().executeDb(cmd)){  
+			ResultSet rs = cmd.getResultSet();
+			if(rs.next())
 				userId= rs.getInt("suserid");
-			}
 		}else{
 			//TODO:send error message to user and return to login page
 		}
