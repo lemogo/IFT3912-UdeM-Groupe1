@@ -102,11 +102,6 @@ public class RequestHandler extends HttpServlet {
 			if (pathInfo.startsWith("/"))
 				pathInfo = pathInfo.substring(1);
 			// if(pathInfo.length()==0)return;
-			if (pathInfo.equals("listEventsAjax")) {
-				SearchEventListHandler listHandler = new SearchEventListHandler();
-				listHandler.doPost(request, response);
-				return;
-			}
 			if (pathInfo.equals("accueil") || pathInfo.equals(""))
 				pathInfo = "accueil.html";
 			handleSimpleRequest(request, response, pathInfo);
@@ -130,11 +125,7 @@ public class RequestHandler extends HttpServlet {
 				return;
 			}
 			pathInfo = pathInfo + ".html";
-		} else if (pathInfo.equals("listEventsAjax")) {
-			request.getRequestDispatcher("/" + pathInfo).forward(request,
-					response);
-			return;
-		} else if (pathInfo.equals("accueil")
+		}else if (pathInfo.equals("accueil")
 				|| pathInfo.equals("enregistrement")
 				|| pathInfo.equals("ajouter-un-evenement")
 				// ||pathInfo.equals("modifier-mes-informations")

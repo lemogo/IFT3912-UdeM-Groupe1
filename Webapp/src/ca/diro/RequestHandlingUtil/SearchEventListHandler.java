@@ -1,6 +1,5 @@
 package ca.diro.RequestHandlingUtil;
 
-import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -14,7 +13,6 @@ import java.util.LinkedList;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -34,7 +32,6 @@ public class SearchEventListHandler extends RequestHandler {
 	public void doPost(HttpServletRequest request, HttpServletResponse response)
 			throws IOException, ServletException {
 		try {
-			System.out.println("In search do post");
 			processRequest(request, response);
 		} catch (Exception e) {
 			catchHelper(request, response, e);
@@ -45,7 +42,6 @@ public class SearchEventListHandler extends RequestHandler {
 	public void doGet(HttpServletRequest request, HttpServletResponse response)
 			throws IOException, ServletException {
 		try {
-			System.out.println("In search do post");
 			processRequest(request, response);
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -60,13 +56,11 @@ public class SearchEventListHandler extends RequestHandler {
 		if (pathInfo == null) pathInfo="";
 		else pathInfo = pathInfo.substring(1);
 
-		String filename = "liste-des-evenements.html";
-		processRequestHelper(request, response, pathInfo, filename);
-
+		processRequestHelper(request, response, pathInfo);
 	}
 
 	private void processRequestHelper(HttpServletRequest request,
-			HttpServletResponse response, String pathInfo, String filename)
+			HttpServletResponse response, String pathInfo)
 			throws SQLException, UnsupportedEncodingException,
 			FileNotFoundException, IOException {
 
@@ -133,6 +127,5 @@ public class SearchEventListHandler extends RequestHandler {
 
 		JSONResponse.put(events);
 		return JSONResponse;
-						
 	}
 }
