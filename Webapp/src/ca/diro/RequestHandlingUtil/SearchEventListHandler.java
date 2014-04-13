@@ -87,6 +87,8 @@ public class SearchEventListHandler extends RequestHandler {
 		
 		String offsetParam = request.getParameter("offset");
 		offsetParam = offsetParam == null ? "0" : offsetParam;
+		
+		String filter = request.getParameter("filter");
 
 		int offset = Integer.parseInt(offsetParam) + 10;
 		// Change to custom number if required.
