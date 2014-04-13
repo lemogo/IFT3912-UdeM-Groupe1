@@ -18,11 +18,6 @@ import ca.diro.DataBase.Command.CancelEvent;
 import ca.diro.DataBase.Command.DeleteEvent;
 import ca.diro.DataBase.Command.PageInfoEvent;
 
-//import javax.mail.*;
-//import javax.mail.internet.InternetAddress;
-//import javax.mail.internet.MimeBodyPart;
-//import javax.mail.internet.MimeMessage;
-//import javax.mail.internet.MimeMultipart;
 public class CancelEventHandler extends RequestHandler {
 	/**
 	 * 
@@ -40,12 +35,8 @@ public class CancelEventHandler extends RequestHandler {
 	public void doPost(
 			HttpServletRequest request, HttpServletResponse response)
 					throws IOException, ServletException {
-		// TODO Implement handling logic for simple requests (and command
-		// validation) and forwarding for requests that require specific
-		// permissions or handling.
 		try{
 			HttpSession session = request.getSession(true);
-			boolean isLoggedIn=session.getAttribute("auth")==null? false:true;
 
 			String userID = (String) session.getAttribute(USER_ID_ATTRIBUTE);
 			String username = (String) session.getAttribute(USERNAME_ATTRIBUTE);
@@ -56,7 +47,7 @@ public class CancelEventHandler extends RequestHandler {
 			DataBase myDb = Main.getDatabase();//new DataBase(restore);
 			PageInfoEvent cmd = new PageInfoEvent(eventID,myDb);
 
-			CancelEvent cmd2 = null;
+			CancelEvent cancelEventCommand = null;
 			if( myDb.executeDb(cmd)){ 
 				ResultSet rs = cmd.getResultSet();
 
@@ -66,8 +57,8 @@ public class CancelEventHandler extends RequestHandler {
 
 						//TODO:Remove the event from the database
 //						DeleteEvent cmd2 = new DeleteEvent(eventID);// (myDb);
-						cmd2 = new CancelEvent(eventID, myDb);// (myDb);
-						if(myDb.executeDb(cmd2)){//cmd.removeEvent(Integer.parseInt(eventID))){
+						cancelEventCommand = new CancelEvent(eventID, myDb);// (myDb);
+						if(myDb.executeDb(cancelEventCommand)){//cmd.removeEvent(Integer.parseInt(eventID))){
 //							System.out.println("Deleted event: "+eventID);
 							deletedSuccessfully=true;
 						}
@@ -81,32 +72,12 @@ public class CancelEventHandler extends RequestHandler {
 				//				response.sendRedirect(setLocation);
 				
 //				CancelEvent cmd3 = new CancelEvent(eventID, myDb);
-				cmd2.nofifySignedUser(eventID);
-				ResultSet rs = cmd2.getListToNotify();
+				cancelEventCommand.nofifySignedUser(eventID);
+				ResultSet rs = cancelEventCommand.getListToNotify();
 				if(rs.next()){
 					
 				}
-				
-				//send mail to all registered users
-//				InitialContext ic = new InitialContext();
-//				String snName = "java:comp/env/mail/MyMailSession";
-//				Session mailSession = (Session)ic.lookup(snName);
-//				
-//				Properties props = mailSession.getProperties();
-//				props.put("mail.from", "user2@mailserver.com");
-//				
-//				Message msg = new MimeMessage(mailSession);
-//				msg.setSubject("msgSubject");
-//				msg.setSentDate(new Date());
-//				msg.setFrom();
-//				msg.setRecipients(Message.RecipientType.TO, InternetAddress.parse("bounce_sound@hotmail.com", false));
-//				MimeBodyPart mbp = new MimeBodyPart();
-//				mbp.setText("msgTxt");
-//				Multipart mp = new MimeMultipart();
-//				mp.addBodyPart(mbp);
-//				msg.setContent(mp);
-//				Transport.send(msg);
-				
+								
 				String setLocation = "/liste-des-evenements/";
 				response.addHeader("deleteSuccess", "true");
 				RequestDispatcher dispacher = request.getRequestDispatcher(setLocation);
