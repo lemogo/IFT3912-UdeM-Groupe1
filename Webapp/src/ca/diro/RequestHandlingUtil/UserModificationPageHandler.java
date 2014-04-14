@@ -125,7 +125,8 @@ public class UserModificationPageHandler extends RequestHandler {
 				description = rs.getString("description");
 				sources.put("registeredSince",rs.getTimestamp("datecreation"));
 			}
-			sources.put("options", buildSelectOptionsTag(1,121,rs.getInt("age")));
+			sources.put("age", rs.getTimestamp("age"));
+//			sources.put("options", buildSelectOptionsTag(1,121,rs.getInt("age")));
 		}else{
 			//TODO:send error message to user and return to login page
 		}

@@ -47,7 +47,8 @@ public class ModifyUserInfoHandler extends RequestHandler {
 					//TODO:Check if the user new info is legal(no illegal characters or malicious scripts)
 			
 					//TODO:Modify User's Information in the database
-			ModifyAccount cmd = new ModifyAccount(id, fullname, email, username, age, description);
+//			ModifyAccount cmd = new ModifyAccount(id, fullname, email, username, age, description);
+			ModifyAccount cmd = new ModifyAccount(id, username, age, description);
 			modifiedSuccessfully = Main.getDatabase().executeDb(cmd);
 			if(!password.equals("")&&modifiedSuccessfully){
 				ModifyAccountPassword cmdPassword = new ModifyAccountPassword(password,""+userId);

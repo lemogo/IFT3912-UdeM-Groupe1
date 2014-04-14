@@ -36,8 +36,7 @@ public class EventModificationPageHandler extends RequestHandler {
 			HttpServletRequest request, HttpServletResponse response)
 					throws IOException, ServletException {
 		try{
-			String pathInfo = request.getPathInfo()== null? "":request.getPathInfo();
-			if(pathInfo.startsWith("/")) pathInfo = pathInfo.substring(1);
+			String pathInfo = getPathInfo(request);
 			//The current request must be a file -> redirect to requestHandler
 			if(	isKnownFileExtention(pathInfo)) {
 				handleSimpleRequest(request, response, pathInfo);

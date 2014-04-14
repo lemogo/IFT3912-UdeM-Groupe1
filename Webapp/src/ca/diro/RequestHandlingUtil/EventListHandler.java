@@ -143,7 +143,7 @@ public class EventListHandler extends RequestHandler {
 					throws IOException, ServletException {
 		try{
 			String pathInfo = request.getParameter("filter");
-			
+			if(pathInfo == null) pathInfo = "";
 			//The current request must be a file -> redirect to requestHandler
 			if(	isKnownFileExtention(pathInfo)) {
 				handleSimpleRequest(request, response, pathInfo);
