@@ -3,6 +3,11 @@
 
 		<div class="container theme-showcase">
 			<h1 class="pageTitle">Connexion</h1>
+			{{#error}}
+			<div class="alert alert-danger">
+		    	{{message}}
+		    </div>
+		    {{/error}}
 			<div class="panel panel-primary">
 				<div class="panel-heading">
 					<h2 class="panel-title">Entrez vos informations de connexion</h2>

@@ -15,6 +15,7 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
@@ -171,6 +172,7 @@ public class RequestHandler extends HttpServlet {
 			HashMap<String, Object> sources = new HashMap<String, Object>();
 			sources.put("user", isLoggedIn);
 			sources.put("options", buildSelectOptionsTag(1, 99, 18));
+			sources.putAll(showErrorMessage(response));
 
 			processTemplate(request, response, "header.html", sources);
 			processTemplate(request, response, filename, sources);
@@ -432,6 +434,36 @@ public class RequestHandler extends HttpServlet {
 		// sources.put("isOwner", false);
 		return sources;
 	}
+
+//	protected HashMap<String, Object> buildErrorMustacheSource(
+//			HttpSession session) throws SQLException {
+//		String loggedUserUsername = (String) session
+//				.getAttribute(USERNAME_ATTRIBUTE);
+//		String password = (String) session
+//				.getAttribute(USER_PASSWORD_ATTRIBUTE);
+//		
+//		boolean bool = session.getAttribute("auth") == null ? false : (boolean) session
+//				.getAttribute("auth");
+//		HashMap<String, Object> sources = new HashMap<String, Object>();
+////		if (eventUsername.equals(loggedUserUsername)
+////				&& isEventOwner(loggedUserUsername, eventUsername, password))
+////			sources.put("isOwner", true);
+//		// sources.put("isOwner", false);
+//		return sources;
+//	}
+	protected HashMap<String, Object> showErrorMessage(HttpServletResponse response) {
+		HashMap<String, Object> sources = new HashMap<String, Object>();
+		HashMap<String,String> messages = new HashMap<String,String>();
+		for(String errorMessage:response.getHeaders("error")){
+//			(response.getHeader("error") == null) ? null : response.getHeader("error");
+			messages.put("message", errorMessage);
+		}
+		if(response.getHeader("error")!=null)sources.put("error", messages);
+		else sources.put("error", false);
+//		if(response.getHeaders("error")!=null)sources.put("error", response.getHeaders("error"));
+		return sources;
+	}
+
 
 	protected boolean isEventOwner(String loggedUserUsername,
 			String eventUsername, String loggedUserPassword)

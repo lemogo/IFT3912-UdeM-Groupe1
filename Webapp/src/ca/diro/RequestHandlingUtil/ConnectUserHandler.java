@@ -61,6 +61,7 @@ public class ConnectUserHandler extends RequestHandler {
 //				String setLocation = "/Webapp/connexion";
 //				response.sendRedirect(setLocation);
 //				newUserSession.setAttribute("auth", Boolean.FALSE);
+				response.setHeader("error", "Le nom d'utilisateur ou le mot de passe est incorrect. Veillez reesayer!");
 				request.getRequestDispatcher("/connexion").forward(request, response);
 			}
 		}

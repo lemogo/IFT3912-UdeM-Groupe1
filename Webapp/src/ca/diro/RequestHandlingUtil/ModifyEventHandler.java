@@ -52,6 +52,7 @@ public class ModifyEventHandler extends RequestHandler {
 				request.getRequestDispatcher("/evenement/"+userId).forward(request, response);
 			}else{
 				//TODO:show modification error message
+				response.setHeader("error", "Desole! Il y a eu une erreur lors de la modification de l'evenement");
 				request.getRequestDispatcher("/modifier-mes-informations/").forward(request, response);
 			}
 		}
