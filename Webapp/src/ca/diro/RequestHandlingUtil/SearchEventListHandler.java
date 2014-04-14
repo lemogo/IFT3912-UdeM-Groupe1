@@ -124,10 +124,10 @@ public class SearchEventListHandler extends RequestHandler {
 
 		JSONResponse.put(new JSONObject().append("count", sources.size()));
 
-		JSONArray events = new JSONArray();
-		events.put(new JSONObject().append("events", sources));
-
+		JSONObject events = new JSONObject();
+		events.put("events", sources);
 		JSONResponse.put(events);
+
 		return JSONResponse;
 	}
 }
