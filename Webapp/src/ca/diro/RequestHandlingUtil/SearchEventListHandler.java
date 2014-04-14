@@ -17,6 +17,8 @@ import javax.servlet.http.HttpServletResponse;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
+import org.json.JSONString;
+import org.json.JSONStringer;
 
 import ca.diro.Main;
 import ca.diro.DataBase.Command.PageInfoEvent;
@@ -75,7 +77,7 @@ public class SearchEventListHandler extends RequestHandler {
 		}
 	}
 
-	private JSONArray buildSearchEventList(HttpServletRequest request)
+	private JSONObject buildSearchEventList(HttpServletRequest request)
 			throws SQLException, JSONException {
 		HashMap<String, Event> sources = new HashMap<String, Event>();
 		String searchParam = request.getParameter("searchStr");
@@ -87,6 +89,8 @@ public class SearchEventListHandler extends RequestHandler {
 		
 		String offsetParam = request.getParameter("offset");
 		offsetParam = offsetParam == null ? "0" : offsetParam;
+		
+		String filter = request.getParameter("filter");
 
 		int offset = Integer.parseInt(offsetParam) + 10;
 		// Change to custom number if required.
@@ -116,16 +120,13 @@ public class SearchEventListHandler extends RequestHandler {
 		return buildJSONResponse(sources);
 	}
 
-	private JSONArray buildJSONResponse(HashMap<String, Event> sources)
+	private JSONObject buildJSONResponse(HashMap<String, Event> sources)
 			throws JSONException {
-		JSONArray JSONResponse = new JSONArray();
+		JSONObject JSONResponse = new JSONObject();
 
-		JSONResponse.put(new JSONObject().append("count", sources.size()));
+		JSONResponse.put("count", sources.size());
+		JSONResponse.put("events", sources);
 
-		JSONArray events = new JSONArray();
-		events.put(new JSONObject().append("events", sources));
-
-		JSONResponse.put(events);
 		return JSONResponse;
 	}
 }
