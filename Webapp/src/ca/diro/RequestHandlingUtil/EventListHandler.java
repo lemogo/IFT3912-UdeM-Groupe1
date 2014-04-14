@@ -142,8 +142,9 @@ public class EventListHandler extends RequestHandler {
 			HttpServletRequest request, HttpServletResponse response)
 					throws IOException, ServletException {
 		try{
-			String pathInfo = "";
-			
+			//TODO: Revert to old form?
+			String pathInfo = request.getParameter("filter");
+			if(pathInfo == null) pathInfo = "";
 			//The current request must be a file -> redirect to requestHandler
 			if(	isKnownFileExtention(pathInfo)) {
 				handleSimpleRequest(request, response, pathInfo);

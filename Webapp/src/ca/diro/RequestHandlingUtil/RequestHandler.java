@@ -483,6 +483,12 @@ public class RequestHandler extends HttpServlet {
 		
 	}
 
+	protected String getPathInfo(HttpServletRequest request) {
+		String pathInfo = request.getPathInfo()== null? "":request.getPathInfo();
+		if(pathInfo.startsWith("/")) pathInfo = pathInfo.substring(1);
+		return pathInfo;
+	}
+
 //	protected Date computeDateDiff(Date birthDate) {
 //		
 //		return new Date((new java.util.Date().getTime()-registrationDate.getTime())) ;
