@@ -114,7 +114,6 @@ public class SearchEventListHandler extends RequestHandler {
 				}
 			}
 		}
-		System.out.println(sources);
 		return buildJSONResponse(sources);
 	}
 
