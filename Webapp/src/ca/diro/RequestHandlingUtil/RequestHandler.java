@@ -9,24 +9,22 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.io.PrintStream;
 import java.io.UnsupportedEncodingException;
-//import java.sql.Date;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
-import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
 import javax.servlet.ServletException;
-import javax.servlet.ServletRequest;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
-import org.json.JSONArray;
+import org.joda.time.DateTime;
+import org.joda.time.Years;
 
 import ca.diro.Main;
 import ca.diro.DataBase.Command.CountUserNotification;
@@ -35,10 +33,6 @@ import ca.diro.DataBase.Command.OpenSession;
 import com.github.mustachejava.DefaultMustacheFactory;
 import com.github.mustachejava.Mustache;
 import com.github.mustachejava.MustacheFactory;
-
-import org.joda.time.DateTime;
-import org.joda.time.Days;
-import org.joda.time.Years;
 
 /**
  * Handler for the Jetty server.
@@ -121,11 +115,11 @@ public class RequestHandler extends HttpServlet {
 	protected void handleSimpleRequest(HttpServletRequest request,
 			HttpServletResponse response, String pathInfo) throws IOException,
 			UnsupportedEncodingException, FileNotFoundException,
-			ServletException {
+			ServletException, SQLException {
 		if (pathInfo.equals("ajouter-un-evenement")) {
 			// if user is not logged in redirect him to sign up page (or maybe
 			// sign in)
-			if (request.getSession(true).getAttribute("auth") == null) {
+			if (!isLoggedIn(request.getSession(true))) {
 				response.sendRedirect("/Webapp/connexion");
 				// request.getRequestDispatcher("/connexion").forward(request,
 				// response);
@@ -149,10 +143,9 @@ public class RequestHandler extends HttpServlet {
 		setResponseContentType(pathInfo, response);
 		response.setCharacterEncoding("utf-8");
 
-		// Ressource existe
 		if (pathInfo.startsWith("https://")) {
 			response.setStatus(HttpServletResponse.SC_OK);
-			// TODO:find out how to deal with this case
+			// TODO:find a better way to deal with this case
 		} else if (!staticResource.exists() && !dynamicResource.exists()) {
 			System.out
 					.println("NOT FOUND :: \tstatic ressource:\t"
@@ -172,7 +165,8 @@ public class RequestHandler extends HttpServlet {
 			HashMap<String, Object> sources = new HashMap<String, Object>();
 			sources.put("user", isLoggedIn);
 			sources.put("options", buildSelectOptionsTag(1, 99, 18));
-			sources.putAll(showErrorMessage(response));
+			sources.putAll(buildErrorMessagesMustacheSource(response));
+			sources.put("notifications_number", countUserNotification(session));
 
 			processTemplate(request, response, "header.html", sources);
 			processTemplate(request, response, filename, sources);
@@ -285,7 +279,6 @@ public class RequestHandler extends HttpServlet {
 			throws UnsupportedEncodingException, FileNotFoundException,
 			IOException {
 		MustacheFactory mc = new DefaultMustacheFactory(dynamicDir);
-		// mc = new DefaultMustacheFactory(dynamicDir);
 		Mustache mustache = mc.compile(filename);
 
 		Map<Object, Object> parameters = new HashMap<Object, Object>(
@@ -344,8 +337,7 @@ public class RequestHandler extends HttpServlet {
 
 	protected String countUserNotification(HttpSession session)
 			throws SQLException {
-		String loggedUserId = session.getAttribute(USER_ID_ATTRIBUTE) == null ? "-1"
-				: (String) session.getAttribute(USER_ID_ATTRIBUTE);
+		String loggedUserId = getLoggedUserId(session);
 		return countUserNotification(loggedUserId);
 	}
 
@@ -381,10 +373,9 @@ public class RequestHandler extends HttpServlet {
 	protected String buildSelectOptionsTag(int smallestIndex,
 			int biggestIndext, Integer selectedIndex) {
 		String options = "";
-		for (int i = smallestIndex; i <= selectedIndex; i++) {
+		for (int i = smallestIndex; i < selectedIndex; i++) {
 			options += "<option value=\"" + i + "\">" + i + "</option>\n";
 		}
-		// if(selectedIndex!=null)
 		options += "<option selected=\"selected\" value=\"" + selectedIndex
 				+ "\">" + selectedIndex + "</option>\n";
 		for (int i = selectedIndex; i <= biggestIndext; i++) {
@@ -435,32 +426,14 @@ public class RequestHandler extends HttpServlet {
 		return sources;
 	}
 
-//	protected HashMap<String, Object> buildErrorMustacheSource(
-//			HttpSession session) throws SQLException {
-//		String loggedUserUsername = (String) session
-//				.getAttribute(USERNAME_ATTRIBUTE);
-//		String password = (String) session
-//				.getAttribute(USER_PASSWORD_ATTRIBUTE);
-//		
-//		boolean bool = session.getAttribute("auth") == null ? false : (boolean) session
-//				.getAttribute("auth");
-//		HashMap<String, Object> sources = new HashMap<String, Object>();
-////		if (eventUsername.equals(loggedUserUsername)
-////				&& isEventOwner(loggedUserUsername, eventUsername, password))
-////			sources.put("isOwner", true);
-//		// sources.put("isOwner", false);
-//		return sources;
-//	}
-	protected HashMap<String, Object> showErrorMessage(HttpServletResponse response) {
+	protected HashMap<String, Object> buildErrorMessagesMustacheSource(HttpServletResponse response) {
 		HashMap<String, Object> sources = new HashMap<String, Object>();
 		HashMap<String,String> messages = new HashMap<String,String>();
 		for(String errorMessage:response.getHeaders("error")){
-//			(response.getHeader("error") == null) ? null : response.getHeader("error");
 			messages.put("message", errorMessage);
 		}
 		if(response.getHeader("error")!=null)sources.put("error", messages);
 		else sources.put("error", false);
-//		if(response.getHeaders("error")!=null)sources.put("error", response.getHeaders("error"));
 		return sources;
 	}
 
@@ -520,10 +493,4 @@ public class RequestHandler extends HttpServlet {
 		if(pathInfo.startsWith("/")) pathInfo = pathInfo.substring(1);
 		return pathInfo;
 	}
-
-//	protected Date computeDateDiff(Date birthDate) {
-//		
-//		return new Date((new java.util.Date().getTime()-registrationDate.getTime())) ;
-//	}
-
 }

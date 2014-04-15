@@ -54,17 +54,21 @@ public class UserModificationPageHandler extends RequestHandler {
 		}
 	}
 
+	public void doPost(HttpServletRequest request, HttpServletResponse response)
+			throws IOException, ServletException {
+		doGet(request, response);
+	}
+
 	private void processRequestHelper(HttpServletRequest request,
 			HttpServletResponse response) throws UnsupportedEncodingException,
-			FileNotFoundException, IOException, SQLException {
+			FileNotFoundException, IOException, SQLException, ServletException {
 
 		String pathInfo = request.getPathInfo() == null? "":request.getPathInfo();
 		if(pathInfo.startsWith("/")) pathInfo = pathInfo.substring(1);
 
-		if(pathInfo.equals("")){
-			//check if user is logged in
-
-			//TODO:if user is not logged in redirect user to login page to view is page
+		if(!isLoggedIn(request.getSession(true))){
+			response.setHeader("error", "Veillez vous connecter!");
+			request.getRequestDispatcher("/connexion").forward(request, response);
 		}
 		String filename = "modifier-mes-informations.html"; 
 
@@ -90,33 +94,29 @@ public class UserModificationPageHandler extends RequestHandler {
 	private HashMap<String, Object> addAllInfoToMustacheSources(
 			HttpServletRequest request, HttpServletResponse response)
 					throws SQLException {
-		//Add User info here!!
 		HashMap<String, Object> sources = new HashMap<String, Object>();
 
-		//TODO:Get the user id using the database and/or if there's no path info the id from the session variable 
 		HttpSession session = request.getSession(true);
-		boolean isLoggedIn=session.getAttribute("auth")==null? false:true;
+		int userId = Integer.parseInt(getLoggedUserId(session));
 
-		int userId = Integer.parseInt((String) (session.getAttribute(USER_ID_ATTRIBUTE)==null?-1:session.getAttribute(USER_ID_ATTRIBUTE)));
+		sources.putAll(addUserInfoToMustacheSources(userId));
 
-		addUserInfoToMustacheSources(sources, userId);
-
-		if(isLoggedIn)sources.put("user", isLoggedIn);
+		if(isLoggedIn(session))sources.put("user", isLoggedIn(session));
 		String loggedUserId = session.getAttribute(USER_ID_ATTRIBUTE)==null?"-1":(String) session.getAttribute(USER_ID_ATTRIBUTE);
 		sources.put("notifications_number", countUserNotification(loggedUserId));
+		sources.putAll(buildErrorMessagesMustacheSource(response));
 		return sources;
 	}
 
-	private String addUserInfoToMustacheSources(HashMap<String, Object> sources, int userId)
+	private HashMap<String, Object> addUserInfoToMustacheSources(int userId)
 			throws SQLException {
-		PageInfoUser cmd = new PageInfoUser(userId) ; //add cast if necessary
-		Boolean asExecuted = Main.getDatabase().executeDb(cmd); //true check si la requete est bien exécuté 
-		ResultSet rs = cmd.getResultSet(); //retourne (username,password,fullname,email,age,description)
+		HashMap<String, Object> sources = new HashMap<String, Object>();
+		PageInfoUser cmd = new PageInfoUser(userId) ; 
 
-		//fullname, username, email, age, description
 		String username="bidon_age",fullname="bidon_fullname",email="bidon_email",
 				age="-1",description="bidon_description";
-		if (asExecuted){
+		if(Main.getDatabase().executeDb(cmd)){  
+			ResultSet rs = cmd.getResultSet();
 			if(rs.next()){
 				username = rs.getString("username");
 				fullname = rs.getString("fullname");
@@ -126,19 +126,18 @@ public class UserModificationPageHandler extends RequestHandler {
 				sources.put("registeredSince",rs.getTimestamp("datecreation"));
 			}
 			sources.put("age", rs.getTimestamp("age"));
-//			sources.put("options", buildSelectOptionsTag(1,121,rs.getInt("age")));
+			//			sources.put("options", buildSelectOptionsTag(1,121,rs.getInt("age")));
 		}else{
-			//TODO:send error message to user and return to login page
+//			response.setHeader("error", "La modification de votre compete a echoue");
+//			request.getRequestDispatcher("/connexion").forward(request, response);
 		}
 		sources.put("username",username);
 		sources.put("fullname",fullname);
 		sources.put("age",age);
 		sources.put("email",email);
 		sources.put("description",description);
-
-//		sources.put("registeredSince",computeOwnerRegisteredSince());
 		sources.put("age",age);
 		sources.put("description",description);
-		return username;
+		return sources;
 	}
 }
