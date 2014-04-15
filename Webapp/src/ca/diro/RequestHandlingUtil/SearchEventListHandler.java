@@ -9,19 +9,17 @@ import java.sql.SQLException;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.LinkedList;
+import java.util.Map;
+import java.util.Map.Entry;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
-import org.json.JSONString;
-import org.json.JSONStringer;
 
 import ca.diro.Main;
-import ca.diro.DataBase.Command.PageInfoEvent;
 import ca.diro.DataBase.Command.ResearchEvent;
 
 public class SearchEventListHandler extends RequestHandler {
@@ -29,6 +27,8 @@ public class SearchEventListHandler extends RequestHandler {
 	 * 
 	 */
 	private static final long serialVersionUID = 5818151764848416043L;
+	
+	public static final int NUMBER_EVENTS_PER_PAGE = 10;
 
 	@Override
 	public void doPost(HttpServletRequest request, HttpServletResponse response)
@@ -90,33 +90,31 @@ public class SearchEventListHandler extends RequestHandler {
 		String offsetParam = request.getParameter("offset");
 		offsetParam = offsetParam == null ? "0" : offsetParam;
 		
+		// To add the filter possibility on searches.
 		String filter = request.getParameter("filter");
 
-		int offset = Integer.parseInt(offsetParam) + 10;
 		// Change to custom number if required.
-		int numEventDisplay = 10;
+		int numEventDisplay = NUMBER_EVENTS_PER_PAGE;
+		
+		int offset = Integer.parseInt(offsetParam);
 
 		if (Main.getDatabase().executeDb(researchComand)) {
+			
 			ResultSet listResultSet = researchComand.getResultSet();
 			while (listResultSet.next() && sources.size() < numEventDisplay) {
 				if (offset == 0) {
-					// TODO: We're essentially searching the same info twice?
-					// Might have to look into this.
-					PageInfoEvent getEventCommand = new PageInfoEvent(
-							listResultSet.getString("eventid"),
-							Main.getDatabase());
-					String badgeClasse = computeBadgeColor(getEventCommand
-							.getAvailablePlaces());
-
+					String badgeClasse = computeBadgeColor(Integer.parseInt(listResultSet.getString("numberplaces")));
+		
 					Event currentEvent = new Event(
-							getEventCommand.getResultSet(), badgeClasse);
+							listResultSet, badgeClasse);
 					sources.put(currentEvent.getTitle(), currentEvent);
-					offset--;
-				} else {
+				}
+				else {
 					offset--;
 				}
 			}
 		}
+		System.out.println(sources);
 		return buildJSONResponse(sources);
 	}
 
@@ -125,7 +123,12 @@ public class SearchEventListHandler extends RequestHandler {
 		JSONObject JSONResponse = new JSONObject();
 
 		JSONResponse.put("count", sources.size());
-		JSONResponse.put("events", sources);
+		
+		JSONObject events = new JSONObject();
+		for(Map.Entry<String, Event> eventEntry : sources.entrySet()){
+			events.put(eventEntry.getKey(), eventEntry.getValue().toMap());
+		}
+		JSONResponse.put("events", events);
 
 		return JSONResponse;
 	}

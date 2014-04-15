@@ -5,7 +5,10 @@ import java.sql.SQLException;
 import java.util.Map;
 import java.util.TreeMap;
 
-class Event implements Comparable<Event>{
+import org.json.JSONException;
+import org.json.JSONObject;
+
+class Event extends JSONObject implements Comparable<Event> {
 	private String username;
 	private String title;
 	private String date;
@@ -14,19 +17,19 @@ class Event implements Comparable<Event>{
 	private String id;
 	private String badgeClass;
 	private String numPlacesLeft;
-	
-	//EventResultSet columns: event.title, event.dateevent, event.location, event.numberplaces, event.description, username, event.suserid
-	private static final String DAT_USER = "username";
-	private static final String DAT_TITLE = "event.title";
-	private static final String DAT_DATE = "event.dateevent";
-	private static final String DAT_LOCATION = "event.location";
-	private static final String DAT_DESC = "event.description";
-	private static final String DAT_ID = "event.suserid";
-	private static final String DAT_NUMPLACESLEFT = "event.numberplaces";
-	
+
+	// EventResultSet columns: eventid, title, suserid, dateevent, location,
+	// description, numberplaces
+	private static final String DAT_TITLE = "title";
+	private static final String DAT_DATE = "dateevent";
+	private static final String DAT_LOCATION = "location";
+	private static final String DAT_DESC = "description";
+	private static final String DAT_ID = "eventid";
+	private static final String DAT_NUMPLACESLEFT = "numberplaces";
+
 	public Event(ResultSet eventData, String badgeClass) throws SQLException {
 
-		this.username = eventData.getString(DAT_USER);
+		this.username = "";
 		this.title = eventData.getString(DAT_TITLE);
 		this.date = eventData.getString(DAT_DATE);
 		this.location = eventData.getString(DAT_LOCATION);
@@ -35,10 +38,9 @@ class Event implements Comparable<Event>{
 		this.numPlacesLeft = eventData.getString(DAT_NUMPLACESLEFT);
 		this.badgeClass = badgeClass;
 	}
-	
-	public Event(String username, String title, String date,
-			String location, String description, String id,
-			String badgeClass) {
+
+	public Event(String username, String title, String date, String location,
+			String description, String id, String badgeClass) {
 		this.username = username;
 		this.title = title;
 		this.date = date;
@@ -48,9 +50,9 @@ class Event implements Comparable<Event>{
 		this.badgeClass = badgeClass;
 	}
 
-	public Event(String username, String title, String date,
-			String location, String description, String id,
-			String badgeClass, String numPlacesLeft) {
+	public Event(String username, String title, String date, String location,
+			String description, String id, String badgeClass,
+			String numPlacesLeft) {
 		this.username = username;
 		this.title = title;
 		this.date = date;
@@ -60,7 +62,7 @@ class Event implements Comparable<Event>{
 		this.badgeClass = badgeClass;
 		this.numPlacesLeft = numPlacesLeft;
 	}
-	
+
 	public String getUsername() {
 		return username;
 	}
@@ -92,10 +94,9 @@ class Event implements Comparable<Event>{
 	public String getNumPlacesLeft() {
 		return numPlacesLeft;
 	}
-	
-	public Map<String,String> toMap() {
-		Map<String,String> mapValues = new TreeMap<String,String>();
-		mapValues.put("username", username);
+
+	public Map<String, String> toMap() {
+		Map<String, String> mapValues = new TreeMap<String, String>();
 		mapValues.put("title", title);
 		mapValues.put("date", date);
 		mapValues.put("location", location);
