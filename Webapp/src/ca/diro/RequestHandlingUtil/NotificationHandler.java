@@ -87,10 +87,9 @@ public class NotificationHandler extends RequestHandler {
 					throws JSONException, SQLException {
 		HashMap<String, Object> sources = new HashMap<String, Object>();
 
-		//TODO:Get the user id using the database and/or if there's no path info the id from the session variable 
 		HttpSession session = request.getSession(true);
-		boolean isLoggedIn=session.getAttribute("auth")==null? false:(boolean)session.getAttribute("auth");
-		if(!isLoggedIn){
+//		boolean isLoggedIn=session.getAttribute("auth")==null? false:(boolean)session.getAttribute("auth");
+		if(!isLoggedIn(session)){
 			//TODO:if user is not logged in redirect user to login page to view is page
 			return sources;
 		}
@@ -111,7 +110,7 @@ public class NotificationHandler extends RequestHandler {
 			}}
 		}
 		sources.put("notificationsList", notificationList);
-		sources.putAll(addSuccessMessagesToMustacheSources(response, isLoggedIn));
+		sources.putAll(addSuccessMessagesToMustacheSources(response, isLoggedIn(session)));
 		sources.put("notifications_number", countUserNotification(getLoggedUserId(session)));
 		return sources;
 	}

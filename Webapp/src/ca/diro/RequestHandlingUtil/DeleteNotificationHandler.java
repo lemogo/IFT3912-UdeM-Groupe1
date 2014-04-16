@@ -31,10 +31,12 @@ public class DeleteNotificationHandler extends RequestHandler {
 					throws IOException, ServletException {
 		try{
 			//TODO:verify if the user is the owner of the notification to delete
-			
 			HttpSession session = request.getSession(true);
-			String userID = (String) session.getAttribute(USER_ID_ATTRIBUTE);
-			String eventID = (String) request.getParameter("eventid");
+			if(authentifyUser(session)==null){
+				return;
+			}
+			String userID = getLoggedUserId(session);
+			String eventID = getLoggedUserId(session);
 
 			//Delete the notification from the database
 			DataBase myDb = Main.getDatabase();

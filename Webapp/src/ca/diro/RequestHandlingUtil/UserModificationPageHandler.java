@@ -42,7 +42,7 @@ public class UserModificationPageHandler extends RequestHandler {
 					handleSimpleRequest(request, response, pathInfo);
 					return;
 				}else if(isAnotherContext(pathInfo)&&!pathInfo.equals("")){ 	        
-					String setLocation = "/Webapp/"+pathInfo;//"/";
+					String setLocation = "/Webapp/"+pathInfo;
 					response.sendRedirect(setLocation);
 					return;
 				}
@@ -102,7 +102,7 @@ public class UserModificationPageHandler extends RequestHandler {
 		sources.putAll(addUserInfoToMustacheSources(userId));
 
 		if(isLoggedIn(session))sources.put("user", isLoggedIn(session));
-		String loggedUserId = session.getAttribute(USER_ID_ATTRIBUTE)==null?"-1":(String) session.getAttribute(USER_ID_ATTRIBUTE);
+		String loggedUserId = getLoggedUserId(session);
 		sources.put("notifications_number", countUserNotification(loggedUserId));
 		sources.putAll(buildErrorMessagesMustacheSource(response));
 		return sources;
