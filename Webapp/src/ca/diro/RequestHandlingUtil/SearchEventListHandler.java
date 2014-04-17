@@ -101,11 +101,10 @@ public class SearchEventListHandler extends RequestHandler {
 		// To add the filter possibility on searches.
 		String filter = request.getParameter("filter");
 		
-		if (filter == EVENT_PAST) {
+		if (filter.equals(EVENT_PAST)) {
 			researchCommand = new ResearchPastEvent(searchInput);
-			System.out.println("HERE");
 		}
-		else if (filter == EVENT_CANCELLED) {
+		else if (filter.equals(EVENT_CANCELLED)) {
 			researchCommand = new ResearchCancelledEvent(searchInput);
 		}
 
