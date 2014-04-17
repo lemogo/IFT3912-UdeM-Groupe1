@@ -88,7 +88,6 @@ public class NotificationHandler extends RequestHandler {
 		HashMap<String, Object> sources = new HashMap<String, Object>();
 
 		HttpSession session = request.getSession(true);
-//		boolean isLoggedIn=session.getAttribute("auth")==null? false:(boolean)session.getAttribute("auth");
 		if(!isLoggedIn(session)){
 			//TODO:if user is not logged in redirect user to login page to view is page
 			return sources;
@@ -101,34 +100,18 @@ public class NotificationHandler extends RequestHandler {
 		if(Main.getDatabase().executeDb(listUserNotificationCommand)){
 			ResultSet rs = listUserNotificationCommand.getResultSet();
 			while (rs.next()){
-				//eventid, title, location, dateevent, description
 				notificationList.add(
 						new Notification(rs.getString("eventid"), 
-								//							"Bidon_Username",//
 								rs.getString("username"), 
 								rs.getString("title")));
 			}}
 		}
 		sources.put("notificationsList", notificationList);
-		sources.putAll(addSuccessMessagesToMustacheSources(response, isLoggedIn(session)));
+		
+		String[] sourceHeaders = new String[]{"addSuccess","registerSuccess","unregisterSuccess","modifySuccess"};
+		sources.putAll(buildMustacheSourcesFromHeaders(response, sourceHeaders));
+		if(isLoggedIn(session))sources.put("user", isLoggedIn(session));
 		sources.put("notifications_number", countUserNotification(getLoggedUserId(session)));
-		return sources;
-	}
-
-	private HashMap<String, Object> addSuccessMessagesToMustacheSources(
-			HttpServletResponse response,
-			boolean isLoggedIn) {
-		HashMap<String, Object> sources = new HashMap<String, Object>();
-		//to display success message
-		Boolean addSuccess = response.getHeader("addSuccess") == null? false:true;
-		sources.put("addSuccess", addSuccess);
-		Boolean registerSuccess = response.getHeader("registerSuccess") == null? false:true;
-		sources.put("registerSuccess", registerSuccess);
-		Boolean unregisterSuccess = response.getHeader("unregisterSuccess") == null? false:true;
-		sources.put("unregisterSuccess", unregisterSuccess);
-		Boolean modifySuccess = response.getHeader("modifySuccess") == null? false:true;
-		sources.put("modifySuccess", modifySuccess);
-		if(isLoggedIn)sources.put("user", isLoggedIn);
 		return sources;
 	}
 }

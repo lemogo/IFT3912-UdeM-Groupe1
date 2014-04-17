@@ -446,13 +446,6 @@ public class RequestHandler extends HttpServlet {
 		return false;
 	}
 
-	// protected boolean isEventOwner( HttpSession session,
-	// String eventUsername) throws SQLException{
-	// if(authentifyUser(session)!=null)
-	// return (eventUsername.equals(loggedUserUsername)) ;
-	// return false;
-	// }
-
 	protected boolean isAccountOwner(String loggedUserUsername,
 			String requestedAccountUsername, String loggedUserPassword)
 			throws SQLException {

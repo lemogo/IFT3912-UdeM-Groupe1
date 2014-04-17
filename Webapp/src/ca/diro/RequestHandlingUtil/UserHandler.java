@@ -6,8 +6,6 @@ import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.Calendar;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
@@ -45,8 +43,7 @@ public class UserHandler extends RequestHandler {
 				handleSimpleRequest(request, response, pathInfo);
 				return;
 			}else if(isAnotherContext(pathInfo)&&!pathInfo.equals("")){ 	        
-				//				request.getRequestDispatcher("/"+pathInfo).forward(request, response);
-				String setLocation = "/Webapp/"+pathInfo;//"/";
+				String setLocation = "/Webapp/"+pathInfo;
 				response.sendRedirect(setLocation);
 				return;
 			}
@@ -133,8 +130,6 @@ public class UserHandler extends RequestHandler {
 		HttpSession session = request.getSession(true);
 
 		int loggedUserId = Integer.parseInt(getLoggedUserId(session));
-//				(String) (session.getAttribute(USER_ID_ATTRIBUTE)==null?"-1":(String)session.getAttribute(USER_ID_ATTRIBUTE)));
-		//		int loggedUserId = session.getAttribute(USER_ID_ATTRIBUTE)==null?-1:(int)session.getAttribute(USER_ID_ATTRIBUTE);
 		String loggedUserUsername = (String) (session.getAttribute(USERNAME_ATTRIBUTE)==null?"-1":session.getAttribute(USERNAME_ATTRIBUTE));
 		String displayedUserUsername = request.getPathInfo().startsWith("/")?request.getPathInfo().substring(1).trim():request.getPathInfo().trim();
 

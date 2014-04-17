@@ -32,26 +32,24 @@ public class ModifyEventHandler extends RequestHandler {
 					throws IOException, ServletException {
 		try
 		{
-			//TODO: check if the user is the owner of the modified event 
-//			if(!is)
+			//TODO: check if the user is the owner of the modified event
 			Boolean modifiedSuccessfully = true;
-			String userId = request.getParameter("id");
+			String eventId = request.getParameter("id");
 			String title = request.getParameter("eventName");
 			String date = request.getParameter("eventDate");
 			String location = request.getParameter("eventLocation");
 			String nbplace = request.getParameter("eventNumPeople");
 			String description = request.getParameter("eventDescription");
 			//modify the event in the database
-			EditEvent cmd = new EditEvent(userId, title, date, location, nbplace, description);
+			authentifyUser(request.getSession(true));
+			EditEvent cmd = new EditEvent(eventId, title, date, location, nbplace, description);
 			modifiedSuccessfully = Main.getDatabase().executeDb(cmd);
 
 			if(modifiedSuccessfully){
 				//redirects the current request to the newly created event
-//				String setLocation = "/Webapp/evenement/"+userId;
-//				response.sendRedirect(setLocation);
-				request.getRequestDispatcher("/evenement/"+userId).forward(request, response);
+				request.getRequestDispatcher("/evenement/"+eventId).forward(request, response);
 			}else{
-				//TODO:show modification error message
+				//show modification error message
 				response.setHeader("error", "Desole! Il y a eu une erreur lors de la modification de l'evenement");
 				request.getRequestDispatcher("/modifier-mes-informations/").forward(request, response);
 			}

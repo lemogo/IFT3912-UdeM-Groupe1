@@ -44,8 +44,8 @@ public class CommentEventHandler extends RequestHandler {
 			int userId = authentifyUser(session);
 			String description = request.getParameter("commentDescription");
 			String eventId = request.getParameter("id");
-
-			CommentEvent cmd = new CommentEvent(eventId, ""+userId, description, Main.getDatabase());  
+//			CommentEvent cmd = 
+					new CommentEvent(eventId, ""+userId, description, Main.getDatabase());  
 			//redirects the current request to the newly commented event
 			String setLocation = "/Webapp/evenement/"+eventId;
 			response.sendRedirect(setLocation);

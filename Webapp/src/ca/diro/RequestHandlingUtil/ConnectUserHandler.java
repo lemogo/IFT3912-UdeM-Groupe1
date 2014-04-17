@@ -25,13 +25,12 @@ public class ConnectUserHandler extends RequestHandler {
 			HttpServletRequest request, HttpServletResponse response)
 					throws IOException, ServletException {
 		try{
-			//TODO:verify if the user is currently login another account. 
 			HttpSession newUserSession = request.getSession(true);
 			if(newUserSession.getAttribute("auth")!=null && newUserSession.getAttribute("auth").equals("true")){
+				//TODO:verify if the user is currently login another account. 
 				//If so,ask the user if he wants to logout from account X and proceed with login 
 				return;
 			}
-			
 			//Verify User's credential and retrieve User id from the database
 			String username = request.getParameter("username");
 			String password = request.getParameter("password");
@@ -53,14 +52,9 @@ public class ConnectUserHandler extends RequestHandler {
 				newUserSession.setAttribute("accessCount", accessCount);
 
 				//Redirects the current request to the user info page
-//				String setLocation = "/Webapp/membre/"+username;
-//				response.sendRedirect(setLocation);
 				request.getRequestDispatcher("/membre/"+username).forward(request, response);
 			}else{
-				//TODO:send error message to user and return to login page
-//				String setLocation = "/Webapp/connexion";
-//				response.sendRedirect(setLocation);
-//				newUserSession.setAttribute("auth", Boolean.FALSE);
+				//send error message to user and return to login page
 				response.setHeader("error", "Le nom d'utilisateur ou le mot de passe est incorrect. Veillez reesayer!");
 				request.getRequestDispatcher("/connexion").forward(request, response);
 			}

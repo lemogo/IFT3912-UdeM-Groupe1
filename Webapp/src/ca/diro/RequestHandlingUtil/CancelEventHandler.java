@@ -2,6 +2,7 @@ package ca.diro.RequestHandlingUtil;
 
 import java.io.IOException;
 import java.sql.ResultSet;
+import java.sql.SQLException;
 
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
@@ -10,7 +11,6 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import ca.diro.Main;
-import ca.diro.DataBase.DataBase;
 import ca.diro.DataBase.Command.CancelEvent;
 import ca.diro.DataBase.Command.PageInfoEvent;
 
@@ -38,47 +38,20 @@ public class CancelEventHandler extends RequestHandler {
 
 			String username = (String) session.getAttribute(USERNAME_ATTRIBUTE);
 			String eventID = (String) request.getParameter("id");
-			Boolean deletedSuccessfully = false;
 
 			//Get the user event info from the database
 			PageInfoEvent eventInfoCommand = new PageInfoEvent(eventID,Main.getDatabase());
 
-			CancelEvent cancelEventCommand = null;
 			if( Main.getDatabase().executeDb(eventInfoCommand)){ 
 				ResultSet rs = eventInfoCommand.getResultSet();
 				if (rs.next()) {
 					//check if the logged user is really the owner of the event
 					if(isAccountOwner(username, rs.getString("username"), rs.getString("password"))){
 						//Remove the event from the database
-//						DeleteEvent cmd2 = new DeleteEvent(eventID);
-						cancelEventCommand = new CancelEvent(eventID, Main.getDatabase());
-						if(Main.getDatabase().executeDb(cancelEventCommand)){
-							deletedSuccessfully=true;
-						}
+						setLocation = cancelEventHelper(response, setLocation,
+								eventID);
 					}
 				}
-			}
-
-			if(deletedSuccessfully){
-				//forward the current request to the list of events
-				cancelEventCommand.nofifySignedUser(eventID);
-//				ResultSet rs = cancelEventCommand.getListToNotify();
-//				if(rs.next()){
-//					
-//				}
-//				String setLocation = "/liste-des-evenements/";
-				response.addHeader("deleteSuccess", "true");
-//				RequestDispatcher dispacher = request.getRequestDispatcher(setLocation);
-//				dispacher.forward(request, response);
-			}else{
-				//TODO:stay on current page and show error message
-				System.out.println("failled to delete event:"+eventID);
-//				String setLocation = "/Webapp/evenement/"+eventID;
-//				response.sendRedirect(setLocation);
-				setLocation = "/evenement/"+eventID;
-				response.addHeader("deleteError", "failled to delete event:"+eventID);
-//				RequestDispatcher dispacher = request.getRequestDispatcher(setLocation);
-//				dispacher.forward(request, response);
 			}
 		}
 		catch (Exception e){
@@ -88,6 +61,21 @@ public class CancelEventHandler extends RequestHandler {
 			RequestDispatcher dispacher = request.getRequestDispatcher(setLocation);
 			dispacher.forward(request, response);
 		}
+	}
+
+	private String cancelEventHelper(HttpServletResponse response,
+			String setLocation, String eventID) throws SQLException {
+		CancelEvent cancelEventCommand = new CancelEvent(eventID, Main.getDatabase());
+		if(Main.getDatabase().executeDb(cancelEventCommand)){
+			cancelEventCommand.nofifySignedUser(eventID);
+			response.addHeader("deleteSuccess", "true");
+		}else{
+			//TODO:stay on current page and show error message
+			System.out.println("failled to delete event:"+eventID);
+			setLocation = "/evenement/"+eventID;
+			response.addHeader("deleteError", "failled to delete event:"+eventID);
+		}
+		return setLocation;
 	}
 
 }
