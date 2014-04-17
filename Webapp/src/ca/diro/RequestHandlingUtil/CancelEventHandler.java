@@ -76,7 +76,7 @@ public class CancelEventHandler extends RequestHandler {
 //				String setLocation = "/Webapp/evenement/"+eventID;
 //				response.sendRedirect(setLocation);
 				setLocation = "/evenement/"+eventID;
-				response.addHeader("error", "failled to delete event:"+eventID);
+				response.addHeader("deleteError", "failled to delete event:"+eventID);
 //				RequestDispatcher dispacher = request.getRequestDispatcher(setLocation);
 //				dispacher.forward(request, response);
 			}

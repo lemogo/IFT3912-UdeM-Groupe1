@@ -145,7 +145,7 @@ public class EventHandler extends RequestHandler {
 						);
 				sources.putAll(buildIsEventOwnerMustacheSource( session,rs.getString("username")));
 			}else{
-				sources.put("error","l'evenement: "+eventID+" n'existe pas");
+				sources.put("errorDoesNotExist",eventID);
 			}
 		}
 		return sources;
@@ -186,21 +186,13 @@ public class EventHandler extends RequestHandler {
 	private HashMap<String, Object> buildMustacheSourcesSuccessInfo(HttpServletResponse response,
 			HttpSession session) {
 		HashMap<String, Object> sources = new HashMap<String, Object>();
-		boolean addSuccess = response.getHeader("addSuccess")==null ? false:Boolean.parseBoolean(response.getHeader("addSuccess"));
-		if(addSuccess) sources.put("addSuccess", addSuccess);
-
-		boolean registerSuccess = response.getHeader("registerSuccess")==null ? false:Boolean.parseBoolean(response.getHeader("registerSuccess"));
-		if(registerSuccess)sources.put("registerSuccess", registerSuccess);
-
-		boolean isRegistered = response.getHeader("isRegistered")==null ? false:Boolean.parseBoolean(response.getHeader("isRegistered"));
-		if(isRegistered)sources.put("isRegistered", isRegistered);
-
-		boolean unregisterSuccess = response.getHeader("unregisterSuccess")==null ? false:Boolean.parseBoolean(response.getHeader("unregisterSuccess"));
-		sources.put("unregisterSuccess", unregisterSuccess);
-
-		boolean modifySuccess = response.getHeader("modifySuccess") == null? false:true;
-		sources.put("modifySuccess", modifySuccess);
+		String[] sourceHeaders = new String[]{"addSuccess","registerSuccess","isRegistered","unregisterSuccess","modifySuccess","deleteError"};
 		
+		for(String currSource:sourceHeaders){
+			boolean isToDisplay = response.getHeader(currSource)==null ? false:Boolean.parseBoolean(response.getHeader(currSource));
+			if(isToDisplay) sources.put(currSource, isToDisplay);
+		}
+
 		return sources;
 	}
 

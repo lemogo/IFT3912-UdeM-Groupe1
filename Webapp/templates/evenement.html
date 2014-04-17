@@ -1,116 +1,117 @@
 <link href="css/event.css" rel="stylesheet">
 <link href="css/events.css" rel="stylesheet">
 
-		<div class="container theme-showcase">
-		{{^isCancelled}}
-			<h1 class="pageTitle">Détails de l'événement</h1>
-			{{#registerSuccess}}
-			<div class="alert alert-success">
-		    	<strong>Félicitation!</strong> Vous êtes maintenant inscrit à l'événement.
-		    </div>
-			{{/registerSuccess}}
-		    {{#unregisterSuccess}}
-			<div class="alert alert-danger">
-		    	Vous ne faite plus parti de l'événement.
-		    </div>
-		    {{/unregisterSuccess}}
-		    {{^unregisterSuccess}}
-			<p class="descpage">Trouvez les informations sur Bacon ipsum dolor sit amet meatball beef ribs jowl bresaola sirloin pork loin tail shank pork chop short ribs pork. Rump brisket tongue, shankle tri-tip pork chop capicola doner corned beef swine leberkas bresaola andouille bacon.</p>
-		    {{/unregisterSuccess}}
-		{{/isCancelled}}
-			<div class="panel panel-primary">
-				{{#event}}
-				<div class="panel-heading">
-					<div class="smallInfos">
-						<p><span class="title">Par: </span><a href="membre/{{creatorUsername}}">{{creatorUsername}}</a></p>
-						<p><span class="title">Personnes inscrites: </span><span class="badge badgeBlue" data-toggle="tooltip" data-placement="left" title="Personnes inscrites">{{numPeople}}</span></p>
-						<p><span class="title">Places restantes: </span><span class="badge {{badgeClass}}{{!badgeGreen si + que 3, badgeYellow si - que 3 et badgeRed si 0}}" data-toggle="tooltip" data-placement="left" title="Places restantes">{{numPlacesLeft}}</span></p>
-					</div>
-					<h2 class="panel-title">{{title}}</h2>
-				</div>
-				<div class="panel-collapse collapse in">
-					<h3>Quand?</h3>
-					<p class="descpage">{{date}}</p>
-					<h3>À quel endroit?</h3>
-					<p class="descpage">{{location}}</p>
-					<h3>Détails sur l'événement</h3>
-					<p class="descpage">{{description}}</p>
-				{{/event}}
-		{{^isCancelled}}
-					{{#isOwner}}
-					<a class="btn btn-primary" href="evenement-modification/{{id}}" role="button">Modifier l'événement</a>
-<!-- 					<a class="btn btn-danger" href="javascript:if(confirm('Supprimer?'))$('#formDeleteEvent').submit();" role="button">Supprimer l'événement</a> -->
-					<a class="btn btn-danger" onclick="document.getElementById('formDeleteEvent').submit()" role="button">Supprimer l'événement</a>
-					<form id="formDeleteEvent" role="form" action="delete-event" method="POST">
-						<input type="hidden" name="id" value="{{id}}" />
-					</form>
-					{{/isOwner}}
-					{{^isOwner}}
-						{{^isRegistered}}
-						<a class="btn btn-primary" onclick="document.getElementById('formRegisterEvent').submit();" role="button">S'inscrire!</a>
-						<form id="formRegisterEvent" role="form" action="register-event" method="POST">
-							<input type="hidden" name="id" value="{{id}}" />
-						</form>
-						{{/isRegistered}}
-						{{#isRegistered}}
-<!--						<a class="btn btn-danger" href="javascript:$('formUnregisterEvent').submit();" role="button">Annuler l'inscription</a>-->
-						<a class="btn btn-danger" onclick="document.getElementById('formUnregisterEvent').submit();" role="button">Annuler l'inscription</a>
-						<form id="formUnregisterEvent" role="form" action="unregister-event" method="POST">
-							<input type="hidden" name="id" value="{{id}}" />
-						</form>
-						{{/isRegistered}}
-					{{/isOwner}}
-		{{/isCancelled}}
-				</div>
+<div class="container theme-showcase">
+	{{^isCancelled}}
+	<h1 class="pageTitle">Détails de l'événement</h1>
+	{{#registerSuccess}}
+	<div class="alert alert-success">
+		<strong>Félicitation!</strong> Vous êtes maintenant inscrit à
+		l'événement.
+	</div>
+	{{/registerSuccess}} {{#unregisterSuccess}}
+	<div class="alert alert-danger">Vous ne faite plus parti de
+		l'événement.</div>
+	{{/unregisterSuccess}} {{^unregisterSuccess}}
+	<p class="descpage">Trouvez les informations sur Bacon ipsum dolor
+		sit amet meatball beef ribs jowl bresaola sirloin pork loin tail shank
+		pork chop short ribs pork. Rump brisket tongue, shankle tri-tip pork
+		chop capicola doner corned beef swine leberkas bresaola andouille
+		bacon.</p>
+	{{/unregisterSuccess}} {{#deleteError}}
+	<div class="alert alert-danger">Désolé!! Il y a eu une erreur
+		lors de l'annulation de l'événement!</div>
+	{{/deleteError}} {{#errorDoesNotExist}}
+	<div class="alert alert-danger">Désolé!! L'événement demandé
+		n'existe pas!</div>
+	{{/errorDoesNotExist}} {{/isCancelled}}
+	<div class="panel panel-primary">
+		{{#event}}
+		<div class="panel-heading">
+			<div class="smallInfos">
+				<p>
+					<span class="title">Par: </span><a
+						href="membre/{{creatorUsername}}">{{creatorUsername}}</a>
+				</p>
+				<p>
+					<span class="title">Personnes inscrites: </span><span
+						class="badge badgeBlue" data-toggle="tooltip"
+						data-placement="left" title="Personnes inscrites">{{numPeople}}</span>
+				</p>
+				<p>
+					<span class="title">Places restantes: </span><span
+						class="badge {{badgeClass}}{{!badgeGreen si + que 3, badgeYellow si - que 3 et badgeRed si 0}}"
+						data-toggle="tooltip" data-placement="left"
+						title="Places restantes">{{numPlacesLeft}}</span>
+				</p>
 			</div>
-			<div class="panel panel-primary">
-				<div class="panel-heading">
-					<h2 class="panel-title">Exprimez-vous sur cet événement</h2>
-				</div>
-				<div id="comments" class="panel-collapse collapse in">
-					<form id="formAddEvent" role="form" action="add-comment" method="POST">
-						<textarea class="form-control" placeholder="Écrivez un commentaire" name="commentDescription" required></textarea>
-						<input type="hidden" name="id" value="{{id}}" />
-						<button class="btn btn-primary" type="submit">Envoyer</button>
-						<!-- <input type="hidden" name="userid" value="{{userid}}" /> -->
-					</form>
-					<!-- Comment box -->
-					{{#comment}}
-					<div class="panel panel-info">
-			            <div class="panel-heading">
-			              <h3 class="panel-title"><a class="username" href="membre/{{username}}">{{username}}</a> <span class="date">{{commentdate}}</span></h3>
-			            </div>
-			            <div class="panel-body">
-			              {{description}}
-			            </div>
-			    	</div>
-					{{/comment}}
-					<!-- Comment box 
-					<div class="panel panel-info">
-			            <div class="panel-heading">
-			              <h3 class="panel-title"><a class="username" href="membre/{{username}}">Barfuhok</a> <span class="date">08h31, 03 Février 2014</span></h3>
-			            </div>
-			            <div class="panel-body">
-			              Vraiment cool!
-			            </div>
-			    	</div>
-					<div class="panel panel-info">
-			            <div class="panel-heading">
-			              <h3 class="panel-title"><a class="username" href="membre/{{username}}">Valérie</a> <span class="date">08h31, 02 Février 2014</span></h3>
-			            </div>
-			            <div class="panel-body">
-			              Je suis inscrite
-			            </div>
-			    	</div>
-			    	
-					<div class="panel panel-info">
-			            <div class="panel-heading">
-			              <h3 class="panel-title"><a class="username" href="membre/{{username}}">Barfuhok</a> <span class="date">08h31, 01 Février 2014</span></h3>
-			            </div>
-			            <div class="panel-body">
-			              Vraiment cool!
-			            </div>
-			    	</div>-->
-				</div>
-			</div>
+			<h2 class="panel-title">{{title}}</h2>
 		</div>
+		<div class="panel-collapse collapse in">
+			<h3>Quand?</h3>
+			<p class="descpage">{{date}}</p>
+			<h3>À quel endroit?</h3>
+			<p class="descpage">{{location}}</p>
+			<h3>Détails sur l'événement</h3>
+			<p class="descpage">{{description}}</p>
+			{{/event}} {{^isCancelled}} {{#isOwner}} <a class="btn btn-primary"
+				href="evenement-modification/{{id}}" role="button">Modifier
+				l'événement</a>
+			<!-- 					<a class="btn btn-danger" href="javascript:if(confirm('Supprimer?'))$('#formDeleteEvent').submit();" role="button">Supprimer l'événement</a> -->
+			<a class="btn btn-danger"
+				onclick="document.getElementById('formDeleteEvent').submit()"
+				role="button">Supprimer l'événement</a>
+			<form id="formDeleteEvent" role="form" action="delete-event"
+				method="POST">
+				<input type="hidden" name="id" value="{{id}}" />
+			</form>
+			{{/isOwner}} {{^isOwner}} {{^errorDoesNotExist}} {{^isRegistered}} <a
+				class="btn btn-primary"
+				onclick="document.getElementById('formRegisterEvent').submit();"
+				role="button">S'inscrire!</a>
+			<form id="formRegisterEvent" role="form" action="register-event"
+				method="POST">
+				<input type="hidden" name="id" value="{{id}}" />
+			</form>
+			{{/isRegistered}} {{/errorDoesNotExist}} {{#isRegistered}}
+			<!--						<a class="btn btn-danger" href="javascript:$('formUnregisterEvent').submit();" role="button">Annuler l'inscription</a>-->
+			<a class="btn btn-danger"
+				onclick="document.getElementById('formUnregisterEvent').submit();"
+				role="button">Annuler l'inscription</a>
+			<form id="formUnregisterEvent" role="form" action="unregister-event"
+				method="POST">
+				<input type="hidden" name="id" value="{{id}}" />
+			</form>
+			{{/isRegistered}} {{/isOwner}} {{/isCancelled}}
+		</div>
+	</div>
+	{{^errorDoesNotExist}}
+	<div class="panel panel-primary">
+		<div class="panel-heading">
+			<h2 class="panel-title">Exprimez-vous sur cet événement</h2>
+		</div>
+		<div id="comments" class="panel-collapse collapse in">
+			<form id="formAddEvent" role="form" action="add-comment"
+				method="POST">
+				<textarea class="form-control" placeholder="Écrivez un commentaire"
+					name="commentDescription" required></textarea>
+				<input type="hidden" name="id" value="{{id}}" />
+				<button class="btn btn-primary" type="submit">Envoyer</button>
+				<!-- <input type="hidden" name="userid" value="{{userid}}" /> -->
+			</form>
+			<!-- Comment box -->
+			{{#comment}}
+			<div class="panel panel-info">
+				<div class="panel-heading">
+					<h3 class="panel-title">
+						<a class="username" href="membre/{{username}}">{{username}}</a> <span
+							class="date">{{commentdate}}</span>
+					</h3>
+				</div>
+				<div class="panel-body">{{description}}</div>
+			</div>
+			{{/comment}}
+		</div>
+	</div>
+	{{/errorDoesNotExist}}
+</div>
