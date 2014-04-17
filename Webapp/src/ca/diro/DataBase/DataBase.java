@@ -131,7 +131,7 @@ public class DataBase {
 		this.statement().executeUpdate(
 				"create table signeduser ("
 						+ "suserId    int   AUTO_INCREMENT, "
-						+ "username  varchar(50) NOT NULL , "
+						+ "username  varchar(50) NOT NULL UNIQUE, "
 						+ "password  varchar(50) NOT NULL ,"
 						+ "fullname  varchar(50) NOT NULL, "
 						+ "email    varchar(50) NOT NULL ,"
@@ -367,7 +367,7 @@ public class DataBase {
 //		  
 //		 myDb.dbClose() ;
 //	}
-	
+//	
 
 	/**
 	  connection to database
