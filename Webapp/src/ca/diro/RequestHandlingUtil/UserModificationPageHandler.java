@@ -42,7 +42,7 @@ public class UserModificationPageHandler extends RequestHandler {
 					handleSimpleRequest(request, response, pathInfo);
 					return;
 				}else if(isAnotherContext(pathInfo)&&!pathInfo.equals("")){ 	        
-					String setLocation = "/Webapp/"+pathInfo;
+					String setLocation = "/Webapp/"+pathInfo;//"/";
 					response.sendRedirect(setLocation);
 					return;
 				}
@@ -75,6 +75,7 @@ public class UserModificationPageHandler extends RequestHandler {
 		File staticResource = new File(staticDir, filename);
 		File dynamicResource = new File(dynamicDir, filename);
 
+		// Ressource existe
 		if (!staticResource.exists() && !dynamicResource.exists()){
 			response.setStatus(HttpServletResponse.SC_NOT_FOUND);
 			processTemplate(request, response, "404.html");
@@ -101,7 +102,7 @@ public class UserModificationPageHandler extends RequestHandler {
 		sources.putAll(addUserInfoToMustacheSources(userId));
 
 		if(isLoggedIn(session))sources.put("user", isLoggedIn(session));
-		String loggedUserId = getLoggedUserId(session);
+		String loggedUserId = session.getAttribute(USER_ID_ATTRIBUTE)==null?"-1":(String) session.getAttribute(USER_ID_ATTRIBUTE);
 		sources.put("notifications_number", countUserNotification(loggedUserId));
 		sources.putAll(buildErrorMessagesMustacheSource(response));
 		return sources;
@@ -125,6 +126,7 @@ public class UserModificationPageHandler extends RequestHandler {
 				sources.put("registeredSince",rs.getTimestamp("datecreation"));
 			}
 			sources.put("age", rs.getTimestamp("age"));
+			//			sources.put("options", buildSelectOptionsTag(1,121,rs.getInt("age")));
 		}else{
 //			response.setHeader("error", "La modification de votre compete a echoue");
 //			request.getRequestDispatcher("/connexion").forward(request, response);

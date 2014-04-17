@@ -1,7 +1,6 @@
 package ca.diro.RequestHandlingUtil;
 
 import java.io.IOException;
-import java.sql.SQLException;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
@@ -31,53 +30,41 @@ public class ModifyUserInfoHandler extends RequestHandler {
 					throws IOException, ServletException {
 		try
 		{
+			Boolean modifiedSuccessfully = true;
 			HttpSession session = request.getSession(true);
-			String userId = ""+authentifyUser(session);
+			String userId = getLoggedUserId(session);
+
+//			String fullname = request.getParameter("fullname");
+//			String email = request.getParameter("email");
 			String username = (String) session.getAttribute(USERNAME_ATTRIBUTE); 
-			String fullname = request.getParameter("fullname"); 
+			String password = request.getParameter("passwordNew")==""?
+					request.getParameter("passwordOld"):request.getParameter("passwordOld");
 			String age = request.getParameter("age");
 			String description = request.getParameter("description");
 			//TODO:Check if the user new info is legal(no illegal characters or malicious scripts)
 			
 			//Modify User's Information in the database
-			ModifyAccount cmd = new ModifyAccount(userId, fullname, age, description);
-			if(Main.getDatabase().executeDb(cmd)){
+//			ModifyAccount cmd = new ModifyAccount(id, fullname, email, username, age, description);
+			ModifyAccount cmd = new ModifyAccount(userId, username, age, description);
+			modifiedSuccessfully = Main.getDatabase().executeDb(cmd);
+			if(!password.equals("")&&modifiedSuccessfully){
+				ModifyAccountPassword cmdPassword = new ModifyAccountPassword(password,userId);
+				modifiedSuccessfully = Main.getDatabase().executeDb(cmdPassword);
+				
+			}
+			if(modifiedSuccessfully){
 				//add a header to the response to show a modification success message to the user
-				response.setHeader("modificationSuccess", "true");
+//				String setLocation = "/Webapp/membre/"+username;
+				response.setHeader("success", "Votre compte a ete modifie avec succes!");
+				request.getRequestDispatcher("/membre/"+username).forward(request, response);
 			}else{
 				response.setHeader("error", "Il y a eu une erreur lors de la modification du compte!");
-				request.getRequestDispatcher("/modifier-mes-informations/"+username).forward(request, response);
-				return;
+				request.getRequestDispatcher("/modifier-mes-informations/"+userId).forward(request, response);
 			}
-			//modify password
-			try{
-				modifyPassword(request, response, session);
-			}catch(Exception e){
-				response.setHeader("error", "Il y a eu une erreur lors de du mot de passe!");
-				request.getRequestDispatcher("/modifier-mes-informations/"+username).forward(request, response);
-				return;
-			}
-			request.getRequestDispatcher("/membre/"+username).forward(request, response);
 		}
 		catch (Exception e){
 			catchHelper( request, response, e);
 		}
-	}
 
-	private void modifyPassword(HttpServletRequest request,
-			HttpServletResponse response, HttpSession session
-			) throws ServletException, IOException, SQLException {
-		String password = request.getParameter("passwordNew")==""?
-				request.getParameter("passwordOld"):request.getParameter("passwordNew");
-		if(password.equals(""))return;
-		String userId = getLoggedUserId(session);
-
-		ModifyAccountPassword cmdPassword = new ModifyAccountPassword(password,userId);
-		if(Main.getDatabase().executeDb(cmdPassword)){
-			session.setAttribute(USER_PASSWORD_ATTRIBUTE, password);
-			response.setHeader("modificationSuccess", "Votre compte a ete modifie avec succes!");
-		}else{
-			response.setHeader("error", "Il y a eu une erreur lors de du mot de passe! Velliez reesayer!");
-		}
 	}
 }

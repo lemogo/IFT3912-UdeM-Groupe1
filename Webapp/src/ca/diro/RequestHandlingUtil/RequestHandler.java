@@ -446,6 +446,13 @@ public class RequestHandler extends HttpServlet {
 		return false;
 	}
 
+	// protected boolean isEventOwner( HttpSession session,
+	// String eventUsername) throws SQLException{
+	// if(authentifyUser(session)!=null)
+	// return (eventUsername.equals(loggedUserUsername)) ;
+	// return false;
+	// }
+
 	protected boolean isAccountOwner(String loggedUserUsername,
 			String requestedAccountUsername, String loggedUserPassword)
 			throws SQLException {
@@ -485,15 +492,5 @@ public class RequestHandler extends HttpServlet {
 		String pathInfo = request.getPathInfo()== null? "":request.getPathInfo();
 		if(pathInfo.startsWith("/")) pathInfo = pathInfo.substring(1);
 		return pathInfo;
-	}
-
-	protected HashMap<String, Object> buildMustacheSourcesFromHeaders(HttpServletResponse response, String[] sourceHeaders) {
-		HashMap<String, Object> sources = new HashMap<String, Object>();
-		
-		for(String currSource:sourceHeaders){
-			boolean isToDisplay = response.getHeader(currSource)==null ? false:Boolean.parseBoolean(response.getHeader(currSource));
-			if(isToDisplay) sources.put(currSource, isToDisplay);
-		}
-		return sources;
 	}
 }

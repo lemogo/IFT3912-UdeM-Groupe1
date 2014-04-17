@@ -42,7 +42,9 @@ public class EventModificationPageHandler extends RequestHandler {
 				handleSimpleRequest(request, response, pathInfo);
 				return;
 			}else if(isAnotherContext(pathInfo)){ 	        
-				String setLocation = "/Webapp/"+pathInfo;
+				//				String setLocation = "/"+pathInfo;//"/";
+				//				request.getRequestDispatcher(setLocation).forward(request, response);
+				String setLocation = "/Webapp/"+pathInfo;//"/";
 				response.sendRedirect(setLocation);
 				return;
 			}
@@ -51,6 +53,7 @@ public class EventModificationPageHandler extends RequestHandler {
 			File staticResource = new File(staticDir, filename);
 			File dynamicResource = new File(dynamicDir, filename);
 
+			// Ressource existe
 			if (!staticResource.exists() && !dynamicResource.exists()){
 				response.setStatus(HttpServletResponse.SC_NOT_FOUND);
 				processTemplate(request, response, "404.html");
@@ -93,7 +96,7 @@ public class EventModificationPageHandler extends RequestHandler {
 			sources.put("options", buildSelectOptionsTag(1,1000,rs.getInt("numberplaces")));
 			sources.put("user", isLoggedIn(session));
 			if(isLoggedIn(session)){
-				String loggedUserId = getLoggedUserId(session);
+				String loggedUserId = session.getAttribute(USER_ID_ATTRIBUTE)==null?"-1":(String) session.getAttribute(USER_ID_ATTRIBUTE);
 				sources.put("notifications_number", countUserNotification(loggedUserId));
 			}
 

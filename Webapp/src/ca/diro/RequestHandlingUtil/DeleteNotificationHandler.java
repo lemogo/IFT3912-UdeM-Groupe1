@@ -30,18 +30,16 @@ public class DeleteNotificationHandler extends RequestHandler {
 			HttpServletRequest request, HttpServletResponse response)
 					throws IOException, ServletException {
 		try{
-			//verify if the user is the owner of the notification to delete
+			//TODO:verify if the user is the owner of the notification to delete
+			
 			HttpSession session = request.getSession(true);
-			if(authentifyUser(session)==null){
-				return;
-			}
-			String userID = getLoggedUserId(session);
-			String eventID = getLoggedUserId(session);
+			String userID = (String) session.getAttribute(USER_ID_ATTRIBUTE);
+			String eventID = (String) request.getParameter("eventid");
 
 			//Delete the notification from the database
 			DataBase myDb = Main.getDatabase();
 			DeleteNotification cmd = new DeleteNotification(eventID, userID);
-			if(! myDb.executeDb(cmd)){
+			if(!myDb.executeDb(cmd)){ 
 				//TODO:stay on current page and show error message
 				System.out.println("failled to delete Notification:"+eventID);
 			}

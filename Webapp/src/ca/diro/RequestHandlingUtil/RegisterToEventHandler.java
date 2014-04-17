@@ -42,7 +42,7 @@ public class RegisterToEventHandler extends RequestHandler {
 			if(getAvailablePlaces(eventID)<1){
 				response.addHeader("error", "Désolé! Il ne reste plus de place dans l'événement.");
 				//				response.addHeader("registerSuccess", "false");
-				response.addHeader("unsufficientPlace", "true");
+//				response.addHeader("unsufficientPlace", "true");
 				return;
 			}
 			//Register the User to the event in the database

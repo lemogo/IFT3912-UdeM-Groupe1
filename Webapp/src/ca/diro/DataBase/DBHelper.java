@@ -47,7 +47,7 @@ public class DBHelper {
 	 */
 	public ResultSet getAllUser(){
 		//TODO give the list of all users
-		String str = "select username , password from signeduser";
+		String str = "select username , email from signeduser";
 		try {
 			
 			this.allUser = myDb.statement().executeQuery(str);

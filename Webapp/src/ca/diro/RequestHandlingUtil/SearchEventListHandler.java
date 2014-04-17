@@ -16,11 +16,15 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import ca.diro.Main;
+import ca.diro.DataBase.Command.Command;
+import ca.diro.DataBase.Command.ResearchCancelledEvent;
 import ca.diro.DataBase.Command.ResearchEvent;
+import ca.diro.DataBase.Command.ResearchPastEvent;
 
 public class SearchEventListHandler extends RequestHandler {
 	/**
@@ -29,6 +33,10 @@ public class SearchEventListHandler extends RequestHandler {
 	private static final long serialVersionUID = 5818151764848416043L;
 	
 	public static final int NUMBER_EVENTS_PER_PAGE = 10;
+	
+	private static final String EVENT_FUTURE = "0";
+	private static final String EVENT_PAST = "1";
+	private static final String EVENT_CANCELLED = "2";
 
 	@Override
 	public void doPost(HttpServletRequest request, HttpServletResponse response)
@@ -85,22 +93,29 @@ public class SearchEventListHandler extends RequestHandler {
 		
 		LinkedList<String> searchInput = new LinkedList<String>(
 				Arrays.asList(searchParam.split("[\\s]+")));
-		ResearchEvent researchComand = new ResearchEvent(searchInput);
+		// To add the filter possibility on searches.
+		String filter = request.getParameter("filter");
+				
+		Command researchCommand = new ResearchEvent(searchInput);
+		
+		if (filter.equals(EVENT_PAST)) {
+			researchCommand = new ResearchPastEvent(searchInput);
+		}
+		else if (filter.equals(EVENT_CANCELLED)) {
+			researchCommand = new ResearchCancelledEvent(searchInput);
+		}
 		
 		String offsetParam = request.getParameter("offset");
 		offsetParam = offsetParam == null ? "0" : offsetParam;
-		
-		// To add the filter possibility on searches.
-		String filter = request.getParameter("filter");
 
 		// Change to custom number if required.
 		int numEventDisplay = NUMBER_EVENTS_PER_PAGE;
 		
 		int offset = Integer.parseInt(offsetParam);
 
-		if (Main.getDatabase().executeDb(researchComand)) {
+		if (Main.getDatabase().executeDb(researchCommand)) {
 			
-			ResultSet listResultSet = researchComand.getResultSet();
+			ResultSet listResultSet = researchCommand.getResultSet();
 			while (listResultSet.next() && sources.size() < numEventDisplay) {
 				if (offset == 0) {
 					String badgeClasse = computeBadgeColor(Integer.parseInt(listResultSet.getString("numberplaces")));
@@ -123,9 +138,9 @@ public class SearchEventListHandler extends RequestHandler {
 
 		JSONResponse.put("count", sources.size());
 		
-		JSONObject events = new JSONObject();
+		JSONArray events = new JSONArray();
 		for(Map.Entry<String, Event> eventEntry : sources.entrySet()){
-			events.put(eventEntry.getKey(), eventEntry.getValue().toMap());
+			events.put(new JSONObject(eventEntry.getValue().toMap()));
 		}
 		JSONResponse.put("events", events);
 
