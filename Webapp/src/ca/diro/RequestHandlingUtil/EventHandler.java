@@ -160,7 +160,7 @@ public class EventHandler extends RequestHandler {
 		sources.put("notifications_number", countUserNotification(session));
 		sources.put("id", eventID);
 		sources.put("user", isLoggedIn(session));
-		String[] sourceHeaders = new String[]{"addSuccess","registerSuccess","isRegistered","unregisterSuccess","modifySuccess","deleteError"};
+		String[] sourceHeaders = new String[]{"addSuccess","registerSuccess","isRegistered","unregisterSuccess","modifySuccess","modificationSuccess","deleteError"};
 		sources.putAll(buildMustacheSourcesFromHeaders(response, sourceHeaders));
 		sources.putAll(buildMustacheSourcesEventInfo(eventID,session));
 		FindCancelledEvent findEventCommand = new FindCancelledEvent(eventID);

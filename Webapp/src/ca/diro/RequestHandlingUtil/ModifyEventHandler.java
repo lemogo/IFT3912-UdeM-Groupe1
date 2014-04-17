@@ -33,7 +33,6 @@ public class ModifyEventHandler extends RequestHandler {
 		try
 		{
 			//TODO: check if the user is the owner of the modified event
-			Boolean modifiedSuccessfully = true;
 			String eventId = request.getParameter("id");
 			String title = request.getParameter("eventName");
 			String date = request.getParameter("eventDate");
@@ -43,10 +42,10 @@ public class ModifyEventHandler extends RequestHandler {
 			//modify the event in the database
 			authentifyUser(request.getSession(true));
 			EditEvent cmd = new EditEvent(eventId, title, date, location, nbplace, description);
-			modifiedSuccessfully = Main.getDatabase().executeDb(cmd);
 
-			if(modifiedSuccessfully){
-				//redirects the current request to the newly created event
+			if(Main.getDatabase().executeDb(cmd)){
+				//redirects the current request to the newly modify event
+				response.setHeader("modificationSuccess", "true");
 				request.getRequestDispatcher("/evenement/"+eventId).forward(request, response);
 			}else{
 				//show modification error message

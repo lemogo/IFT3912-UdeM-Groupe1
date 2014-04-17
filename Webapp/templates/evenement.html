@@ -4,6 +4,11 @@
 <div class="container theme-showcase">
 	<h1 class="pageTitle">Détails de l'événement</h1>
 	{{^isCancelledOrPassed}}
+	{{#modificationSuccess}}
+	<div class="alert alert-success">
+		 L'événement � été modifié avec succées!.
+	</div>
+	{{/modificationSuccess}}
 	{{#registerSuccess}}
 	<div class="alert alert-success">
 		<strong>Félicitation!</strong> Vous êtes maintenant inscrit à
