@@ -126,7 +126,7 @@ public class Main {
 		handler.addServlet(new ServletHolder( new UnregisterToEventHandler()), "/unregister-event");
 		handler.addServlet(new ServletHolder( new CommentEventHandler()), "/add-comment");
 
-		handler.addServlet(new ServletHolder( new DeleteNotificationHandler()), "/remove-notification");
+		handler.addServlet(new ServletHolder( new DeleteNotificationHandler()), "/deleteNotification");
 		handler.addServlet(new ServletHolder( new NotificationHandler()), "/notifications");
 		
 		handler.addServlet(new ServletHolder( new UserModificationPageHandler()), "/modifier-mes-informations/*");

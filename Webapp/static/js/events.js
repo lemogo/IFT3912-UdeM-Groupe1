@@ -1,6 +1,6 @@
 $(document).ready(function(){
 	var offset = 0;	//Offset for the event pager
-	var limit = 2; //Number of events we want to fetch 
+	var limit = 10; //Number of events we want to fetch 
 	var filter = 0; //0 : all events, 1 : passed events, 2 : cancelled events
 	
 	//Ajax request for events display
