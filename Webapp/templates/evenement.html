@@ -2,8 +2,8 @@
 <link href="css/events.css" rel="stylesheet">
 
 <div class="container theme-showcase">
-	{{^isCancelled}}
 	<h1 class="pageTitle">Détails de l'événement</h1>
+	{{^isCancelledOrPassed}}
 	{{#registerSuccess}}
 	<div class="alert alert-success">
 		<strong>Félicitation!</strong> Vous êtes maintenant inscrit à
@@ -24,7 +24,7 @@
 	{{/deleteError}} {{#errorDoesNotExist}}
 	<div class="alert alert-danger">Désolé!! L'événement demandé
 		n'existe pas!</div>
-	{{/errorDoesNotExist}} {{/isCancelled}}
+	{{/errorDoesNotExist}} {{/isCancelledOrPassed}}
 	<div class="panel panel-primary">
 		{{#event}}
 		<div class="panel-heading">
@@ -54,10 +54,9 @@
 			<p class="descpage">{{location}}</p>
 			<h3>Détails sur l'événement</h3>
 			<p class="descpage">{{description}}</p>
-			{{/event}} {{^isCancelled}} {{#isOwner}} <a class="btn btn-primary"
+			{{/event}} {{^isCancelledOrPassed}} {{#isOwner}} <a class="btn btn-primary"
 				href="evenement-modification/{{id}}" role="button">Modifier
 				l'événement</a>
-			<!-- 					<a class="btn btn-danger" href="javascript:if(confirm('Supprimer?'))$('#formDeleteEvent').submit();" role="button">Supprimer l'événement</a> -->
 			<a class="btn btn-danger"
 				onclick="document.getElementById('formDeleteEvent').submit()"
 				role="button">Supprimer l'événement</a>
@@ -82,7 +81,7 @@
 				method="POST">
 				<input type="hidden" name="id" value="{{id}}" />
 			</form>
-			{{/isRegistered}} {{/isOwner}} {{/isCancelled}}
+			{{/isRegistered}} {{/isOwner}} {{/isCancelledOrPassed}}
 		</div>
 	</div>
 	{{^errorDoesNotExist}}
@@ -91,6 +90,7 @@
 			<h2 class="panel-title">Exprimez-vous sur cet événement</h2>
 		</div>
 		<div id="comments" class="panel-collapse collapse in">
+		{{^isCancelledOrPassed}}
 			<form id="formAddEvent" role="form" action="add-comment"
 				method="POST">
 				<textarea class="form-control" placeholder="Écrivez un commentaire"
@@ -99,6 +99,7 @@
 				<button class="btn btn-primary" type="submit">Envoyer</button>
 				<!-- <input type="hidden" name="userid" value="{{userid}}" /> -->
 			</form>
+			{{/isCancelledOrPassed}}
 			<!-- Comment box -->
 			{{#comment}}
 			<div class="panel panel-info">

@@ -18,6 +18,7 @@ import javax.servlet.http.HttpSession;
 
 import ca.diro.Main;
 import ca.diro.DataBase.DataBase;
+import ca.diro.DataBase.Command.FindCancelledEvent;
 import ca.diro.DataBase.Command.ListCommentEvent;
 import ca.diro.DataBase.Command.PageInfoEvent;
 import ca.diro.DataBase.Command.VerifyUserRegisterToEvent;
@@ -159,9 +160,15 @@ public class EventHandler extends RequestHandler {
 		sources.put("notifications_number", countUserNotification(session));
 		sources.put("id", eventID);
 		sources.put("user", isLoggedIn(session));
-		sources.putAll(buildMustacheSourcesSuccessInfo(response, session));
+		String[] sourceHeaders = new String[]{"addSuccess","registerSuccess","isRegistered","unregisterSuccess","modifySuccess","deleteError"};
+		sources.putAll(buildMustacheSourcesFromHeaders(response, sourceHeaders));
 		sources.putAll(buildMustacheSourcesEventInfo(eventID,session));
-
+		FindCancelledEvent findEventCommand = new FindCancelledEvent(eventID);
+		if(Main.getDatabase().executeDb(findEventCommand)){
+			ResultSet rs = findEventCommand.getResultSet();
+			if (rs.next())
+		sources.put("isCancelledOrPassed", Boolean.TRUE);
+		}
 		return sources;
 	}
 
@@ -180,20 +187,6 @@ public class EventHandler extends RequestHandler {
 		}
 		Collections.sort(commentList,Collections.reverseOrder());
 		return commentList;
-	}
-
-
-	private HashMap<String, Object> buildMustacheSourcesSuccessInfo(HttpServletResponse response,
-			HttpSession session) {
-		HashMap<String, Object> sources = new HashMap<String, Object>();
-		String[] sourceHeaders = new String[]{"addSuccess","registerSuccess","isRegistered","unregisterSuccess","modifySuccess","deleteError"};
-		
-		for(String currSource:sourceHeaders){
-			boolean isToDisplay = response.getHeader(currSource)==null ? false:Boolean.parseBoolean(response.getHeader(currSource));
-			if(isToDisplay) sources.put(currSource, isToDisplay);
-		}
-
-		return sources;
 	}
 
 

@@ -17,6 +17,7 @@ import javax.servlet.http.HttpSession;
 
 import ca.diro.Main;
 import ca.diro.DataBase.Command.Command;
+import ca.diro.DataBase.Command.FindCancelledEvent;
 import ca.diro.DataBase.Command.ListCancelledEvent;
 import ca.diro.DataBase.Command.ListComingEvent;
 import ca.diro.DataBase.Command.ListPassedEvent;
@@ -27,7 +28,7 @@ public class EventListHandler extends RequestHandler {
 	 * 
 	 */
 	private static final long serialVersionUID = 5818151764848416043L;
-	
+
 	private static final String EVENT_FUTURE = "0";
 	private static final String EVENT_PAST = "1";
 	private static final String EVENT_CANCELLED = "2";
@@ -85,8 +86,8 @@ public class EventListHandler extends RequestHandler {
 
 	private void processRequestHelper(HttpServletRequest request,
 			HttpServletResponse response, String pathInfo, String filename)
-			throws SQLException, UnsupportedEncodingException,
-			FileNotFoundException, IOException {
+					throws SQLException, UnsupportedEncodingException,
+					FileNotFoundException, IOException {
 		setDefaultResponseContentCharacterAndStatus(response);
 
 		Command getListCommand;
@@ -105,16 +106,17 @@ public class EventListHandler extends RequestHandler {
 				String badgeClasse = computeBadgeColor(numPlacesLeft);
 				String username = "Error_retrieving_username";
 				if(Main.getDatabase().executeDb(getEventCommand)){
-				ResultSet currEventResultSet = getEventCommand.getResultSet();
-					
+					ResultSet currEventResultSet = getEventCommand.getResultSet();
+
 					if(currEventResultSet.next())
 						username = getEventCommand.getResultSet().getString("username");
 				}
 
 				eventList.add(
 						new Event(username, listResultSet.getString("title"), listResultSet.getString("dateevent"),
-						listResultSet.getString("location"), listResultSet.getString("description"), listResultSet.getString("eventId"),
-						badgeClasse, ""+numPlacesLeft));
+								listResultSet.getString("location"), listResultSet.getString("description"), listResultSet.getString("eventId"),
+								badgeClasse, ""+numPlacesLeft));
+				
 			}
 			//add event info here!!
 			HashMap<String, Object> sources = new HashMap<String, Object>();
@@ -122,13 +124,13 @@ public class EventListHandler extends RequestHandler {
 
 			//to display success message
 			HttpSession session = request.getSession(true);
-			boolean isLoggedIn=session.getAttribute("auth")==null? false:true;
-			
+
 			sources.put("deleteSuccess", showDeleteSucessMessage(response));
 			sources.put("addSuccess", showAddSucessMessage(response));
-			sources.put("user", isLoggedIn);
+			sources.put("user", isLoggedIn(session));
 
-			String loggedUserId = session.getAttribute(USER_ID_ATTRIBUTE)==null?"-1":(String) session.getAttribute(USER_ID_ATTRIBUTE);
+
+			String loggedUserId = getLoggedUserId(session);
 			sources.put("notifications_number", countUserNotification(loggedUserId));
 
 			processTemplate(request, response, "header.html", sources);
@@ -161,5 +163,5 @@ public class EventListHandler extends RequestHandler {
 			catchHelper( request, response, e);		
 		}
 	}
-	
+
 }

@@ -493,4 +493,14 @@ public class RequestHandler extends HttpServlet {
 		if(pathInfo.startsWith("/")) pathInfo = pathInfo.substring(1);
 		return pathInfo;
 	}
+
+	protected HashMap<String, Object> buildMustacheSourcesFromHeaders(HttpServletResponse response, String[] sourceHeaders) {
+		HashMap<String, Object> sources = new HashMap<String, Object>();
+		
+		for(String currSource:sourceHeaders){
+			boolean isToDisplay = response.getHeader(currSource)==null ? false:Boolean.parseBoolean(response.getHeader(currSource));
+			if(isToDisplay) sources.put(currSource, isToDisplay);
+		}
+		return sources;
+	}
 }
