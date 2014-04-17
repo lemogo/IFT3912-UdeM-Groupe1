@@ -36,7 +36,7 @@ public class CommentEvent extends Command{
 	 */
 	private String buildQuery(String userId, String eventId) {
 		
-		String str = "select username, commentevent.description, datecreation from  signeduser, commentevent " +
+		String str = "select username, commentevent.description, commentevent.datecreation from  signeduser, commentevent " +
 						"where 	signeduser.suserid = "+ userId +" and " +
 								"signeduser.suserid = commentevent.suserid and " +
 								"commentevent.eventid = "+ eventId + "" ;

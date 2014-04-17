@@ -176,7 +176,7 @@ public class DataBase {
 						"create table commentEvent ("
 								+ "commentId    int primary key  AUTO_INCREMENT, "
 								+ "description  char(500) NOT NULL, "
-								+ "datecreation  datetime  , "
+								+ "datecreation  datetime  default CURRENT_TIMESTAMP() , "
 								+ "eventId   int NOT NULL ,"
 								+ "suserId   int NOT NULL ,"
 								+ "foreign key (eventId) references event(eventId) ON DELETE CASCADE,"
@@ -278,15 +278,15 @@ public class DataBase {
 									+ "values('course ', 3, '2002-11-11 08:00:00','gatineau','course folle', 8,'04:02:30','cancelled', 'danse' )");
 
 			this.statement().executeUpdate(
-					"insert into commentevent (description, datecreation, eventid, suserid)"
-							+ "values('cool comme event', CURRENT_DATE(),1,1)");
+					"insert into commentevent (description, eventid, suserid)"
+							+ "values('cool comme event',1,1)");
 			this.statement()
 					.executeUpdate(
-							"insert into commentevent (description, datecreation, eventid, suserid)"
-									+ "values('genial je kiff', CURRENT_TIMESTAMP(), 1,2)");
+							"insert into commentevent (description, eventid, suserid)"
+									+ "values('genial je kiff', 1,2)");
 			this.statement().executeUpdate(
-					"insert into commentevent (description, datecreation, eventid, suserid)"
-							+ "values('bon timing', CURRENT_DATE(), 2,1)");
+					"insert into commentevent (description, eventid, suserid)"
+							+ "values('bon timing', 2,1)");
 
 			this.statement().executeUpdate(
 					"insert into subsEventGeneral (eventId)" + "values(1),"
@@ -355,18 +355,18 @@ public class DataBase {
 	}
 
 	
-//	 public static void main(String[] args) throws Exception { 
-//		 DataBase myDb = 
-//		 new DataBase(); //
-//		// String restore = "DataBaseRestore.sql" ; // DataBase
-//		// myDb = new DataBase(restore); // myDb.dbConnect() ; // myDb.dbDelete();
-//		 
-//		   myDb.createTables(); 
-//		   myDb.populateTable(); //String info =
-//		
-//		  
-//		 myDb.dbClose() ;
-//	}
+	 public static void main(String[] args) throws Exception { 
+		 DataBase myDb = 
+		 new DataBase(); //
+		// String restore = "DataBaseRestore.sql" ; // DataBase
+		// myDb = new DataBase(restore); // myDb.dbConnect() ; // myDb.dbDelete();
+		 
+		   myDb.createTables(); 
+		   myDb.populateTable(); //String info =
+		
+		  
+		 myDb.dbClose() ;
+	}
 	
 
 	/**
