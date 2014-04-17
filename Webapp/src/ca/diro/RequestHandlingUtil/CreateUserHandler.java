@@ -61,6 +61,9 @@ public class CreateUserHandler extends RequestHandler {
 			else{
 				//return to the account creation page 
 				//and try to indicate to the user the source of the account creation failure 
+//				System.out.println("failled to create new user account");
+//				String setLocation = "/Webapp/enregistrement";
+//				response.sendRedirect(setLocation);
 				response.setHeader("error", "Erreur lors de la creation du compte");
 				request.getRequestDispatcher("/enregistrement").forward(request, response);
 			}

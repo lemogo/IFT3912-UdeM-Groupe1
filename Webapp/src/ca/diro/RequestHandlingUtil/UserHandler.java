@@ -6,6 +6,8 @@ import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
@@ -43,7 +45,8 @@ public class UserHandler extends RequestHandler {
 				handleSimpleRequest(request, response, pathInfo);
 				return;
 			}else if(isAnotherContext(pathInfo)&&!pathInfo.equals("")){ 	        
-				String setLocation = "/Webapp/"+pathInfo;
+				//				request.getRequestDispatcher("/"+pathInfo).forward(request, response);
+				String setLocation = "/Webapp/"+pathInfo;//"/";
 				response.sendRedirect(setLocation);
 				return;
 			}
@@ -74,6 +77,8 @@ public class UserHandler extends RequestHandler {
 				return;
 			}else if(isAnotherContext(pathInfo)){ 	        
 				request.getRequestDispatcher("/"+pathInfo).forward(request, response);
+				//				String setLocation = "/Webapp/"+pathInfo;
+				//				response.sendRedirect(setLocation);
 				return;
 			}
 			processRequest(request, response);
@@ -129,7 +134,8 @@ public class UserHandler extends RequestHandler {
 		//TODO:Get the user id using the database and/or if there's no path info the id from the session variable 
 		HttpSession session = request.getSession(true);
 
-		int loggedUserId = Integer.parseInt(getLoggedUserId(session));
+		int loggedUserId = Integer.parseInt((String) (session.getAttribute(USER_ID_ATTRIBUTE)==null?"-1":(String)session.getAttribute(USER_ID_ATTRIBUTE)));
+		//		int loggedUserId = session.getAttribute(USER_ID_ATTRIBUTE)==null?-1:(int)session.getAttribute(USER_ID_ATTRIBUTE);
 		String loggedUserUsername = (String) (session.getAttribute(USERNAME_ATTRIBUTE)==null?"-1":session.getAttribute(USERNAME_ATTRIBUTE));
 		String displayedUserUsername = request.getPathInfo().startsWith("/")?request.getPathInfo().substring(1).trim():request.getPathInfo().trim();
 
@@ -144,10 +150,24 @@ public class UserHandler extends RequestHandler {
 			sources.putAll(buildMustacheSourcesUserEventList(displayedUserUserId, displayedUserUsername));
 			sources.putAll(buildMustacheSourcesUserRegisteredEventList(displayedUserUserId, displayedUserUsername));
 		}
-		String[] sourceHeaders = new String[]{"addSuccess","registerSuccess","isRegistered","unregisterSuccess","modifySuccess"};
-		sources.putAll(buildMustacheSourcesFromHeaders(response, sourceHeaders));
-		sources.put("user", isLoggedIn(session));
+		sources.putAll(buildMustacheSourcesSuccessMessages(response, isLoggedIn(session)));
 		sources.put("notifications_number", countUserNotification(""+loggedUserId));
+		return sources;
+	}
+
+	private HashMap<String, Object> buildMustacheSourcesSuccessMessages(
+			HttpServletResponse response, boolean isLoggedIn) {
+		HashMap<String, Object> sources = new HashMap<String, Object>();
+		//to display success message
+		Boolean addSuccess = response.getHeader("addSuccess") == null? false:true;
+		sources.put("addSuccess", addSuccess);
+		Boolean registerSuccess = response.getHeader("registerSuccess") == null? false:true;
+		sources.put("registerSuccess", registerSuccess);
+		Boolean unregisterSuccess = response.getHeader("unregisterSuccess") == null? false:true;
+		sources.put("unregisterSuccess", unregisterSuccess);
+		Boolean modifySuccess = response.getHeader("modifySuccess") == null? false:true;
+		sources.put("modifySuccess", modifySuccess);
+		if(isLoggedIn)sources.put("user", isLoggedIn);
 		return sources;
 	}
 
@@ -165,7 +185,7 @@ public class UserHandler extends RequestHandler {
 		if(rs2!=null)
 			while(rs2.next()){
 				registeredEventList.add(							
-						new Event(rs2.getString("username"), rs2.getString("title"), rs2.getString("dateevent"),
+						new Event(username, rs2.getString("title"), rs2.getString("dateevent"),
 								rs2.getString("location"), 
 								rs2.getString("description"), rs2.getString("eventid"),
 								"Event_badgeClass1"));

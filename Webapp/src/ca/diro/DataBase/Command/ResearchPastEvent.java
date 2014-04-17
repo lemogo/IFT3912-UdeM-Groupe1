@@ -10,14 +10,14 @@ import java.util.LinkedList;
  * @author william
  *
  */
-public class ResearchEvent extends Command{
+public class ResearchPastEvent extends Command{
 
 	
 	/**
 	 * Constructor 
 	 * @param info String to build query
 	 */
-	public ResearchEvent(LinkedList<String> stack) {
+	public ResearchPastEvent(LinkedList<String> stack) {
 		
 		//this.stack  = stack ;
 		query_ = buildQuery(stack);
@@ -37,7 +37,7 @@ public class ResearchEvent extends Command{
 		    return "";
 		}
 		String str =  "SELECT eventid, title, suserid, dateevent, location, description, numberplaces FROM Event where " ;
-		str += "UPPER(status) not = 'CANCELLED' ";
+		str += "dateevent < CURRENT_DATE() and UPPER(status) not = 'CANCELLED' ";
 		String st ="";
 		for (String mot : info) {
 			st += "or title LIKE '%" + mot+ "%' or description LIKE '%" + mot + "%'  " ;

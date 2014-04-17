@@ -32,8 +32,10 @@ public class ModifyUserInfoHandler extends RequestHandler {
 		{
 			Boolean modifiedSuccessfully = true;
 			HttpSession session = request.getSession(true);
-
 			String userId = getLoggedUserId(session);
+
+//			String fullname = request.getParameter("fullname");
+//			String email = request.getParameter("email");
 			String username = (String) session.getAttribute(USERNAME_ATTRIBUTE); 
 			String password = request.getParameter("passwordNew")==""?
 					request.getParameter("passwordOld"):request.getParameter("passwordOld");
@@ -42,6 +44,7 @@ public class ModifyUserInfoHandler extends RequestHandler {
 			//TODO:Check if the user new info is legal(no illegal characters or malicious scripts)
 			
 			//Modify User's Information in the database
+//			ModifyAccount cmd = new ModifyAccount(id, fullname, email, username, age, description);
 			ModifyAccount cmd = new ModifyAccount(userId, username, age, description);
 			modifiedSuccessfully = Main.getDatabase().executeDb(cmd);
 			if(!password.equals("")&&modifiedSuccessfully){
@@ -51,6 +54,7 @@ public class ModifyUserInfoHandler extends RequestHandler {
 			}
 			if(modifiedSuccessfully){
 				//add a header to the response to show a modification success message to the user
+//				String setLocation = "/Webapp/membre/"+username;
 				response.setHeader("success", "Votre compte a ete modifie avec succes!");
 				request.getRequestDispatcher("/membre/"+username).forward(request, response);
 			}else{

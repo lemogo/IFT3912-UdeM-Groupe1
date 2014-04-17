@@ -18,7 +18,6 @@ import javax.servlet.http.HttpSession;
 
 import ca.diro.Main;
 import ca.diro.DataBase.DataBase;
-import ca.diro.DataBase.Command.FindCancelledEvent;
 import ca.diro.DataBase.Command.ListCommentEvent;
 import ca.diro.DataBase.Command.PageInfoEvent;
 import ca.diro.DataBase.Command.VerifyUserRegisterToEvent;
@@ -146,7 +145,7 @@ public class EventHandler extends RequestHandler {
 						);
 				sources.putAll(buildIsEventOwnerMustacheSource( session,rs.getString("username")));
 			}else{
-				sources.put("errorDoesNotExist",eventID);
+				sources.put("error","l'evenement: "+eventID+" n'existe pas");
 			}
 		}
 		return sources;
@@ -160,15 +159,9 @@ public class EventHandler extends RequestHandler {
 		sources.put("notifications_number", countUserNotification(session));
 		sources.put("id", eventID);
 		sources.put("user", isLoggedIn(session));
-		String[] sourceHeaders = new String[]{"addSuccess","registerSuccess","isRegistered","unregisterSuccess","modifySuccess","modificationSuccess","deleteError"};
-		sources.putAll(buildMustacheSourcesFromHeaders(response, sourceHeaders));
+		sources.putAll(buildMustacheSourcesSuccessInfo(response, session));
 		sources.putAll(buildMustacheSourcesEventInfo(eventID,session));
-		FindCancelledEvent findEventCommand = new FindCancelledEvent(eventID);
-		if(Main.getDatabase().executeDb(findEventCommand)){
-			ResultSet rs = findEventCommand.getResultSet();
-			if (rs.next())
-		sources.put("isCancelledOrPassed", Boolean.TRUE);
-		}
+
 		return sources;
 	}
 
@@ -187,6 +180,28 @@ public class EventHandler extends RequestHandler {
 		}
 		Collections.sort(commentList,Collections.reverseOrder());
 		return commentList;
+	}
+
+
+	private HashMap<String, Object> buildMustacheSourcesSuccessInfo(HttpServletResponse response,
+			HttpSession session) {
+		HashMap<String, Object> sources = new HashMap<String, Object>();
+		boolean addSuccess = response.getHeader("addSuccess")==null ? false:Boolean.parseBoolean(response.getHeader("addSuccess"));
+		if(addSuccess) sources.put("addSuccess", addSuccess);
+
+		boolean registerSuccess = response.getHeader("registerSuccess")==null ? false:Boolean.parseBoolean(response.getHeader("registerSuccess"));
+		if(registerSuccess)sources.put("registerSuccess", registerSuccess);
+
+		boolean isRegistered = response.getHeader("isRegistered")==null ? false:Boolean.parseBoolean(response.getHeader("isRegistered"));
+		if(isRegistered)sources.put("isRegistered", isRegistered);
+
+		boolean unregisterSuccess = response.getHeader("unregisterSuccess")==null ? false:Boolean.parseBoolean(response.getHeader("unregisterSuccess"));
+		sources.put("unregisterSuccess", unregisterSuccess);
+
+		boolean modifySuccess = response.getHeader("modifySuccess") == null? false:true;
+		sources.put("modifySuccess", modifySuccess);
+		
+		return sources;
 	}
 
 

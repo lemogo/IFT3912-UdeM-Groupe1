@@ -13,10 +13,12 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+import org.json.JSONException;
+
 import ca.diro.Main;
 import ca.diro.DataBase.Command.PageInfoUser;
 
-public class UserModificationPageHandler extends RequestHandler {
+public class RemoveNotificationHandler extends RequestHandler {
 
 	/**
 	 * 
@@ -44,6 +46,7 @@ public class UserModificationPageHandler extends RequestHandler {
 				}else if(isAnotherContext(pathInfo)&&!pathInfo.equals("")){ 	        
 					String setLocation = "/Webapp/"+pathInfo;//"/";
 					response.sendRedirect(setLocation);
+//					request.getRequestDispatcher("/"+pathInfo).forward(request, response);
 					return;
 				}
 			}
@@ -54,24 +57,19 @@ public class UserModificationPageHandler extends RequestHandler {
 		}
 	}
 
-	public void doPost(HttpServletRequest request, HttpServletResponse response)
-			throws IOException, ServletException {
-		doGet(request, response);
-	}
-
 	private void processRequestHelper(HttpServletRequest request,
 			HttpServletResponse response) throws UnsupportedEncodingException,
-			FileNotFoundException, IOException, SQLException, ServletException {
-
+			FileNotFoundException, IOException, JSONException, SQLException {
 		String pathInfo = request.getPathInfo() == null? "":request.getPathInfo();
 		if(pathInfo.startsWith("/")) pathInfo = pathInfo.substring(1);
 
-		if(!isLoggedIn(request.getSession(true))){
-			response.setHeader("error", "Veillez vous connecter!");
-			request.getRequestDispatcher("/connexion").forward(request, response);
-		}
-		String filename = "modifier-mes-informations.html"; 
+		if(pathInfo.equals("")){
+			//check if user is logged in
 
+			//TODO:if user is not logged in redirect user to login page to view is page
+		}
+
+		String filename = "modifier-mes-informations.html"; 
 		File staticResource = new File(staticDir, filename);
 		File dynamicResource = new File(dynamicDir, filename);
 
@@ -93,51 +91,57 @@ public class UserModificationPageHandler extends RequestHandler {
 
 	private HashMap<String, Object> addAllInfoToMustacheSources(
 			HttpServletRequest request, HttpServletResponse response)
-					throws SQLException {
+					throws JSONException, SQLException {
+		//Add User info here!!
 		HashMap<String, Object> sources = new HashMap<String, Object>();
 
+		//TODO:Get the user id using the database and/or if there's no path info the id from the session variable 
 		HttpSession session = request.getSession(true);
-		int userId = Integer.parseInt(getLoggedUserId(session));
+		boolean isLoggedIn=session.getAttribute("auth")==null? false:true;
 
-		sources.putAll(addUserInfoToMustacheSources(userId));
+		int userId = Integer.parseInt((String) (session.getAttribute(USER_ID_ATTRIBUTE)==null?-1:session.getAttribute(USER_ID_ATTRIBUTE)));
 
-		if(isLoggedIn(session))sources.put("user", isLoggedIn(session));
-		String loggedUserId = session.getAttribute(USER_ID_ATTRIBUTE)==null?"-1":(String) session.getAttribute(USER_ID_ATTRIBUTE);
-		sources.put("notifications_number", countUserNotification(loggedUserId));
-		sources.putAll(buildErrorMessagesMustacheSource(response));
+//		boolean isOwner = userId>0;
+//		sources.put("isOwner", isOwner);
+
+//		addUserInfoToMustacheSources(sources, userId);
+
+		if(isLoggedIn)sources.put("user", isLoggedIn);
+		sources.put("notifications_number", countUserNotification(""+userId));
 		return sources;
 	}
 
-	private HashMap<String, Object> addUserInfoToMustacheSources(int userId)
-			throws SQLException {
-		HashMap<String, Object> sources = new HashMap<String, Object>();
-		PageInfoUser cmd = new PageInfoUser(userId) ; 
+	private String addUserInfoToMustacheSources(HashMap<String, Object> sources, int userId)
+			throws JSONException, SQLException {
+		PageInfoUser cmd = new PageInfoUser(userId) ; //add cast if necessary
+		Boolean asExecuted = Main.getDatabase().executeDb(cmd); //true check si la requete est bien exécuté 
+		ResultSet rs = cmd.getResultSet(); //retourne (username,password,fullname,email,age,description)
 
+		//fullname, username, email, age, description
 		String username="bidon_age",fullname="bidon_fullname",email="bidon_email",
-				age="-1",description="bidon_description";
-		if(Main.getDatabase().executeDb(cmd)){  
-			ResultSet rs = cmd.getResultSet();
+				age="-1",description="bidon_description", password="bidon_password";
+		if (asExecuted){
 			if(rs.next()){
 				username = rs.getString("username");
 				fullname = rs.getString("fullname");
 				email = rs.getString("email");
 				age  = rs.getString("age"); 
+				password  = rs.getString("password"); 
 				description = rs.getString("description");
-				sources.put("registeredSince",rs.getTimestamp("datecreation"));
 			}
-			sources.put("age", rs.getTimestamp("age"));
-			//			sources.put("options", buildSelectOptionsTag(1,121,rs.getInt("age")));
 		}else{
-//			response.setHeader("error", "La modification de votre compete a echoue");
-//			request.getRequestDispatcher("/connexion").forward(request, response);
+			//TODO:send error message to user and return to login page
 		}
 		sources.put("username",username);
 		sources.put("fullname",fullname);
 		sources.put("age",age);
+		sources.put("passwordOld",password);
 		sources.put("email",email);
 		sources.put("description",description);
+
 		sources.put("age",age);
 		sources.put("description",description);
-		return sources;
+		return username;
 	}
+
 }

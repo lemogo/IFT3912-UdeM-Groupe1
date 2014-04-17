@@ -9,6 +9,7 @@ import javax.servlet.http.HttpSession;
 
 import ca.diro.Main;
 import ca.diro.DataBase.Command.CommentEvent;
+import ca.diro.DataBase.Command.EditEvent;
 
 /**
  * @author Lionnel
@@ -34,24 +35,28 @@ public class CommentEventHandler extends RequestHandler {
 					throws IOException, ServletException {
 		try
 		{
+			Boolean addedSuccessfully = true;
+
 			HttpSession session = request.getSession(true);
-			if(!isLoggedIn(session)||authentifyUser(session)==-1){
-				response.setHeader("error", "veillez vous connecter avant d'ajouter un commentaire!");
-				request.getRequestDispatcher("/connexion").forward(request, response);
-				return;
-			}
-			
-			int userId = authentifyUser(session);
-			String description = request.getParameter("commentDescription");
+			boolean isLoggedIn=session.getAttribute("auth")==null? false:true;
+			int userId = Integer.parseInt((String) (session.getAttribute(USER_ID_ATTRIBUTE)==null?-1:session.getAttribute(USER_ID_ATTRIBUTE)));
+
+			//TODO:modify the event in the database
 			String eventId = request.getParameter("id");
-//			CommentEvent cmd = 
-					new CommentEvent(eventId, ""+userId, description, Main.getDatabase());  
-			//redirects the current request to the newly commented event
-			String setLocation = "/Webapp/evenement/"+eventId;
-			response.sendRedirect(setLocation);
+			String description = request.getParameter("commentDescription");
+
+			CommentEvent cmd = new CommentEvent(eventId, ""+userId, description, Main.getDatabase());  
+						
+			if(addedSuccessfully){
+				//redirects the current request to the newly created event
+				String setLocation = "/Webapp/evenement/"+eventId;//eventID;
+//				String setLocation = "/Webapp/liste-des-evenements/";
+				response.sendRedirect(setLocation);
+			}else{
+				//TODO:show modification error message
+			}
 		}
 		catch (Exception e){
-			//TODO:show modification error message
 			catchHelper( request, response, e);
 		}
 	}
