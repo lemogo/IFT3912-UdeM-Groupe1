@@ -39,9 +39,7 @@ public class DeleteNotificationHandler extends RequestHandler {
 			//Delete the notification from the database
 			DataBase myDb = Main.getDatabase();
 			DeleteNotification cmd = new DeleteNotification(eventID, userID);
-			if( myDb.executeDb(cmd)){ 
-
-			}else{
+			if(!myDb.executeDb(cmd)){ 
 				//TODO:stay on current page and show error message
 				System.out.println("failled to delete Notification:"+eventID);
 			}
