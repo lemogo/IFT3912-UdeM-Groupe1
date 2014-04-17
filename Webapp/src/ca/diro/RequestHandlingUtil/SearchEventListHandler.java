@@ -93,13 +93,10 @@ public class SearchEventListHandler extends RequestHandler {
 		
 		LinkedList<String> searchInput = new LinkedList<String>(
 				Arrays.asList(searchParam.split("[\\s]+")));
-		Command researchCommand = new ResearchEvent(searchInput);
-		
-		String offsetParam = request.getParameter("offset");
-		offsetParam = offsetParam == null ? "0" : offsetParam;
-		
 		// To add the filter possibility on searches.
 		String filter = request.getParameter("filter");
+				
+		Command researchCommand = new ResearchEvent(searchInput);
 		
 		if (filter.equals(EVENT_PAST)) {
 			researchCommand = new ResearchPastEvent(searchInput);
@@ -107,6 +104,9 @@ public class SearchEventListHandler extends RequestHandler {
 		else if (filter.equals(EVENT_CANCELLED)) {
 			researchCommand = new ResearchCancelledEvent(searchInput);
 		}
+		
+		String offsetParam = request.getParameter("offset");
+		offsetParam = offsetParam == null ? "0" : offsetParam;
 
 		// Change to custom number if required.
 		int numEventDisplay = NUMBER_EVENTS_PER_PAGE;
