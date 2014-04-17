@@ -37,14 +37,15 @@ public class ResearchEvent extends Command{
 		    return "";
 		}
 		String str =  "SELECT eventid, title, suserid, dateevent, location, description, numberplaces FROM Event where " ;
-		str += "UPPER(status) <> 'CANCELLED' and ";
+		str += "UPPER(status) <> 'CANCELLED' and (";
 		String st ="";
 		for (String mot : info) {
 			st += "or title LIKE '%" + mot+ "%' or description LIKE '%" + mot + "%'  " ;
 			
 		}
-		st = st.replaceFirst("or", " ") ;
-		str += st  ;
+		st = st.replaceFirst("or", " ");
+		st += ")";
+		str += st;
 		
 		return str;
 	}
