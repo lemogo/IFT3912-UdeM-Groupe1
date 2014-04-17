@@ -130,10 +130,9 @@ public class UserHandler extends RequestHandler {
 		HttpSession session = request.getSession(true);
 
 		int loggedUserId = Integer.parseInt(getLoggedUserId(session));
-		String loggedUserUsername = (String) (session.getAttribute(USERNAME_ATTRIBUTE)==null?"-1":session.getAttribute(USERNAME_ATTRIBUTE));
-		String displayedUserUsername = request.getPathInfo().startsWith("/")?request.getPathInfo().substring(1).trim():request.getPathInfo().trim();
-
-		if(displayedUserUsername.equals("")||displayedUserUsername==null) displayedUserUsername = loggedUserUsername;
+		String loggedUserUsername = getLoggedUsername(session);
+		String displayedUserUsername = getDisplayedUserUsername(request,
+				loggedUserUsername);
 		boolean isOwner = loggedUserUsername.equals( displayedUserUsername);
 		sources.put("isOwner", isOwner);
 
@@ -144,11 +143,23 @@ public class UserHandler extends RequestHandler {
 			sources.putAll(buildMustacheSourcesUserEventList(displayedUserUserId, displayedUserUsername));
 			sources.putAll(buildMustacheSourcesUserRegisteredEventList(displayedUserUserId, displayedUserUsername));
 		}
-		String[] sourceHeaders = new String[]{"addSuccess","registerSuccess","isRegistered","unregisterSuccess","modifySuccess"};
+		String[] sourceHeaders = new String[]{"addSuccess","registerSuccess","isRegistered","unregisterSuccess","modifySuccess","modificationSuccess"};
 		sources.putAll(buildMustacheSourcesFromHeaders(response, sourceHeaders));
 		sources.put("user", isLoggedIn(session));
 		sources.put("notifications_number", countUserNotification(""+loggedUserId));
 		return sources;
+	}
+
+	private String getDisplayedUserUsername(HttpServletRequest request,
+			String loggedUserUsername) {
+		String displayedUserUsername = request.getPathInfo().startsWith("/")?request.getPathInfo().substring(1).trim():request.getPathInfo().trim();
+		if(displayedUserUsername.equals("")||displayedUserUsername==null) displayedUserUsername = loggedUserUsername;
+		return displayedUserUsername;
+	}
+
+	private String getLoggedUsername(HttpSession session) {
+		String loggedUserUsername = (String) (session.getAttribute(USERNAME_ATTRIBUTE)==null?"-1":session.getAttribute(USERNAME_ATTRIBUTE));
+		return loggedUserUsername;
 	}
 
 	private HashMap<String, Object> buildMustacheSourcesUserRegisteredEventList(

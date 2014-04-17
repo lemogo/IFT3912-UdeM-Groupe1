@@ -31,15 +31,15 @@ public class ModifyAccount extends CommandUpdate{
 	 * Constructor
 	 * @param userId 
 	 * @param email 
-	 * @param username 
+	 * @param fullname 
 	 * @param password 
 	 * @param age 
 	 * @param description 
 	 * 
 	 */
-	public ModifyAccount(String userId, String username, String age, String description )   {
+	public ModifyAccount(String userId, String fullname, String age, String description )   {
 		
-		query_ = changeUserInformation(userId,  username, age, description) ; 
+		query_ = changeUserInformation(userId,  fullname, age, description) ; 
 	}
 	
 	/**
@@ -107,10 +107,10 @@ public class ModifyAccount extends CommandUpdate{
 	 * @param description
 	 * @return str <code>String</code> which is the query to be executed 
 	 */
-	private String changeUserInformation(String userId, String username, String age, String description ){
+	private String changeUserInformation(String userId, String fullname, String age, String description ){
 		
 		String str = "" ;	
-		str = "update signeduser set username = '" + username
+		str = "update signeduser set fullname = '" + fullname
 				+ "'  ,description = '" + description + "',  age = '" + age   +
 									"' where suserid = "+ userId ;
 		 return str ;
