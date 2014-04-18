@@ -48,15 +48,15 @@ public class RequestHandler extends HttpServlet {
 	/**
 	 * The list of supported commands in requests.
 	 */
-//	private final static String[] SUPPORTED_COMMANDS = {};
+	// private final static String[] SUPPORTED_COMMANDS = {};
 	/**
 	 * The <code>ResultSet</code> of a database query.
 	 */
-//	private ResultSet resultSet;
+	// private ResultSet resultSet;
 	/**
 	 * The <code>resultSet</code> as a <code>JSONArray</code>.
 	 */
-//	private JSONArray JSONResult;
+	// private JSONArray JSONResult;
 
 	// La racine des ressources a presenter
 	private static File rootDir = new File(".");
@@ -82,13 +82,14 @@ public class RequestHandler extends HttpServlet {
 	public void doGet(HttpServletRequest request, HttpServletResponse response)
 			throws IOException, ServletException {
 		try {
-			String pathInfo = request.getPathInfo() == null ? "" : request.getPathInfo();
-				if (pathInfo.startsWith("/"))
-					pathInfo = pathInfo.substring(1);
-				// if(pathInfo.length()==0)return;
-				if (pathInfo.equals("accueil") || pathInfo.equals(""))
-					pathInfo = "accueil.html";
-				handleSimpleRequest(request, response, pathInfo);
+			String pathInfo = request.getPathInfo() == null ? "" : request
+					.getPathInfo();
+			if (pathInfo.startsWith("/"))
+				pathInfo = pathInfo.substring(1);
+			// if(pathInfo.length()==0)return;
+			if (pathInfo.equals("accueil") || pathInfo.equals(""))
+				pathInfo = "accueil.html";
+			handleSimpleRequest(request, response, pathInfo);
 		} catch (Exception e) {
 			System.out.println("In Get request handler catch exception");
 			e.printStackTrace();
@@ -126,7 +127,7 @@ public class RequestHandler extends HttpServlet {
 				return;
 			}
 			pathInfo = pathInfo + ".html";
-		}else if (pathInfo.equals("accueil")
+		} else if (pathInfo.equals("accueil")
 				|| pathInfo.equals("enregistrement")
 				|| pathInfo.equals("ajouter-un-evenement")
 				// ||pathInfo.equals("modifier-mes-informations")
@@ -426,17 +427,19 @@ public class RequestHandler extends HttpServlet {
 		return sources;
 	}
 
-	protected HashMap<String, Object> buildErrorMessagesMustacheSource(HttpServletResponse response) {
+	protected HashMap<String, Object> buildErrorMessagesMustacheSource(
+			HttpServletResponse response) {
 		HashMap<String, Object> sources = new HashMap<String, Object>();
-		HashMap<String,String> messages = new HashMap<String,String>();
-		for(String errorMessage:response.getHeaders("error")){
+		HashMap<String, String> messages = new HashMap<String, String>();
+		for (String errorMessage : response.getHeaders("error")) {
 			messages.put("message", errorMessage);
 		}
-		if(response.getHeader("error")!=null)sources.put("error", messages);
-		else sources.put("error", false);
+		if (response.getHeader("error") != null)
+			sources.put("error", messages);
+		else
+			sources.put("error", false);
 		return sources;
 	}
-
 
 	protected boolean isEventOwner(String loggedUserUsername,
 			String eventUsername, String loggedUserPassword)
@@ -484,13 +487,35 @@ public class RequestHandler extends HttpServlet {
 	protected int computeAge(long initialDate) {
 		Date today = new java.util.Date();
 		Date past = new java.util.Date(initialDate);
-		return Years.yearsBetween(new DateTime(past), new DateTime(today)).getYears();
-		
+		return Years.yearsBetween(new DateTime(past), new DateTime(today))
+				.getYears();
+
 	}
 
 	protected String getPathInfo(HttpServletRequest request) {
-		String pathInfo = request.getPathInfo()== null? "":request.getPathInfo();
-		if(pathInfo.startsWith("/")) pathInfo = pathInfo.substring(1);
+		String pathInfo = request.getPathInfo() == null ? "" : request
+				.getPathInfo();
+		if (pathInfo.startsWith("/"))
+			pathInfo = pathInfo.substring(1);
 		return pathInfo;
 	}
+
+	protected HashMap<String, Object> buildMustacheSourcesFromHeaders(
+			HttpServletResponse response, String[] sourceHeaders) {
+
+		HashMap<String, Object> sources = new HashMap<String, Object>();
+
+		for (String currSource : sourceHeaders) {
+
+			boolean isToDisplay = response.getHeader(currSource) == null ? false
+					: Boolean.parseBoolean(response.getHeader(currSource));
+
+			if (isToDisplay)
+				sources.put(currSource, isToDisplay);
+
+		}
+
+		return sources;
+	}
+
 }
