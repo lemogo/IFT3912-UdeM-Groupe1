@@ -59,12 +59,12 @@ public class CreateUserHandler extends RequestHandler {
 			while (allUsers.next()) {
 				if (allUsers.getString("username").equals(userName)) {
 					errors.put("errorUser",
-							"Champ invalide: username déjà en utilisation.");
+							"Champ invalide: username en utilisation.");
 					error = true;
 				}
 				if (allUsers.getString("email").equals(email)) {
 					errors.put("errorEmail",
-							"Champ invalide: courriel déjà en utilisation.");
+							"Champ invalide: courriel en utilisation.");
 					error = true;
 				}
 			}
@@ -81,6 +81,7 @@ public class CreateUserHandler extends RequestHandler {
 				errors.put("errorGeneral",
 						"Erreur lors de la creation du compte");
 			}
+			setDefaultResponseContentCharacterAndStatus(response);
 			processTemplate(request, response, "header.html", errors);
 			processTemplate(request, response, "enregistrement.html", errors);
 			processTemplate(request, response, "footer.html");
