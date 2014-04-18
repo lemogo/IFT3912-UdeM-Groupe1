@@ -94,6 +94,10 @@ class Event extends JSONObject implements Comparable<Event> {
 	public String getNumPlacesLeft() {
 		return numPlacesLeft;
 	}
+	
+	public void setNumPlacesLeft(int numPlacesLeft) {
+		this.numPlacesLeft = ""+numPlacesLeft;
+	}
 
 	public Map<String, String> toMap() {
 		Map<String, String> mapValues = new TreeMap<String, String>();

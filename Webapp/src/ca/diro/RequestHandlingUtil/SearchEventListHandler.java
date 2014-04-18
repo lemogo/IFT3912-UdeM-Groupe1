@@ -22,6 +22,7 @@ import org.json.JSONObject;
 
 import ca.diro.Main;
 import ca.diro.DataBase.Command.Command;
+import ca.diro.DataBase.Command.PageInfoEvent;
 import ca.diro.DataBase.Command.ResearchCancelledEvent;
 import ca.diro.DataBase.Command.ResearchEvent;
 import ca.diro.DataBase.Command.ResearchPastEvent;
@@ -127,6 +128,13 @@ public class SearchEventListHandler extends RequestHandler {
 				else {
 					offset--;
 				}
+			}
+		}
+		for (Entry<String, Event> entry : sources.entrySet()) {
+			PageInfoEvent pageInfoEvent = new PageInfoEvent(""+entry.getValue().getId(), Main.getDatabase());
+			if (Main.getDatabase().executeDb(pageInfoEvent)) {
+				ResultSet searchResultSet = pageInfoEvent.getResultSet();
+				entry.getValue().setNumPlacesLeft(pageInfoEvent.getAvailablePlaces());
 			}
 		}
 		return buildJSONResponse(sources);
