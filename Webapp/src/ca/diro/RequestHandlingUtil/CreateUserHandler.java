@@ -2,6 +2,7 @@ package ca.diro.RequestHandlingUtil;
 
 import java.io.IOException;
 import java.sql.ResultSet;
+import java.util.HashMap;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
@@ -28,6 +29,7 @@ public class CreateUserHandler extends RequestHandler {
 	@Override
 	public void doPost(HttpServletRequest request, HttpServletResponse response)
 			throws IOException, ServletException {
+		HashMap<String, String> errors = new HashMap<String,String>();
 		try {
 			if (isLoggedIn(request.getSession(true))) {
 				// possibly:show popup, user is already logged in as username,
@@ -55,17 +57,13 @@ public class CreateUserHandler extends RequestHandler {
 			boolean error = false;		
 			while (allUsers.next()) {
 				if (allUsers.getString("username").equals(userName)) {
-					response.setHeader("errorUser",
+					errors.put("errorUser",
 							"Champ invalide: username déjà en utilisation.");
-					request.getRequestDispatcher("/enregistrement").forward(
-							request, response);
 					error = true;
 				}
 				if (allUsers.getString("email").equals(email)) {
-					response.setHeader("errorEmail",
+					errors.put("errorEmail",
 							"Champ invalide: courriel déjà en utilisation.");
-					request.getRequestDispatcher("/enregistrement").forward(
-							request, response);
 					error = true;
 				}
 			}
@@ -79,12 +77,10 @@ public class CreateUserHandler extends RequestHandler {
 				// return to the account creation page
 				// and try to indicate to the user the source of the account
 				// creation failure
-				response.setHeader("errorGeneral",
+				errors.put("errorGeneral",
 						"Erreur lors de la creation du compte");
-				request.getRequestDispatcher("/enregistrement").forward(
-						request, response);
 			}
-			System.out.println(response.getHeader("errorEmail"));
+			processTemplate(request, response, "enregistrement.html", errors);
 		} catch (Exception e) {
 			System.out.println("In CreateUserHandler catch exception");
 			catchHelper(request, response, e);
