@@ -6,8 +6,6 @@ package ca.diro.DataBase.Command;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
-import org.json.JSONException;
-
 import ca.diro.DataBase.DataBase;
 
 /**

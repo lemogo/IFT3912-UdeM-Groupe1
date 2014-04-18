@@ -55,26 +55,6 @@ public class TestDB {
 		}
 	}
 	
-	/**
-	 * Test method for {@link DataBase.DataBase#dbExecute(DataBase.Command)}.
-	 * @throws SQLException 
-	 * @throws ClassNotFoundException 
-	 */
-	@Test
-	
-	public void testDbExecute() throws ClassNotFoundException, SQLException {
-		
-		Command cmd = new CommandHello();
-		boolean boo = myDb.executeDb(cmd); 
-		
-		ResultSet rs = cmd.getResultSet();
-		
-		while (rs.next()) {
-			//System.out.println(rs.getString(4));
-		}
-		assertTrue(boo);
-			
-	}
 
 	
 	/**

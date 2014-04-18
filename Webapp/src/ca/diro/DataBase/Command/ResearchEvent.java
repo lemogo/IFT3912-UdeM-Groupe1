@@ -40,7 +40,7 @@ public class ResearchEvent extends Command{
 		str += "dateevent >= CURRENT_TIMESTAMP() and UPPER(status) <> 'CANCELLED' and (";
 		String st ="";
 		for (String mot : info) {
-			st += "or title LIKE '%" + mot+ "%' or description LIKE '%" + mot + "%'  " ;
+			st += "or UPPER(title) LIKE '%" + mot.toUpperCase() + "%' or UPPER(description) LIKE '%" + mot.toUpperCase() + "%'  " ;
 			
 		}
 		st = st.replaceFirst("or", " ");

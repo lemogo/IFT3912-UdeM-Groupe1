@@ -42,11 +42,11 @@ public class DBHelper {
 	
 	
 	/**
-	 * Method to give user'name, password and  of all users 
+	 * Method to give user'name, email and  of all users 
 	 * @return allUser a <code>ResultSet</code> Object after good connection else null.
 	 */
 	public ResultSet getAllUser(){
-		//TODO give the list of all users
+		
 		String str = "select username , email from signeduser";
 		try {
 			

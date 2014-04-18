@@ -36,7 +36,7 @@ public class CommentEvent extends Command{
 	 */
 	private String buildQuery(String userId, String eventId) {
 		
-		String str = "select username, commentevent.description, datecreation from  signeduser, commentevent " +
+		String str = "select username, commentevent.description, commentevent.datecreation from  signeduser, commentevent " +
 						"where 	signeduser.suserid = "+ userId +" and " +
 								"signeduser.suserid = commentevent.suserid and " +
 								"commentevent.eventid = "+ eventId + "" ;
@@ -55,8 +55,8 @@ public class CommentEvent extends Command{
 
 		 try {
 			 
-			myDb.statement().executeUpdate("insert into commentevent (description, datecreation, eventid, suserid) " +
-					"values("+"'" + description +"', CURRENT_TIMESTAMP(), "+ eventId + " , "+ userId + ")");
+			myDb.statement().executeUpdate("insert into commentevent (description, eventid, suserid) " +
+					"values("+"'" + description +"', "+ eventId + " , "+ userId + ")");
 			returnValue = true ;
 		 } catch (SQLException e) {
 			 System.err.println(e.getMessage());
@@ -69,7 +69,7 @@ public class CommentEvent extends Command{
 		
 		 try {
 			 
-			 String str =" select username, commentevent.description, datecreation from  signeduser, commentevent " +
+			 String str =" select username, commentevent.description, commentevent.datecreation from  signeduser, commentevent " +
 						"where signeduser.suserid = commentevent.suserid and " +
 						"commentevent.eventid = "+ eventId + ""  ;
 			 listComment = myDb.statement().executeQuery(str);
