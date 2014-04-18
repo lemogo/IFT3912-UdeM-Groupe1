@@ -12,7 +12,8 @@ public class DeleteNotification extends CommandUpdate{
 	/**
 	 * Constructor
 	 * @param eventId string for query
-
+	 * @throws ClassNotFoundException 
+	 * @throws SQLException 
 	 */
 	public DeleteNotification(String eventId, String userId)  {
 		query_ = removeEvent(eventId, userId)  ;
@@ -27,8 +28,7 @@ public class DeleteNotification extends CommandUpdate{
 	private String removeEvent(String eventId, String userId) {
 		//TODO perform remove query
 		String str ="";
-		str = "update subsEventSigned set notification = 'already' " +
-				"where eventid = "+eventId + " AND  suserid = " +userId ;
+		str = "delete from subsEventSigned where eventid = "+ eventId +" and suserid = " +userId ;
 		return str ;
 	}
 
