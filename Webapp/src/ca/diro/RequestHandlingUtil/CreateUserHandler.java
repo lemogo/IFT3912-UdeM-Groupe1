@@ -52,6 +52,7 @@ public class CreateUserHandler extends RequestHandler {
 			CreateUserAccount cmd = new CreateUserAccount(userName, password,
 					fullname, email, age, description, db);
 
+			
 			DBHelper dbh = new DBHelper(db);
 			ResultSet allUsers = dbh.getAllUser();
 			boolean error = false;		
@@ -80,7 +81,9 @@ public class CreateUserHandler extends RequestHandler {
 				errors.put("errorGeneral",
 						"Erreur lors de la creation du compte");
 			}
+			processTemplate(request, response, "header.html", errors);
 			processTemplate(request, response, "enregistrement.html", errors);
+			processTemplate(request, response, "footer.html");
 		} catch (Exception e) {
 			System.out.println("In CreateUserHandler catch exception");
 			catchHelper(request, response, e);
