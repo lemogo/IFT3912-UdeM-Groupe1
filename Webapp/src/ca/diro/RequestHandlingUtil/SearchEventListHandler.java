@@ -32,9 +32,9 @@ public class SearchEventListHandler extends RequestHandler {
 	 * 
 	 */
 	private static final long serialVersionUID = 5818151764848416043L;
-	
+
 	public static final int NUMBER_EVENTS_PER_PAGE = 10;
-	
+
 	private static final String EVENT_FUTURE = "0";
 	private static final String EVENT_PAST = "1";
 	private static final String EVENT_CANCELLED = "2";
@@ -62,18 +62,20 @@ public class SearchEventListHandler extends RequestHandler {
 
 	private void processRequest(HttpServletRequest request,
 			HttpServletResponse response) throws IOException,
-			UnsupportedEncodingException, FileNotFoundException, SQLException, ServletException {
+			UnsupportedEncodingException, FileNotFoundException, SQLException,
+			ServletException {
 		String pathInfo = request.getPathInfo();
-		if (pathInfo == null) pathInfo="";
-		else pathInfo = pathInfo.substring(1);
+		if (pathInfo == null)
+			pathInfo = "";
+		else
+			pathInfo = pathInfo.substring(1);
 
 		processRequestHelper(request, response, pathInfo);
 	}
 
 	private void processRequestHelper(HttpServletRequest request,
-			HttpServletResponse response, String pathInfo)
-			throws SQLException, UnsupportedEncodingException,
-			FileNotFoundException, IOException {
+			HttpServletResponse response, String pathInfo) throws SQLException,
+			UnsupportedEncodingException, FileNotFoundException, IOException {
 
 		try {
 			// TODO: Determine if this is the correct way to send this
@@ -91,50 +93,54 @@ public class SearchEventListHandler extends RequestHandler {
 		HashMap<String, Event> sources = new HashMap<String, Event>();
 		String searchParam = request.getParameter("searchStr");
 		searchParam = searchParam == null ? "" : searchParam;
-		
+
 		LinkedList<String> searchInput = new LinkedList<String>(
 				Arrays.asList(searchParam.split("[\\s]+")));
 		// To add the filter possibility on searches.
 		String filter = request.getParameter("filter");
-				
+
 		Command researchCommand = new ResearchEvent(searchInput);
-		
+
 		if (filter.equals(EVENT_PAST)) {
 			researchCommand = new ResearchPastEvent(searchInput);
-		}
-		else if (filter.equals(EVENT_CANCELLED)) {
+		} else if (filter.equals(EVENT_CANCELLED)) {
 			researchCommand = new ResearchCancelledEvent(searchInput);
 		}
-		
+
 		String offsetParam = request.getParameter("offset");
 		offsetParam = offsetParam == null ? "0" : offsetParam;
 
 		// Change to custom number if required.
 		int numEventDisplay = NUMBER_EVENTS_PER_PAGE;
-		
+
 		int offset = Integer.parseInt(offsetParam);
 
 		if (Main.getDatabase().executeDb(researchCommand)) {
-			
+
 			ResultSet listResultSet = researchCommand.getResultSet();
 			while (listResultSet.next() && sources.size() < numEventDisplay) {
 				if (offset == 0) {
-					String badgeClasse = computeBadgeColor(Integer.parseInt(listResultSet.getString("numberplaces")));
-		
-					Event currentEvent = new Event(
-							listResultSet, badgeClasse);
+					// Set badge to red if event is cancelled or past.
+					String badgeClasse = filter.equals(EVENT_FUTURE) ? computeBadgeColor(Integer
+							.parseInt(listResultSet.getString("numberplaces")))
+							: computeBadgeColor(0);
+					Event currentEvent = new Event(listResultSet, badgeClasse);
+					if (!filter.equals(EVENT_FUTURE))
+						currentEvent.setNumPlacesLeft(0);
 					sources.put(currentEvent.getTitle(), currentEvent);
-				}
-				else {
+				} else {
 					offset--;
 				}
 			}
 		}
-		for (Entry<String, Event> entry : sources.entrySet()) {
-			PageInfoEvent pageInfoEvent = new PageInfoEvent(""+entry.getValue().getId(), Main.getDatabase());
-			if (Main.getDatabase().executeDb(pageInfoEvent)) {
-				ResultSet searchResultSet = pageInfoEvent.getResultSet();
-				entry.getValue().setNumPlacesLeft(pageInfoEvent.getAvailablePlaces());
+		if (filter.equals(EVENT_FUTURE)) {
+			for (Entry<String, Event> entry : sources.entrySet()) {
+				PageInfoEvent pageInfoEvent = new PageInfoEvent(""
+						+ entry.getValue().getId(), Main.getDatabase());
+				if (Main.getDatabase().executeDb(pageInfoEvent)) {
+					entry.getValue().setNumPlacesLeft(
+							pageInfoEvent.getAvailablePlaces());
+				}
 			}
 		}
 		return buildJSONResponse(sources);
@@ -145,9 +151,9 @@ public class SearchEventListHandler extends RequestHandler {
 		JSONObject JSONResponse = new JSONObject();
 
 		JSONResponse.put("count", sources.size());
-		
+
 		JSONArray events = new JSONArray();
-		for(Map.Entry<String, Event> eventEntry : sources.entrySet()){
+		for (Map.Entry<String, Event> eventEntry : sources.entrySet()) {
 			events.put(new JSONObject(eventEntry.getValue().toMap()));
 		}
 		JSONResponse.put("events", events);
